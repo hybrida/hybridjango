@@ -1,0 +1,331 @@
+@import url(http://fonts.googleapis.com/css?family=Playfair+Display);
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+body {
+  background-color: #cbc9c2;
+  background-image: url("/static/img/kilt4.jpg");
+  background-repeat: repeat;
+  font-family: 'Raleway', sans-serif;
+  padding-top: 50px;
+}
+#suggestionBox {
+  right: -100%;
+  bottom: 75px;
+  z-index: 50000;
+  transition: right 0.2s ease;
+}
+#logo {
+  height: 5em;
+  z-index: 99999;
+}
+#home {
+  padding: 0;
+  margin: 0;
+  z-index: 99999;
+}
+.content {
+  position: relative;
+}
+h1,
+h2,
+h3,
+.big-title,
+.small-title,
+.big-sub-title {
+  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  margin-top: 0.6em;
+  margin-bottom: 0.4em;
+}
+h1,
+.big-title {
+  font-size: 3.2em;
+  color: #005675;
+}
+h2,
+.small-title {
+  text-align: inherit;
+  font-size: 2.5em;
+  color: #000;
+}
+h1 + h3,
+.big-title + .big-sub-title {
+  font-size: 2.5em;
+  color: #9e9d98;
+  margin-top: -0.5em;
+}
+a {
+  text-decoration: none;
+  color: #9e9d98;
+}
+a:hover {
+  text-decoration: none;
+  text-underline: none!important;
+  color: #000;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+.btn {
+  font-family: Raleway, sans-serif;
+}
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 0 8px #000;
+  border: none;
+  text-align: center;
+  vertical-align: bottom;
+}
+.form-control:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+.form-control {
+  border-radius: 0;
+}
+.error {
+  color: #7c3f63;
+}
+.container-with-set-aspect-ratio {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+#carousel-frontpage > div > .item > img {
+  width: 100%;
+}
+.progress {
+  position: relative;
+}
+.progress-bar {
+  position: absolute;
+}
+.progress span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+.fixed-bottom-right {
+  position: fixed;
+  z-index: 9999;
+  bottom: 16px;
+  right: 16px;
+}
+.transparent-box,
+.white-box {
+  background-color: #fff;
+  _border-radius: 4px;
+  padding: 20px;
+  overflow: auto;
+}
+.clean-white-box {
+  background-color: #fff;
+  _border-radius: 4px;
+  padding: 20px;
+  overflow: auto;
+  border: solid rgba(0, 0, 0, 0.1) 2px;
+  border-bottom: white;
+}
+.transparent-box {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.sleek-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1px;
+  margin: 1px;
+}
+.art-img {
+  overflow: hidden;
+  max-width: 100%;
+  height: auto;
+}
+.article-bg {
+  background-repeat: repeat;
+  min-height: 100vh;
+  height: auto;
+  margin-top: -50px;
+  padding-top: 50px;
+}
+.row.container-height {
+  overflow: hidden;
+  background-color: #fff;
+}
+.row.container-height > [class*="col-"] {
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}
+.row.container-height > [class*="-box"]:after {
+  content: ' ';
+  display: block;
+  height: 20px;
+}
+.fixscroll {
+  position: fixed;
+}
+.subtitle_styled {
+  font-size: 25px;
+  color: #cbc9c2;
+  /*border-bottom: solid 2px #d3d3d3;*/
+  padding: 1%;
+}
+.fp_white {
+  background-color: #fff;
+  padding: 1%;
+}
+.fp_beige {
+  background-color: #f7eee7;
+  padding: .5%;
+}
+.div_pointer {
+  cursor: pointer;
+}
+.clearfix {
+  display: block;
+  width: 100%;
+  height: 0;
+  clear: both;
+}
+.nav-container,
+.center-container {
+  width: 100%;
+  max-width: 892px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-box {
+  padding: 20px 15px 30px;
+  background: #fff;
+}
+.page-box,
+.sleek-box,
+.white-box,
+.transparent-box,
+.transparent-box-addition,
+.drop-shadow {
+  box-shadow: rgba(0, 0, 0, 0.4) -5px 5px 25px 0;
+}
+.no-shadow {
+  box-shadow: none !important;
+}
+.rounded {
+  border-radius: 10px;
+}
+.top-text {
+  margin: 0 0 10px;
+  padding: 0 0 5px;
+  border-bottom: 2px solid #9e9d98;
+  font: normal 16px "Playfair Display", serif;
+  text-transform: uppercase;
+  color: #9e9d98;
+}
+.buttons + .top-text {
+  margin-top: 8px;
+}
+.fc-state-highlight {
+  background-color: #b8c9d8 !important;
+}
+.space-above {
+  margin-top: 15px;
+}
+.space-below {
+  margin-bottom: 20px;
+}
+.row.inverted,
+.inverted {
+  background-color: #496873;
+  color: #fff;
+}
+.inverted a,
+a.inverted {
+  color: #fff;
+}
+.background-blue {
+  background-color: #005675;
+}
+.css-table {
+  display: table;
+}
+.css-table-row {
+  display: table-row;
+}
+.css-table-cell {
+  display: table-cell;
+}
+/**
+ * Bootstrap:
+ * 'xs': any size    -- Extra small, for phones
+ * 'sm': 768 and up  -- Small, for tablets
+ * 'md': 992 and up  -- Medium, for smaller pcs
+ * 'lg': 1200 and up -- Large, for larger pcs
+ *
+ * 'xl': 1600 and up -- Extra large, for even larger pcs. Not standard.
+ *
+ * Since bootstrap uses "mobile first", we will do the same, meaning
+ * design so that it looks good on small screens, then add @media rules
+ * where needed to make it look good on bigger screens as well
+ **/
+@media only screen and (max-width: 1199px) and (min-width: 992px) {
+  #navbar-search {
+    width: 64px;
+  }
+}
+@media (min-width: 992px) {
+  .center-container {
+    width: 90%;
+    max-width: 959px;
+  }
+  .nav-container {
+    max-width: 1079px;
+  }
+  .space-above {
+    margin-top: 30px;
+  }
+  .space-below {
+    margin-bottom: 50px;
+  }
+  .page-box {
+    padding: 40px 50px 80px;
+  }
+}
+@media (min-width: 1200px) {
+  #home {
+    margin-right: 32px;
+  }
+  .center-container {
+    width: 80%;
+    max-width: 1119px;
+  }
+  .nav-container {
+    width: 90%;
+    max-width: 1279px;
+  }
+}
+@media (min-width: 1600px) {
+  .center-container {
+    width: 70%;
+    max-width: 1799px;
+  }
+  .nav-container {
+    width: 80%;
+    max-width: 2099px;
+  }
+}
+@media (min-width: 3000px) {
+  .center-container {
+    width: 60%;
+    max-width: 2000px;
+  }
+  .nav-container {
+    width: 70%;
+    max-width: 2400px;
+  }
+}
+@media (max-width: 992px) {
+  .btn-responsive {
+    padding: 4px 9px;
+    font-size: 90%;
+  }
+}
