@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-  <h> hei</h>
-</body>
-</html>
+{% block title %}Kiltbestilling{% endblock %}
+{% block content %}
+    <style>
+        body {
+            background: black;
+        }
+        h1 {
+            color: white;
+        }
+        #h {
+            text-decoration: underline;
+        }
+        #h:hover {
+            color: green;
+        }
+    </style>
+    <h1 id="h">Hei</h1>
+    <p>asdofhowqjfojdsfojw wqdoifjoidsajf</p>
+    <h1>{{ request.GET }}</h1>
+{% endblock %}a
