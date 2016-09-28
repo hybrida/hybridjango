@@ -5,11 +5,13 @@ from .models import Bedrift
 # Create your views here.
 
 bedrifter = [
-    Bedrift("Norconsult", "Jonas", "Anna Malmø"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
+
 ]
 
 

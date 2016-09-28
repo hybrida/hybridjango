@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Bedkom{% endblock %}
 {% block content %}
-    <style>
+    <style xmlns="http://www.w3.org/1999/html">
 
         h1 {
             color: white;
@@ -52,19 +52,8 @@
             text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
         }
 
-        tr:hover td {
-            background: #4E5066;
-            color: #FFFFFF;
-            border-top: 1px solid #22262e;
-            border-bottom: 1px solid #22262e;
-        }
-
         tr:nth-child(odd) td {
             background: #EBEBEB;
-        }
-
-        tr:nth-child(odd):hover td {
-            background: #4E5066;
         }
 
         tr:last-child td:first-child {
@@ -83,6 +72,12 @@
             font-size: 13px;
             text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
             border-right: 1px solid #C1C3D1;
+        }
+
+        .textarea-kommentar {
+            height: 100px;
+            width: 80%;
+            resize: none;
         }
 
     </style>
@@ -157,15 +152,42 @@
                     <th class="text-left">Navn</th>
                     <th class="text-left">Ansvarlig</th>
                     <th class="text-left">Kontaktperson</th>
-                    <th class="text-left"></th>
+                    <th class="text-left">Siste Kommentar</th>
+                    <th class="text-left">Kommentar</th>
+                    <th class="text-left">Status</th>
+                    <th class="text-left">Prioritet</th>
                 </tr>
                 </thead>
                 <tbody class="table-hover">
                 {% for bedrift in bedrifter %}
                     <tr>
                         <td class="text-left">{{ bedrift.navn }}</td>
-                       <td class="text-left"> <a href="?ansvarlig={{ bedrift.ansvarlig }}">{{ bedrift.ansvarlig }}</a></td>
+                        <td class="text-left"><a href="?ansvarlig={{ bedrift.ansvarlig }}">{{ bedrift.ansvarlig }}</a>
+                        </td>
                         <td class="text-left">{{ bedrift.kontaktperson }}</td>
+                        <td class="text-left">{{ bedrift.sisteKommentar }}</td>
+                        <td class="text-left">
+                            <form class="navbar-form-navbar-left">
+                                <div class="form-group">
+                                    <textarea placeholder="Kommentar" class="textarea-kommentar"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-default">Submit</button>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Dropdown
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="#">Booket og lagt i kalendere</a></li>
+                                    <li><a href="#">Booket</a></li>
+                                    <li><a href="#">Kontakter</a></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

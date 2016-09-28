@@ -5,8 +5,10 @@ class Bedrift:
     navn = None
     ansvarlig = None
     kontaktperson = None
+    sisteKommentar = None
 
-    def __init__(self, navn, ansvarlig, kontaktperson):
+    def __init__(self, navn, ansvarlig, kontaktperson, sisteKommentar):
         self.navn = navn
         self.ansvarlig = ansvarlig
         self.kontaktperson = kontaktperson
+        self.sisteKommentar = sisteKommentar
