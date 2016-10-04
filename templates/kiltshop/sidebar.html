@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Kiltbestlling{% endblock %}
+{% block title %}Kiltbestilling{% endblock %}
 
 {% block content %}
 
@@ -21,10 +21,13 @@
                     <a href="{% url 'shop' %}">Shop</a>
                 </li>
                 <li>
-                    <a href="{% url 'bestilling' %}">Bestilling</a>
+                    <a href="{% url 'order' %}">Bestilling</a>
                 </li>
                  <li>
                     <a href="{% url 'admin' %}">Admin</a>
+                </li>
+                <li>
+                    <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
                 </li>
             </ul>
         </div>
