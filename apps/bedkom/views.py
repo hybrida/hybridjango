@@ -1,21 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Bedrift
-
-# Create your views here.
-
-bedrifter = [
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-    Bedrift("Norconsult", "Jonas", "Anna Malmø", "Heihei, detter er en veldig lang kommentar"),
-
-]
+from .models import Company, CompanyComment
 
 
 def index(request):
-    if(request in bedrifter):
-        print(request.GET["ansvarlig"])
-    return render(request, "bedkom/bedrifter.html", {"bedrifter": bedrifter})
+    companies = Company.objects.all()
+    for company in companies:
+        company.last_comment = company.companycomment_set.order_by('timestamp').last()
+    return render(request, "bedkom/bedrifter.html", {"companies": companies})

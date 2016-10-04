@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Bedkom{% endblock %}
 {% block content %}
-    <style xmlns="http://www.w3.org/1999/html">
+    <style>
 
         h1 {
             color: white;
@@ -16,7 +16,6 @@
         }
 
         div.big_wrapper {
-            position: fixed;
             margin-left: 5%;
             margin-right: 5%;
             width: 90%;
@@ -159,13 +158,13 @@
                 </tr>
                 </thead>
                 <tbody class="table-hover">
-                {% for bedrift in bedrifter %}
+                {% for company in companies %}
                     <tr>
-                        <td class="text-left">{{ bedrift.navn }}</td>
-                        <td class="text-left"><a href="?ansvarlig={{ bedrift.ansvarlig }}">{{ bedrift.ansvarlig }}</a>
+                        <td class="text-left">{{ company.name }}</td>
+                        <td class="text-left"> <a href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
+                        <td class="text-left">{{ company.contact_person }}</td>
                         </td>
-                        <td class="text-left">{{ bedrift.kontaktperson }}</td>
-                        <td class="text-left">{{ bedrift.sisteKommentar }}</td>
+                        <td class="text-left">{{ company.last_comment.text }}</td>
                         <td class="text-left">
                             <form class="navbar-form-navbar-left">
                                 <div class="form-group">
