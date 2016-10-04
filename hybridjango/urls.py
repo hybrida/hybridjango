@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^strikk/', TemplateView.as_view(template_name='hybridastrikk.html')),
     url(r'^bedkom/', include('apps.bedkom.urls')),
+    url(r'^quiz/', include('apps.quiz.urls')),
+
 ]
