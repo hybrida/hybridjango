@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.kiltshop',
     'apps.bedkom',
-    'apps.accounts',
 ]
 
 MIDDLEWARE = [
