@@ -160,33 +160,22 @@
                 <tbody class="table-hover">
                 {% for company in companies %}
                     <tr>
-                        <td class="text-left">{{ company.name }}</td>
-                        <td class="text-left"> <a href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
+                        <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
+                        <td class="text-left"><a href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
                         <td class="text-left">{{ company.contact_person }}</td>
-                        </td>
                         <td class="text-left">{{ company.last_comment.text }}</td>
                         <td class="text-left">
-                            <form class="navbar-form-navbar-left">
+                            <form action="{% url 'comment' company.pk %}" method="post">
+                                {% csrf_token %}
                                 <div class="form-group">
-                                    <textarea placeholder="Kommentar" class="textarea-kommentar"></textarea>
+                                    <label for="text"></label>
+                                    <textarea placeholder="Kommentar" id="text" class="textarea-kommentar"></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button type="submit" class="btn btn-default">Kommenter</button>
                             </form>
                         </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Dropdown
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><a href="#">Booket og lagt i kalendere</a></li>
-                                    <li><a href="#">Booket</a></li>
-                                    <li><a href="#">Kontakter</a></li>
-                                </ul>
-                            </div>
-                        </td>
+
+                        <td class="text-left"> <button type="button" >{{ company.status }} </button></td>
                     </tr>
                 {% endfor %}
                 </tbody>
