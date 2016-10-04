@@ -1,21 +1,6 @@
-{% extends 'base.html' %}
-{% block title %}Kiltbestilling{% endblock %}
-{% block content %}
-    <style>
-        body {
-            background: black;
-        }
-        h1 {
-            color: white;
-        }
-        #h {
-            text-decoration: underline;
-        }
-        #h:hover {
-            color: green;
-        }
-    </style>
-    <h1 id="h">Hei</h1>
-    <p>asdofhowqjfojdsfojw wqdoifjoidsajf</p>
-    <h1>{{ request.GET }}</h1>
-{% endblock %}a
+{% extends 'kiltshop/sidebar.html' %}
+{% block content2 %}
+
+ <h2> Dette blir en statisk side som lister alle bestillingene bruker har valgt </h2>
+
+{% endblock %}

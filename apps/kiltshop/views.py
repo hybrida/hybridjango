@@ -6,3 +6,9 @@ def index(request):
 
 def bestilling(request):
     return render(request, "kiltshop/bestilling.html")
+
+def shop(request):
+    return render(request, "kiltshop/shop.html")
+
+def admin(request):
+    return render(request, "kiltshop/admin.html")
