@@ -19,6 +19,6 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='frontpage.html')),
-    url(r'^kilt/', include('apps.kiltbestilling.urls')),
+    url(r'^kiltbestilling/', include('apps.kiltbestilling.urls'), name='kiltbestilling'),
     url(r'^admin/', admin.site.urls),
 ]
