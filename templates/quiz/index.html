@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Bedkom{% endblock %}
+{% block content %}
+    {% if best_team %}
+        <ul>
+            {% for team in best_team %}
+                <li><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ingen tilgjengelige lag</p>
+    {% endif %}
+{% endblock %}

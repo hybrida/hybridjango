@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Bedkom{% endblock %}
+{% block content %}
+
+    <style>
+        .big_wrapper {
+            border:3px solid blue;
+            margin-left:5%;
+            margin-right:5%;
+            margin-top:20px;
+        }
+        .wrapper_left {
+            border:3px solid red;
+            margin-right:50%;
+        }
+        .wrapper_right{
+            border: 3px solid green;
+            margin-left:50%;
+        }
+        h1 {
+            text-align: left;
+        }
+
+
+    </style>
+
+
+    <div class="big_wrapper">
+        <div class="wrapper_left">
+            <h1>{{ company.name }}</h1>
+
+        </div>
+
+        <div class="wrapper_right">
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

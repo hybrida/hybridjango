@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'apps.kiltshop',
     'apps.bedkom',
     'apps.accounts',
+    'apps.quiz',
 ]
 
 MIDDLEWARE = [
