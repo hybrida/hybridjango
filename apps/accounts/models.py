@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 
 
 class Hybrid(models.Model):
-    def user_folder(instance, filename):
-        return os.path.join('user', instance.user.username, filename)
+    @staticmethod
+    def user_folder(self, instance, filename):
+        return os.path.join('users', instance.user.username, filename)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     middle_name = models.CharField(max_length=50)

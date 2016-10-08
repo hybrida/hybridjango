@@ -27,4 +27,5 @@ urlpatterns = [
                   url(r'^bedkom/', include('apps.bedkom.urls')),
                   url(r'^hybrid/', include('apps.accounts.urls')),
                   url(r'^quiz/', include('apps.quiz.urls')),
+                  url(r'^events/', include('apps.events.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

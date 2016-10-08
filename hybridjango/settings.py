@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.bedkom',
     'apps.accounts',
     'apps.quiz',
+    'apps.events',
 ]
 
 MIDDLEWARE = [

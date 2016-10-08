@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.functions import datetime
 from django.forms import forms
 
 
@@ -23,7 +24,7 @@ class CompanyComment(models.Model):
     company = models.ForeignKey(Company)
     commenter = models.ForeignKey(User)
     text = models.TextField()
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return "Kommentar " + str(self.pk)
