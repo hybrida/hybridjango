@@ -1,0 +1,212 @@
+.picFrame {
+    margin: 0 auto;
+    position: relative;
+    width: 500px;
+    height: auto;
+    max-width: 100%;
+    max-height: 500px;
+
+    box-shadow: rgba(0, 0, 0, 0.4) -5px 6px 25px;
+    border-radius: 5px;
+    background: #ccc;
+    overflow: hidden;
+}
+
+.pic {
+    display: block;
+
+    margin: 0;
+    padding: 0;
+
+    min-width: 100%;
+    width: auto;
+    max-width: 500px;
+
+    height: auto;
+
+    background: #ccc;
+}
+
+.info-block-container {
+    margin-top: 2em;
+}
+
+.info-block {
+    margin: 0;
+    padding: 30px 0;
+    background: url('/assets/images/profile_bg.gif') center repeat-y;
+}
+
+.info-block + .info-block {
+    padding-top: 0;
+}
+
+.info-block ul {
+    margin: 0;
+    padding: 0;
+}
+
+.info-block li {
+    position: relative;
+    list-style: none;
+}
+
+.info-block .label,
+.info-block .info {
+    padding: 0;
+    display: block;
+    width: 50%;
+    float: left;
+    clear: right;
+    transform: translate(10%, 0);
+
+    text-align: left;
+    line-height: 24px;
+}
+
+.info-block .label {
+    clear: left;
+    transform: translate(-10%, 0);
+
+    text-align: right;
+    font-size: 16px;
+    color: #046;
+}
+
+.info-block .error .label,
+.info-block .error .info{
+    border-color: #933;
+    color: #933;
+}
+
+.input-container,
+.select-container {
+    position: relative;
+    height: 29px;
+}
+
+.info-block input,
+.info-block select {
+    position: relative;
+    top: 50%;
+    width: 80%;
+    height: 28px;
+    transform: translateY(-50%);
+    border: 1px solid #a9a9a9;
+    border-radius: 2px;
+    padding-left: 3px;
+}
+
+
+.edit .picFrame {
+    height: 300px;
+    text-align: center;
+}
+
+
+.edit .picFrame .pic-inner,
+.edit .picFrame .loader {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.edit .picFrame .pic-inner {
+    width: 0;
+    height: 0;
+    padding: 50%;
+
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+
+.edit .picFrame .loader {
+    position: absolute;
+    left: 50%;
+    display: block;
+    width: 43px;
+    transform: translateX(-50%);
+}
+
+.edit .picFrame .link-container,
+.edit .picFrame .drop {
+    line-height: 45px;
+    width:150px;
+    transform: translate(-50%, -50%);
+    cursor:pointer;
+    text-shadow: rgba(0,0,0,1) 0 0 7px;
+    z-index: 3;
+}
+
+.edit .picFrame .link:hover,
+.edit .picFrame .drop {
+    color: #eee;
+    text-shadow: rgba(0,0,0,1) 0 0 10px;
+}
+
+.edit .picFrame .glyphicon {
+    position: relative;
+    top: 3px;
+}
+
+.edit .pic {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.edit .poof .pic-inner {
+    visibility: hidden;
+}
+
+.edit .poof:hover .pic-inner {
+    visibility: visible;
+}
+
+.edit .poof:hover .loader {
+    visibility: hidden;
+}
+
+.edit .poof:hover .pic {
+    opacity: 0.5;
+}
+
+.edit .info-block .label {
+    line-height: 29px;
+}
+
+.edit .cardcode-help {
+    overflow: visible;
+    margin-top: -10px;
+    padding-top: 10px;
+}
+
+.edit .cardcode-help img {
+    position: absolute;
+    visibility: hidden;
+    bottom: 20px;
+    transform: translateX(-20%);
+    max-width: 167px;
+    width: 40vw;
+    z-index: 2;
+    opacity: 0;
+    transition: 0.1s;
+}
+
+.edit .cardcode-help:hover img {
+    visibility: visible;
+    opacity: 1;
+    width: 60vw;
+    max-width: 500px;
+}
+
+@media(max-width: 320px) {
+    .big-title {font-size: 2.5em;}
+    .info-block-container {margin-top: 15px;}
+    .info-block {background: none; padding: 15px 0;}
+    .info-block .label,
+    .info-block .info {float: none; width: auto; text-align: center; transform: none;}
+    .edit .cardcode-help img {margin-left: -70px;}
+}

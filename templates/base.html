@@ -34,23 +34,43 @@
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
 
-
-                <li><a href="/bedrift">Bedrift</a></li>
-                <li><a href="/kalender">Kalender</a></li>
-                <li><a href="/info">Om Hybrida</a></li>
-                <li><a href="/i&amp;iktringen">I&IKT-Ringen</a></li>
             </ul>
-            <form class="navbar-form navbar-right" role="search" action="/search" method="GET">
-                <div class="form-group">
-                    <input id="navbar-search" type="text" class="form-control" name="term" placeholder="Søk"/>
-                </div>
-            </form>
             <ul class="nav navbar-nav navbar-right">
-
-                <li>
-
-                    <a href="/login?returnarg=%2F">Logg inn</a>
-
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><span class="glyphicon glyphicon-search"></span></a>
+                    <div class="dropdown-menu">
+                        <form class="navbar-form" role="search" action="/search" method="GET">
+                            <div class="form-group">
+                                <input id="navbar-search" type="text" class="form-control" name="term"
+                                       placeholder="Søk"/>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{% firstof user.username 'Logg inn' %}</a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'logout' %}">Logg ut</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <form class="navbar-form" method="post" action="{% url 'login' %}">
+                                    {% csrf_token %}
+                                    <label for="id_username">Username:</label>
+                                    <input autofocus="" id="id_username" maxlength="254" name="username" required=""
+                                           type="text" class="form-control">
+                                    <label for="id_password">Password:</label>
+                                    <input id="id_password" name="password" required="" type="password"
+                                           class="form-control">
+                                    <button class="btn btn-primary form-control" type="submit">Logg inn</button>
+                                </form>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </li>
             </ul>
         </div>
