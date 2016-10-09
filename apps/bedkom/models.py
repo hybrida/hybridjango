@@ -8,12 +8,20 @@ class Company(models.Model):
     responsible = models.ForeignKey(User)
     contact_person = models.CharField(max_length=150)
 
-    CHOICES = (
-        ('BOOKET', 'Booket'),
-        ('KONTAKTET', 'Kontaktet')
+    CHOICES_STATUS = (
+        ('Booket', 'BOOKET'),
+        ('Kontaktet', 'KONTAKTET'),
+        ('Takket nei', 'NEI')
     )
 
-    status = models.CharField(choices=CHOICES, max_length=6)
+    CHOICES_PRIORITY = (
+        ('Høy', 'HØY'),
+        ('Middels', 'MIDDELS'),
+        ('Lav', 'LAV')
+    )
+
+    status = models.CharField(choices=CHOICES_STATUS, max_length=15)
+    priority = models.CharField(choices=CHOICES_PRIORITY, max_length=10, null=True)
 
     def __str__(self):
         return self.name
@@ -27,5 +35,3 @@ class CompanyComment(models.Model):
 
     def __str__(self):
         return "Kommentar " + str(self.pk)
-
-
