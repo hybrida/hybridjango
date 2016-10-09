@@ -35,7 +35,9 @@
         </div>
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
-
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'event_list' %}">Nytt Arrangement</a></li>{% endif %}
+                <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

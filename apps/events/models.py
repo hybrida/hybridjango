@@ -18,4 +18,4 @@ class Event(models.Model):
     event_end = models.DateTimeField()
 
     def __str__(self):
-        return '{}: {}'.format(self.timestamp, self.title)
+        return '{}: {}'.format(self.timestamp.date(), self.title)

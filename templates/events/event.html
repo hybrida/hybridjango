@@ -12,13 +12,16 @@
                         <h6 class="top-text">
                             Av:
                             <a class="userLink" id="{{ event.author }}"
-                               href="/hybrid/{{ event.author }}">{{ event.author.hybrid.get_full_name }}</a>
+                               href="{% url 'profile' event.author.pk %}">{{ event.author.hybrid.get_full_name }}</a>
+                            {% if user.is_authenticated %}
+                                <a class="pull-right" href="{% url 'edit_event' event.pk %}">
+                                    <button class="btn btn-xs btn-primary">Rediger</button>
+                                </a>
 
-                            <a class="pull-right" href="{% url 'event' event.pk %}/endre">
-                                <button class="btn btn-xs btn-primary">Rediger</button>
-                            </a>
-
-
+                                <a class="pull-right" href="{% url 'delete_event' event.pk %}">
+                                    <button class="btn btn-xs btn-danger">Slett</button>
+                                </a>
+                            {% endif %}
                         </h6>
                         <p class="text-center"></p>
                         <p>{{ event.text }}</p>
@@ -139,17 +142,27 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <form method="post" action="{% url 'events' %}/meldpaa">
-                                    <input name="eventId" value="{{ event.pk }}" type="hidden">
-                                    <button type="submit" class=" btn btn-primary btn-block"> Meld meg på</button>
-
-                                </form>
-
+                        {% if user.is_authenticated %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% if user in event.participants.all %}
+                                        <form method="post" action="{% url 'leave_event' event.pk %}">
+                                            {% csrf_token %}
+                                            <input name="eventId" value="{{ event.pk }}" type="hidden">
+                                            <button type="submit" class=" btn btn-danger btn-block">Meld meg av
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form method="post" action="{% url 'join_event' event.pk %}">
+                                            {% csrf_token %}
+                                            <input name="eventId" value="{{ event.pk }}" type="hidden">
+                                            <button type="submit" class=" btn btn-primary btn-block">Meld meg på
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
 
                     </div>
                 </div>

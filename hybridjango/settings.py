@@ -116,6 +116,7 @@ USE_TZ = True
 MEDIA_ROOT = 'uploads/'
 MEDIA_URL = '/uploads/'
 
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'redirect_to_profile'
 LOGOUT_REDIRECT_URL = 'home'
 
