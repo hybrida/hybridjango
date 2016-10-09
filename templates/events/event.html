@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="article-bg">
+        <div class="container-fluid center-container">
+            <div class="row space-below">
+                <div class="col-xs-12 col-md-8 col-xl-7 space-above">
+                    <div class="white-box">
+                        <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
+
+                        <h1>{{ event.title }}</h1>
+                        <h3 class="text-center">{{ event.ingress }}</h3>
+                        <h6 class="top-text">
+                            Av:
+                            <a class="userLink" id="{{ event.author }}"
+                               href="/hybrid/{{ event.author }}">{{ event.author.hybrid.get_full_name }}</a>
+
+                            <a class="pull-right" href="{% url 'event' event.pk %}/endre">
+                                <button class="btn btn-xs btn-primary">Rediger</button>
+                            </a>
+
+
+                        </h6>
+                        <p class="text-center"></p>
+                        <p>{{ event.text }}</p>
+                        <p></p>
+
+
+                        <h6 class="top-text">Påmeldte</h6>
+
+                        <div class="col-md-12">
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    0
+                                </div>
+                                <div class="col-md-11">
+                                    <p onclick="$ ( '.showhide1' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 1 </p>
+                                </div>
+                                <div style="display: none" class="showhide1" id="showhide1" name="showhide1">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    0
+                                </div>
+                                <div class="col-md-11">
+                                    <p onclick="$ ( '.showhide2' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 2 </p>
+                                </div>
+                                <div style="display: none" class="showhide2" id="showhide2" name="showhide2">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    0
+                                </div>
+                                <div class="col-md-11">
+                                    <p onclick="$ ( '.showhide3' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 3 </p>
+                                </div>
+                                <div style="display: none" class="showhide3" id="showhide3" name="showhide3">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    0
+                                </div>
+                                <div class="col-md-11">
+                                    <p onclick="$ ( '.showhide4' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 4 </p>
+                                </div>
+                                <div style="display: none" class="showhide4" id="showhide4" name="showhide4">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    0
+                                </div>
+                                <div class="col-md-11">
+                                    <p onclick="$ ( '.showhide5' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 5 </p>
+                                </div>
+                                <div style="display: none" class="showhide5" id="showhide5" name="showhide5">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-xl-5 space-above">
+
+
+                    <div class="transparent-box">
+                        <div class="row">
+                            <div class="col-md-6" style="border-right: solid lightslategray">
+                                Åpnes<br>
+                                Frist<br>
+                                2. Frist<br>
+                                Start<br>
+                                Slutt<br>
+                                Sted<br>
+                                <br>
+
+
+                            </div>
+                            <div class="col-md-6">
+                                {{ event.signup_start }}
+                                {{ event.signup_end }}
+                                <br>TODO<br>
+                                {{ event.event_start }}
+                                {{ event.event_end }}
+                                Terra
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="progress">
+                                    <div class="progress-bar"
+                                         style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
+                                    </div>
+                                    <span>
+                    {{ event.participants.count }} / {{ event.max_participants }}
+                </span>
+                                </div>
+                                <div class="progress">
+                                    <div data-toggle="Venteliste" class="progress-bar" style="width: 0">
+                                    </div>
+                                    <span>
+                    0 / 30
+                </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <form method="post" action="{% url 'events' %}/meldpaa">
+                                    <input name="eventId" value="{{ event.pk }}" type="hidden">
+                                    <button type="submit" class=" btn btn-primary btn-block"> Meld meg på</button>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-xl-5 space-above">
+
+                    <div class="transparent-box comment-section">
+                        <h6 class="top-text">Kommentarer</h6>
+
+                        <div style="margin-top:1em">
+                            <form action="" method="POST">
+                                <label for="comment" class="sr-only">Comment:</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="comment" name="comment" autocomplete="off"
+                                           maxlength="250" type="text">
+                                    <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">Kommenter</button>
+                </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

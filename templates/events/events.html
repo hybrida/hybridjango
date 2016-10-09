@@ -1,10 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Events</h2>
-    <ul>
-        {% for event in object_list %}
-            <li>{{ event.name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container-fluid center-container">
+        <div class="row space-below space-above">
+            <div class="col-xs-12 space-above">
+                <div class="page-box">
+                    <h5 class="top-text">Nyhetsfeed</h5>
+                    {% for event in object_list %}
+                        <div class="col-lg-8 render big-thumbnail" style="padding: 7px; margin-bottom: -1px;">
+                            <div class="white-box no-shadow">
+                                <div style="position: relative;">
+                                    <div style="padding-top: 100%;">
+                                    </div>
+                                    <div class="container-with-set-aspect-ratio">
+                                        <a href="/events/{{ event.pk }}">
+                                            <div style="position: relative">
+                                                <div style="padding-top: 50%">
+                                                </div>
+                                                <div class="container-with-set-aspect-ratio">
+                                                    <img class="super-center" src="/uploads/{{ event.image }}"
+                                                         alt="No image available"
+                                                         width="100%">
+                                                </div>
+                                            </div>
+                                            <h3 class="col-xs-12">{{ event.title }}</h3>
+                                        </a>
+
+                                        <p class="col-xs-12">{{ event.ingress }}</p>
+
+                                        <div class="container-fluid"
+                                             style="position: absolute; bottom: 0; background: rgba(245,245,245,1); width: 100%;">
+                                            <div class="row">
+                                                <div class="col-xs-6">{{ event.event_start }}</div>
+                                                <div class="col-xs-6">
+                                                    <div class="progress" style="margin-bottom: 0;">
+                                                        <div class="progress-bar"
+                                                             style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
+                                                        </div>
+                                                        <span>{{ event.participants.count }} / {{ event.max_participants }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 {% endblock %}
