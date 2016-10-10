@@ -1,33 +1,23 @@
-{% extends 'base.html' %}
-{% block content %}
-    <div class="container-fluid center-container">
-        <div class="row space-below">
-            <div class="col-lg-8 space-above">
-                <div class="transparent-box">
-                    <h3>Endre arrangement</h3>
-                    <form action="" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="submit" value="Save"/>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-4 space-above">
-                <div class="transparent-box">
-                    <h3>Her skal det stå en del innformasjon om denne formen:</h3>
-                    <hr>
-                    <p>Det skal stå litt om hva de forskjellige feltene betyr, samt litt om hvordan vi liker å ha det
-                        her på
-                        hybridasiden!</p>
-                    <p>Før du oppretter ett nytt event eller en artikkel, ser vi gjerne at du leser igjennom disse
-                        retningslinjene
-                        slik at vi får en kul side, med kule bilder, og kul formatering, som ser sinnsykt kul ut hele
-                        tiden,
-                        alltid!</p>
-                    <p><strong>Grensen står for klassetrinnet som har lov til å melde seg opp. Tallet står for
-                        avslutningsår.</strong></p>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock content %}
+{% extends 'standard.html' %}
+{% block text %}
+    <h3>Endre arrangement</h3>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save"/>
+    </form>
+{% endblock text %}
+{% block sidebar %}
+    <h3>Her skal det stå en del informasjon om denne formen:</h3>
+    <hr>
+    <p>Det skal stå litt om hva de forskjellige feltene betyr, samt litt om hvordan vi liker å ha det
+        her på
+        hybridasiden!</p>
+    <p>Før du oppretter ett nytt event eller en artikkel, ser vi gjerne at du leser igjennom disse
+        retningslinjene
+        slik at vi får en kul side, med kule bilder, og kul formatering, som ser sinnsykt kul ut hele
+        tiden,
+        alltid!</p>
+    <p><strong>Grensen står for klassetrinnet som har lov til å melde seg opp. Tallet står for
+        avslutningsår.</strong></p>
+{% endblock sidebar %}
