@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.functions import datetime
+from django.utils import timezone
 
 
 class Event(models.Model):
@@ -8,7 +8,7 @@ class Event(models.Model):
     ingress = models.CharField(max_length=500)
     text = models.TextField()
     author = models.ForeignKey(User, related_name='authored')
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
+    timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='events', default='placeholder-event.png')
     participants = models.ManyToManyField(User, related_name='participating', blank=True)
     max_participants = models.IntegerField()
@@ -16,6 +16,9 @@ class Event(models.Model):
     signup_end = models.DateTimeField()
     event_start = models.DateTimeField()
     event_end = models.DateTimeField()
+
+    def signup_open(self):
+        return self.signup_start < timezone.now() < self.signup_end
 
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)

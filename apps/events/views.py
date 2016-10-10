@@ -69,13 +69,13 @@ def join_event(request, pk):
     user = request.user
     if user.is_authenticated:
         event = Event.objects.get(pk=pk)
-        if event.participants.count() < event.max_participants:
+        if event.participants.count() < event.max_participants and event.signup_open():
             event.participants.add(user)
     return redirect('event', pk)
 
 
 def leave_event(request, pk):
     user = request.user
-    if user.is_authenticated:
+    if user.is_authenticated and Event.objects.get(pk=pk).signup_open():
         Event.objects.get(pk=pk).participants.remove(user)
     return redirect('event', pk)
