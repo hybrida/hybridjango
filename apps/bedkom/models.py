@@ -11,8 +11,10 @@ class Company(models.Model):
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
-        ('Kontaktet', 'KONTAKTET'),
-        ('Takket nei', 'NEI')
+        ('Opprettet kontaktet', 'KONTAKTET'),
+        ('Takket nei', 'NEI'),
+        ('Ikke kontaktet', 'IKKE_KONTAKTET'),
+        ('Sendt mail', 'SENDT_MAIL')
     )
 
     CHOICES_PRIORITY = (
