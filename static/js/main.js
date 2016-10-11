@@ -2,7 +2,7 @@ _=function(o){return function(){return o;}};
 
 String.prototype.replaceAll = function(replacing, replacement) {
     return this.replace(new RegExp(replacing, 'g'), replacement);
-}
+};
 
 clearSelf = function(obj) {
     obj.innerHTML="";
