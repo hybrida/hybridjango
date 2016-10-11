@@ -22,3 +22,10 @@ class Event(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
+
+
+class EventComment(models.Model):
+    event = models.ForeignKey(Event)
+    author = models.ForeignKey(User)
+    timestamp = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
