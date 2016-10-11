@@ -1,10 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .models import Event
+from .forms import EventCommentForm
+from .models import Event, EventComment
 
 
 class EventList(generic.ListView):
@@ -79,3 +81,16 @@ def leave_event(request, pk):
     if user.is_authenticated and Event.objects.get(pk=pk).signup_open():
         Event.objects.get(pk=pk).participants.remove(user)
     return redirect('event', pk)
+
+
+@login_required
+def comment_event(request, pk):
+    user = request.user
+    event_id = request.POST['event_id']
+    text = request.POST['text']
+    if user.is_authenticated:
+        comment = EventComment(author=user, event_id=event_id, text=text)
+        print(comment.full_clean())
+        comment.save()
+    return redirect('event', pk)
+

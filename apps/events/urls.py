@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import EventList, EventView, EventCreate, EventEdit, EventDelete, join_event, leave_event
+from .views import *
 
 urlpatterns = [
     url(r'^$', EventList.as_view(), name='event_list'),
@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/slett$', EventDelete.as_view(), name='delete_event'),
     url(r'^(?P<pk>[0-9]+)/meldpaa$', join_event, name='join_event'),
     url(r'^(?P<pk>[0-9]+)/meldav$', leave_event, name='leave_event'),
+    url(r'^(?P<pk>[0-9]+)/comment$', comment_event, name='comment_event'),
 ]
