@@ -73,10 +73,8 @@
             border-right: 1px solid #C1C3D1;
         }
 
-        .textarea-kommentar {
-            height: 100px;
-            width: 80%;
-            resize: none;
+        .text-left_1 {
+            padding-left:5px;
         }
 
     </style>
@@ -148,12 +146,12 @@
             <table class="table-fill">
                 <thead>
                 <tr>
-                    <th class="text-left">Navn</th>
-                    <th class="text-left">Ansvarlig</th>
-                    <th class="text-left">Kontaktperson</th>
-                    <th class="text-left">Siste Kommentar</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Prioritet</th>
+                    <th class="text-left_1">Navn</th>
+                    <th class="text-left_1">Ansvarlig</th>
+                    <th class="text-left_1">Kontaktperson</th>
+                    <th class="text-left_1">Siste Kommentar</th>
+                    <th class="text-left_1">Status</th>
+                    <th class="text-left_1">Prioritet</th>
                 </tr>
                 </thead>
                 <tbody class="table-hover">
@@ -169,33 +167,36 @@
                         </td>
                         <td class="text-left">
                             {% if company.priority == 'Høy' %}
-                                <style> .knapp{{ company.name }} {
-                                    background-color: lightgreen;
-                                }
+                                <style>
+                                    .knapp{{ company.name }} {
+                                        background-color: lightgreen;
+                                    }
 
-                                .knapp_tekst {
-                                    color: black;
-                                    text-align: center;
-                                }</style> {% endif %}
+                                    .knapp_tekst {
+                                        color: black;
+                                        text-align: center;
+                                    }</style> {% endif %}
                             {% if company.priority == 'Middels' %}
-                                <style>.knapp{{ company.name }} {
-                                    background-color: yellow;
-                                }
+                                <style>
+                                    .knapp{{ company.name }} {
+                                        background-color: yellow;
+                                    }
 
-                                .knapp_tekst {
-                                    color: black;
-                                    text-align: center;
-                                }</style> {% endif %}
+                                    .knapp_tekst {
+                                        color: black;
+                                        text-align: center;
+                                    }</style> {% endif %}
 
                             {% if company.priority == 'Lav' %}
-                                <style>.knapp{{ company.name }} {
-                                    background-color: red;
-                                }
+                                <style>
+                                    .knapp{{ company.name }} {
+                                        background-color: red;
+                                    }
 
-                                .knapp_tekst {
-                                    color: black;
-                                    text-align: center;
-                                }</style> {% endif %}
+                                    .knapp_tekst {
+                                        color: black;
+                                        text-align: center;
+                                    }</style> {% endif %}
 
                             <div class="knapp{{ company.name }}"><p class="knapp_tekst">{{ company.priority }} </p>
                             </div>
