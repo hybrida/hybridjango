@@ -8,6 +8,12 @@ class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
     responsible = models.ForeignKey(User)
     contact_person = models.CharField(max_length=150)
+    address = models.CharField(max_length=150, null=True, blank=True)
+    info = models.CharField(max_length=300, null=True, blank=True)
+    description = models.CharField(max_length=400, null=True, blank=True)
+    telephone = models.CharField(max_length=30, null=True, blank=True)
+    notes = models.CharField(max_length=100, null=True, blank=True)
+
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
@@ -23,8 +29,8 @@ class Company(models.Model):
         ('Lav', 'LAV')
     )
 
-    status = models.CharField(choices=CHOICES_STATUS, max_length=15)
-    priority = models.CharField(choices=CHOICES_PRIORITY, max_length=10, null=True)
+    status = models.CharField(choices=CHOICES_STATUS, max_length=20)
+    priority = models.CharField(choices=CHOICES_PRIORITY, max_length=20, null=True)
 
     def __str__(self):
         return self.name
@@ -38,3 +44,8 @@ class CompanyComment(models.Model):
 
     def __str__(self):
         return "Kommentar " + str(self.pk)
+
+class EarlierBedpresses(models.Model):
+    company = models.ForeignKey(Company)
+    room = models.CharField(max_length=25, null=True, blank=True)
+    date = models.DateField(default=datetime.datetime.now)
