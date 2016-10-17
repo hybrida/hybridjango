@@ -11,11 +11,13 @@ class Event(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='events', default='placeholder-event.png')
     participants = models.ManyToManyField(User, related_name='participating', blank=True)
-    max_participants = models.IntegerField()
-    signup_start = models.DateTimeField()
-    signup_end = models.DateTimeField()
-    event_start = models.DateTimeField()
-    event_end = models.DateTimeField()
+    max_participants = models.IntegerField(default=0)
+    max_waiting = models.IntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
+    signup_start = models.DateTimeField(blank=True)
+    signup_end = models.DateTimeField(blank=True)
+    event_start = models.DateTimeField(blank=True)
+    event_end = models.DateTimeField(blank=True)
 
     def signup_open(self):
         return self.signup_start < timezone.now() < self.signup_end
