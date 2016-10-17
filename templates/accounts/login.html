@@ -1,35 +1,32 @@
-{% extends "base.html" %}
+{% extends "standard_wide.html" %}
+{% load widget_tweaks %}
 
-{% block content %}
+{% block text %}
 
     {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+        <p>Feil brukerneavn/passord</p>
     {% endif %}
 
     {% if next %}
         {% if user.is_authenticated %}
-            <p>Your account doesn't have access to this page. To proceed,
-                please login with an account that has access.</p>
+            <p>Du har dessverre ikke tilgang til denne siden.</p>
         {% else %}
-            <p>Please login to see this page.</p>
+            <p>Du må logge inn for å se denne siden.</p>
         {% endif %}
     {% endif %}
 
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <table>
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-        </table>
-
-        <input type="submit" value="login" />
-        <input type="hidden" name="next" value="{{ next }}" />
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label_tag }}
+            {{ form.password|add_class:"form-control" }}
+        </div>
+        <button type="submit" value="login" class="btn btn-primary">Logg inn</button>
+        <input type="hidden" name="next" value="{{ next }}"/>
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf #}
