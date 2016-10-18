@@ -1,9 +1,9 @@
-{% extends 'standard.html' %}
+{% extends 'standard_sidebar.html' %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
     <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
 
-    <h1>{{ event.title }}</h1>
+    <h1 id="event_title">{{ event.title }}</h1>
     <h3 class="text-center">{{ event.ingress }}</h3>
     <h6 class="top-text">
         Av:
@@ -20,7 +20,7 @@
         {% endif %}
     </h6>
     <p class="text-center"></p>
-    <p>{{ event.text }}</p>
+    <p>{{ event.text|linebreaksbr }}</p>
     <p></p>
 
 
@@ -91,27 +91,30 @@
     </div>
 {% endblock text %}
 {% block sidebar %}
-    <div class="row">
-        <div class="col-md-6" style="border-right: solid lightslategray">
-            Åpnes<br>
-            Frist<br>
-            2. Frist<br>
-            Start<br>
-            Slutt<br>
-            Sted<br>
-            <br>
-
-
-        </div>
-        <div class="col-md-6">
-            {{ event.signup_start }}
-            {{ event.signup_end }}
-            <br>TODO<br>
-            {{ event.event_start }}
-            {{ event.event_end }}
-            Terra
-        </div>
-    </div>
+    <table width="100%" class="info-table">
+        <tbody>
+        <tr>
+            <td>Åpnes</td>
+            <td>{{ event.signup_start }}</td>
+        </tr>
+        <tr>
+            <td>Frist</td>
+            <td>{{ event.signup_end }}</td>
+        </tr>
+        <tr>
+            <td>Start</td>
+            <td>{{ event.event_start }}</td>
+        </tr>
+        <tr>
+            <td>Slutt</td>
+            <td>{{ event.event_end }}</td>
+        </tr>
+        <tr>
+            <td>Sted</td>
+            <td>{{ event.location }}</td>
+        </tr>
+        </tbody>
+    </table>
     <br>
     <div class="row">
         <div class="col-md-12">
@@ -137,42 +140,97 @@
         <div class="row">
             <div class="col-md-12">
                 {% if event.signup_open %}
-                {% if user in event.participants.all %}
-                    <form method="post" action="{% url 'leave_event' event.pk %}">
-                        {% csrf_token %}
-                        <input name="eventId" value="{{ event.pk }}" type="hidden">
-                        <button type="submit" class=" btn btn-danger btn-block">Meld meg av
-                        </button>
-                    </form>
-                {% else %}
-                    <form method="post" action="{% url 'join_event' event.pk %}">
-                        {% csrf_token %}
-                        <input name="eventId" value="{{ event.pk }}" type="hidden">
-                        <button type="submit" class=" btn btn-primary btn-block">Meld meg på
-                        </button>
-                    </form>
-                {% endif %}
+                    {% if user in event.participants.all %}
+                        <form method="post" action="{% url 'leave_event' event.pk %}">
+                            {% csrf_token %}
+                            <input name="eventId" value="{{ event.pk }}" type="hidden">
+                            <button type="submit" class=" btn btn-danger btn-block">Meld meg av
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'join_event' event.pk %}">
+                            {% csrf_token %}
+                            <input name="eventId" value="{{ event.pk }}" type="hidden">
+                            <button type="submit" class=" btn btn-primary btn-block">Meld meg på
+                            </button>
+                        </form>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
     {% endif %}
 {% endblock sidebar %}
 {% block extra %}
-    <div class="col-xs-12 col-xl-5 space-above">
-
-        <div class="transparent-box comment-section">
+    <script type="text/javascript">
+        textBox = $('#text-box');
+        sidebar = $('#sidebar');
+        adjust_height = function () {
+            if (window.innerWidth >= 992) {
+                $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 30 + 'px');
+            } else {
+                $('#comment_box').css('max-height', "")
+            }
+        };
+        window.onload = adjust_height;
+        window.onresize = adjust_height;
+    </script>
+    <div class="col-xs-12 col-md-4 col-xl-5 space-above">
+        <div class="white-box comment-section" id="comment_box" style="overflow-y: scroll">
             <h6 class="top-text">Kommentarer</h6>
-
-            <div style="margin-top:1em">
-                <form action="" method="POST">
-                    <label for="comment" class="sr-only">Comment:</label>
-                    <div class="input-group">
-                        <input class="form-control" id="comment" name="comment" autocomplete="off"
-                               maxlength="250" type="text">
-                        <span class="input-group-btn">
-                    <button type="submit" class="btn btn-primary">Kommenter</button>
-                </span>
+            {% for comment in event.eventcomment_set.all %}
+                <div class="row">
+                    <div class="col-xs-2 col-lg-2" style="padding-right:0">
+                        <a class="userThumbnailLink" id="{{ comment.author }}"
+                           href="{% url 'profile' comment.author_id %}">
+                            <img class="userThumbnail" src="/uploads/{{ comment.author.hybrid.image }}"
+                                 alt="{{ comment.author_id }}">
+                        </a>
                     </div>
+                    <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
+                        <div class="row">
+                            <div class="col-xs-11">
+                                <strong>
+                                    <a class="userLink" id="{{ comment.author }}"
+                                       href="{% url 'profile' comment.author_id %}">{{ comment.author.hybrid.get_full_name }}</a>:</strong>
+                            </div>
+                            {% if user == comment.author %}
+                                <div class="col-xs-1" style="padding-left: 0;">
+                                    <div class="btn-group pull-right">
+                                        <button class="btn btn-default btn-xs dropdown-toggle" type="button"
+                                                data-toggle="dropdown" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu"
+                                            style="min-width:0;padding:0;border:none;">
+                                            <form method="POST" action="/comment/delete/1">
+                                                <button type="submit" class="btn btn-sm btn-danger"> Slett</button>
+                                            </form>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ comment.text }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <small>{{ comment.timestamp }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div style="margin:1em">
+                <form action="{% url 'comment_event' event.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="event_id" value="{{ event.pk }}" hidden>
+                    <label for="comment" class="sr-only">Comment:</label>
+                        <input class="form-control" id="comment" name="text" autocomplete="off"
+                               maxlength="250" type="text">
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
                 </form>
             </div>
         </div>

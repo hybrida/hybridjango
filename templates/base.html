@@ -36,7 +36,7 @@
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'event_list' %}">Nytt Arrangement</a></li>{% endif %}
+                    <li><a href="{% url 'new_event' %}">Nytt Arrangement</a></li>{% endif %}
                 <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -57,6 +57,14 @@
                        aria-expanded="false">{% firstof user.username 'Logg inn' %}</a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'profile' user.pk %}">Profil</a>
+                            </li>
+                            {% if user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'admin:index' %}">Administrering</a>
+                                </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'logout' %}">Logg ut</a>
                             </li>

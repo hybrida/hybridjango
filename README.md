@@ -1,7 +1,7 @@
 # hybridjango
 Lag et python virtuelt miljø (virtualenv), med navn venv og plassert i prosjektmappen.
 
-Prosjektet krever for øyeblikket libjpeg-dev installert. (```sudo apt install libjpeg-dev``` i ubuntu).
+Prosjektet krever for øyeblikket libjpeg-dev installert. (```sudo apt install libjpeg-dev``` **i ubuntu**).
 
 Naviger til prosjektmappen og kjør
 ```bash
