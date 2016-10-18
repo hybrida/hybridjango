@@ -18,6 +18,7 @@ class Event(models.Model):
     signup_end = models.DateTimeField(blank=True)
     event_start = models.DateTimeField(blank=True)
     event_end = models.DateTimeField(blank=True)
+    weight = models.IntegerField(default=0)
 
     def signup_open(self):
         return self.signup_start < timezone.now() < self.signup_end
