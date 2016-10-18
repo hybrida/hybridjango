@@ -105,12 +105,11 @@ img {
 }
 
 .container-with-set-aspect-ratio {
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     overflow: hidden;
-    top: 0;
-    overflow: hidden;
-    bottom: 0;
     position: absolute;
 }
 
