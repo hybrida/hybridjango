@@ -54,7 +54,7 @@ $(document).ready(function() {
 
 function toggleSuggestionBox() {
     var $sb = $('#suggestionBox');
-    $sb.css('right', $sb.css('right') == '16px' ? '-100%' : 16);
+    $sb.css('right', $sb.css('right') == '16px' ? '-200%' : 16);
 }
 
 function submitSuggestion() {
