@@ -60,6 +60,11 @@
                             <li>
                                 <a href="{% url 'profile' user.pk %}">Profil</a>
                             </li>
+                            {% if user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'admin:index' %}">Administrering</a>
+                                </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'logout' %}">Logg ut</a>
                             </li>
