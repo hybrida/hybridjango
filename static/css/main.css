@@ -311,6 +311,18 @@ a.inverted {
     text-align: right;
 }
 
+
+
+.is-table-row {
+    display: table;
+}
+.is-table-row [class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
