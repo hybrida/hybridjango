@@ -1,4 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+from .models import Product, Order
 
 
 def index(request):
@@ -11,7 +13,12 @@ def bestilling(request):
     return render(request, "kiltshop/bestilling.html")
 
 def shop(request):
-    return render(request, "kiltshop/shop.html")
+    products = Product.objects.all()
+    return render(request, "kiltshop/shop.html", {'products': products})
+
+
+
+
 
 def admin(request):
     return render(request, "kiltshop/admin.html")
