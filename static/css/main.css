@@ -108,6 +108,10 @@ img {
     left: 0;
     right: 0;
     overflow: hidden;
+    top: 0;
+    overflow: hidden;
+    bottom: 0;
+    position: absolute;
 }
 
 #carousel-frontpage > div > .item > img {
