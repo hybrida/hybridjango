@@ -8,7 +8,7 @@ body {
 }
 
 #suggestionBox {
-    right: -100%;
+    right: -200%;
     bottom: 75px;
     z-index: 50000;
     transition: right 0.2s ease;
@@ -93,6 +93,7 @@ img {
     box-shadow: none;
 }
 
+.progress,
 .btn,
 .form-control,
 .dropdown-menu {
@@ -104,12 +105,12 @@ img {
 }
 
 .container-with-set-aspect-ratio {
-    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     overflow: hidden;
+    position: absolute;
 }
 
 #carousel-frontpage > div > .item > img {

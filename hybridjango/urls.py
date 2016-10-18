@@ -25,6 +25,7 @@ urlpatterns = [
                   url(r'^kilt/', include('apps.kiltshop.urls')),
                   url(r'^strikk/', TemplateView.as_view(template_name='hybridastrikk.html')),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
+                  url(r'^statutter/', TemplateView.as_view(template_name='statutter.html')),
                   url(r'^hybrid/', include('apps.accounts.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^arrangementer/', include('apps.events.urls'), name='events'),
