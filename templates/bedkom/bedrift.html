@@ -1,40 +1,145 @@
-{% extends 'base.html' %}
-{% block title %}Bedkom{% endblock %}
-{% block content %}
+{% extends 'standard_sidebar.html' %}
+{% block title %}{{ company.name }}{% endblock %}
+{% block text %}
 
     <style>
         .big_wrapper {
-            border:3px solid blue;
-            margin-left:5%;
-            margin-right:5%;
-            margin-top:20px;
-        }
-        .wrapper_left {
-            border:3px solid red;
-            margin-right:50%;
-        }
-        .wrapper_right{
-            border: 3px solid green;
-            margin-left:50%;
-        }
-        h1 {
-            text-align: left;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border-radius: 3px;
         }
 
+        .table-fill {
+            background: white;
+            border-radius: 3px;
+            border-collapse: collapse;
+            margin: auto;
+            padding: 5px;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            animation: float 5s infinite;
+        }
+
+        th:first-child {
+            border-top-left-radius: 3px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 3px;
+            border-right: none;
+        }
+
+        tr {
+            border-top: 1px solid #C1C3D1;
+            border-bottom-: 1px solid #C1C3D1;
+            color: #666B85;
+            font-size: 16px;
+            font-weight: normal;
+            text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+        }
+
+        th {
+            background: #EBEBEB;
+            width: 20%;
+            border: 1px solid #C1C3D1;
+
+        }
+
+        td:last-child {
+            border-bottom: 1px solid #C1C3D1;
+        }
+
+        td {
+            background: #FFFFFF;
+            padding: 20px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 13px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;
+        }
+
+        .text-left_1 {
+            padding-left: 5px;
+        }
+
+        .big_wrapper {
+            background: white;
+        }
+
+        .table-title {
+            text-align: left;
+            width: 50%;
+        }
+        .pull-left {
+            text-align: left;
+            width: 50%;
+        }
+
+        .pull-right {
+            text-align: right;
+            width: 50%;
+        }
 
     </style>
 
 
     <div class="big_wrapper">
-        <div class="wrapper_left">
-            <h1>{{ company.name }}</h1>
-
+        <div class="pull-left">
+        <h1 class="table-title">{{ company.name }}</h1>
         </div>
+        {% if user.is_authenticated %}
+            <div class="pull-right" >
+            <a>
+                <button class="btn btn-xs btn-primary">Rediger</button>
+            </a></div>
 
-        <div class="wrapper_right">
+        {% endif %}
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left_1">Status</th>
+                <td class="text-left">{{ company.status }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Adresse</th>
+                <td class="text-left_1">{{ company.address }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Kort intro</th>
+                <td class="text-left_1">{{ company.info }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Beskrivelse</th>
+                <td class="text-left_1">{{ company.description }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Telefon</th>
+                <td class="text-left_1">{{ company.telephone }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Notater</th>
+                <td class="text-left_1">{{ company.notes }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Ansvarlig</th>
+                <td class="text-left_1">{{ company.responsible }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Prioritet</th>
+                <td class="text-left_1">{{ company.priority }}</td>
+            </tr>
+            </thead>
+        </table>
 
-
-        </div>
+    <div class="">
+        <h3>Tidligere bedriftspresentasjoner</h3>
+        {% for bedpress in bedpresses %}
+            <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.room }} | {{ bedpress.date }}</a></p>
+        {% endfor %}
+    </div>
 
     </div>
 
