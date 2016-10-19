@@ -2,6 +2,23 @@
 {% load static %}
 {% block title %}Hybridastrikk{% endblock %}
 {% block content %}
+
+    <style>
+        img {
+            filter: gray; /* IE6-9 */
+            -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+            -webkit-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            box-shadow: 0px 2px 6px 2px rgba(0,0,0,0.75);
+            margin-bottom:20px;
+        }
+
+        img:hover {
+            filter: none; /* IE6-9 */
+            -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */
+        }
+    </style>
+
     <div class="container-fluid">
         <h1>Hybridas egen strikkeside</h1>
         <p>Her vil alle de fantastiske strikkeoppskriftene bli lagt ut</p>
@@ -16,8 +33,8 @@
     <div class="container">
         <h2>Image Gallery</h2>
         <p>The .thumbnail class can be used to display an image gallery. Click on the images to see it in full size:</p>
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row is-table-row">
+            <div class="col-md-8">
                 <a href="../static/img/Kiltkast.png" class="thumbnail">
                     <p>Hybridas strikkegenser</p>
                     <img src="../static/img/Kiltkast.png">
@@ -29,14 +46,36 @@
                     <img src="../static/img/Griff,%20drop%20shadow.png">
                 </a>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-4">
                 <a href="../static/img/Kiltkast.png" class="thumbnail">
                     <p>Hvite kiltsokker med mønster</p>
-                    <img src="../static/img/Kiltkast.png">
+                    <img src="../static/img/Kiltkast.png" style="height: 200px">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <a href="../static/img/Kiltkast.png" class="thumbnail">
+                    <p>Hybridas strikkegenser</p>
+                    <img src="../static/img/Kiltkast.png" style="height: 200px">
                 </a>
             </div>
         </div>
     </div>
 
+
+
+    <div class="container" style="filter: none; -webkit-filter: grayscale(0);">
+        <div class="row">
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://2.bp.blogspot.com/-H6MAoWN-UIE/TuRwLbHRSWI/AAAAAAAABBk/89iiEulVsyg/s400/Free%2BNature%2BPhoto.jpg" style="filter: none; -webkit-filter: grayscale(0);" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://www.virginia.org/uploadedImages/virginiaorg/Images/OrgImages/H/HamptonConventionVisitorBureau/Grandview_Nature_Preserve.jpg?width=300&height=200&scale=upscalecanvas" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://blog.arborday.org/wp-content/uploads/2013/02/NEC1-300x200.jpg" style="filter: none; -webkit-filter: grayscale(0);" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://th03.deviantart.net/fs70/200H/f/2010/256/0/9/painting_of_nature_by_dhikagraph-d2ynalq.jpg" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://www.virginia.org/uploadedImages/virginiaorg/Images/OrgImages/H/HamptonConventionVisitorBureau/Grandview_Nature_Preserve.jpg?width=300&height=200&scale=upscalecanvas" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://th03.deviantart.net/fs70/200H/f/2010/256/0/9/painting_of_nature_by_dhikagraph-d2ynalq.jpg" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://2.bp.blogspot.com/-H6MAoWN-UIE/TuRwLbHRSWI/AAAAAAAABBk/89iiEulVsyg/s400/Free%2BNature%2BPhoto.jpg" /></div>
+            <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="http://blog.arborday.org/wp-content/uploads/2013/02/NEC1-300x200.jpg" /></div>
+        </div>
+    </div>
 
 {%  endblock %}

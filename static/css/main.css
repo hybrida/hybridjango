@@ -108,7 +108,7 @@ img {
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: 0; /* very important */
     overflow: hidden;
     position: absolute;
 }
@@ -311,6 +311,18 @@ a.inverted {
     border-right: solid lightslategray;
     text-align: right;
 }
+
+
+
+.is-table-row {
+    display: table;
+}
+.is-table-row [class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+
 
 /**
  * Bootstrap:
