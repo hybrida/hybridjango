@@ -1,6 +1,18 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
 
- <h2> Dette blir en statisk side med alle artiklene man kan bestille </h2>
+    <!-- Products -->,
+     {% for product in products %}
+
+
+         <div class="col-sm-4 col-lg-2">
+             <div class="product_info">
+                <img src="{{ product.image.url }}" style="width:300px;height:300px;">
+                <h3>{{ product.name }}</h3>
+            </div>
+         </div>
+
+
+     {% endfor %}
 
 {% endblock %}
