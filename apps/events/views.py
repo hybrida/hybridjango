@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
+from apps.events.forms import EventForm
 from .models import Event, EventComment
 
 
@@ -22,21 +23,7 @@ class EventView(generic.DetailView):
 class EventCreate(PermissionRequiredMixin, generic.CreateView):
     permission_required = 'events.event.can_add_event'
     model = Event
-    fields = [
-        'title',
-        'ingress',
-        'text',
-        'image',
-        'max_participants',
-        'signup_start',
-        'signup_end',
-        'event_start',
-        'event_end',
-    ]
-    success_url = ''
-
-    def get_success_url(self):
-        return reverse('event', kwargs={'pk': self.object.pk})
+    form_class = EventForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -46,20 +33,7 @@ class EventCreate(PermissionRequiredMixin, generic.CreateView):
 class EventEdit(PermissionRequiredMixin, generic.UpdateView):
     permission_required = 'events.event.can_change_event'
     model = Event
-    fields = [
-        'title',
-        'ingress',
-        'text',
-        'image',
-        'max_participants',
-        'signup_start',
-        'signup_end',
-        'event_start',
-        'event_end',
-    ]
-
-    def get_success_url(self):
-        return reverse('event', kwargs={'pk': self.object.pk})
+    form_class = EventForm
 
 
 class EventDelete(PermissionRequiredMixin, generic.DeleteView):
