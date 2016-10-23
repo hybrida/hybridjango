@@ -1,4 +1,5 @@
 {% extends 'standard_sidebar.html' %}
+{% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
     <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
@@ -25,69 +26,23 @@
 
 
     <h6 class="top-text">Påmeldte</h6>
-
-    <div class="col-md-12">
-
-        <div class="row">
-            <div class="col-md-1">
-                0
+    <div>
+        {% for grade in "12345" %}
+            <div class="row">
+                <div class="col-md-1">
+                    {{ event.participants|grade:grade|length }}
+                </div>
+                <div class="col-md-11">
+                    <p onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ;" style="cursor: pointer;">
+                        Klasse {{ grade }} </p>
+                </div>
+                <div style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
+                    {% for participant in event.participants|grade:grade %}
+                        {% include 'events/user_profile.html' %}
+                    {% endfor %}
+                </div>
             </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide1' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 1 </p>
-            </div>
-            <div style="display: none" class="showhide1" id="showhide1" name="showhide1">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide2' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 2 </p>
-            </div>
-            <div style="display: none" class="showhide2" id="showhide2" name="showhide2">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide3' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 3 </p>
-            </div>
-            <div style="display: none" class="showhide3" id="showhide3" name="showhide3">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide4' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 4 </p>
-            </div>
-            <div style="display: none" class="showhide4" id="showhide4" name="showhide4">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide5' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 5 </p>
-            </div>
-            <div style="display: none" class="showhide5" id="showhide5" name="showhide5">
-
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 {% endblock text %}
 {% block sidebar %}
@@ -127,14 +82,14 @@
     </table>
     <br>
     {% if event.max_participants %}
-    <div class="progress">
-        <div class="progress-bar"
-             style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
-        </div>
-        <span>
+        <div class="progress">
+            <div class="progress-bar"
+                 style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
+            </div>
+            <span>
             {{ event.participants.count }} / {{ event.max_participants }}
         </span>
-    </div>
+        </div>
     {% endif %}
 
     {% if user.is_authenticated %}

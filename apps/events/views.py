@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
-from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
