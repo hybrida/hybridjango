@@ -14,14 +14,13 @@ def order(request):
         return render(request, 'accounts/login.html')
     else:
         user = request.user
-        order = Order.objects.filter(user=user)
-        products = Product.objects.filter(order=order)
+        orders = Order.objects.filter(user=user)
+        products = Product.objects.filter(order=orders)
         return render(request, "kiltshop/bestilling.html", {'products': products})
 
 
 def shop(request):
-    products = Product.objects.all()
-    return render(request, "kiltshop/shop.html", {'products': products})
+    return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
 
 
 def admin(request):

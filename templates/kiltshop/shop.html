@@ -1,19 +1,95 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
 
-    <style>
-    </style>
+<style>
+    div.img {
+    }
 
-    <!-- Products -->
+    div.img:hover {
+    }
+
+    div.img img {
+        width: 200px;
+        height: 250px;
+    }
+
+    div.desc {
+        padding: 15px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .responsive {
+        padding: 0 6px;
+        float: left;
+        width: 24.99999%;
+    }
+
+    @media only screen and (max-width: 700px){
+        .responsive {
+            width: 49.99999%;
+            margin: 6px 0;
+        }
+    }
+
+    @media only screen and (max-width: 500px){
+        .responsive {
+            width: 100%;
+        }
+    }
+
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+    <!-- Kilts -->
+    <h1> Kilt </h1>
     {% for product in products %}
-         <div class="col-sm-4 col-lg-2">
-             <div class="product_info">
-                <img src="{{ product.image.url }}" style="width:300px;height:300px;">
-                <h3>{{ product.name }}</h3>
-                 <div align="center" class="checkbox">
-                     <label><input type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label>
+        {% if product.type == 'K' %}
+                <div class="responsive">
+                <div class="img" align="center">
+                  <img src="{{ product.image.url }}" alt="Trolltunga Norway" width="200" height="200">
+                  <div class="desc">{{ product.name }}</div>
+                  <div class="checkbox"><label><input type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
                 </div>
             </div>
-         </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Sporran -->
+    <h1> Sporran </h1>
+    {% for product in products %}
+        {% if product.type == 'S' %}
+
+            <div class="responsive">
+                 <label>
+               <div class="img" align="center">
+                    <img src="{{ product.image.url }}" alt="Trolltunga Norway" width="200" height="200">
+                <div class="desc">{{ product.name }}</div>
+                <div class="checkbox"><input type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
+              </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <!-- ekstra -->
+    <h1> Ekstra </h1>
+    {% for product in products %}
+        {% if product.type == 'E' %}
+            <div class="responsive">
+                 <div class="img" align="center">
+                  <img src="{{ product.image.url }}" alt="Trolltunga Norway" width="200" height="200">
+                  <div class="desc">{{ product.name }}</div>
+                  <div class="checkbox"><label><input type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 {% endblock %}
