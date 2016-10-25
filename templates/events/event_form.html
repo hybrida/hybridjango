@@ -1,10 +1,58 @@
 {% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
 {% block text %}
-    <h3>Endre arrangement</h3>
+    <h3>Endre/Lag arrangement</h3>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save"/>
+        <div class="form-group">
+            <label for="id_title">Tittel:</label>
+            {{ form.title|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_ingress">Ingress:</label>
+            {{ form.ingress|add_class:"form-control"|attr:"rows:3" }}
+        </div>
+        <div class="form-group">
+            <label for="id_text">Tekst:</label>
+            {{ form.text|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_image">Bilde:</label>
+            {{ form.image }}
+        </div>
+        <div class="form-group">
+            <label for="id_max_participants">Deltagere:</label>
+            {{ form.max_participants|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_price">Pris:</label>
+            {{ form.price|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_signup_start">Påmeldingsstart:</label>
+            {{ form.signup_start|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_signup_end">Påmeldingsslutt:</label>
+            {{ form.signup_end|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_event_start">Start:</label>
+            {{ form.event_start|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_event_end">Slutt:</label>
+            {{ form.event_end|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_weight">Vekting:</label>
+            {{ form.weight|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_weight">Sted:</label>
+            {{ form.location|add_class:"form-control" }}
+        </div>
+        <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
     </form>
 {% endblock text %}
 {% block sidebar %}

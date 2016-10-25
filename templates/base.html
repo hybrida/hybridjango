@@ -35,7 +35,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
-                {% if user.is_authenticated %}
+                {% if perms.events.can_add_event %}
                     <li><a href="{% url 'new_event' %}">Nytt Arrangement</a></li>{% endif %}
                 <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
             </ul>
@@ -72,12 +72,16 @@
                             <li>
                                 <form class="navbar-form" method="post" action="{% url 'login' %}">
                                     {% csrf_token %}
-                                    <label for="id_username">Username:</label>
-                                    <input autofocus="" id="id_username" maxlength="254" name="username" required=""
-                                           type="text" class="form-control">
-                                    <label for="id_password">Password:</label>
-                                    <input id="id_password" name="password" required="" type="password"
-                                           class="form-control">
+                                    <div class="form-group">
+                                        <label for="id_username">Brukernavn:</label>
+                                        <input autofocus="" id="id_username" maxlength="254" name="username" required=""
+                                               type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_password">Passord:</label>
+                                        <input id="id_password" name="password" required="" type="password"
+                                               class="form-control">
+                                    </div>
                                     <button class="btn btn-primary form-control" type="submit">Logg inn</button>
                                 </form>
                             </li>
