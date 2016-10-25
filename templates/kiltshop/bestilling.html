@@ -10,14 +10,14 @@
           <tr>
             <th>Produkt</th>
             <th>Type</th>
-            <th>Antall</th>
+            <th>ID (ønsker: Antall)</th>
           </tr>
         </thead>
         <tbody>
         {% for item in products %}
           <tr>
                 <td>{{ item.name }}</td>
-                <td>{{ item.image }}</td>
+                <td>{{ item.type }}</td>
                 <td>{{ item.pk }}</td>
           </tr>
          {% endfor %}
