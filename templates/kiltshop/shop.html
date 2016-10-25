@@ -1,18 +1,19 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
 
-    <!-- Products -->,
-     {% for product in products %}
+    <style>
+    </style>
 
-
+    <!-- Products -->
+    {% for product in products %}
          <div class="col-sm-4 col-lg-2">
              <div class="product_info">
                 <img src="{{ product.image.url }}" style="width:300px;height:300px;">
                 <h3>{{ product.name }}</h3>
+                 <div align="center" class="checkbox">
+                     <label><input type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label>
+                </div>
             </div>
          </div>
-
-
-     {% endfor %}
-
+    {% endfor %}
 {% endblock %}

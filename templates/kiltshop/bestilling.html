@@ -1,6 +1,28 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
-
- <h2> Dette blir en statisk side som lister alle bestillingene bruker har valgt </h2>
-
+<div class="container">
+    {% if not products %}
+        <h2>Finner ingen bestilling for {{ request.user }}</h2>
+    {% else %}
+      <h2>Bestilling for {{ request.user }}:</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Produkt</th>
+            <th>Type</th>
+            <th>Antall</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in products %}
+          <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.image }}</td>
+                <td>{{ item.pk }}</td>
+          </tr>
+         {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
 {% endblock %}
