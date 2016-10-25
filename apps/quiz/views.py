@@ -4,7 +4,7 @@ from .models import Team
 
 
 def index(request):
-    best_team = Team.objects.order_by('points')[:3]
+    best_team = Team.objects.order_by('-points')[:3]
     template = loader.get_template('quiz/index.html')
     context = {
         'best_team': best_team,

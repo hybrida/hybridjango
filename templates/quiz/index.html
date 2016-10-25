@@ -1,13 +1,43 @@
 {% extends 'base.html' %}
-{% block title %}Bedkom{% endblock %}
+{% block title %}Quiz{% endblock %}
 {% block content %}
-    {% if best_team %}
-        <ul>
+    <h1>Quiz</h1>
+    <style>
+        #Top3 {
+            width: 400px;
+            border-radius: 10px;
+            border: 5px solid black;
+        }
+
+        li {
+            font-size: 22px;
+            color: black;
+        }
+
+        a {
+            color: black;
+        }
+        a:hover {
+            color: blue;
+        }
+
+        #picture {
+            float: right;
+        }
+    </style>
+    <div id="Top3">
+        <h2>Topp 3</h2>
+        {% if best_team %}
+        <ol>
             {% for team in best_team %}
                 <li><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></li>
             {% endfor %}
-        </ul>
+        </ol>
     {% else %}
         <p>Ingen tilgjengelige lag</p>
     {% endif %}
+    </div>
+    <div id="picture">
+        <img src="/static/img/students1.png" alt="Students" height="422" width="590">
+    </div>
 {% endblock %}
