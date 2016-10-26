@@ -34,9 +34,25 @@
         </div>
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
-                {% if perms.events.can_add_event %}
-                    <li><a href="{% url 'new_event' %}">Nytt Arrangement</a></li>{% endif %}
                 <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
+                <li><a href="{% url 'home' %}">Om Hybrida</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'home' %}">Update<sup>k</sup></a></li>
+                {% else %}
+                    <li><a href="{% url 'home' %}">For bedrifter</a></li>
+                {% endif %}
+                <li><a href="{% url 'home' %}">Kontakt Oss</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span style="padding-right: .5em">Mer</span><span class="glyphicon glyphicon-menu-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'home' %}">Kontakt Oss</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
@@ -53,7 +69,9 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{% firstof user.username 'Logg inn' %}</a>
+                       aria-expanded="false">
+                        <span style="padding-right: .5em">{% firstof user.username 'Logg inn' %}</span><span
+                            class="glyphicon glyphicon-menu-down"></span></a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                             <li>
@@ -81,7 +99,11 @@
                                         <input id="id_password" name="password" required="" type="password"
                                                class="form-control">
                                     </div>
-                                    <button class="btn btn-primary form-control" type="submit">Logg inn</button>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary form-control" type="submit">Logg inn</button>
+                                        <a href="https://innsida.ntnu.no/sso/?target=hybridawebtest&returnargs=/,"
+                                           class="btn btn-default form-control">Registrer deg</a>
+                                    </div>
                                 </form>
                             </li>
                         {% endif %}
