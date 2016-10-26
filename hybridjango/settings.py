@@ -26,6 +26,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = [
+    'vevsjef@hybrida.no',
+]
+
+SERVER_EMAIL = 'robot@hybrida.no'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -129,3 +135,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'robot@hybrida.no'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
