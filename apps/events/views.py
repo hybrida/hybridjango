@@ -62,11 +62,12 @@ def leave_event(request, pk):
 @login_required
 def comment_event(request, pk):
     user = request.user
-    event_id = request.POST['event_id']
-    text = request.POST['text']
-    if user.is_authenticated:
-        comment = EventComment(author=user, event_id=event_id, text=text)
-        print(comment.full_clean())
-        comment.save()
+    if request.POST:
+        event_id = request.POST['event_id']
+        text = request.POST['text']
+        if user.is_authenticated:
+            comment = EventComment(author=user, event_id=event_id, text=text)
+            print(comment.full_clean())
+            comment.save()
     return redirect('event', pk)
 
