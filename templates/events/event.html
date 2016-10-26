@@ -2,8 +2,9 @@
 {% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
-    <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
-
+    <div class="remove-whitebox-padding">
+        <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
+    </div>
     <h1 id="event_title">{{ event.title }}</h1>
     <h3 class="text-center">{{ event.ingress }}</h3>
     <h6 class="top-text">
