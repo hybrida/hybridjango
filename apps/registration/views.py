@@ -13,6 +13,7 @@ from .models import User
 
 class Profile(generic.DetailView):
     model = User
+    slug_field = 'username'
     template_name = 'registration/profile.html'
 
 
