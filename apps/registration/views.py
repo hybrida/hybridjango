@@ -19,7 +19,7 @@ class Profile(generic.DetailView):
 
 def redirect_to_profile(request):
     if request.user.is_authenticated:
-        return redirect('profile', request.user.id)
+        return redirect('profile', request.user)
     else:
         return redirect('login')
 
