@@ -1,6 +1,6 @@
 from django import template
-from apps.events.models import Event
-from apps.accounts.models import get_graduation_year
+
+from apps.registration.models import get_graduation_year
 
 register = template.Library()
 

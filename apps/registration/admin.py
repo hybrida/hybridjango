@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from apps.accounts.models import Hybrid
+from apps.registration.models import Hybrid
 
 
 class UserInline(admin.TabularInline):
