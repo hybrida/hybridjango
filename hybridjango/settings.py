@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'apps.kiltshop',
     'apps.bedkom',
-    'apps.accounts',
+    'apps.registration',
     'apps.quiz',
     'apps.events',
 ]

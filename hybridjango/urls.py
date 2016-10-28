@@ -26,7 +26,7 @@ urlpatterns = [
                   url(r'^strikk/', TemplateView.as_view(template_name='hybridastrikk.html')),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
                   url(r'^statutter/', TemplateView.as_view(template_name='statutter.html')),
-                  url(r'^hybrid/', include('apps.accounts.urls'), name='accounts'),
+                  url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^arrangementer/', include('apps.events.urls'), name='events'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

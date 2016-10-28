@@ -1,11 +1,11 @@
-import os
 import csv
+import os
 
 from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
 
-from apps.accounts.models import Hybrid
+from apps.registration.models import Hybrid
 from hybridjango.settings import BASE_DIR
-from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
