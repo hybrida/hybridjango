@@ -13,7 +13,7 @@ from .models import User
 
 class Profile(generic.DetailView):
     model = User
-    template_name = 'accounts/profile.html'
+    template_name = 'registration/profile.html'
 
 
 def redirect_to_profile(request):
