@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from .models import Product, Order
 
 
@@ -11,7 +12,7 @@ def info2(request):
 
 def order(request):
     if not request.user.is_authenticated():
-        return render(request, 'accounts/login.html')
+        return render(request, 'registration/login.html')
     else:
         user = request.user
         orders = Order.objects.filter(user=user)
