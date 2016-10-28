@@ -75,7 +75,7 @@
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                             <li>
-                                <a href="{% url 'profile' user.pk %}">Profil</a>
+                                <a href="{% url 'profile' user %}">Profil</a>
                             </li>
                             {% if user.is_superuser %}
                                 <li>
