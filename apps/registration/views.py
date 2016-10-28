@@ -45,7 +45,7 @@ def register(request):
             'robot@hybrida.no',
             ['{}@stud.ntnu.no'.format(username), ],
         )
-    return render(request, 'accounts/register.html', {'username': username, 'successful': successful})
+    return render(request, 'registration/register.html', {'username': username, 'successful': successful})
 
 
 def complete_registration(request, uidb64, token):
@@ -67,4 +67,4 @@ def complete_registration(request, uidb64, token):
             form = SetPasswordForm(user)
     else:
         form = None
-    return render(request, 'accounts/reset_password.html', {'valid': valid, 'form': form})
+    return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
