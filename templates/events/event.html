@@ -49,7 +49,6 @@
 {% endblock text %}
 {% block sidebar %}
     <table width="100%" class="info-table">
-        <tbody>
         {% if event.signup_start %}
             <tr>
                 <td>Åpnes</td>
@@ -80,7 +79,6 @@
                 <td>{{ event.location }}</td>
             </tr>
         {% endif %}
-        </tbody>
     </table>
     <br>
     {% if event.max_participants %}
