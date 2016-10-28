@@ -1,0 +1,14 @@
+{% extends 'standard_wide.html' %}
+{% block text %}
+    {% if username %}
+        {% if successful %}
+            Mail sendt til {{ username }}@stud.ntnu.no
+        {% endif %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Brukernavn: </label>
+        <input id="username" name="username" type="text" class="form-control">
+        <button class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}
