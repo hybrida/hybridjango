@@ -136,7 +136,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_HOST_USER = 'robot@hybrida.no'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.zoho.com'
+# EMAIL_HOST_USER = 'robot@hybrida.no'
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
