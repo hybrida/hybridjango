@@ -1,9 +1,9 @@
 <a href="{% url 'profile' participant.pk %}">
-    <div class="col-md-1" style="height: 30px; overflow: hidden">
+    <div class="col-xs-1" style="height: 30px; overflow: hidden">
         <img src="/uploads/{{ participant.hybrid.image }}" alt="profilepic for {{ participant.username }}"
              width="30px">
     </div>
-    <div class="col-md-11">
+    <div class="col-xs-11">
         <strong>{{ participant.hybrid.get_full_name }}</strong>
     </div>
 </a>

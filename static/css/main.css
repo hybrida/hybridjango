@@ -347,8 +347,13 @@ a.inverted {
     display: table-cell;
 }
 
+.info-table {
+    margin: auto;
+}
+
 .info-table td {
-    padding: .5em 2em;
+    padding: .5em 1.5em;
+    text-align: left;
 }
 
 .info-table td:first-child {
