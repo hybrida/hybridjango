@@ -27,6 +27,7 @@ class Hybrid(models.Model):
     gender = models.CharField(max_length=1, blank=True)
     specialization = models.CharField(max_length=50, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+    title = models.CharField(max_length=150, blank=True, default='Hybrid')
 
     def get_full_name(self):
         if self.middle_name:

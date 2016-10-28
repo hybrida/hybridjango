@@ -4,7 +4,7 @@
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
 {% endblock link %}
-{% block script %}
+{% comment %}
     <script type="text/javascript">
 
         function uploadImage(filesParent) {
@@ -49,7 +49,7 @@
             });
         });
     </script>
-{% endblock script %}
+{% endcomment %}
 {% block content %}
     <div class="container-fluid center-container nedit space-above">
         <div class="row space-below">
@@ -67,6 +67,7 @@
                         </div>
                         <div class="col-md-6 col-xs-12 pull-left space-above">
                             <h1 class="big-title">{{ user.first_name }} {{ user.hybrid.middle_name }} {{ user.last_name }}</h1>
+                            <h3 class="big-sub-title">{{ user.hybrid.title }}</h3>
                             <br>
                             <div style="overflow-x: auto">
                                 <table class="info-table">
