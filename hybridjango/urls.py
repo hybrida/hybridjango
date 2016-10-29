@@ -29,4 +29,5 @@ urlpatterns = [
                   url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^arrangementer/', include('apps.events.urls'), name='events'),
+                  url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

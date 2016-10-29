@@ -1,0 +1,112 @@
+{% extends 'standard_sidebar.html' %}
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ballot.css' %}">
+{% endblock %}
+
+{% block text %}
+    <h1 id="title">Resultat</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Antall</th>
+            <th>Prosent</th>
+        </tr>
+        </thead>
+        <tbody id="resultater">
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block sidebar %}
+    <h2>Ny avstemning</h2>
+    <form method="post" action="{% url 'ballot:overview' %}" id="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <span>Tittel</span>
+            <input class="form-control" type="text" name="title"/>
+        </div>
+        <div id="new-choices">
+            <span>Valg</span>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="membersOnly" checked> Kun for medlemmer
+            </label>
+        </div>
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <button class="btn btn-success" type="button" onclick="addInput()"><span
+                        class="glyphicon glyphicon-plus"></span></button>
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" type="reset"><span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <a role="button" class="btn btn-primary" type="submit" id="submit">Start Avstemming</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        $(document).ready(function () {
+            addInput();
+            addInput();
+        });
+
+        var choices = 0;
+        function addInput() {
+            $('#new-choices').append(
+                    '<div class="input-group" id="choice-' + choices + '">' +
+                    '<input class="form-control choice" type="text" name="choice-' + choices + '"/>' +
+                    '<span class="input-group-btn">' +
+                    '<button type="button" class="btn btn-danger" onclick="removeChoice(' + choices + ')">' +
+                    '<span class="glyphicon glyphicon-remove">' +
+                    '</span>' +
+                    '</button>' +
+                    '</span>' +
+                    '</div>'
+            );
+            choices++;
+        }
+
+        setInterval(function () {
+                    $.ajax({
+                        url: '{% url 'ballot:results' %}',
+                        type: 'GET',
+                        success: function (response) {
+                            var newResults = "";
+                            for (candidate of response.results) {
+                                newResults += '<tr><th>' + candidate.name + '</th>';
+                                newResults += '<th>' + candidate.votes + '</th>';
+                                newResults += '<th>' + ((candidate.votes * 100.0) / response.total).toFixed(1) + '%</th></tr>';
+                            }
+                            newResults += '<tr><th>Totalt</th>';
+                            newResults += '<th>' + response.total + '</th>';
+                            newResults += '<th></th></tr>';
+                            $('#resultater').html(newResults);
+                            $('#title').html(response.title);
+                        }
+                    })
+                },
+                5000);
+
+        $('#submit').click(function () {
+            $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {
+            })
+        });
+
+        function removeChoice(number) {
+            $("#choice-" + number).remove();
+        }
+
+    </script>
+{% endblock %}
