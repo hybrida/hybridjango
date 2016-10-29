@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -18,9 +19,10 @@ class Ballot:
     votes = []
 
 
+@login_required
 def overview(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'simennje'):
+    if not user.username == 'simennje':
         return redirect('login')
     if request.method == 'POST':
         Ballot.title = request.POST.get('title', 'Avstemning')
@@ -32,8 +34,9 @@ def overview(request):
     return render(request, 'ballot/overview.html')
 
 
+@login_required
 def ballot(request):
-    context = {'choices': Ballot.choices, 'title': Ballot.title, 'nr': Ballot.nr,}
+    context = {'choices': Ballot.choices, 'title': Ballot.title, 'nr': Ballot.nr}
     return render(request, 'ballot/voteview.html', context=context)
 
 
@@ -41,15 +44,19 @@ def vote(request):
     if request.method == 'POST':
         user = request.user
 
-        if not user.is_authenticated: return HttpResponse("Du må være innlogget for å stemme")
-        if user.pk < 2: return HttpResponse("Linjeforeningen Hybrida kan ikke stemme selv")
-        if Ballot.only_members and not user.hybrid.member: return HttpResponse("Kun medlemmer kan stemme")
-        if user.pk in Ballot.has_voted: return HttpResponse("Du har allerede stemt")
+        if not user.is_authenticated:
+            return HttpResponse("Du må være innlogget for å stemme")
+        if user.pk < 2:
+            return HttpResponse("Linjeforeningen Hybrida kan ikke stemme selv")
+        if Ballot.only_members and not user.hybrid.member:
+            return HttpResponse("Kun medlemmer kan stemme")
+        if user.pk in Ballot.has_voted:
+            return HttpResponse("Du har allerede stemt")
 
-        vote = request.POST.get("choice", None)
-        if vote in Ballot.choices:
+        new_vote = request.POST.get("choice", None)
+        if new_vote in Ballot.choices:
             Ballot.has_voted.append(user.pk)
-            Ballot.votes.append(vote)
+            Ballot.votes.append(new_vote)
             return HttpResponse("Du stemte på {}.".format(vote))
 
     return HttpResponse("Du avga ingen stemme")
