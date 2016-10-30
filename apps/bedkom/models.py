@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.functions import datetime
 from django.forms import forms
 
+from apps.events.models import Event
+
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -49,3 +51,7 @@ class EarlierBedpresses(models.Model):
     company = models.ForeignKey(Company)
     room = models.CharField(max_length=25, null=True, blank=True)
     date = models.DateField(default=datetime.datetime.now)
+
+class Bedpress(models.Model):
+    event = models.OneToOneField(Event)
+
