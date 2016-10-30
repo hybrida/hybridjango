@@ -1,6 +1,77 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
 
- <h2> Dette blir en statisk side der admin kan aktivere kiltsalg / se status på bestillinger. </h2>
+<head>
+<style>
+    #table1 tr th{
+    width:25%;
+}
+    .text-center{
+        font-size: 50px;
+
+    }
+
+</style>
+</head>
+
+<body>
+
+ <h1>Administrasjon</h1>
+
+
+   <p class="text-center">Tider</p>
+
+    <hr>
+
+    <table class ="table table-bordered" style="width:100%" id="table1">
+        <tr>
+            <th>Start</th>
+            <th>Slutt</th>
+            <th>Status</th>
+            <th>Vis</th>
+        </tr>
+
+    </table>
+
+ <p class ="text-center"> Bestillinger</p>
+    <hr>
+
+    <table class ="table table-bordered" style="width:100%" id="table1">
+        <tr>
+            <th>Produkt</th>
+            <th>Størrelse</th>
+            <th>Antall</th>
+            <th>Hentet</th>
+        </tr>
+        {% for product in products %}
+            {% if product.type == 'K' %}
+            <tr>
+                <th>{{ product.name }}</th>
+                <th>her kommer størrelse</th>
+                <th>her kommer en for løkke som henter antall</th>
+                <th>her kommer en for løkke som henter antall hentede</th>
+            </tr>
+            {% endif %}
+            {% if product.type == 'S' %}
+            <tr>
+                <th>{{ product.name }}</th>
+                <th>-</th>
+                <th>her kommer en for løkke som henter antall</th>
+                <th>her kommer en for løkke som henter antall hentede</th>
+            </tr>
+            {% endif %}
+            {% if product.type == 'E' %}
+            <tr>
+                <th>{{ product.name }}</th>
+                <th>her kommer størrelse</th>
+                <th>her kommer en for løkke som henter antall</th>
+                <th>her kommer en for løkke som henter antall hentede</th>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
 
 {% endblock %}
+
+</body>
