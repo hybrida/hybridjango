@@ -3,6 +3,8 @@
     {% if username %}
         {% if successful %}
             Mail sendt til {{ username }}@stud.ntnu.no
+        {% elif time_to_wait %}
+            Du må vente {{ time_to_wait|timeuntil }} før du kan sende en ny mail.
         {% endif %}
     {% endif %}
     <form method="post">

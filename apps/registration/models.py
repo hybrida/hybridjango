@@ -40,3 +40,14 @@ class Hybrid(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class RecoveryMail(models.Model):
+    hybrid = models.ForeignKey(Hybrid)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return "{}_{}".format(self.hybrid, self.timestamp)
