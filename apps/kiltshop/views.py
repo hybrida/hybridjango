@@ -25,4 +25,10 @@ def shop(request):
 
 
 def admin(request):
-    return render(request, "kiltshop/admin.html")
+    if not request.user.is_authenticated():
+        return render(request, 'registration/login.html')
+    else:
+        user = request.user
+        orders = Order.objects.filter(user=user)
+        products = Product.objects.filter(order=orders)
+        return render(request, "kiltshop/admin.html", {'products': products})
