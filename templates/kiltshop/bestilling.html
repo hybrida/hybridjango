@@ -1,24 +1,42 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block content2 %}
+
+<style>
+    #table1 tr th{
+    width:25%;}
+
+    .table-items{
+        font-size: 20px;
+    }
+
+    .table-header{
+        font-size: 25px;
+        font-style: italic;
+    }
+
+</style>
+
 <div class="container">
     {% if not products %}
         <h2>Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
       <h2>Din bestilling:</h2>
-      <table class="table">
-        <thead>
+      <table class="table table-bordereds" style="width:100%" id="table1">
+        <thead class="table-header">
           <tr>
             <th>Produkt</th>
             <th>Type</th>
             <th>ID (ønsker: Antall)</th>
+            <th>slett</th>
           </tr>
         </thead>
         <tbody>
         {% for item in products %}
-          <tr>
+          <tr class="table-items">
                 <td>{{ item.name }}</td>
                 <td>{{ item.type }}</td>
                 <td>{{ item.pk }}</td>
+                <td><input type="button" class="custom_image" value="{{ item.pk }}" id="CB1" /><label for='CB1'>&nbsp;</label></td>
           </tr>
          {% endfor %}
         </tbody>
