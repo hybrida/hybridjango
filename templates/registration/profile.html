@@ -57,7 +57,12 @@
                 <div class="page-box">
                     <div class="row">
                         <div class="col-xs-12">
-                            <h5 class="top-text">{{ hybrid.hybridname }}</h5>
+                            <h5 class="top-text">
+                                <span><a href="{% url 'profile' hybrid %}">{{ hybrid.username }}</a></span>
+                                {% if user == hybrid %}
+                                <span style="float: right"><a href="{% url 'edit_profile' hybrid %}">Endre Bruker</a></span>
+                                {% endif %}
+                            </h5>
                         </div>
                         <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
                             {% block image %}
