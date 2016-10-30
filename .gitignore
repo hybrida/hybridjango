@@ -138,6 +138,3 @@ hybenv/
 
 # Database
 db.sqlite3
-
-# Local and production settings
-hybridjango/local_settings.py
