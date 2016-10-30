@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from .models import Product, Order
 
 
@@ -21,14 +20,21 @@ def order(request):
 
 
 def shop(request):
+    if request.method == 'POST':
+        products = request.POST.getlist('product', None)
+        if products is not None:
+            user = request.user
+            order = Order.objects.create(user=user)
+            order.products.add(*products)
+            order.save()
     return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
 
 
 def admin(request):
-    if not request.user.is_authenticated():
+
+    if not request.user.is_staff:
         return render(request, 'registration/login.html')
     else:
         user = request.user
-        orders = Order.objects.filter(user=user)
-        products = Product.objects.filter(order=orders)
-        return render(request, "kiltshop/admin.html", {'products': products})
+        orders = Order.objects.all()
+        return render(request, "kiltshop/admin.html", {'orders': orders})
