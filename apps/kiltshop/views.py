@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from .models import Product, Order
 
 
@@ -32,4 +31,10 @@ def shop(request):
 
 
 def admin(request):
-    return render(request, "kiltshop/admin.html")
+
+    if not request.user.is_staff:
+        return render(request, 'registration/login.html')
+    else:
+        user = request.user
+        orders = Order.objects.all()
+        return render(request, "kiltshop/admin.html", {'orders': orders})
