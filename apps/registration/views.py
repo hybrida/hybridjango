@@ -5,11 +5,12 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
 
-from .models import Hybrid
+from .models import Hybrid, RecoveryMail
 from .forms import HybridForm
 
 
@@ -45,23 +46,34 @@ token_generator = PasswordResetTokenGenerator()
 def register(request):
     successful = False
     username = request.POST.get('username')
+    context = {
+        'username': username,
+    }
     user = Hybrid.objects.filter(username=username).first()
     if user:
-        successful = send_mail(
-            'Lag Hybrida.no bruker',
-            'Hei {name},\n\nåpne på denne linken for å opprette brukeren {username}:\n'
-            'http{s}://{host}{generated}'.format(
-                name=user.first_name,
-                username=username,
-                s='s' if request.is_secure() else '',
-                host=request.get_host(),
-                generated=reverse('complete_registration', kwargs={
-                    'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
-            'robot@hybrida.no',
-            ['{}@stud.ntnu.no'.format(username), ],
-        )
-    return render(request, 'registration/register.html', {'username': username, 'successful': successful})
+        last_mail = RecoveryMail.objects.filter(hybrid=user).first()
+        if not (last_mail and last_mail.timestamp < timezone.now() + timezone.timedelta(minutes=10)):
+            successful = send_mail(
+                'Lag Hybrida.no bruker',
+                'Hei {name},\n\nåpne på denne linken for å opprette brukeren {username}:\n'
+                'http{s}://{host}{generated}'.format(
+                    name=user.first_name,
+                    username=username,
+                    s='s' if request.is_secure() else '',
+                    host=request.get_host(),
+                    generated=reverse('complete_registration', kwargs={
+                        'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
+                'robot@hybrida.no',
+                ['{}@stud.ntnu.no'.format(username), ],
+            )
+        else:
+            successful = False
+            time_to_wait = last_mail.timestamp + timezone.timedelta(minutes=10)
+            context['time_to_wait'] = time_to_wait
+        if successful: RecoveryMail.objects.create(hybrid=user)
+        context['successful'] = successful
+    return render(request=request, template_name='registration/register.html', context=context)
 
 
 def complete_registration(request, uidb64, token):
