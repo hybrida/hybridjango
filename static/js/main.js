@@ -70,12 +70,12 @@ function submitSuggestion() {
     };
 
     var pretext;
-    if (anonymously || suggestingUser == "") {pretext = "Nytt anonymt forslag!"}
-    else {pretext = "Nytt forslag fra "+suggestingUser+"!"}
+    if (anonymously || suggestingUser == "") {pretext = ""}
+    else {pretext = "Feedback from "+suggestingUser}
 
     $button.prop('disabled', true);
     $.post("https://hooks.slack.com/services/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", 'payload={"attachments":[{\
-        "fallback":     "Nytt forslag til forbedring!",\
+        "fallback":     "Feedback recieved",\
         "pretext":      "' + jsonSafe(pretext) + '",\
         "color":        "good",\
         "fields":[{\
