@@ -97,7 +97,7 @@
                         }
                     })
                 },
-                5000);
+                500);
 
         $('#submit').click(function () {
             $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {
