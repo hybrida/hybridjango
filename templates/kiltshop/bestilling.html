@@ -14,6 +14,16 @@
         font-style: italic;
     }
 
+    .button{
+        background-color: Transparent;
+        background-repeat:no-repeat;
+        border: none;
+        cursor:pointer;
+        overflow: hidden;
+        outline:none;
+    }
+
+
 </style>
 
 <div class="container">
@@ -28,7 +38,6 @@
             <th>Produkt</th>
             <th>Type</th>
             <th>ID (ønsker: Antall)</th>
-            <th>slett</th>
           </tr>
         </thead>
 
@@ -39,7 +48,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.type }}</td>
                 <td>{{ item.pk }}</td>
-                <td><button name="delete" type="submit" value="{{ item.pk }}">slett</button></td>
+                <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
           </tr>
          {% endfor %}
         </tbody>
