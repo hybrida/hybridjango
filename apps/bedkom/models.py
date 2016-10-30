@@ -54,4 +54,9 @@ class EarlierBedpresses(models.Model):
 
 class Bedpress(models.Model):
     event = models.OneToOneField(Event)
+    company = models.ForeignKey(Company, null=True)
 
+
+class EarlierBedpresses(models.Model):
+    company = models.ForeignKey()
+    bedpress = models.ForeignKey(Bedpress, null=True)
