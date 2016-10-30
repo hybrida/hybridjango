@@ -144,3 +144,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_PORT = 465
 # EMAIL_USE_SSL = True
+
+# If user has any local settings (local_settings.py), override the ones above
+# Must be at the bottom of the file
+# Used in production
+try:
+    from local_settings import *
+except ImportError as e:
+    pass
