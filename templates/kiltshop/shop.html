@@ -9,8 +9,6 @@
         }
 
         div.img img {
-            width: 200px;
-            height: 250px;
         }
 
         div.desc {
@@ -58,13 +56,14 @@
                     <div class="img" align="center">
                         <img src="{{ product.image.url }}" width="200" height="200">
                         <div class="desc">{{ product.name }}</div>
-                        <div class="checkbox"><label><input name="product" type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}
+                        <div class="checkbox"><label class="radio-inline"><input name="product" type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}
                         </label></div>
                     </div>
                 </div>
             {% endif %}
         {% endfor %}
 
+    <div class="clearfix"></div>
         <!-- Sporran -->
         <h1> Sporran </h1>
         {% for product in products %}
@@ -81,6 +80,7 @@
             {% endif %}
         {% endfor %}
 
+    <div class="clearfix"></div>
         <!-- ekstra -->
         <h1> Ekstra </h1>
         {% for product in products %}
@@ -89,12 +89,14 @@
                     <div class="img" align="center">
                         <img src="{{ product.image.url }}" width="200" height="200">
                         <div class="desc">{{ product.name }}</div>
-                        <div class="checkbox"><label><input name="product" type="checkbox"
-                                                            value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
+                        <div class="checkbox"><label><input name="product" type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
                     </div>
                 </div>
             {% endif %}
         {% endfor %}
+
+
+    <div class="clearfix"></div>
 
 
         <div align="center" class="row">
