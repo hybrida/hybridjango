@@ -9,9 +9,9 @@
     <h3 class="text-center">{{ event.ingress }}</h3>
     <h6 class="top-text">
         Av:
-        <a class="userLink" id="{{ event.author }}"
-           href="{% url 'profile' event.author.pk %}">{{ event.author.hybrid.get_full_name }}</a>
-        {% if user.is_authenticated %}
+        <a class="hybridLink" id="{{ event.author }}"
+           href="{% url 'profile' event.author %}">{{ event.author.get_full_name }}</a>
+        {% if hybrid.is_authenticated %}
             <a class="pull-right" href="{% url 'edit_event' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
@@ -39,7 +39,7 @@
                     </div>
                     <div style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
                         {% for participant in event.participants|grade:grade %}
-                            {% include 'events/user_profile.html' %}
+                            {% include 'events/hybrid_profile.html' %}
                         {% endfor %}
                     </div>
                 </div>
@@ -90,11 +90,11 @@
         </span>
         </div>
     {% endif %}
-    {% if user.is_authenticated %}
+    {% if hybrid.is_authenticated %}
         <div class="row">
             <div class="col-xs-12">
                 {% if event.signup_open %}
-                    {% if user in event.participants.all %}
+                    {% if hybrid in event.participants.all %}
                         <form method="post" action="{% url 'leave_event' event.pk %}">
                             {% csrf_token %}
                             <input name="eventId" value="{{ event.pk }}" type="hidden">
@@ -134,9 +134,9 @@
             {% for comment in event.eventcomment_set.all %}
                 <div class="row">
                     <div class="col-xs-2 col-lg-2" style="padding-right:0">
-                        <a class="userThumbnailLink" id="{{ comment.author }}"
+                        <a class="hybridThumbnailLink" id="{{ comment.author }}"
                            href="{% url 'profile' comment.author_id %}">
-                            <img class="userThumbnail" src="/uploads/{{ comment.author.hybrid.image }}"
+                            <img class="hybridThumbnail" src="/uploads/{{ comment.author.hybrid.image }}"
                                  alt="{{ comment.author_id }}">
                         </a>
                     </div>
@@ -144,10 +144,10 @@
                         <div class="row">
                             <div class="col-xs-11">
                                 <strong>
-                                    <a class="userLink" id="{{ comment.author }}"
+                                    <a class="hybridLink" id="{{ comment.author }}"
                                        href="{% url 'profile' comment.author_id %}">{{ comment.author.hybrid.get_full_name }}</a>:</strong>
                             </div>
-                            {% if user == comment.author %}
+                            {% if hybrid == comment.author %}
                                 <div class="col-xs-1" style="padding-left: 0;">
                                     <div class="btn-group pull-right">
                                         <button class="btn btn-default btn-xs dropdown-toggle" type="button"
