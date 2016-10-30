@@ -48,7 +48,7 @@ def vote(request):
             return HttpResponse("Du må være innlogget for å stemme")
         if user.pk < 2:
             return HttpResponse("Linjeforeningen Hybrida kan ikke stemme selv")
-        if Ballot.only_members and not user.hybrid.member:
+        if Ballot.only_members and not user.member:
             return HttpResponse("Kun medlemmer kan stemme")
         if user.pk in Ballot.has_voted:
             return HttpResponse("Du har allerede stemt")
@@ -57,7 +57,7 @@ def vote(request):
         if new_vote in Ballot.choices:
             Ballot.has_voted.append(user.pk)
             Ballot.votes.append(new_vote)
-            return HttpResponse("Du stemte på {}.".format(vote))
+            return HttpResponse("Du stemte på {}.".format(new_vote))
 
     return HttpResponse("Du avga ingen stemme")
 
