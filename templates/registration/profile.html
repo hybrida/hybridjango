@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ user.username }}{% endblock title %}
+{% block title %}{{ hybrid.hybridname }}{% endblock title %}
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
 {% endblock link %}
@@ -16,7 +16,7 @@
                 $(".picFrame").removeClass("hidden");
                 $(".picFrame .link, .pic").removeClass("hidden");
                 $(".picFrame").addClass("poof");
-            }, "{{ user.username }}");
+            }, "{{ hybrid.hybridname }}");
         }
 
         $(document).ready(function () {
@@ -57,52 +57,55 @@
                 <div class="page-box">
                     <div class="row">
                         <div class="col-xs-12">
-                            <h5 class="top-text">{{ user.username }}</h5>
-
+                            <h5 class="top-text">{{ hybrid.hybridname }}</h5>
                         </div>
                         <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
-                            <div class="picFrame poof">
-                                <img class="pic super-center" src="/uploads/{{ user.hybrid.image }}">
-                            </div>
+                            {% block image %}
+                                <div class="picFrame poof">
+                                    <img class="pic super-center" src="/uploads/{{ hybrid.image }}">
+                                </div>
+                            {% endblock %}
                         </div>
                         <div class="col-md-6 col-xs-12 pull-left space-above">
-                            <h1 class="big-title">{{ user.first_name }} {{ user.hybrid.middle_name }} {{ user.last_name }}</h1>
-                            <h3 class="big-sub-title">{{ user.hybrid.title }}</h3>
-                            <br>
-                            <div style="overflow-x: auto">
-                                <table class="info-table">
-                                    {% if user.email %}
+                            {% block info %}
+                                <h1 class="big-title">{{ hybrid.first_name }} {{ hybrid.middle_name }} {{ hybrid.last_name }}</h1>
+                                <h3 class="big-sub-title">{{ hybrid.title }}</h3>
+                                <br>
+                                <div style="overflow-x: auto">
+                                    <table class="info-table">
+                                        {% if hybrid.email %}
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{{ hybrid.email }}</td>
+                                            </tr>
+                                        {% endif %}
                                         <tr>
-                                            <td>Email</td>
-                                            <td>{{ user.email }}</td>
+                                            <td>Medlem</td>
+                                            <td>{% if hybrid.member %}Ja{% else %}Nei{% endif %}</td>
                                         </tr>
-                                    {% endif %}
-                                    <tr>
-                                        <td>Medlem</td>
-                                        <td>{% if user.hybrid.member %}Ja{% else %}Nei{% endif %}</td>
-                                    </tr>
-                                    {% if user.groups.all %}
+                                        {% if hybrid.groups.all %}
+                                            <tr>
+                                                <td>Medlem av</td>
+                                                <td>
+                                                    {% for group in hybrid.groups.all %}
+                                                        {{ group }}<br>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                         <tr>
-                                            <td>Medlem av</td>
-                                            <td>
-                                                {% for group in user.groups.all %}
-                                                    {{ group }}<br>
-                                                {% endfor %}
-                                            </td>
+                                            <td>Avgangsår</td>
+                                            <td>{{ hybrid.graduation_year }}</td>
                                         </tr>
-                                    {% endif %}
-                                    <tr>
-                                        <td>Avgangsår</td>
-                                        <td>{{ user.hybrid.graduation_year }}</td>
-                                    </tr>
-                                    {% if user.hybrid.specialization %}
-                                        <tr>
-                                            <td>Spesialisering</td>
-                                            <td>{{ user.hybrid.specialization }}</td>
-                                        </tr>
-                                    {% endif %}
-                                </table>
-                            </div>
+                                        {% if hybrid.specialization %}
+                                            <tr>
+                                                <td>Spesialisering</td>
+                                                <td>{{ hybrid.specialization }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            {% endblock %}
                         </div>
                     </div>
                 </div>

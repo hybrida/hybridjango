@@ -34,6 +34,8 @@ SERVER_EMAIL = 'robot@hybrida.no'
 
 # Application definition
 
+AUTH_USER_MODEL = 'registration.Hybrid'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

@@ -8,13 +8,19 @@ from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
 
-from .models import User
+from .models import Hybrid
 
 
 class Profile(generic.DetailView):
-    model = User
+    model = Hybrid
     slug_field = 'username'
     template_name = 'registration/profile.html'
+
+
+class EditProfile(generic.UpdateView):
+    model = Hybrid
+    slug_field = 'username'
+    template_name = 'registration/profile_form.html'
 
 
 def redirect_to_profile(request):
@@ -30,7 +36,7 @@ token_generator = PasswordResetTokenGenerator()
 def register(request):
     successful = False
     username = request.POST.get('username')
-    user = User.objects.filter(username=username).first()
+    user = Hybrid.objects.filter(username=username).first()
     if user:
         successful = send_mail(
             'Lag Hybrida.no bruker',
@@ -42,7 +48,7 @@ def register(request):
                 host=request.get_host(),
                 generated=reverse('complete_registration', kwargs={
                     'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': token_generator.make_token(User.objects.get(username=username))})),
+                    'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
             'robot@hybrida.no',
             ['{}@stud.ntnu.no'.format(username), ],
         )
