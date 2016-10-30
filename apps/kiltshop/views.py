@@ -14,7 +14,6 @@ def order(request):
     if not request.user.is_authenticated():
         return render(request, 'registration/login.html')
     else:
-        print(request.POST)
         user = request.user
         if request.method == 'POST':
             delete = request.POST.get('delete')
