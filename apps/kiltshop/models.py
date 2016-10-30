@@ -1,5 +1,5 @@
-from django.contrib.auth.models import User
 from django.db import models
+from apps.registration.models import Hybrid
 
 
 class Product(models.Model):
@@ -24,7 +24,7 @@ class Product(models.Model):
 
 class Order(models.Model):
     products = models.ManyToManyField(Product)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(Hybrid)
 
     def __str__(self):
         return str(self.user)

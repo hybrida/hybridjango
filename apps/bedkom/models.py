@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from apps.registration.models import Hybrid
 from django.db.models.functions import datetime
 from django.forms import forms
 
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    responsible = models.ForeignKey(User)
+    responsible = models.ForeignKey(Hybrid)
     contact_person = models.CharField(max_length=150)
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
@@ -38,7 +38,7 @@ class Company(models.Model):
 
 class CompanyComment(models.Model):
     company = models.ForeignKey(Company)
-    commenter = models.ForeignKey(User)
+    commenter = models.ForeignKey(Hybrid)
     text = models.TextField()
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
