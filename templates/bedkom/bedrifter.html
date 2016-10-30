@@ -68,6 +68,10 @@
             padding-left: 5px;
         }
 
+        .pull-right {
+            text-align: right;
+        }
+
     </style>
 
 
@@ -79,68 +83,74 @@
                 <div class="table-title">
                     <h3>Bedrifter</h3>
                 </div>
-                <thead>
-                <tr>
-                    <th class="text-left_1">Navn</th>
-                    <th class="text-left_1">Ansvarlig</th>
-                    <th class="text-left_1">Kontaktperson</th>
-                    <th class="text-left_1">Siste Kommentar</th>
-                    <th class="text-left_1">Status</th>
-                    <th class="text-left_1">Prioritet</th>
-                </tr>
-                </thead>
-                <tbody class="table-hover">
-                {% for company in companies %}
-                    <tr>
-                        <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
-                        <td class="text-left"><a
-                                href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
-                        <td class="text-left">{{ company.contact_person }}</td>
-                        <td class="text-left">{{ company.last_comment.text }}</td>
-                        <td class="text-left">
-                            <button type="button">{{ company.status }} </button>
-                        </td>
-                        <td class="text-left">
-                            {% if company.priority == 'Høy' %}
-                                <style>
-                                    .knapp{{ company.name }} {
-                                        background-color: lightgreen;
-                                    }
-
-                                    .knapp_tekst {
-                                        color: black;
-                                        text-align: center;
-                                    }</style> {% endif %}
-                            {% if company.priority == 'Middels' %}
-                                <style>
-                                    .knapp{{ company.name }} {
-                                        background-color: yellow;
-                                    }
-
-                                    .knapp_tekst {
-                                        color: black;
-                                        text-align: center;
-                                    }</style> {% endif %}
-
-                            {% if company.priority == 'Lav' %}
-                                <style>
-                                    .knapp{{ company.name }} {
-                                        background-color: red;
-                                    }
-
-                                    .knapp_tekst {
-                                        color: black;
-                                        text-align: center;
-                                    }</style> {% endif %}
-
-                            <div class="knapp{{ company.name }}"><p class="knapp_tekst">{{ company.priority }} </p>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                <div class="pull-right">
+                    <a href="nybedrift">
+                        <button class="btn btn-xs btn-primary">Lag ny bedrift</button>
+                    </a>
+                </div>
         </div>
+        <thead>
+        <tr>
+            <th class="text-left_1">Navn</th>
+            <th class="text-left_1">Ansvarlig</th>
+            <th class="text-left_1">Kontaktperson</th>
+            <th class="text-left_1">Siste Kommentar</th>
+            <th class="text-left_1">Status</th>
+            <th class="text-left_1">Prioritet</th>
+        </tr>
+        </thead>
+        <tbody class="table-hover">
+        {% for company in companies %}
+            <tr>
+                <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
+                <td class="text-left"><a
+                        href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
+                <td class="text-left">{{ company.contact_person }}</td>
+                <td class="text-left">{{ company.last_comment.text }}</td>
+                <td class="text-left">
+                    <button type="button">{{ company.status }} </button>
+                </td>
+                <td class="text-left">
+                    {% if company.priority == 'Høy' %}
+                        <style>
+                            .knapp{{ company.name }} {
+                                background-color: lightgreen;
+                            }
+
+                            .knapp_tekst {
+                                color: black;
+                                text-align: center;
+                            }</style> {% endif %}
+                    {% if company.priority == 'Middels' %}
+                        <style>
+                            .knapp{{ company.name }} {
+                                background-color: yellow;
+                            }
+
+                            .knapp_tekst {
+                                color: black;
+                                text-align: center;
+                            }</style> {% endif %}
+
+                    {% if company.priority == 'Lav' %}
+                        <style>
+                            .knapp{{ company.name }} {
+                                background-color: red;
+                            }
+
+                            .knapp_tekst {
+                                color: black;
+                                text-align: center;
+                            }</style> {% endif %}
+
+                    <div class="knapp{{ company.name }}"><p class="knapp_tekst">{{ company.priority }} </p>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
     </div>
 
 {% endblock %}
