@@ -21,6 +21,7 @@
         <h2>Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
       <h2>Din bestilling:</h2>
+      <form action="" method="post">
       <table class="table table-bordereds" style="width:100%" id="table1">
         <thead class="table-header">
           <tr>
@@ -30,17 +31,20 @@
             <th>slett</th>
           </tr>
         </thead>
+
+        {% csrf_token %}
         <tbody>
         {% for item in products %}
           <tr class="table-items">
                 <td>{{ item.name }}</td>
                 <td>{{ item.type }}</td>
                 <td>{{ item.pk }}</td>
-                <td><input type="button" class="custom_image" value="{{ item.pk }}" id="CB1" /><label for='CB1'>&nbsp;</label></td>
+                <td><button name="delete" type="submit" value="{{ item.pk }}">slett</button></td>
           </tr>
          {% endfor %}
         </tbody>
       </table>
+      </form>
     </div>
     {% endif %}
 {% endblock %}
