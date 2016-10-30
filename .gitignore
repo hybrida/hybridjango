@@ -136,4 +136,5 @@ hybenv/
 # Rope project settings
 .ropeproject
 
+# Database
 db.sqlite3
