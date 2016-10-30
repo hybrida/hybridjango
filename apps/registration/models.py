@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
@@ -15,11 +15,10 @@ def five_years():
 
 
 def user_folder(instance, filename):
-    return os.path.join('users', instance.user.username, filename)
+    return os.path.join('users', instance.username, filename)
 
 
-class Hybrid(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Hybrid(AbstractUser):
     middle_name = models.CharField(max_length=50, blank=True)
     member = models.BooleanField(default=False)
     graduation_year = models.IntegerField(default=five_years)
@@ -31,13 +30,13 @@ class Hybrid(models.Model):
 
     def get_full_name(self):
         if self.middle_name:
-            first_name = self.user.first_name + ' ' + self.middle_name
+            first_name = self.first_name + ' ' + self.middle_name
         else:
-            first_name = self.user.first_name
-        return first_name + ' ' + self.user.last_name
+            first_name = self.first_name
+        return first_name + ' ' + self.last_name
 
     def get_grade(self):
         return self.graduation_year - (timezone.now() - timedelta(weeks=26)).year
 
     def __str__(self):
-        return self.user.username
+        return self.username
