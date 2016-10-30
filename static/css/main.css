@@ -255,6 +255,10 @@ img {
     padding: .5%;
 }
 
+.feedback:focus {
+    outline: none;
+}
+
 .div_pointer {
     cursor: pointer;
 }
