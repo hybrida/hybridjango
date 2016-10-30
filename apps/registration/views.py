@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth.views import redirect_to_login
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -9,6 +10,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
 
 from .models import Hybrid
+from .forms import HybridForm
 
 
 class Profile(generic.DetailView):
@@ -21,6 +23,13 @@ class EditProfile(generic.UpdateView):
     model = Hybrid
     slug_field = 'username'
     template_name = 'registration/profile_form.html'
+    form_class = HybridForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not (request.user.is_authenticated() and self.get_object() == request.user):
+            return redirect_to_login(request.get_full_path())
+        return super(EditProfile, self).dispatch(
+            request, *args, **kwargs)
 
 
 def redirect_to_profile(request):
