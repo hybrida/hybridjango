@@ -119,20 +119,18 @@
 <button class="feedback btn btn-default btn-lg btn-responsive fixed-bottom-right" onclick="toggleSuggestionBox()">
     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> Tilbakemelding
 </button>
-<div id="suggestionBox" class="white-box fixed-bottom-right container-fluid col-lg-4" style="padding: 0 30px 20px">
+<div id="suggestionBox" class="white-box fixed-bottom-right container" style="padding: 0 30px 20px">
     <input id="suggestingUser" value="" hidden>
     <h2 style="text-align: center">Tilbakemelding til Vevkom</h2>
-    <div class="form-group">
-        <textarea class="form-control" rows="10" cols="50" id="suggestionContent" style="resize: none"
-                  placeholder="Hjelp oss til å gjøre siden bedre"></textarea>
-        {% if user.is_authenticated %}
-            <input type="checkbox" id="suggestAnonymously"> Send anonymt
-        {% else %}
-            <input type="checkbox" id="suggestAnonymously" checked hidden>
-            <br><p>Du er ikke logget inn så forslaget vil bli sent anonymt. Om du vil at vi skal kunne kontakte deg, vennligs logg inn.</p>
-        {% endif %}
-    </div>
-    <button type="submit" class="btn btn-primary form-control" id="suggestionButton" onclick="submitSuggestion()">Send
+    <textarea class="form-control" id="suggestionContent"
+            placeholder="Hjelp oss til å gjøre siden bedre"></textarea>
+    {% if user.is_authenticated %}
+        <span><input type="checkbox" id="suggestAnonymously"> Send anonymt</span>
+    {% else %}
+        <input type="checkbox" id="suggestAnonymously" checked hidden>
+        <span>Du er ikke logget inn så forslaget vil bli sent anonymt. Om du vil at vi skal kunne kontakte deg, vennligs logg inn.</span>
+    {% endif %}
+    <button type="submit" class="btn btn-default" id="suggestionButton" onclick="submitSuggestion()">Send
     </button>
 </div>
 
@@ -150,5 +148,3 @@
 {% endblock %}
 </body>
 </html>
-
-

@@ -54,10 +54,41 @@ body {
 #suggestionBox {
     right: -8px;
     bottom: 75px;
+    width: 500px;
+    height: 400px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
     z-index: 50000;
     transform: translateX(100%);
     transition: right 0.2s ease,
                 transform 0.2s ease;
+}
+
+#suggestionBox #suggestionContent {
+    resize: none;
+    width: 100%;
+    height: auto;
+    flex-grow: 1;
+    margin-bottom: 5px;
+}
+
+#suggestionBox button {
+    margin-top: 15px;
+}
+
+@media (max-width: 992px) {
+  #suggestionBox {
+    bottom: 55px;
+  }
+}
+
+@media (max-width: 767px) {
+  #suggestionBox {
+    width: calc(100% - 32px);
+    height: calc(100% - 71px);
+  }
 }
 
 #logo {
