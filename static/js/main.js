@@ -68,12 +68,19 @@ function submitSuggestion() {
     var $suggestion = $('#suggestionBox #suggestionContent');
 
     var title = window.location.href;
+    var suggestion = $suggestion.val();
     var suggestingUser = $('#suggestionBox #suggestingUser').val();
     var anonymously = $('#suggestionBox #suggestAnonymously').is(":checked");
 
     var jsonSafe = function(string) {
-        return string.replaceAll('\\\\', '\\\\').replaceAll('"', '\\"');
+        return $.trim(string.replaceAll('\\\\', '\\\\').replaceAll('"', '\\"'));
     };
+
+    var treatedSuggestion = jsonSafe(suggestion);
+    if (treatedSuggestion == "") {
+      alert("Du kan ikke sende et tomt forslag.");
+      return;
+    }
 
     var pretext;
     if (anonymously || suggestingUser == "") {pretext = ""}
@@ -86,7 +93,7 @@ function submitSuggestion() {
         "color":        "good",\
         "fields":[{\
             "title":    "' + jsonSafe(title) + '",\
-            "value":    "' + jsonSafe($suggestion.val()) + '",\
+            "value":    "' + treatedSuggestion + '",\
             "short":    false\
     }]}]}').fail(function() {
         alert("Noe gikk galt og forslaget ble ikke sent.");
