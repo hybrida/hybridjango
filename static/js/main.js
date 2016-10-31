@@ -54,7 +54,13 @@ $(document).ready(function() {
 
 function toggleSuggestionBox() {
     var $sb = $('#suggestionBox');
-    $sb.css('right', $sb.css('right') == '16px' ? '-200%' : 16);
+    if ($sb.css('right') == '16px') {
+        $sb.css('right', '-8px');
+        $sb.css('transform', 'translateX(100%)');
+    } else {
+        $sb.css('right','16px');
+        $sb.css('transform', 'translateX(0)');
+    }
 }
 
 function submitSuggestion() {
