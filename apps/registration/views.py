@@ -52,7 +52,7 @@ def register(request):
     user = Hybrid.objects.filter(username=username).first()
     if user:
         last_mail = RecoveryMail.objects.filter(hybrid=user).first()
-        if last_mail and last_mail.timestamp + timezone.timedelta(minutes=0) > timezone.now():
+        if last_mail and last_mail.timestamp + timezone.timedelta(minutes=10) > timezone.now():
             successful = False
             time_to_wait = last_mail.timestamp + timezone.timedelta(minutes=10)
             context['time_to_wait'] = time_to_wait
