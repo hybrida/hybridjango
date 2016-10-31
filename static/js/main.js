@@ -54,7 +54,13 @@ $(document).ready(function() {
 
 function toggleSuggestionBox() {
     var $sb = $('#suggestionBox');
-    $sb.css('right', $sb.css('right') == '16px' ? '-200%' : 16);
+    if ($sb.css('right') == '16px') {
+        $sb.css('right', '-8px');
+        $sb.css('transform', 'translateX(100%)');
+    } else {
+        $sb.css('right','16px');
+        $sb.css('transform', 'translateX(0)');
+    }
 }
 
 function submitSuggestion() {
@@ -62,12 +68,19 @@ function submitSuggestion() {
     var $suggestion = $('#suggestionBox #suggestionContent');
 
     var title = window.location.href;
+    var suggestion = $suggestion.val();
     var suggestingUser = $('#suggestionBox #suggestingUser').val();
     var anonymously = $('#suggestionBox #suggestAnonymously').is(":checked");
 
     var jsonSafe = function(string) {
-        return string.replaceAll('\\\\', '\\\\').replaceAll('"', '\\"');
+        return $.trim(string.replaceAll('\\\\', '\\\\').replaceAll('"', '\\"'));
     };
+
+    var treatedSuggestion = jsonSafe(suggestion);
+    if (treatedSuggestion == "") {
+      alert("Du kan ikke sende et tomt forslag.");
+      return;
+    }
 
     var pretext;
     if (anonymously || suggestingUser == "") {pretext = ""}
@@ -80,7 +93,7 @@ function submitSuggestion() {
         "color":        "good",\
         "fields":[{\
             "title":    "' + jsonSafe(title) + '",\
-            "value":    "' + jsonSafe($suggestion.val()) + '",\
+            "value":    "' + treatedSuggestion + '",\
             "short":    false\
     }]}]}').fail(function() {
         alert("Noe gikk galt og forslaget ble ikke sent.");
