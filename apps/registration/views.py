@@ -57,6 +57,8 @@ def register(request):
             time_to_wait = last_mail.timestamp + timezone.timedelta(minutes=10)
             context['time_to_wait'] = time_to_wait
         else:
+            mails = ['{}@stud.ntnu.no'.format(username)]
+            if user.email: mails.append(user.email)
             successful = send_mail(
                 'Lag Hybrida.no bruker',
                 'Hei {name},\n\nåpne denne linken for å (gjen)opprette brukeren {username}:\n'
@@ -69,7 +71,7 @@ def register(request):
                         'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
                         'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
                 'robot@hybrida.no',
-                ['{}@stud.ntnu.no'.format(username), user.email],
+                mails,
             )
     if successful: RecoveryMail.objects.create(hybrid=user)
     context['successful'] = successful

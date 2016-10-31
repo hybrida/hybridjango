@@ -3,7 +3,6 @@
 {% block title %}Forside{% endblock %}
 {% block content %}
     <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
-    </div>
     <div class="fp_white" style="margin-top: -.2%">
     </div>
     <div class="container-fluid center-container">
@@ -15,7 +14,7 @@
                             Velkommen til linjeforening Hybrida sin nettside
                         </div>
                         <div class="col-sm-6 white-box no-shadow inverted">
-                            <a href="/nystudent"> Ny student? Klikk her!</a>
+                            <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
                         </div>
                         <!--- <div class="col-sm-4 white-box no-shadow inverted" style="background:#7c3f63;"> </div> -->
                     </div>
@@ -29,51 +28,9 @@
     <div class="container-fluid center-container">
         <div class="row space-below space-above">
             <div class="col-xs-12 space-above">
-                <div class="page-box">
+                <div class="white-box">
                     <h5 class="top-text">Nyhetsfeed</h5>
-                    {% for event in object_list %}
-                        <div class="col-lg-8 render big-thumbnail" style="padding: 7px; margin-bottom: -1px;">
-                            <div class="white-box no-shadow">
-                                <div style="position: relative;">
-                                    <div style="padding-top: 100%;">
-                                    </div>
-                                    <div class="container-with-set-aspect-ratio">
-                                        <a href="/events/{{ event.pk }}">
-                                            <div style="position: relative">
-                                                <div style="padding-top: 50%">
-                                                </div>
-                                                <div class="container-with-set-aspect-ratio">
-                                                    <img class="super-center" src="/uploads/{{ event.image }}"
-                                                         alt="No image available"
-                                                         width="100%">
-                                                </div>
-                                            </div>
-                                            <h3 class="col-xs-12">{{ event.title }}</h3>
-                                        </a>
-
-                                        <p class="col-xs-12">{{ event.ingress }}</p>
-
-                                        <div class="container-fluid"
-                                             style="position: absolute; bottom: 0; background: rgba(245,245,245,1); width: 100%;">
-                                            <div class="row">
-                                                <div class="col-xs-6">{{ event.event_start }}</div>
-                                                <div class="col-xs-6">
-                                                    <div class="progress" style="margin-bottom: 0;">
-                                                        <div class="progress-bar"
-                                                             style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
-                                                        </div>
-                                                        <span>{{ event.participants.count }} / {{ event.max_participants }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    {% endfor %}
-                    <div class="clearfix"></div>
+                    {% include 'events/events_thumblist.html' %}
                 </div>
             </div>
 
