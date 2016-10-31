@@ -18,9 +18,10 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
+from apps.events.views import EventList
 
 urlpatterns = [
-                  url(r'^$', TemplateView.as_view(template_name='frontpage.html'), name='home'),
+                  url(r'^$', EventList.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', admin.site.urls),
                   url(r'^kilt/', include('apps.kiltshop.urls'), name='kiltshop'),
                   url(r'^strikk/', TemplateView.as_view(template_name='hybridastrikk.html')),

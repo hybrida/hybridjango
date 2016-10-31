@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -41,6 +42,8 @@ class Hybrid(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'slug': self.username})
 
 class RecoveryMail(models.Model):
     hybrid = models.ForeignKey(Hybrid)

@@ -11,11 +11,12 @@
         Av:
         <a class="hybridLink" id="{{ event.author }}"
            href="{% url 'profile' event.author %}">{{ event.author.get_full_name }}</a>
-        {% if hybrid.is_authenticated %}
+        {% if perms.events.can_add_event %}
             <a class="pull-right" href="{% url 'edit_event' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
-
+        {% endif %}
+        {% if perms.events.can_add_event %}
             <a class="pull-right" href="{% url 'delete_event' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
@@ -39,7 +40,7 @@
                     </div>
                     <div style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
                         {% for participant in event.participants|grade:grade %}
-                            {% include 'events/hybrid_profile.html' %}
+                            {% include 'events/user_profile.html' %}
                         {% endfor %}
                     </div>
                 </div>
@@ -147,22 +148,6 @@
                                     <a class="hybridLink" id="{{ comment.author }}"
                                        href="{% url 'profile' comment.author_id %}">{{ comment.author.hybrid.get_full_name }}</a>:</strong>
                             </div>
-                            {% if hybrid == comment.author %}
-                                <div class="col-xs-1" style="padding-left: 0;">
-                                    <div class="btn-group pull-right">
-                                        <button class="btn btn-default btn-xs dropdown-toggle" type="button"
-                                                data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right" role="menu"
-                                            style="min-width:0;padding:0;border:none;">
-                                            <form method="POST" action="/comment/delete/1">
-                                                <button type="submit" class="btn btn-sm btn-danger"> Slett</button>
-                                            </form>
-                                        </ul>
-                                    </div>
-                                </div>
-                            {% endif %}
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
