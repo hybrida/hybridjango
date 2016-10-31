@@ -119,19 +119,17 @@
 <button class="feedback btn btn-default btn-lg btn-responsive fixed-bottom-right" onclick="toggleSuggestionBox()">
     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> Tilbakemelding
 </button>
-<div id="suggestionBox" class="white-box fixed-bottom-right container" style="padding: 0 30px 20px">
+<div id="suggestionBox" class="white-box fixed-bottom-right container">
     <input id="suggestingUser" value="" hidden>
     <h2 style="text-align: center">Tilbakemelding til Vevkom</h2>
-    <textarea class="form-control" id="suggestionContent"
-            placeholder="Hjelp oss til å gjøre siden bedre"></textarea>
+    <textarea class="form-control" id="suggestionContent" placeholder="Hjelp oss til å gjøre siden bedre"></textarea>
     {% if user.is_authenticated %}
         <span><input type="checkbox" id="suggestAnonymously"> Send anonymt</span>
     {% else %}
         <input type="checkbox" id="suggestAnonymously" checked hidden>
-        <span>Du er ikke logget inn så forslaget vil bli sent anonymt. Om du vil at vi skal kunne kontakte deg, vennligs logg inn.</span>
+        <span>Du er ikke logget inn så meldingen vil bli sent anonymt. Om du vil at vi skal kunne kontakte deg, vennligs logg inn.</span>
     {% endif %}
-    <button type="submit" class="btn btn-default" id="suggestionButton" onclick="submitSuggestion()">Send
-    </button>
+    <button type="submit" class="btn btn-default" id="suggestionButton" onclick="submitSuggestion()">Send</button>
 </div>
 
 <div class="wrap">
@@ -139,8 +137,7 @@
         {% block content %}
         {% endblock %}
     </div>
-    <div id="footer">
-    </div>
+    <div id="footer"></div>
 </div>
 <script type="text/javascript" src="{% static "lib/js/bootstrap.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/main.js" %}"></script>
