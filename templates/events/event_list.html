@@ -4,5 +4,5 @@
     {% include 'events/events_thumblist.html' %}
 {% endblock %}
 {% block sidebar %}
-    <a href="{% url 'new_event' %}">Nytt Arrangement</a>
+    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
 {% endblock %}
