@@ -52,10 +52,14 @@ def register(request):
     user = Hybrid.objects.filter(username=username).first()
     if user:
         last_mail = RecoveryMail.objects.filter(hybrid=user).first()
-        if not (last_mail and last_mail.timestamp < timezone.now() + timezone.timedelta(minutes=10)):
+        if last_mail and last_mail.timestamp + timezone.timedelta(minutes=0) > timezone.now():
+            successful = False
+            time_to_wait = last_mail.timestamp + timezone.timedelta(minutes=10)
+            context['time_to_wait'] = time_to_wait
+        else:
             successful = send_mail(
                 'Lag Hybrida.no bruker',
-                'Hei {name},\n\nåpne på denne linken for å opprette brukeren {username}:\n'
+                'Hei {name},\n\nåpne denne linken for å (gjen)opprette brukeren {username}:\n'
                 'http{s}://{host}{generated}'.format(
                     name=user.first_name,
                     username=username,
@@ -65,14 +69,10 @@ def register(request):
                         'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
                         'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
                 'robot@hybrida.no',
-                ['{}@stud.ntnu.no'.format(username), ],
+                ['{}@stud.ntnu.no'.format(username), user.email],
             )
-        else:
-            successful = False
-            time_to_wait = last_mail.timestamp + timezone.timedelta(minutes=10)
-            context['time_to_wait'] = time_to_wait
-        if successful: RecoveryMail.objects.create(hybrid=user)
-        context['successful'] = successful
+    if successful: RecoveryMail.objects.create(hybrid=user)
+    context['successful'] = successful
     return render(request=request, template_name='registration/register.html', context=context)
 
 

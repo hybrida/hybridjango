@@ -86,6 +86,14 @@ WSGI_APPLICATION = 'hybridjango.wsgi.application'
 
 DATABASES = {
     'default': {
+        #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #        'NAME': 'hybridjango',
+        #        'USER': 'hybriduser',
+        #        'PASSWORD': 'vevkom er 8',
+        #        'HOST': 'localhost',
+        #        'PORT': '',
+        #    },
+        #    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -139,11 +147,11 @@ STATICFILES_DIRS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_HOST = 'smtp.zoho.com'
-# EMAIL_HOST_USER = 'robot@hybrida.no'
-# EMAIL_HOST_PASSWORD = ''
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'robot@hybrida.no'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
 
 # If user has any local settings (local_settings.py), override the ones above
 # Must be at the bottom of the file
