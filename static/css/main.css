@@ -491,6 +491,10 @@ a.inverted {
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, .5));
 }
 
+.navbar-login {
+    padding: 15px;
+}
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
@@ -504,8 +508,10 @@ a.inverted {
  * design so that it looks good on small screens, then add @media rules
  * where needed to make it look good on bigger screens as well
  **/
-@media only screen and (max-width: 1199px) and (min-width: 992px) {
-    #navbar-search {
+
+@media (min-width: 768px) {
+    .navbar-login {
+        padding: 0;
     }
 }
 
