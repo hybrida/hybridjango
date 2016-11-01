@@ -16,7 +16,6 @@
                         <div class="col-sm-6 white-box no-shadow inverted">
                             <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
                         </div>
-                        <!--- <div class="col-sm-4 white-box no-shadow inverted" style="background:#7c3f63;"> </div> -->
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -27,13 +26,17 @@
         &nbsp;</a>
     <div class="container">
         <div class="row space-below space-above">
-            <div class="col-xs-12 space-above">
+            <div class="col-xs-12 col-md-4 space-above">
                 <div class="white-box">
-                    <h5 class="top-text">Nyhetsfeed</h5>
+                    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
+                    {{ events_chronological }}
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <div class="unstyled-box">
                     {% include 'events/events_thumblist.html' %}
                 </div>
             </div>
-
         </div>
     </div>
 {% endblock %}

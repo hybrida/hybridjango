@@ -228,6 +228,10 @@ img {
     overflow: auto;
 }
 
+.unstyled-box {
+    padding: 20px;
+}
+
 .clean-white-box {
     background-color: #fff;
     padding: 20px;
