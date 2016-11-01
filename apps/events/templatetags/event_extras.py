@@ -7,4 +7,4 @@ register = template.Library()
 
 @register.filter
 def grade(value, arg):
-    return value.filter(hybrid__graduation_year=get_graduation_year(arg))
+    return value.filter(graduation_year=get_graduation_year(arg))
