@@ -35,13 +35,13 @@
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
-                <li><a href="{% url 'home' %}">Om Hybrida</a></li>
+                <li><a href="{% url 'about' %}">Om Hybrida</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'home' %}">Update<sup>k</sup></a></li>
+                    <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
                 {% else %}
-                    <li><a href="{% url 'home' %}">For bedrifter</a></li>
+                    <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
                 {% endif %}
-                <li><a href="{% url 'home' %}">Kontakt Oss</a></li>
+                <li><a href="{% url 'contact_us' %}">Kontakt Oss</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
@@ -103,8 +103,11 @@
                                                class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-primary form-control" type="submit" style="width: 100%; margin: .25em 0;">Logg inn</button>
-                                        <a href="{% url 'register' %}" class="btn btn-default" style="width: 100%">Registrer/Gjenoprett bruker</a>
+                                        <button class="btn btn-primary form-control" type="submit"
+                                                style="width: 100%; margin: .25em 0;">Logg inn
+                                        </button>
+                                        <a href="{% url 'register' %}" class="btn btn-default" style="width: 100%">Registrer/Gjenoprett
+                                            bruker</a>
                                     </div>
                                 </form>
                             </li>
@@ -119,11 +122,48 @@
 {% include './feedback.html' %}
 
 <div class="wrap">
-    <div class="content">
+    <div class="article-bg">
         {% block content %}
         {% endblock %}
     </div>
-    <div id="footer"></div>
+    <div id="footer" class="container">
+        <div class="row">
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    et eller annet
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    <h4>Kontaktinfo</h4>
+                    <table class="info-table">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        <tr>
+                            <td>Mail</td>
+                            <td>styret@hybrida.no</td>
+                        </tr>
+                        <tr>
+                            <td>Telefon</td>
+                            <td>12345678</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td>Hva nå enn adressen er</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    <div class="remove-whitebox-padding">
+                        {% include 'ringen.svg' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript" src="{% static "lib/js/bootstrap.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/main.js" %}"></script>

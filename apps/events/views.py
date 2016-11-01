@@ -1,6 +1,8 @@
+import os
+from hybridjango.settings import STATIC_FOLDER
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -71,3 +73,15 @@ def comment_event(request, pk):
             comment.save()
     return redirect('event', pk)
 
+
+UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
+
+
+def updatek(request):
+    context = {}
+    dirs = os.listdir(UPDATEK)
+    context['updatek'] = sorted([(
+                              dir,
+                              set([os.path.splitext(file)[0] for file in os.listdir(os.path.join(UPDATEK, dir))])
+                          ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
+    return render(request, 'staticpages/updatek.html', context)

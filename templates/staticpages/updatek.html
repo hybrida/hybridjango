@@ -1,0 +1,14 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+{% block text %}
+    {% for dir, files in updatek %}
+        <div>
+            <h3>{{ dir }}</h3>
+            {% for file in files %}
+                <a href="/static/pdf/updatek/{{ dir }}/{{ file }}.pdf">
+                    <img width="142px" src="/static/pdf/updatek/{{ dir }}/{{ file }}.png">
+                </a>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}
