@@ -45,7 +45,10 @@ token_generator = PasswordResetTokenGenerator()
 
 def register(request):
     successful = False
-    username = request.POST.get('username')
+    if request.method == 'POST':
+        username = request.POST.get('username').lower()
+    else:
+        username = None
     context = {
         'username': username,
     }
