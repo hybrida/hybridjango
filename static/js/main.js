@@ -52,10 +52,10 @@ $(document).ready(function() {
     $(window).resize(calculateSuperCenter);
 });
 
-function toggleSuggestionBox() {
-    var $sb = $('#suggestionBox');
+function toggleFeedbackBox() {
+    var $sb = $('#feedbackBox');
     if ($sb.css('right') == '16px') {
-        $sb.css('right', '-8px');
+        $sb.css('right', '-8px'); // Account for shadow on box
         $sb.css('transform', 'translateX(100%)');
     } else {
         $sb.css('right','16px');
@@ -63,44 +63,68 @@ function toggleSuggestionBox() {
     }
 }
 
-function submitSuggestion() {
-    var $button = $('#suggestionBox #suggestionButton');
-    var $suggestion = $('#suggestionBox #suggestionContent');
+function submitFeedback() {
 
-    var title = window.location.href;
-    var suggestion = $suggestion.val();
-    var suggestingUser = $('#suggestionBox #suggestingUser').val();
-    var anonymously = $('#suggestionBox #suggestAnonymously').is(":checked");
+    // Get handlers
+    var $button = $('#feedbackButton');
+    var $content = $('#feedbackContent');
 
-    var jsonSafe = function(string) {
-        return $.trim(string.replaceAll('\\\\', '\\\\').replaceAll('"', '\\"'));
+    // Get data
+    var url = window.location.href;
+    var content = $content.val();
+    var user = $('#feedbackUser').val();
+    var email = $('#feedbackEmail').val();
+    var anonymous = $('#feedbackAnonymous').is(":checked");
+
+    // Email data
+    var subject = "Tilbakemelding til Vevkom";
+    var bodyPreText = "Dette er et svar på din tilbakemelding:\n"
+
+    // Format data
+    var slackSafe = function(string) {
+        return $.trim(string.replaceAll('&', '&amp;')
+                            .replaceAll('<', '&lt;')
+                            .replaceAll('>', '&gt;'));
     };
 
-    var treatedSuggestion = jsonSafe(suggestion);
-    if (treatedSuggestion == "") {
+    var fallback = "Feedback received";
+    var authorName = anonymous ? "" : slackSafe(user);
+    var authorLink = anonymous ? "" : encodeURI("mailto:" + email + "?subject=") + encodeURIComponent(subject) + encodeURI("&body=") + encodeURIComponent(bodyPreText + content);
+    var authorIcon = "https://slack-files.com/T0CAJ0U4A-F2WLMK087-7d8bf05908";
+    var color = "good";
+    var footer = "Sent from " + url
+    var text = slackSafe(content);
+
+    // Verify request
+    if (text == "") {
       alert("Du kan ikke sende et tomt forslag.");
       return;
     }
 
-    var pretext;
-    if (anonymously || suggestingUser == "") {pretext = ""}
-    else {pretext = "Feedback from "+suggestingUser}
+    // Stop user from sending while waiting
+    $button.prop("disabled", true);
 
-    $button.prop('disabled', true);
-    $.post("https://hooks.slack.com/services/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", 'payload={"attachments":[{\
-        "fallback":     "Feedback recieved",\
-        "pretext":      "' + jsonSafe(pretext) + '",\
-        "color":        "good",\
-        "fields":[{\
-            "title":    "' + jsonSafe(title) + '",\
-            "value":    "' + treatedSuggestion + '",\
-            "short":    false\
-    }]}]}').fail(function() {
-        alert("Noe gikk galt og forslaget ble ikke sent.");
+    // Send JSON post request
+    $.post("https://hooks.slack.com/services/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", JSON.stringify({
+      "attachments": [
+        {
+          "fallback": fallback,
+          "author_name": authorName,
+          "author_link": authorLink,
+          "author_icon": authorIcon,
+          "color": color,
+          "footer": footer,
+          "text": text
+        }
+      ]
+    })).fail(function() {
+      alert("Noe gikk galt og forslaget ble ikke sent.");
+
     }).done(function() {
-        $suggestion.val('');
-        toggleSuggestionBox();
+      $content.val(""); // Reset text
+      toggleFeedbackBox(); // Hide box
+
     }).always(function() {
-        $button.prop('disabled', false);
+      $button.prop("disabled", false); // Enable button when done waiting
     });
 }
