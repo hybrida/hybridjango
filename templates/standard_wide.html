@@ -1,17 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="article-bg">
-        <div class="container-fluid center-container">
-            <div class="row space-below">
-                <div class="col-xs-12 space-above">
-                    <div class="white-box" id="text-box">
-                        {% block text %}
-                        {% endblock text %}
-                    </div>
-                </div>
-                {% block extra %}
-                {% endblock extra %}
+    <div class="row space-below">
+        <div class="col-xs-12 space-above">
+            <div class="white-box" id="text-box">
+                {% block text %}
+                {% endblock text %}
             </div>
         </div>
+        {% block extra %}
+        {% endblock extra %}
     </div>
 {% endblock content %}

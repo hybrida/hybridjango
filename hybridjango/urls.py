@@ -18,18 +18,27 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
-from apps.events.views import EventList
+from apps.events.views import EventList, updatek
 
 urlpatterns = [
                   url(r'^$', EventList.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', admin.site.urls),
                   url(r'^kilt/', include('apps.kiltshop.urls'), name='kiltshop'),
-                  url(r'^strikk/', TemplateView.as_view(template_name='hybridastrikk.html')),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
-                  url(r'^statutter/', TemplateView.as_view(template_name='statutter.html')),
-                  url(r'^griffens_orden/', TemplateView.as_view(template_name='griffens_orden.html')),
                   url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^arrangementer/', include('apps.events.urls'), name='events'),
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
+
+                  # Static pages, only temporary (short on time before genfors)
+                  url(r'^strikk/', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
+                  url(r'^statutter/', TemplateView.as_view(template_name='staticpages/statutter.html')),
+                  url(r'^griffens_orden/', TemplateView.as_view(template_name='staticpages/griffens_orden.html')),
+                  url(r'^om_hybrida/', TemplateView.as_view(template_name='staticpages/about.html'), name='about'),
+                  url(r'^for_bedrifter/', TemplateView.as_view(template_name='staticpages/for_companies.html'),
+                      name='for_companies'),
+                  url(r'^updatek/', updatek, name='updatek'),
+                  url(r'^komite/', TemplateView.as_view(template_name='staticpages/committees.html'), name='committees'),
+                  url(r'^kontakt_oss/', TemplateView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
