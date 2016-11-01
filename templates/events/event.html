@@ -136,7 +136,7 @@
                 <div class="row">
                     <div class="col-xs-2 col-lg-2" style="padding-right:0">
                         <a class="hybridThumbnailLink" id="{{ comment.author }}"
-                           href="{% url 'profile' comment.author_id %}">
+                           href="{% url 'profile' comment.author.username %}">
                             <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
                                  alt="{{ comment.author_id }}">
                         </a>
@@ -146,7 +146,7 @@
                             <div class="col-xs-11">
                                 <strong>
                                     <a class="hybridLink" id="{{ comment.author }}"
-                                       href="{% url 'profile' comment.author_id %}">{{ comment.author.hybrid.get_full_name }}</a>:</strong>
+                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
                             </div>
                         </div>
                         <div class="row">
