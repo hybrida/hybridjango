@@ -51,11 +51,12 @@ body {
     padding-top: 50px;
 }
 
-#suggestionBox {
-    right: -8px;
+#feedbackBox {
+    right: -8px; /* Account for shadow on box */
     bottom: 75px;
     width: 500px;
     height: 400px;
+    padding: 0 30px 20px;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
@@ -66,7 +67,11 @@ body {
     transform 0.2s ease;
 }
 
-#suggestionBox #suggestionContent {
+#feedbackBox h2 {
+    text-align: center
+}
+
+#feedbackBox #feedbackContent {
     resize: none;
     width: 100%;
     height: auto;
@@ -74,18 +79,18 @@ body {
     margin-bottom: 5px;
 }
 
-#suggestionBox button {
+#feedbackBox #feedbackButton {
     margin-top: 15px;
 }
 
 @media (max-width: 992px) {
-    #suggestionBox {
+    #feedbackBox {
         bottom: 55px;
     }
 }
 
 @media (max-width: 767px) {
-    #suggestionBox {
+    #feedbackBox {
         width: calc(100% - 32px);
         height: calc(100% - 71px);
     }
@@ -288,7 +293,7 @@ img {
     padding: .5%;
 }
 
-.feedback:focus {
+.no-outline:focus, .no-outline:active:focus {
     outline: none;
 }
 
