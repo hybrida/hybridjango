@@ -1,0 +1,110 @@
+{% extends 'standard_sidebar.html' %}
+{% load static %}
+{% block text %}
+    <article>
+        <h1>Bedrift</h1>
+        <section>
+            <h2>Bedriftskontakt</h2>
+            <p>
+                Hybrida Bedriftskomite har ansvaret for kontakten med bedrifter for sivilingeniørstudiet
+                Ingeniørvitenskap og IKT (I&IKT) ved NTNU. Komitéen ble etablert for å formidle informasjon til
+                bedrifter vedrørende studieprogrammet og hvilken kompetanse våre studenter innehar. Formålet til
+                bedriftskomitéen er å hjelpe studentene ved studieprogrammet med prosjektoppgaver, hovedoppgaver,
+                sommerjobber og fast ansettelse. I tillegg kan bedriftsbesøk, ekskursjoner og temakvelder gi bedrifter
+                og studenter mulighet til å skape nettverk.
+            </p>
+            <p>
+                %%%%%[Trengs kontaktinformasjon i neste avsnitt] Arrangementer av denne typen krever samarbeid fra
+                bedrifter. Hvis dere kan bidra, kontakt oss gjerne via [KONTAKTMETODE!!!!]. For en komplett liste med
+                Hybrida Bedriftkomités oppgaver og gjøremål,%%% se våre statutter i samme meny.%%% [Statutter har ikke
+                vært synlig for andre enn de som er medlem av bedriftskomitéen]
+            </p>
+        </section>
+        <section>
+            <h2>Bedriftsbesøk:</h2>
+            <p>
+                Et bedriftsbesøk går i hovedsak ut på at bedriften besøker NTNU for å presentere seg for studentene. Et
+                typisk bedriftsbesøk innebærer først og fremst en presentasjon der bedriften holder foredrag for
+                utvalgte studenter. I tillegg er det vanlig med påfølgende bespisning, og mange bedrifter velger å ha
+                jobbsamtaler/intervjuer tilknyttet besøket.
+            </p>
+            <p>
+                Hensikten med besøket er først og fremst rekruttering, men et bedriftsbesøk gir også god markedsføring
+                mot kommende sivilingeniører. Hybrida BedKom tar seg av all praktisk organisering, så dere trenger kun å
+                møte opp forberedt med presentasjon!
+            </p>
+        </section>
+        <section>
+            <h2>Presentasjon:</h2>
+            <p>
+                Presentasjonen varer vanligvis i én skoletime (45 minutter) og avholdes oftest i auditorium. Her er de
+                fleste audiovisuelle hjelpemidler tilgjengelig (PC/projektor, mikrofoner, overhead osv), og dersom dere
+                har spesielle ønsker vil man selvsagt forsøke å etterkomme disse. De fleste presentasjoner begynner
+                17:15 eller 18:15, da det passer godt med timeplanen til de fleste av studentene.
+            </p>
+        </section>
+        <section>
+            <h2>Bespisning:</h2>
+            <p>
+                De aller fleste bedrifter velger å spandere mat og drikke etter presentasjonen. Her har vi flere
+                samarbeidspartnere og kan blant annet tilby rimelige alternativer fra SiT (Studentsamskipnaden i
+                Trondheim), som holder til på Gløshaugen. Noen bedrifter ønsker fri bar, andre vil ha et fast antall
+                enheter i form av drikkebonger. Bespisningen gir bedriften en fin mulighet til å snakke direkte med
+                studentene i uformelle omgivelser. Det er ofte i den forbindelse interesserte melder seg på til
+                jobbsamtaler.
+            </p>
+            <p>
+                Tips:
+                <br>
+                <br>
+                Dette er tips basert på tilbakemeldinger vi har fått fra studenter over flere år:
+            </p>
+            <ul>
+                <li>Husk at dere snakker med I&IKT-studenter. Ikke vær redd for å bruke fagbegreper de burde kjenne
+                    til.
+                </li>
+                <li>Forsøk å skille dere ut fra andre bedrifter. Hva er det som gjør nettopp dere til den mest
+                    attraktive arbeidsgiveren?
+                </li>
+                <li>Fokuser på hvordan det er å arbeide i deres bedrift sosialt, arbeidsoppgaver, arbeidsmiljø,
+                    utfordringer. Vis gjerne bilder fra arbeidsplassen.
+                </li>
+                <li>Organisasjonsinndeling, økonomi og administrasjon er ofte mindre interessant når det kommer til å
+                    velge jobb. Forsøk å legg mindre vekt på dette enn de overnevnte punkter.
+                </li>
+                <li>Begrens presentasjonen til 45 minutter.</li>
+                <li>Ta med en nyutdannet sivilingeniør fra NTNU, samt en fra HR.</li>
+                <li>Still med flere personer, slik at det er enklere å komme i kontakt med dere under bespisningen.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Priser:</h2>
+            <p>
+                Hybrida BedKom tar et honorar på kroner 10 000,- for en full bedriftspresentasjon som holdes for et
+                utvalg av klassetrinnene ved studiet. Dette inkluderer PR-kostnader og liknende. Mat og drikke kommer i
+                tillegg. Priser fra ulike leverandører fåes ved forespørsel. Hvis bedriften ønsker en presentasjon for
+                mindre grupper innenfor I & IKT (typisk en av spesialiseringene), kan dette selvsagt ordnes etter
+                avtale. Slike arrangement tar vi selvsagt et lavere honorar for.
+            </p>
+        </section>
+    </article>
+{% endblock %}
+{% block sidebar %}
+    <h3>Kontaktinformasjon</h3>
+    <table class="info-table">
+        <tr>
+            <td>Mail</td>
+            <td>bedrift@hybrida.no</td>
+        </tr>
+         <tr>
+            <td>Telefon</td>
+            <td>12345678</td>
+        </tr>
+         <tr>
+            <td>Adresse</td>
+            <td>Hva nå enn adressen er</td>
+        </tr>
+    </table>
+    <h3>Diverse</h3>
+    <a href="{% static 'pdf/Hybrida Bedriftskomité statutter 12042011.pdf' %}">Statutter</a>
+{% endblock %}
