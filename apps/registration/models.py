@@ -34,6 +34,8 @@ class Hybrid(AbstractUser):
             first_name = self.first_name + ' ' + self.middle_name
         else:
             first_name = self.first_name
+        if first_name == "" and self.last_name == "":
+            return self.username
         return first_name + ' ' + self.last_name
 
     def get_grade(self):
