@@ -81,7 +81,8 @@ def updatek(request):
     context = {}
     dirs = os.listdir(UPDATEK)
     context['updatek'] = sorted([(
-                              dir,
-                              set([os.path.splitext(file)[0] for file in os.listdir(os.path.join(UPDATEK, dir))])
-                          ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
+                                     dir,
+                                     sorted(set([os.path.splitext(file)[0] for file in
+                                                 os.listdir(os.path.join(UPDATEK, dir))]))
+                                 ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
     return render(request, 'staticpages/updatek.html', context)
