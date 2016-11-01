@@ -40,11 +40,11 @@
                             }
                             lastNr = response.nr;
                             var newChoices = "";
-                            for (option of response.choices) {
+                            for (choice of response.choices) {
                                 newChoices += '\
             <div class="col-md-6">\
-                <input type="radio" name="option" id="' + option + '" class="option" value="' + option + '">\
-                <label for="' + option + '">' + option + '</label>\
+                <input type="radio" name="choice" id="' + choice + '" class="option" value="' + choice + '">\
+                <label for="' + choice + '">' + choice + '</label>\
             </div>';
                             }
                             $('#options').html(newChoices);
