@@ -2,47 +2,47 @@
 
 /* cyrillic */
 @font-face {
-  font-family: 'Playfair Display';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-cyrillic.woff2) format('woff2');
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-cyrillic.woff2) format('woff2');
+    unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
 /* latin-ext */
 @font-face {
-  font-family: 'Playfair Display';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin-ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /* latin */
 @font-face {
-  font-family: 'Playfair Display';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
 /* latin-ext */
 @font-face {
-  font-family: 'Raleway Dots';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin-ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+    font-family: 'Raleway Dots';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /* latin */
 @font-face {
-  font-family: 'Raleway Dots';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+    font-family: 'Raleway Dots';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
 body {
@@ -63,7 +63,7 @@ body {
     z-index: 50000;
     transform: translateX(100%);
     transition: right 0.2s ease,
-                transform 0.2s ease;
+    transform 0.2s ease;
 }
 
 #suggestionBox #suggestionContent {
@@ -79,16 +79,16 @@ body {
 }
 
 @media (max-width: 992px) {
-  #suggestionBox {
-    bottom: 55px;
-  }
+    #suggestionBox {
+        bottom: 55px;
+    }
 }
 
 @media (max-width: 767px) {
-  #suggestionBox {
-    width: calc(100% - 32px);
-    height: calc(100% - 71px);
-  }
+    #suggestionBox {
+        width: calc(100% - 32px);
+        height: calc(100% - 71px);
+    }
 }
 
 #logo {
@@ -437,6 +437,49 @@ a.inverted {
     float: none;
     display: table-cell;
     vertical-align: top;
+}
+
+.sidebar-links {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar-links > li {
+    width: 100%;
+    display: block;
+}
+
+.sidebar-links a {
+    padding: 12px;
+    line-height: 20px;
+    display: block;
+    border-radius: 2px;
+    font-size: large;
+}
+
+.sidebar-links a:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+}
+
+#griff_fill {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, .5));
+    transition: 1s;
+}
+
+#griff_border {
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .5));
+}
+
+#griff_fill:hover {
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .5));
+    transform: translate(-.5%, -.5%) scale(1.01, 1.01);
+}
+
+.ringen_company_logo:hover  {
+    transition: 2s;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, .5));
 }
 
 /**

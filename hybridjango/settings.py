@@ -146,6 +146,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
+# Selfmade, used to list files, must be changed on deployment
+STATIC_FOLDER = os.path.join(BASE_DIR, "static")
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_HOST_USER = 'robot@hybrida.no'

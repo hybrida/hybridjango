@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="article-bg">
-        <div class="container-fluid center-container">
-            <div class="row space-below">
-                <div class="col-md-8 space-above">
-                    <div class="white-box" id="text-box">
-                        {% block text %}
-                        {% endblock text %}
-                    </div>
-                </div>
-                <div class="col-md-4 space-above">
-                    <div class="white-box" id="sidebar">
-                        {% block sidebar %}
-                        {% endblock sidebar %}
-                    </div>
-                </div>
-                {% block extra %}
-                {% endblock extra %}
+    <div class="row space-below">
+        <div class="col-md-8 space-above">
+            <div class="white-box" id="text-box">
+                {% block text %}
+                {% endblock text %}
             </div>
         </div>
+        <div class="col-md-4 space-above">
+            <div class="white-box" id="sidebar">
+                {% block sidebar %}
+                {% endblock sidebar %}
+            </div>
+        </div>
+        {% block extra %}
+        {% endblock extra %}
     </div>
 {% endblock content %}
