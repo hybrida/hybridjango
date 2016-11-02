@@ -21,131 +21,165 @@
 
 {% block text %}
 
-  <div class="info">
+<style>
+
+    h2#table-header {
+        font-size: 16pt;
+    }
+
+    a {
+        color: darkblue;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+    a:active {
+        text-decoration: underline;
+    }
+
+    .table-header {
+        font-size: 2px;
+    }
+
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #000000 !important;
+    }
+    .table td, .table th {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: 1px solid #eceeef;
+    }
+
+    td, th {
+        display: table-cell;
+        vertical-align: inherit;
+    }
+   @media only screen and (max-width: 500px) {
+            .sizes {
+            padding: 1.5rem;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            border-width: .2rem;
+        }
+    }
+
+
+</style>
+
+<div class="info">
 
 	<h2> Informasjon </h2>
 	<p>
-		Nå har du endelig muligheten til å skaffe deg Hybrida-kilten! Vi bestiller kiltene våre fra nettsiden <a href="https://Sportkilt.com">Sportkilt.com</a>
+		Nå har du endelig muligheten til å skaffe deg Hybrida-kilten! Vi bestiller kiltene våre fra nettsiden <a href="https://Sportkilt.com" target="_blank"> Sportkilt.com</a>
 	</p>
     <p>I Hybrida bruker vi kiltmønsteret som heter Irisher. I tillegg til ulike størrelser
         for menn, finnes den også i damefasong for jentene, eller minikilt.
     </p>
 	<p>
-		Alle kiltene kommer med fringes (frynser), sewn-down pleats og buckle closure (belte på siden).
+		Alle kiltene kommer med frynser(fringes) og belte med spenner på siden( buckle closure) med mindre annet er oppgitt. Herrekiltene kommer i tilleg med innsydd bak(sewn-down pleats).
 	</p>
 
 	<p>
 		Av tilbehør kan man bestille:
 		<ul>
 			<li>
-				<a href="http://www.sportkilt.com/index.php?1&p=view_category&category_id=220">
-					Sporran </a>
+				<a href="http://www.sportkilt.com/index.php?1&p=view_category&category_id=220" target="_blank">	Sporran </a>
 			</li>
 			<li>
-				<a href="http://www.sportkilt.com/product/721/Kilt-Hose---Regular.html">
-					Sokker </a>
+				<a href="http://www.sportkilt.com/product/721/Kilt-Hose---Regular.html" target="_blank"> Sokker </a>
 			</li>
 			<li>
-				<a href="http://www.sportkilt.com/product/8651/Irisher-Flashes.html">
-					Flashes </a>
+				<a href="http://www.sportkilt.com/product/8651/Irisher-Flashes.html" target="_blank"> Flashes </a>
 		</ul>
 	</p>
 
 	<p>
 		Sokkene er kun tilgjengelig i hvitt, vi kan jo ikke ha noen som går rundt med røde sokker!
-		For priser kan man se på <a href="http://www.sportkilt.com">Sportkilt</a> men disse kan endres ved større forsendelser.
+		For priser kan man se på <a href="http://www.sportkilt.com" target="_blank"> Sportkilt</a> men disse kan endres ved større forsendelser.
 	</p>
 	<p>
 		Om du vil ha noe annet fra sportkilt.com, spesielle ønsker osv, kan du skrive ekstra info under Annet når du bestiller
 		så skal vi se hva vi kan få til.
 	</p>
+	<h2> Størrelser: </h2>
+</div>
 
-	<h2> Størrelser </h2>
+<div class="size-tables">
 
-	<h3 id="tableheader"> Guttemodeller </h3>
-	<table id="guttemodeller" border="1" width="450">
-		<tbody>
-			<tr>
-				<td width="225">
-					Størrelse</td>
-				<td width="225">
-				   Centimeter rundt livet</td>
-			</tr>
-			<tr>
-				<td>
-					Small (S)</td>
-				<td>
-					 63,5 - 76</td>
-			</tr>
-			<tr>
-				<td>
-					Medium (M)</td>
-				<td>
-					68,5 - 84</td>
-			</tr>
-			<tr>
-				<td>
-					Medium Long (ML)</td>
-				<td>
-					68,5 - 84</td>
-			</tr>
-			<tr>
-				<td>
-					Large (L)</td>
-				<td>
-					86,5 - 96,5</td*/>
-			</tr>
-			<tr>
-				<td>
-					Extra Large (XL)</td>
-				<td>
-					99,0 - 117</td>
-			</tr>
-			<tr>
-				<td>
-					Extra Extra Large (XXL)</td>
-				<td>
-					119,5 - 147</td>
-			</tr>
-		</tbody>
-	</table>
-	Det anbefales å kjøpe Medium Long dersom du er høyere enn 175cm
+	<h2 id="table-header"> Guttemodeller </h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Størrelse</th>
+                <th>Centimeter rundt livet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Small</td>
+                <td>63,5 - 76</td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>68,5 - 84</td>
+            </tr>
+            <tr>
+                <td>Medium Long</td>
+                <td>68,5 - 84</td>
+            </tr>
+            <tr>
+                <td>Large</td>
+                <td>86,5 - 96,5</td>
+            </tr>
+            <tr>
+                <td>Extra Large (XL)</td>
+                <td>99,0 - 117</td>
+            </tr>
+            <tr>
+                <td>Extra Extra Large (XXL)</td>
+                <td>119,5 - 147</td>
+            </tr>
+        </tbody>
+    </table>
+	<p> Det anbefales å kjøpe Medium Long dersom du er høyere enn 175cm </p>
 
-	<h3 id="tableheader">Jentemodeller</h3>
-	<table id="jentemodeller" border="1" width="450">
-		<tbody>
-			<tr>
-				<td width="200">
-					Størrelse</td>
-				<td width="200">
-					Centimeter rundt livet</td>
-			</tr>
-			<tr>
-				<td>
-					Small</td>
-				<td>
-					63,5 - 76</td>
-			</tr>
-			<tr>
-				<td>
-					Medium</td>
-				<td>
-					68,5 - 84</td>
-			</tr>
-			<tr>
-				<td>
-					Large</td>
-				<td>
-					86,5 - 96,5</td>
-			</tr>
-			<tr>
-				<td>
-					Extra Large</td>
-				<td>
-					99,0 - 112</td>
-			</tr>
-		</tbody>
-	</table>
+	<h2 id="table-header">Jentemodeller</h2>
+	<table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Størrelse</th>
+                <th>Centimeter rundt livet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Small</td>
+                <td>63,5 - 76</td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>68,5 - 84</td>
+            </tr>
+            <tr>
+                <td>Medium Long</td>
+                <td>68,5 - 84</td>
+            </tr>
+            <tr>
+                <td>Large</td>
+                <td>86,5 - 96,5</td>
+            </tr>
+            <tr>
+                <td>Extra Large (XL)</td>
+                <td>99,0 - 117</td>
+            </tr>
+            <tr>
+                <td>Extra Extra Large (XXL)</td>
+                <td>119,5 - 147</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 
