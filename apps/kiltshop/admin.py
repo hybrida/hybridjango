@@ -1,15 +1,21 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from .models import Product, Order
+from .models import Product, Order, ProductInfo
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name','type',)
+    list_display = ('name', 'type',)
+
+
+class ProductInfoInline(admin.TabularInline):
+    model = ProductInfo
+    extra = 0
 
 
 class OrderAdmin(admin.ModelAdmin):
     filter_horizontal = ('products',)
+    inlines = (ProductInfoInline,)
 
     formfield_overrides = {
         models.CharField: {'widget': Textarea(
@@ -19,6 +25,6 @@ class OrderAdmin(admin.ModelAdmin):
     }
 
 
-admin.site.register(Product,ProductAdmin)
-admin.site.register(Order,OrderAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Order, OrderAdmin)
 
