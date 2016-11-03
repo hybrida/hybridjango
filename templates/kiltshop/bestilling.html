@@ -85,10 +85,18 @@
                                     {{ info.size }}
                                 {% endif %}
                             {% endfor %}
+                        {% elif item.type == 'E' %}
+                            {% if item.pk == 34 or item.name == "Premium Sokker" %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.size }}
+                                {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
                         {% else %}
-                             -
-                    </td>
+                            -
                         {% endif %}
+                    </td>
                     <td>
                          {% for info in productInfo %}
                                 {% if info.product_id == item.pk %}

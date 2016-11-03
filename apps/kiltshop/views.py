@@ -10,11 +10,10 @@ def index(request):
 
 def order(request):
 
-    user_order = Order.objects.filter(user=request.user).first()
-
     if not request.user.is_authenticated():
         return render(request, 'registration/login.html')
     else:
+        user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
             delete = request.POST.get('delete')
             user_order.products.remove(delete)
@@ -33,6 +32,10 @@ def shop(request):
     user = request.user
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
+        size = request.POST.get('size', None)
+        number = request.POST.get('number', None)
+        print(number)
+        print(size)
         if not len(products) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
@@ -61,7 +64,6 @@ def shop(request):
                     if Order.objects.filter(user=user).exists():
                         order_list = Order.objects.filter(user=user).first()
                         for product in order_list.products.all():
-                            print("count")
                             if product.type == 'K':
                                 has_kilt_id = product.pk
                                 has_kilt = True
