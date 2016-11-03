@@ -80,9 +80,11 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+            <div{% if message.tags %} class="alert alert-warning"{% endif %}>
                 <a class="close" data-dismiss="alert" href="#">&times;</a>
-                {{ message }}
+                <p align="center" id="warning">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                </p>
             </div>
         {% endfor %}
     {% endif %}

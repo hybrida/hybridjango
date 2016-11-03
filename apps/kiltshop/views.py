@@ -27,13 +27,13 @@ def order(request):
 
 
 def shop(request):
-    if not request.user.is_staff:  # I tilfelle noen har lyst å shoppe før release
+    if not request.user.is_staff:  # In case somebody unwanted starts "shopping"
         return render(request, 'registration/login.html')
     user = request.user
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
         if not len(products) > 0:
-            messages.warning(request, 'Du har ikke valgt noen produkt!') # Skal være messages.error, men den funket ikke tidligere (hadde ikke farge)
+            messages.warning(request, 'Ingen produkter er valgt')
         else:
             new_kilt = False
             has_kilt = False
@@ -52,9 +52,9 @@ def shop(request):
                     new_sporra=True
 
             if kilt_numb > 1:
-                messages.warning(request, 'Error: Du har valgt flere enn 1 kilt!')  # Skal være messages.error, men den funket ikke tidligere (hadde ikke farge)
+                messages.warning(request, 'Du har valgt mer enn en kilt!')
             elif sporra_numb > 1:
-                messages.warning(request, 'Error: Du har valgt mer enn 1 sporra!')  # Skal være messages.error, men den funket ikke tidligere (hadde ikke farge)
+                messages.warning(request, 'Du har valgt mer enn en sporra')
             else:
                 if products is not None:
                     if Order.objects.filter(user=user).exists():
@@ -86,7 +86,6 @@ def shop(request):
                         order.products.add(*products) # ignore this
                         order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
-
 
     return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
 
