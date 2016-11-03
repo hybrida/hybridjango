@@ -27,8 +27,12 @@
           color: #000;
         }
         input[type=checkbox]:checked + label {
-            box-shadow: 0px 0px 5px #4143ff;
+            box-shadow: 0 0 5px #4143ff;
             color: #4143ff;
+        }
+
+        .form-control {
+            width: 50px;
         }
 
         #header {
@@ -47,8 +51,25 @@
 
         .checkbox label, .radio label{
             min-height: 250px;
-            padding-left: 0px;
+            padding-left: 0;
+        }
 
+        select{
+           -webkit-appearance: button;
+           -webkit-border-radius: 2px;
+           -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+           -webkit-user-select: none;
+           background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+           background-position: 97% center;
+           background-repeat: no-repeat;
+           border: 1px solid #AAA;
+           color: #555;
+           font-size: inherit;
+           overflow: hidden;
+           padding: 5px 10px;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+           width: 10em;
         }
 
         div.comment {
@@ -102,6 +123,23 @@
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
+                                {% if product.name == 'Gutt' %}
+                                   <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M">Medium</option>
+                                        <option value="ML" selected >Medium Long</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                        <option value="XXL">2X Large (XXL)</option>
+                                    </select>
+                                {% else %}
+                                     <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                     </select>
+                                {% endif %}
                             </label>
                         </div>
                     </div>
@@ -140,6 +178,23 @@
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
+                                {% if product.pk == 34 %}
+                                    <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                     </select>
+                                {% elif product.name == 'Premium Sokker' %}
+                                    <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                    </select>
+                                {% endif %}
+                                Antall:
+                               <input name="number" type="number" class="form-control" min="1" max="9" value="1" onkeydown="return false">
                             </label>
                         </div>
                     </div>
