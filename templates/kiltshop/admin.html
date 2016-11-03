@@ -1,23 +1,49 @@
-{% extends 'kiltshop/sidebar.html' %}
-{% block content2 %}
+{% extends 'standard_sidebar.html' %}
+{%  block sidebar %}
 
-<head>
+    <h2> Kiltbestilling </h2>
+    <li>
+        <a href="{% url 'kilt:info' %}">Info</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:shop' %}">Shop</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:order' %}">Bestilling</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:admin' %}">Admin</a>
+    </li>
+    <li>
+        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
+    </li>
+
+{%  endblock %}
+{% block text %}
+
 <style>
     #table1 tr th{
-    width:25%;
-}
-    .text-center{
-        font-size: 50px;
+        width:25%;
+    }
 
+    .text-center{
+     font-size: 3.5em;
+    }
+
+    #kiltkat {
+        box-shadow: 8px 8px 10px #aaa;
+        border-radius: 30%;
+        display: block;
+        margin: 0 auto;
+        width:300px;
+        height:300px;
+        overflow:hidden;
     }
 
 </style>
-</head>
 
-<body>
-
- <h1>Administrasjon</h1>
-
+{% if request.user.is_superuser %}
+ <h1>Administrasjon </h1>
 
    <p class="text-center">Tider</p>
 
@@ -43,35 +69,31 @@
             <th>Antall</th>
             <th>Hentet</th>
         </tr>
-        {% for product in products %}
-            {% if product.type == 'K' %}
+        {% for order in orders %}
             <tr>
                 <th>{{ product.name }}</th>
                 <th>her kommer størrelse</th>
                 <th>her kommer en for løkke som henter antall</th>
                 <th>her kommer en for løkke som henter antall hentede</th>
             </tr>
-            {% endif %}
-            {% if product.type == 'S' %}
             <tr>
                 <th>{{ product.name }}</th>
                 <th>-</th>
                 <th>her kommer en for løkke som henter antall</th>
                 <th>her kommer en for løkke som henter antall hentede</th>
             </tr>
-            {% endif %}
-            {% if product.type == 'E' %}
             <tr>
                 <th>{{ product.name }}</th>
                 <th>her kommer størrelse</th>
                 <th>her kommer en for løkke som henter antall</th>
                 <th>her kommer en for løkke som henter antall hentede</th>
             </tr>
-            {% endif %}
         {% endfor %}
     </table>
 
-
+{% else %}
+        <p class=text-center style="padding-bottom: 0.15em" align="middle"> Kun tilgjengelig for admin</p>
+        <img src=../../static/img/kiltkat.jpg id="kiltkat" align="middle">
+        <p align="middle" style="padding-top: 0.4em">"u no has access"</p>
+{% endif %}
 {% endblock %}
-
-</body>

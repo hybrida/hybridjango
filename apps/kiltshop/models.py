@@ -13,7 +13,6 @@ class Product(models.Model):
         (extra, 'Ekstra')
     )
 
-
     name = models.CharField(max_length=150)
     image = models.ImageField(upload_to='products', default='placeholder-event.png')
     type = models.CharField(max_length=1, choices=type_choices, default=kilt)
@@ -23,8 +22,10 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    products = models.ManyToManyField(Product)
     user = models.ForeignKey(Hybrid)
+    products = models.ManyToManyField(Product)
+    comment = models.CharField(max_length=200, blank=True)
+
 
     def __str__(self):
-        return str(self.user)
+        return str("Bestilling  : "+self.user.first_name+" "+self.user.middle_name+" "+self.user.last_name)
