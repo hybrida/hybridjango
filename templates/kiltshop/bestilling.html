@@ -1,7 +1,28 @@
-{% extends 'kiltshop/sidebar.html' %}
-{% block content2 %}
+{% extends 'standard_sidebar.html' %}
+{%  block sidebar %}
+    <h2> Kiltbestilling </h2>
+    <li>
+        <a href="{% url 'kilt:info' %}">Info</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:shop' %}">Shop</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:order' %}">Bestilling</a>
+    </li>
+     <li>
+         <a href="{% url 'kilt:admin' %}">Admin</a>
+    </li>
+    <li>
+        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
+    </li>
+
+{%  endblock %}
+
+{% block text %}
 
 <style>
+
     #table1 tr th{
     width:25%;}
 
@@ -10,7 +31,7 @@
     }
 
     .table-header{
-        font-size: 25px;
+        font-size: 1.5em;
         font-style: italic;
     }
 
@@ -26,34 +47,51 @@
 
 </style>
 
-<div class="container">
     {% if not products %}
-        <h2>Finner ingen bestilling for {{ request.user }}</h2>
+        <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
-      <h2>Din bestilling:</h2>
-      <form action="" method="post">
-      <table class="table table-bordereds" style="width:100%" id="table1">
-        <thead class="table-header">
-          <tr>
-            <th>Produkt</th>
-            <th>Type</th>
-            <th>ID (ønsker: Antall)</th>
-          </tr>
-        </thead>
+        <h2>Din bestilling:</h2>
+        <form action="" method="post">
+            <table class="table table-bordereds" >
+                <thead class="table-header">
+                    <tr>
+                        <th class="col-xs-7">Produkt</th>
+                        <th class="col-xs-2">Type</th>
+                        <th class="col-xs-2">Størrelse</th>
+                        <th class="col-xs-1">Antall</th>
+                    </tr>
+                </thead>
 
-        {% csrf_token %}
-        <tbody>
-        {% for item in products %}
-          <tr class="table-items">
-                <td>{{ item.name }}</td>
-                <td>{{ item.type }}</td>
-                <td>{{ item.pk }}</td>
-                <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
-          </tr>
-         {% endfor %}
-        </tbody>
-      </table>
-      </form>
-    </div>
+            {% csrf_token %}
+            {% for item in products %}
+                <tr class="table-items">
+                    <td>
+                            {{ item.name }}
+                    </td>
+                    <td>
+                        {% if item.type == 'K' %}
+                            Kilt
+                        {% elif item.type == 'S' %}
+                            Sporran
+                        {% else %}
+                            Ekstra
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.type == 'K' %}
+                            TBA
+                        {% else %}
+                             -
+                        {% endif %}
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
     {% endif %}
+
 {% endblock %}

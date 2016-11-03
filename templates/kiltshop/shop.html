@@ -1,27 +1,65 @@
-{% extends 'kiltshop/sidebar.html' %}
-{% block content2 %}
+{% extends 'standard_sidebar.html' %}
+{%  block sidebar %}
+    <h2> Kiltbestilling </h2>
+    <li>
+        <a href="{% url 'kilt:info' %}">Info</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:shop' %}">Shop</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:order' %}">Bestilling</a>
+    </li>
+     <li>
+         <a href="{% url 'kilt:admin' %}">Admin</a>
+    </li>
+    <li>
+        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
+    </li>
+
+{%  endblock %}
+
+{% block text %}
 
     <style>
 
-
-        div.img:hover {
+        input[type=checkbox] + label {
+          color: #000;
+        }
+        input[type=checkbox]:checked + label {
+            box-shadow: 0px 0px 5px #4143ff;
+            color: #4143ff;
         }
 
-        div.img img {
+        #header {
+            padding-bottom: 0.5em;
         }
 
         div.desc {
-            padding: 15px;
-            font-size: 20px;
-            text-align: center;
+            font-size: 18px;
+            padding-bottom: 0.5em;
         }
 
-        * {
-            box-sizing: border-box;
+        textarea {
+            resize: none;
+            overflow: auto;
+        }
+
+        .checkbox label, .radio label{
+            min-height: 250px;
+            padding-left: 0px;
+
+        }
+
+        div.comment {
+            height: 10em;
+            position: relative;
+            padding-bottom: 15em;
+            padding-top: 3em;
         }
 
         .responsive {
-            padding: 0 6px;
+            padding: 0 0.5em;
             float: left;
             width: 24.99999%;
         }
@@ -38,25 +76,32 @@
                 width: 100%;
             }
         }
-
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
     </style>
-    <form action="" method="post">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form id="submit" action="" method="post">
         {% csrf_token %}
         <!-- Kilts -->
-        <h1> Kilt </h1>
+        <h1 id="header"> Kilt </h1>
         {% for product in products %}
             {% if product.type == 'K' %}
                 <div class="responsive">
                     <div class="img" align="center">
-                        <img src="{{ product.image.url }}" width="200" height="200">
-                        <div class="desc">{{ product.name }}</div>
-                        <div class="checkbox"><label class="radio-inline"><input name="product" type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}
-                        </label></div>
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -67,13 +112,15 @@
         <h1> Sporran </h1>
         {% for product in products %}
             {% if product.type == 'S' %}
-
                 <div class="responsive">
                     <div class="img" align="center">
-                        <img src="{{ product.image.url }}" width="200" height="200">
-                        <div class="desc">{{ product.name }}</div>
-                        <div class="checkbox"><label><input name="product" type="checkbox"
-                                                            value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -81,18 +128,31 @@
 
     <div class="clearfix"></div>
         <!-- ekstra -->
-        <h1> Ekstra </h1>
+        <h1 id="header"> Ekstra </h1>
         {% for product in products %}
             {% if product.type == 'E' %}
                 <div class="responsive">
                     <div class="img" align="center">
-                        <img src="{{ product.image.url }}" width="200" height="200">
-                        <div class="desc">{{ product.name }}</div>
-                        <div class="checkbox"><label><input name="product" type="checkbox" value="{{ product.pk }}">ID:{{ product.pk }}</label></div>
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             {% endif %}
         {% endfor %}
+
+
+    <div class="clearfix"></div>
+
+    <div align="center" class="comment">
+        <p> Kommentar:</p>
+        <textarea placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
+    </div>
+
 
 
     <div class="clearfix"></div>
@@ -105,4 +165,5 @@
         </div>
 
     </form>
+
 {% endblock %}
