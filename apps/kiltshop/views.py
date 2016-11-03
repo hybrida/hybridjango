@@ -1,34 +1,39 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from .models import Product, Order
+from .models import Product, Order, ProductInfo
 
 
 def index(request):
     return render(request, "kiltshop/info.html")
 
+
 def order(request):
+
+    user_order = Order.objects.filter(user=request.user).first()
+
     if not request.user.is_authenticated():
         return render(request, 'registration/login.html')
     else:
-        user = request.user
         if request.method == 'POST':
             delete = request.POST.get('delete')
-            order = Order.objects.filter(user=user).first()
-            order.products.remove(delete)
-            order.save()
+            user_order.products.remove(delete)
+            user_order.save()
 
-        return render(request,"kiltshop/bestilling.html", {'products': Product.objects.filter(order=Order.objects.filter(user=user))})
+        return render(request,"kiltshop/bestilling.html",
+            {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
+             'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first())}
+        )
 
 
 def shop(request):
-    if not request.user.is_staff: #I tilfelle noen har lyst å shoppe før release
+    if not request.user.is_staff:  # I tilfelle noen har lyst å shoppe før release
         return render(request, 'registration/login.html')
     user = request.user
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
         if not len(products) > 0:
-            messages.warning(request, 'Du har ikke valgt noen produkt!') #Skal være messages.error, men den funket ikke tidligere (hadde ikke farge)
+            messages.warning(request, 'Du har ikke valgt noen produkt!') # Skal være messages.error, men den funket ikke tidligere (hadde ikke farge)
         else:
             new_kilt = False
             has_kilt = False
@@ -78,11 +83,9 @@ def shop(request):
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
                         order = Order.objects.create(user=user)
-                        order.products.add(*products)
+                        order.products.add(*products) # ignore this
                         order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
-
-
 
 
     return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})

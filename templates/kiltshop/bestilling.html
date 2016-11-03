@@ -63,6 +63,7 @@
                 </thead>
 
             {% csrf_token %}
+
             {% for item in products %}
                 <tr class="table-items">
                     <td>
@@ -79,13 +80,21 @@
                     </td>
                     <td>
                         {% if item.type == 'K' %}
-                            TBA
+                            {% for info in productInfo %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.size }}
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
                              -
-                        {% endif %}
                     </td>
+                        {% endif %}
                     <td>
-                        1
+                         {% for info in productInfo %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.number }}
+                                {% endif %}
+                            {% endfor %}
                     </td>
                     <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
                 </tr>
