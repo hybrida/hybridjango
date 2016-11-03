@@ -101,6 +101,12 @@
             {% endfor %}
             </table>
         </form>
+        {% if order.comment %}
+            <p> Din kommentar: {{ order.comment }}</p>
+        {% endif %}
     {% endif %}
+
+
+
 
 {% endblock %}
