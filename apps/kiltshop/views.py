@@ -68,8 +68,12 @@ def shop(request):
                                 has_kilt_id = product.pk
                                 has_kilt = True
                             if product.type == 'S':
-                                has_sporra=True
-                                has_sporra_id=product.pk
+                                has_sporra = True
+                                has_sporra_id = product.pk
+                            if product.type == 'E':
+                                for item in products:
+                                    if str(item) == str(product.pk):
+                                        order_list.products.remove(item)
 
                         if has_kilt and new_kilt:
                             order_list.products.remove(has_kilt_id)
