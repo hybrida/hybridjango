@@ -33,13 +33,16 @@ def shop(request):
     if not request.user.is_staff:  # In case somebody unwanted starts "shopping"
         return render(request, 'registration/login.html')
     user = request.user
+    active_order = OrderInfo.objects.filter(status=True).first()
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
         size = request.POST.get('size', None)
         number = request.POST.get('number', None)
         print(number)
         print(size)
-        if not len(products) > 0:
+        if not active_order:
+            messages.warning(request, 'Kiltbestilling er ikke åpen. For spørsmål kontakt nestleder')
+        elif not len(products) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
             new_kilt = False
@@ -63,7 +66,6 @@ def shop(request):
             elif sporra_number > 1:
                 messages.warning(request, 'Du har valgt mer enn en sporra.')
             else:
-                active_order = OrderInfo.objects.filter(status=True).first()
                 if products is not None:
                     if Order.objects.filter(user=user).exists():
                         order_list = Order.objects.filter(user=user).first()
