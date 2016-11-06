@@ -17,7 +17,10 @@ def order(request):
         if request.method == 'POST':
             delete = request.POST.get('delete')
             user_order.products.remove(delete)
-            user_order.save()
+            if len(user_order.products.all()) == 0:
+                user_order.delete()
+            else:
+                user_order.save()
 
         return render(request,"kiltshop/bestilling.html",
             {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
