@@ -25,9 +25,17 @@ class Order(models.Model):
     user = models.ForeignKey(Hybrid)
     products = models.ManyToManyField(Product, through='ProductInfo')
     comment = models.CharField(max_length=200, blank=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return str("Bestilling  : "+self.user.first_name+" "+self.user.middle_name+" "+self.user.last_name)
+
+
+class OrderInfo(models.Model):
+    orders = models.ManyToManyField(Order, null=True, blank=True)
+    startTime = models.DateTimeField(null=True, blank=True)
+    endTime = models.DateTimeField(null=True, blank=True)
+    status = models.BooleanField(default=True)
 
 
 class ProductInfo(models.Model):
