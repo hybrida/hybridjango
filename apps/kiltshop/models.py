@@ -37,6 +37,9 @@ class OrderInfo(models.Model):
     endTime = models.DateTimeField(null=True, blank=True)
     status = models.BooleanField(default=True)
 
+    def __str__(self):
+        return str(str(self.startTime)+" - "+str(self.endTime)+" ("+str(self.status)+")")
+
 
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)

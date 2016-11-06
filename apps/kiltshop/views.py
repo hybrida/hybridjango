@@ -63,6 +63,7 @@ def shop(request):
             elif sporra_number > 1:
                 messages.warning(request, 'Du har valgt mer enn en sporra.')
             else:
+                active_order = OrderInfo.objects.filter(status=True).first()
                 if products is not None:
                     if Order.objects.filter(user=user).exists():
                         order_list = Order.objects.filter(user=user).first()
@@ -91,6 +92,8 @@ def shop(request):
 
                         order_list.products.add(*products)
                         order_list.save()
+                        active_order.orders.add(order_list)
+                        active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
                         order_list = Order.objects.create(user=user)
@@ -98,6 +101,8 @@ def shop(request):
                         order_list.comment = comment
                         order_list.products.add(*products) # ignore this
                         order_list.save()
+                        active_order.orders.add(order_list)
+                        active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
 
     return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
