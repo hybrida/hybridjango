@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from .models import Product, Order, ProductInfo
+from .models import Product, Order, ProductInfo, OrderInfo
 
 
 def index(request):
@@ -101,6 +101,12 @@ def shop(request):
 
 
 def admin(request):
-        orders = Order.objects.all()
-        return render(request, "kiltshop/admin.html", {'orders': orders})
+    user_order = Order.objects.all()
+    products = Product.objects.all()
+    orderinfo = OrderInfo.objects.all()
 
+    return render(request, "kiltshop/admin.html",
+                  {'products': products,
+                   'orders': user_order,
+                  'orderinfo': orderinfo},
+                  )

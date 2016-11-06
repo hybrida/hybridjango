@@ -22,12 +22,8 @@
 {% block text %}
 
 <style>
-    #table1 tr th{
-        width:25%;
-    }
-
     .text-center{
-     font-size: 3.5em;
+     font-size: 3em;
     }
 
     #kiltkat {
@@ -40,60 +36,153 @@
         overflow:hidden;
     }
 
+
 </style>
 
 {% if request.user.is_superuser %}
- <h1>Administrasjon </h1>
 
-   <p class="text-center">Tider</p>
+    <div class="container" style="width:100%;">
+        <h1>Administrasjon </h1>
 
-    <hr>
+        <form action="admin.html" method="post">
+        {% csrf_token %}
+            <!-- Tidstabell -->
+            <div id="timetable">
+                <p class ="text-center" >Tider:</p>
+                <table class="table table-bordered" style="width:100%" id="comment_table">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-3">Start</th>
+                            <th class="col-xs-3">Slutt</th>
+                            <th class="col-xs-2">Status</th>
+                            <th class="col-xs-2">Vis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for timeframe in orderinfo %}
+                            {% if timeframe.status %}
+                                <tr style="background-color: #90ee90">
+                            {% else %}
+                                <tr  style="background-color: #FDD">
+                            {% endif %}
+                                <!--  Liste over stattider -->
+                                    <td>
+                                        {{ timeframe.startTime }}
+                                    </td>
+                                    <!-- liste over slutttider-->
+                                    <td style="word-wrap: break-word; max-width: 40em;">
+                                        {{ timeframe.endTime }}
+                                    </td>
+                                    <!-- status på ordren -->
+                                    <td style="word-wrap: break-word; max-width: 40em;">
+                                        {% if timeframe.status %}
+                                            Aktiv
+                                        {% else %}
+                                            Avsluttet
+                                        {% endif %}
+                                    </td>
+                                    <!-- knapp som viser ordrene i liste under. -->
+                                    <td style="word-wrap: break-word; max-width: 40em;">
+                                        <input type="submit" value="Vis Bestilling"
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                            <tr>
+                                <td><input maxlength="10" size="7" type="text" value="yyyy-mm-dd" name="start" id="start"></td>
+                                <td><input maxlength="10" size="7" type="text" value="yyyy-mm-dd" name="slutt" id="slutt"></td>
+                                <td>Ikke opprettet</td>
+                                <td><input name="createTime" type="submit" value="Lag tidsrom"></td>
+                            </tr>
+                    </tbody>
+                </table>
+            <hr/>
+            </div>
 
-    <table class ="table table-bordered" style="width:100%" id="table1">
-        <tr>
-            <th>Start</th>
-            <th>Slutt</th>
-            <th>Status</th>
-            <th>Vis</th>
-        </tr>
 
-    </table>
+            <!-- Ordre (totalt) -->
+            <div id="allorders">
+                <p class ="text-center" >Bestillinger:</p>
+                <table class="table table-bordered" style="width:100%" id="orders_table">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-5">Produkt</th>
+                            <th class="col-xs-3">Størrelse</th>
+                            <th class="col-xs-3">Antall</th>
+                            <th class="col-xs-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in products %}
+                        <tr class="table-items">
+                            <!--  Liste over alle produkt (pluss størrelser) -->
+                            <th>
 
- <p class ="text-center"> Bestillinger</p>
-    <hr>
 
-    <table class ="table table-bordered" style="width:100%" id="table1">
-        <tr>
-            <th>Produkt</th>
-            <th>Størrelse</th>
-            <th>Antall</th>
-            <th>Hentet</th>
-        </tr>
-        {% for order in orders %}
-            <tr>
-                <th>{{ product.name }}</th>
-                <th>her kommer størrelse</th>
-                <th>her kommer en for løkke som henter antall</th>
-                <th>her kommer en for løkke som henter antall hentede</th>
-            </tr>
-            <tr>
-                <th>{{ product.name }}</th>
-                <th>-</th>
-                <th>her kommer en for løkke som henter antall</th>
-                <th>her kommer en for løkke som henter antall hentede</th>
-            </tr>
-            <tr>
-                <th>{{ product.name }}</th>
-                <th>her kommer størrelse</th>
-                <th>her kommer en for løkke som henter antall</th>
-                <th>her kommer en for løkke som henter antall hentede</th>
-            </tr>
-        {% endfor %}
-    </table>
+                            </th>
+                            <!-- Evt størrelser-->
+                            <td style="word-wrap: break-word; max-width: 40em;">
+
+                            </td>
+                            <!-- Antall bestitlt -->
+                            <td style="word-wrap: break-word; max-width: 40em;">
+                            </td>
+                            <!-- Status på ordren -->
+                            <td style="word-wrap: break-word; max-width: 40em;">
+                            </td>
+
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            <hr/>
+            </div>
+
+        <!-- Ordre (for bruker) -->
+            <div id="userorder" align="center">
+                <select name="{{ user.id }}" id="{{ user.id }}">
+                    <option value="-1">Ingen
+                    {% for order in orders %}
+                        <option value="{{ order.user.pk }}">{{ order.user.first_name }} {{ order.user.last_name }}</option>
+                    {% endfor %}
+                </select>
+                <input name="showUser" type="submit" value="Vis bestilling">
+            </div>
+            <hr>
+        </form>
+        <!-- Kommentarer -->
+        <div id="comments">
+            <p class ="text-center" style="font-size: 20px">Kommentarer:</p>
+            <table class="table table-bordered" style="width:100%" id="comment_table">
+                <thead>
+                    <tr>
+                        <th class="col-xs-4">Navn</th>
+                        <th class="col-xs-8">Kommentar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        {% if order.comment %}
+                            <tr class="table-items">
+                                <th>
+                                    {{ order.user.first_name }}  {{ order.user.last_name }}
+                                </th>
+                                <td style="word-wrap: break-word; max-width: 40em;">
+                                    {{ order.comment }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+ </div>
 
 {% else %}
+
         <p class=text-center style="padding-bottom: 0.15em" align="middle"> Kun tilgjengelig for admin</p>
         <img src=../../static/img/kiltkat.jpg id="kiltkat" align="middle">
         <p align="middle" style="padding-top: 0.4em">"u no has access"</p>
+
 {% endif %}
+
 {% endblock %}
