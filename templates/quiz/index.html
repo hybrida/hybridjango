@@ -3,10 +3,11 @@
 {% block content %}
     <h1>Quiz</h1>
     <style>
-        #Top3 {
+        #standing {
+            position: absolute;
+            top: 50px;
+            left: 50px;
             width: 400px;
-            border-radius: 10px;
-            border: 5px solid black;
         }
 
         li {
@@ -17,6 +18,7 @@
         a {
             color: black;
         }
+
         a:hover {
             color: blue;
         }
@@ -25,17 +27,27 @@
             float: right;
         }
     </style>
-    <div id="Top3">
-        <h2>Topp 3</h2>
-        {% if best_team %}
-        <ol>
+    <div id="standing">
+        <h2>Resultat</h2>
+        <div id="list">
+            {% if best_team %}
+                <table class="info-table">
+                    {% for team in best_team %}
+                        <tr>
+                            <td><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></td>
+                            <td>{{ team.points }}</td>
+                            <td><meter style="width:75%;height:25px;" id="bars" title="Awesomeness" max="10" low="1" high="8" optimum="5" value="7"></meter></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Ingen tilgjengelige lag</p>
+            {% endif %}
+        </div>
+        <div id="points">
             {% for team in best_team %}
-                <li><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></li>
             {% endfor %}
-        </ol>
-    {% else %}
-        <p>Ingen tilgjengelige lag</p>
-    {% endif %}
+        </div>
     </div>
     <div id="picture">
         <img src="/static/img/students1.png" alt="Students" height="422" width="590">
