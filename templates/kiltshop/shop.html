@@ -124,7 +124,7 @@
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
                                 {% if product.name == 'Gutt' %}
-                                   <select name="size" id="{{ product.pk }}">
+                                   <select name="size-{{ product.pk }}" id="{{ product.pk }}">
                                         <option value="S">Small</option>
                                         <option value="M">Medium</option>
                                         <option value="ML" selected >Medium Long</option>
@@ -133,7 +133,7 @@
                                         <option value="XXL">2X Large (XXL)</option>
                                     </select>
                                 {% else %}
-                                     <select name="size" id="{{ product.pk }}">
+                                     <select name="size-{{ product.pk }}" id="{{ product.pk }}">
                                         <option value="S">Small</option>
                                         <option value="M" selected>Medium</option>
                                         <option value="L">Large</option>
@@ -179,14 +179,14 @@
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
                                 {% if product.pk == 34 %}
-                                    <select name="size" id="{{ product.pk }}">
+                                    <select name="size-{{ product.pk }}" id="{{ product.pk }}">
                                         <option value="S">Small</option>
                                         <option value="M" selected>Medium</option>
                                         <option value="L">Large</option>
                                         <option value="XL">X Large (XL)</option>
                                      </select>
                                 {% elif product.name == 'Premium Sokker' %}
-                                    <select name="size" id="{{ product.pk }}">
+                                    <select name="size-{{ product.pk }}" id="{{ product.pk }}">
                                         <option value="S">Small</option>
                                         <option value="M" selected>Medium</option>
                                         <option value="L">Large</option>
@@ -194,7 +194,7 @@
                                     </select>
                                 {% endif %}
                                 Antall:
-                               <input name="number" type="number" class="form-control" min="1" max="9" value="1" onkeydown="return false">
+                               <input name="number-{{ product.pk }}" type="number" class="form-control" min="1" max="9" value="1" onkeydown="return false">
                             </label>
                         </div>
                     </div>
