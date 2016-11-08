@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -7,12 +8,9 @@ from .models import Product, Order, ProductInfo, OrderInfo
 def index(request):
     return render(request, "kiltshop/info.html")
 
-
+@login_required
 def order(request):
 
-    if not request.user.is_authenticated():
-        return render(request, 'registration/login.html')
-    else:
         user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
             delete = request.POST.get('delete')
