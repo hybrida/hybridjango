@@ -86,13 +86,15 @@
                                 {% endif %}
                             {% endfor %}
                         {% elif item.type == 'E' %}
-                            {% if item.pk == 34 or item.name == "Premium Sokker" %}
+                            {% for info in productInfo %}
                                 {% if info.product_id == item.pk %}
-                                    {{ info.size }}
+                                    {% if not item.name == 'Sokker' and not item.name == 'Flashes' %}
+                                        {{ info.size }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                 {% endif %}
-                            {% else %}
-                                -
-                            {% endif %}
+                            {% endfor %}
                         {% else %}
                             -
                         {% endif %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -7,12 +8,9 @@ from .models import Product, Order, ProductInfo, OrderInfo
 def index(request):
     return render(request, "kiltshop/info.html")
 
-
+@login_required
 def order(request):
 
-    if not request.user.is_authenticated():
-        return render(request, 'registration/login.html')
-    else:
         user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
             delete = request.POST.get('delete')
@@ -36,10 +34,6 @@ def shop(request):
     active_order = OrderInfo.objects.filter(status=True).first()
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
-        size = request.POST.get('size', None)
-        number = request.POST.get('number', None)
-        print(number)
-        print(size)
         if not active_order:
             messages.warning(request, 'Kiltbestilling er ikke åpen. For spørsmål kontakt nestleder')
         elif not len(products) > 0:
@@ -88,13 +82,22 @@ def shop(request):
                             order_list.products.remove(has_sporra_id)
 
                         comment = request.POST.get('comment', None)
+                        print(comment)
                         order_list = Order.objects.filter(user=user).first()
-                        if len(comment) > 0:
+                        if comment:
                             order_list.comment = comment
 
                         order_list.products.add(*products)
+                        for product in products:
+                            number = int(request.POST.get('number-{id}'.format(id=product), 1))
+                            if number > 0:
+                                objectinfo = ProductInfo.objects.filter(order=order_list)
+                                productinfo = objectinfo.get(product=product)
+                                size = request.POST.get('size-{id}'.format(id=product), None)
+                                productinfo.number = number
+                                productinfo.size = size
+                                productinfo.save()
                         order_list.save()
-                        active_order.orders.add(order_list)
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
@@ -102,6 +105,15 @@ def shop(request):
                         comment = request.POST.get('comment', None)
                         order_list.comment = comment
                         order_list.products.add(*products) # ignore this
+                        for product in products:
+                            number = int(request.POST.get('number-{id}'.format(id=product), 1))
+                            if number > 0:
+                                objectinfo = ProductInfo.objects.filter(order=order_list)
+                                productinfo = objectinfo.get(product=product)
+                                size = request.POST.get('size-{id}'.format(id=product), None)
+                                productinfo.number = number
+                                productinfo.size = size
+                                productinfo.save()
                         order_list.save()
                         active_order.orders.add(order_list)
                         active_order.save()

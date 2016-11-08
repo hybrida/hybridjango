@@ -83,7 +83,7 @@
                                     </td>
                                     <!-- knapp som viser ordrene i liste under. -->
                                     <td style="word-wrap: break-word; max-width: 40em;">
-                                        <input type="submit" value="Vis Bestilling"
+                                        <input type="submit" value="Vis Bestilling">
                                     </td>
                                 </tr>
                         {% endfor %}
@@ -112,16 +112,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for item in products %}
+                    {% for item in products %}<!-- må finne ut 1. hvordan få lastet inn bare produkter med bestillinger, og 2. hvordan telle opp produktene.
+                        <!-- her må man ha en if else løkke for skjekke om produkter har en bestilling -->
+                        <!-- her må man ha en if løkke for skjekke om det er størrelser på produktet, hvis den har et, må det skjøres underløkker -->
                         <tr class="table-items">
                             <!--  Liste over alle produkt (pluss størrelser) -->
                             <th>
-
+                                <!-- her må navn på produkter i ordren bli satt inn, fra de produktene som har litt VALGT,
+                                dvs, at Hvis ingen har bestilt en bestemt størrelse, skal den ikke dukke opp-->
 
                             </th>
                             <!-- Evt størrelser-->
                             <td style="word-wrap: break-word; max-width: 40em;">
-
+                                <!--her kommer størrelser-->
                             </td>
                             <!-- Antall bestitlt -->
                             <td style="word-wrap: break-word; max-width: 40em;">
