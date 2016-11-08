@@ -82,8 +82,9 @@ def shop(request):
                             order_list.products.remove(has_sporra_id)
 
                         comment = request.POST.get('comment', None)
+                        print(comment)
                         order_list = Order.objects.filter(user=user).first()
-                        if len(comment) > 0:
+                        if comment:
                             order_list.comment = comment
 
                         order_list.products.add(*products)
@@ -96,6 +97,7 @@ def shop(request):
                                 productinfo.number = number
                                 productinfo.size = size
                                 productinfo.save()
+                        order_list.save()
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
