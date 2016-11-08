@@ -45,5 +45,8 @@ class OrderInfo(models.Model):
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)
     order = models.ForeignKey(Order)
-    number = models.IntegerField(default=1,)
-    size = models.CharField(max_length=64, blank=True)
+    number = models.IntegerField(default=1)
+    size = models.CharField(max_length=64, null=True)
+
+    class Meta():
+        auto_created = True
