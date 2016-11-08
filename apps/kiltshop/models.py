@@ -32,7 +32,7 @@ class Order(models.Model):
 
 
 class OrderInfo(models.Model):
-    orders = models.ManyToManyField(Order, null=True, blank=True)
+    orders = models.ManyToManyField(Order, blank=True)
     startTime = models.DateTimeField(null=True, blank=True)
     endTime = models.DateTimeField(null=True, blank=True)
     status = models.BooleanField(default=True)
