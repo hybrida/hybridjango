@@ -73,6 +73,7 @@
             text-align: left;
             width: 50%;
         }
+
         .pull-left {
             text-align: left;
             width: 50%;
@@ -88,18 +89,24 @@
 
     <div class="big_wrapper">
         <div class="pull-left">
-        <h1 class="table-title">{{ company.name }}</h1>
+            <h1 class="table-title">{{ company.name }}</h1>
         </div>
-        {% if user.is_authenticated %}
-            <div class="pull-right">
-            <a href="">
-                <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
+        <div class="pull-right">
+            <a href="{% url 'bedkom'  %}">
+                <button class="btn btn-xs btn-primary">Tilbake</button>
             </a>
-            <a href="{{ company.id }}/endre">
-                <button class="btn btn-xs btn-primary">Rediger</button>
-            </a></div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'new_event' %}">
+                    <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
+                </a>
+                <a href="{% url 'endre_bedrift' company.id %}">
+                    <button class="btn btn-xs btn-primary">Rediger</button>
 
-        {% endif %}
+                </a>
+            {% endif %}
+        </div>
+
+
         <table class="table-fill">
             <thead>
             <tr>
@@ -137,12 +144,12 @@
             </thead>
         </table>
 
-    <div class="">
-        <h3>Tidligere bedriftspresentasjoner</h3>
-        {% for bedpress in bedpresses %}
-            <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.room }} | {{ bedpress.date }}</a></p>
-        {% endfor %}
-    </div>
+        <div class="">
+            <h3>Tidligere bedriftspresentasjoner</h3>
+            {% for bedpress in bedpresses %}
+                <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.room }} | {{ bedpress.date }}</a></p>
+            {% endfor %}
+        </div>
 
     </div>
 
