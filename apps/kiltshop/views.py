@@ -26,10 +26,8 @@ def order(request):
              'order': user_order}
         )
 
-
+@login_required
 def shop(request):
-    if not request.user.is_staff:  # In case somebody unwanted starts "shopping"
-        return render(request, 'registration/login.html')
     user = request.user
     active_order = OrderInfo.objects.filter(status=True).first()
     if request.method == 'POST':
