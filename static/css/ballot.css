@@ -1,0 +1,63 @@
+.btn {
+    border-radius: 0;
+}
+
+#options {
+}
+
+.option {
+    display: none;
+}
+
+.option + label {
+    padding: .25em;
+    margin: 0;
+    width: 100%;
+    font-size: 200%;
+    border-bottom: solid thin;
+    font-weight: normal;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 200ms;
+}
+
+.option:checked + label {
+    color: #005675;
+}
+
+.option + label:before {
+    font-family: "Glyphicons Halflings";
+    content: " ";
+    display: inline-block;
+    padding-right: .1em;
+    vertical-align: bottom;
+}
+
+.option:checked + label:before {
+    content: " ";
+}
+
+#submitButton {
+    padding: .5em;
+    width: 100%;
+    font-size: 300%;
+    margin-top: .25em;
+}
+
+#submitContainer {
+}
+
+h1 {
+    font-size: 3em;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .container {
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+}

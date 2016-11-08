@@ -91,8 +91,11 @@
         <h1 class="table-title">{{ company.name }}</h1>
         </div>
         {% if user.is_authenticated %}
-            <div class="pull-right" >
-            <a>
+            <div class="pull-right">
+            <a href="">
+                <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
+            </a>
+            <a href="{{ company.id }}/endre">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a></div>
 

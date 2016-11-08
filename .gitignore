@@ -128,9 +128,15 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+hybenv/
 
 # Spyder project settings
 .spyderproject
 
 # Rope project settings
 .ropeproject
+
+# Database
+db.sqlite3
+
+static/pdf/updatek

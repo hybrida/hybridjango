@@ -1,0 +1,82 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ballot.css' %}">
+{% endblock %}
+
+{% block text %}
+    <h1 id="title">{{ title }}</h1>
+    <br>
+    <form id="vote_form">
+        {% csrf_token %}
+        <div id="options" class="row">
+            {% for choice in choices %}
+                <div class="col-md-6">
+                    <input type="radio" name="choice" id="{{ choice }}" class="option" value="{{ choice }}">
+                    <label for="{{ choice }}" class="">{{ choice }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="submitContainer">
+                <a class="btn btn-primary" id="submitButton" role="button"
+                   data-toggle="popover" data-trigger="focus" tabindex="0">Stem</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script>
+        var lastNr = {{ nr }};
+        setInterval(function () {
+                    $.ajax({
+                        url: '{% url 'ballot:choices' %}',
+                        type: 'GET',
+                        success: function (response) {
+                            if (response.nr === lastNr) {
+                                return;
+                            }
+                            lastNr = response.nr;
+                            var newChoices = "";
+                            for (choice of response.choices) {
+                                newChoices += '\
+            <div class="col-md-6">\
+                <input type="radio" name="choice" id="' + choice + '" class="option" value="' + choice + '">\
+                <label for="' + choice + '">' + choice + '</label>\
+            </div>';
+                            }
+                            $('#options').html(newChoices);
+                            $('#submitButton').addClass('btn-primary');
+                            $('#title').html(response.title);
+                        }
+                    })
+                },
+                5000);
+
+        var submitButton = $('#submitButton');
+        var timeoutID;
+
+        submitButton.click(function () {
+            $.post('{% url 'ballot:vote' %}', $('#vote_form').serialize(), function (response) {
+                if (response.indexOf('Du stemte') == 0 || response.indexOf('Du har') == 0) {
+                    document.getElementById('vote_form').reset();
+                    $('#submitButton').removeClass('btn-primary');
+                }
+
+                submitButton.attr('data-content', response);
+                submitButton.attr('data-placement', 'top');
+                submitButton.popover('show');
+            });
+        });
+
+        submitButton.on('shown.bs.popover', function () {
+            var $pop = $(this);
+            window.clearTimeout(timeoutID);
+            timeoutID = setTimeout(function () {
+                $pop.popover('hide');
+            }, 2000);
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "standard_wide.html" %}
+{% load widget_tweaks %}
+
+{% block text %}
+
+    {% if form.errors %}
+        <p>Feil brukernavn/passord</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Du har dessverre (eller eventuelt heldigvis) ikke tilgang.</p>
+        {% else %}
+            <p>Du må logge inn for å se denne siden.</p>
+        {% endif %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label_tag }}
+            {{ form.password|add_class:"form-control" }}
+        </div>
+        <button type="submit" value="login" class="btn btn-primary">Logg inn</button>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
+    <a href="{% url 'register' %}" class="">Registrer/Gjenoprett bruker</a>
+
+    {# Assumes you setup the password_reset view in your URLconf #}
+    {# <p><a href="{% url 'password_reset' %}">Lost password?</a></p> #}
+
+{% endblock %}

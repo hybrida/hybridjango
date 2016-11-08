@@ -1,5 +1,49 @@
-@import url(http://fonts.googleapis.com/css?family=Playfair+Display);
-@import url(http://fonts.googleapis.com/css?family=Raleway);
+/* Fonts */
+
+/* cyrillic */
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-cyrillic.woff2) format('woff2');
+    unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* latin-ext */
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Playfair Display'), local('PlayfairDisplay-Regular'), url(/static/fonts/Playfair-Display-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+/* latin-ext */
+@font-face {
+    font-family: 'Raleway Dots';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: 'Raleway Dots';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Raleway Dots'), local('RalewayDots-Regular'), url(/static/fonts/Raleway-Dots-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
 
 body {
     background: #cbc9c2 url("/static/img/kilt4.jpg") repeat;
@@ -7,16 +51,55 @@ body {
     padding-top: 50px;
 }
 
-#suggestionBox {
-    right: -100%;
+#feedbackBox {
+    right: -8px; /* Account for shadow on box */
     bottom: 75px;
+    width: 500px;
+    height: 400px;
+    padding: 0 30px 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
     z-index: 50000;
-    transition: right 0.2s ease;
+    transform: translateX(100%);
+    transition: right 0.2s ease,
+    transform 0.2s ease;
+}
+
+#feedbackBox h2 {
+    text-align: center
+}
+
+#feedbackBox #feedbackContent {
+    resize: none;
+    width: 100%;
+    height: auto;
+    flex-grow: 1;
+    margin-bottom: 5px;
+}
+
+#feedbackBox #feedbackButton {
+    margin-top: 15px;
+}
+
+@media (max-width: 992px) {
+    #feedbackBox {
+        bottom: 55px;
+    }
+}
+
+@media (max-width: 767px) {
+    #feedbackBox {
+        width: calc(100% - 32px);
+        height: calc(100% - 71px);
+    }
 }
 
 #logo {
-  height: 5em;
-  z-index: 99999;
+    margin-top: 4px;
+    height: 82px;
+    z-index: 99999;
 }
 
 #home {
@@ -93,10 +176,12 @@ img {
     box-shadow: none;
 }
 
+.progress,
 .btn,
 .form-control,
+.white-box,
 .dropdown-menu {
-    border-radius: 0;
+    border-radius: 2px;
 }
 
 .error {
@@ -104,12 +189,11 @@ img {
 }
 
 .container-with-set-aspect-ratio {
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     overflow: hidden;
-    top: 0;
-    overflow: hidden;
-    bottom: 0;
     position: absolute;
 }
 
@@ -140,14 +224,16 @@ img {
 
 .white-box {
     background-color: #fff;
-    _border-radius: 4px;
     padding: 20px;
     overflow: auto;
 }
 
+.unstyled-box {
+    padding: 20px;
+}
+
 .clean-white-box {
     background-color: #fff;
-    _border-radius: 4px;
     padding: 20px;
     overflow: auto;
     border: solid rgba(0, 0, 0, 0.1) 2px;
@@ -211,6 +297,10 @@ img {
     padding: .5%;
 }
 
+.no-outline:focus, .no-outline:active:focus {
+    outline: none;
+}
+
 .div_pointer {
     cursor: pointer;
 }
@@ -240,7 +330,7 @@ img {
 .white-box,
 .transparent-box-addition,
 .drop-shadow {
-    box-shadow: rgba(0, 0, 0, 0.4) -5px 5px 25px 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
 }
 
 .no-shadow {
@@ -303,13 +393,106 @@ a.inverted {
     display: table-cell;
 }
 
+.info-table {
+    margin: auto;
+}
+
 .info-table td {
-    padding: .5em 2em;
+    padding: .5em 1.5em;
+    text-align: left;
 }
 
 .info-table td:first-child {
     border-right: solid lightslategray;
     text-align: right;
+}
+
+.image-info-overlay {
+    margin-top: -100px;
+    min-height: 100px;
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));
+}
+
+.image-info-overlay-content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-shadow: 0 0 2px #000;
+    font-weight: bold;
+    padding: 0 4px;
+}
+
+.fill-width {
+    margin: 0 -20px;
+    overflow: hidden;
+}
+
+.event-preview {
+    padding: 0 20px 20px 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, .5), rgba(0, 0, 0, 0) 8px);
+}
+
+.remove-whitebox-padding {
+    margin: -20px;
+}
+
+.is-table-row {
+    display: table;
+}
+
+.is-table-row [class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.sidebar-links {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar-links > li {
+    width: 100%;
+    display: block;
+}
+
+.sidebar-links a {
+    padding: 12px;
+    line-height: 20px;
+    display: block;
+    border-radius: 2px;
+    font-size: large;
+}
+
+.sidebar-links a:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+}
+
+#griff_fill {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, .5));
+    transition: 1s;
+}
+
+#griff_border {
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .5));
+}
+
+#griff_fill:hover {
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, .5));
+    transform: translate(-.5%, -.5%) scale(1.01, 1.01);
+}
+
+.ringen_company_logo:hover  {
+    transition: 2s;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, .5));
+}
+
+.navbar-login {
+    padding: 15px;
 }
 
 /**
@@ -325,8 +508,10 @@ a.inverted {
  * design so that it looks good on small screens, then add @media rules
  * where needed to make it look good on bigger screens as well
  **/
-@media only screen and (max-width: 1199px) and (min-width: 992px) {
-    #navbar-search {
+
+@media (min-width: 768px) {
+    .navbar-login {
+        padding: 0;
     }
 }
 

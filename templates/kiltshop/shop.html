@@ -1,6 +1,226 @@
-{% extends 'kiltshop/sidebar.html' %}
-{% block content2 %}
+{% extends 'standard_sidebar.html' %}
+{%  block sidebar %}
+    <h2> Kiltbestilling </h2>
+    <li>
+        <a href="{% url 'kilt:info' %}">Info</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:shop' %}">Shop</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:order' %}">Bestilling</a>
+    </li>
+     <li>
+         <a href="{% url 'kilt:admin' %}">Admin</a>
+    </li>
+    <li>
+        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
+    </li>
 
- <h2> Dette blir en statisk side med alle artiklene man kan bestille </h2>
+{%  endblock %}
+
+{% block text %}
+
+    <style>
+
+        input[type=checkbox] + label {
+          color: #000;
+        }
+        input[type=checkbox]:checked + label {
+            box-shadow: 0 0 5px #005675;
+            color: #005675;
+        }
+
+        .form-control {
+            width: 50px;
+        }
+
+        #header {
+            padding-bottom: 0.5em;
+        }
+
+        div.desc {
+            font-size: 18px;
+            padding-bottom: 0.5em;
+        }
+
+        textarea {
+            resize: none;
+            overflow: auto;
+        }
+
+        .checkbox label, .radio label{
+            min-height: 250px;
+            padding-left: 0;
+        }
+
+        select{
+           -webkit-appearance: button;
+           -webkit-border-radius: 2px;
+           -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+           -webkit-user-select: none;
+           background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+           background-position: 97% center;
+           background-repeat: no-repeat;
+           border: 1px solid #AAA;
+           color: #555;
+           font-size: inherit;
+           overflow: hidden;
+           padding: 5px 10px;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+           width: 10em;
+        }
+
+        div.comment {
+            height: 10em;
+            position: relative;
+            padding-bottom: 15em;
+            padding-top: 3em;
+        }
+
+        .responsive {
+            padding: 0 0.5em;
+            float: left;
+            width: 24.99999%;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .responsive {
+                width: 49.99999%;
+                margin: 6px 0;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .responsive {
+                width: 100%;
+            }
+        }
+    </style>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-warning"{% endif %}>
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <p align="center" id="warning">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form id="submit" action="" method="post">
+        {% csrf_token %}
+        <!-- Kilts -->
+        <h1 id="header"> Kilt </h1>
+        {% for product in products %}
+            {% if product.type == 'K' %}
+                <div class="responsive">
+                    <div class="img" align="center">
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                                {% if product.name == 'Gutt' %}
+                                   <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M">Medium</option>
+                                        <option value="ML" selected >Medium Long</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                        <option value="XXL">2X Large (XXL)</option>
+                                    </select>
+                                {% else %}
+                                     <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                     </select>
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    <div class="clearfix"></div>
+        <!-- Sporran -->
+        <h1> Sporran </h1>
+        {% for product in products %}
+            {% if product.type == 'S' %}
+                <div class="responsive">
+                    <div class="img" align="center">
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    <div class="clearfix"></div>
+        <!-- ekstra -->
+        <h1 id="header"> Ekstra </h1>
+        {% for product in products %}
+            {% if product.type == 'E' %}
+                <div class="responsive">
+                    <div class="img" align="center">
+                        <div class="checkbox">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <label for="{{ product.pk }}">
+                                <img src="{{ product.image.url }}" width="200" height="200">
+                                <div class="desc">{{ product.name }}</div>
+                                {% if product.pk == 34 %}
+                                    <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                     </select>
+                                {% elif product.name == 'Premium Sokker' %}
+                                    <select name="size" id="{{ product.pk }}">
+                                        <option value="S">Small</option>
+                                        <option value="M" selected>Medium</option>
+                                        <option value="L">Large</option>
+                                        <option value="XL">X Large (XL)</option>
+                                    </select>
+                                {% endif %}
+                                Antall:
+                               <input name="number" type="number" class="form-control" min="1" max="9" value="1" onkeydown="return false">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+    <div class="clearfix"></div>
+
+    <div align="center" class="comment">
+        <p> Kommentar:</p>
+            <textarea  name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
+    </div>
+
+
+
+    <div class="clearfix"></div>
+
+
+        <div align="center" class="row">
+            <div class="col-md-12" id="submitContainer">
+                <button type="submit">Bestill</button>
+            </div>
+        </div>
+
+    </form>
 
 {% endblock %}

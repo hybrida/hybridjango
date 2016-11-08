@@ -1,0 +1,114 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+{% block title %}{{ hybrid.hybridname }}{% endblock title %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
+{% endblock link %}
+{% comment %}
+    <script type="text/javascript">
+
+        function uploadImage(filesParent) {
+            $(".picFrame .link, .picFrame .drop, .pic").addClass("hidden");
+            uploadFile(filesParent.files[0], function (url) {
+                var filename = url.substring(url.lastIndexOf("/") + 1);
+                $(".profile-image-file-name").val(filename);
+                $(".pic").attr("src", url);
+                $(".picFrame").removeClass("hidden");
+                $(".picFrame .link, .pic").removeClass("hidden");
+                $(".picFrame").addClass("poof");
+            }, "{{ hybrid.hybridname }}");
+        }
+
+        $(document).ready(function () {
+            $(".edit .picFrame .ajaxUpload").click(function () {
+                $(".profile-image-file-input").click()
+            });
+            $(".edit .picFrame .remove").click(function () {
+                $(".pic").attr("src", "usr/placeholder-profile.jpg");
+                $(".profile-image-file-name").val("");
+                $(".picFrame .remove").addClass("hidden");
+            });
+            $(".edit .picFrame").on("dragover", function (jqe) {
+                jqe.preventDefault();
+            }).on("drop", function (jqe) {
+                jqe.preventDefault();
+                uploadImage(jqe.originalEvent.dataTransfer);
+            });
+            $(".profile-image-file-input").change(function () {
+                uploadImage(this);
+            });
+
+            $('.error :input').popover({
+                placement: 'left',
+                container: 'body',
+                trigger: 'focus',
+                html: true,
+                content: function () {
+                    return $('.' + $(this).attr('name') + ' .message').html();
+                }
+            });
+        });
+    </script>
+{% endcomment %}
+{% block text %}
+    <div style="padding: 20px 30px 60px">
+    <div class="row">
+        <div class="col-xs-12">
+            <h5 class="top-text">
+                <span><a href="{% url 'profile' hybrid %}">{{ hybrid.username }}</a></span>
+                {% if user == hybrid %}
+                    <span style="float: right"><a href="{% url 'edit_profile' hybrid %}">Endre Bruker</a></span>
+                {% endif %}
+            </h5>
+        </div>
+        <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
+            {% block image %}
+                <div class="picFrame poof">
+                    <img class="pic super-center" src="/uploads/{{ hybrid.image }}">
+                </div>
+            {% endblock %}
+        </div>
+        <div class="col-md-6 col-xs-12 pull-left space-above">
+            {% block info %}
+                <h1 class="big-title">{{ hybrid.first_name }} {{ hybrid.middle_name }} {{ hybrid.last_name }}</h1>
+                <h3 class="big-sub-title">{{ hybrid.title }}</h3>
+                <br>
+                <div style="overflow-x: auto">
+                    <table class="info-table">
+                        {% if hybrid.email %}
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ hybrid.email }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>Medlem</td>
+                            <td>{% if hybrid.member %}Ja{% else %}Nei{% endif %}</td>
+                        </tr>
+                        {% if hybrid.groups.all %}
+                            <tr>
+                                <td>Medlem av</td>
+                                <td>
+                                    {% for group in hybrid.groups.all %}
+                                        {{ group }}<br>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>Avgangsår</td>
+                            <td>{{ hybrid.graduation_year }}</td>
+                        </tr>
+                        {% if hybrid.specialization %}
+                            <tr>
+                                <td>Spesialisering</td>
+                                <td>{{ hybrid.specialization }}</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+    </div>
+{% endblock %}

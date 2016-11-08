@@ -2,36 +2,10 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
-    <div data-ride="carousel" class="carousel slide" id="carousel-frontpage" data-interval="10000">
-        <ol class="carousel-indicators">
-            <li class="active" data-slide-to="0" data-target="#carousel-frontpage"></li>
-            <li data-slide-to="1" data-target="#carousel-frontpage"></li>
-            <li data-slide-to="2" data-target="#carousel-frontpage"></li>
-        </ol>
-        <div style="padding-top: 37%"></div>
-        <div role="listbox" class="carousel-inner container-with-set-aspect-ratio">
-            <div class="item active">
-                <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
-            </div>
-            <div class="item">
-                <img src="{% static "img/Kiltkast.png" %}" data-holder-rendered="true">
-            </div>
-            <div class="item">
-                <img src="{% static "img/instacarousel.png" %}" data-holder-rendered="true">
-            </div>
-        </div>
-        <a data-slide="prev" role="button" href="#carousel-frontpage" class="left carousel-control">
-            <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a data-slide="next" role="button" href="#carousel-frontpage" class="right carousel-control">
-            <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
+    <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
     <div class="fp_white" style="margin-top: -.2%">
     </div>
-    <div class="container-fluid center-container">
+    <div class="container">
         <div class="row">
             <div class="col-xs-12 space-above">
                 <div class="col-xs-12 drop-shadow">
@@ -40,9 +14,8 @@
                             Velkommen til linjeforening Hybrida sin nettside
                         </div>
                         <div class="col-sm-6 white-box no-shadow inverted">
-                            <a href="/nystudent"> Ny student? Klikk her!</a>
+                            <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
                         </div>
-                        <!--- <div class="col-sm-4 white-box no-shadow inverted" style="background:#7c3f63;"> </div> -->
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -51,57 +24,19 @@
     </div>
     <a name="nyhetsfeed" style="position:relative; height: 1px; margin-top: -1px; top: -18px; display:block; ">
         &nbsp;</a>
-    <div class="container-fluid center-container">
+    <div class="container">
         <div class="row space-below space-above">
-            <div class="col-xs-12 space-above">
-                <div class="page-box">
-                    <h5 class="top-text">Nyhetsfeed</h5>
-                    {% for event in object_list %}
-                        <div class="col-lg-8 render big-thumbnail" style="padding: 7px; margin-bottom: -1px;">
-                            <div class="white-box no-shadow">
-                                <div style="position: relative;">
-                                    <div style="padding-top: 100%;">
-                                    </div>
-                                    <div class="container-with-set-aspect-ratio">
-                                        <a href="/events/{{ event.pk }}">
-                                            <div style="position: relative">
-                                                <div style="padding-top: 50%">
-                                                </div>
-                                                <div class="container-with-set-aspect-ratio">
-                                                    <img class="super-center" src="/uploads/{{ event.image }}"
-                                                         alt="No image available"
-                                                         width="100%">
-                                                </div>
-                                            </div>
-                                            <h3 class="col-xs-12">{{ event.title }}</h3>
-                                        </a>
-
-                                        <p class="col-xs-12">{{ event.ingress }}</p>
-
-                                        <div class="container-fluid"
-                                             style="position: absolute; bottom: 0; background: rgba(245,245,245,1); width: 100%;">
-                                            <div class="row">
-                                                <div class="col-xs-6">{{ event.event_start }}</div>
-                                                <div class="col-xs-6">
-                                                    <div class="progress" style="margin-bottom: 0;">
-                                                        <div class="progress-bar"
-                                                             style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
-                                                        </div>
-                                                        <span>{{ event.participants.count }} / {{ event.max_participants }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    {% endfor %}
-                    <div class="clearfix"></div>
+            <div class="col-xs-12 col-md-4 space-above">
+                <div class="white-box">
+                    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
+                    {{ events_chronological }}
                 </div>
             </div>
-
+            <div class="col-xs-12 col-md-8">
+                <div class="unstyled-box">
+                    {% include 'events/events_thumblist.html' %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
