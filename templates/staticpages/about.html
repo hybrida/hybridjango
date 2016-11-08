@@ -1,0 +1,15 @@
+{% extends 'standard_sidebar.html' %}
+{% block text %}
+    <h1>Om Hybrida</h1>
+    <h3>Har ikke noe innhold her enda, så dere får heller se på den fancy griffen.</h3>
+    {% include 'griff.svg' %}
+{% endblock %}
+{% block sidebar %}
+    <div class="remove-whitebox-padding">
+        <ul class="sidebar-links">
+            <li><a href="{% url 'about' %}">Om Hybrida</a></li>
+            <li><a href="{% url 'committees' %}">Komitéer</a></li>
+            <li><a href="{% url 'griff_orden' %}">Griffens Orden</a></li>
+        </ul>
+    </div>
+{% endblock %}

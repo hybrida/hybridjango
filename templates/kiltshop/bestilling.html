@@ -1,6 +1,120 @@
-{% extends 'kiltshop/sidebar.html' %}
-{% block content2 %}
+{% extends 'standard_sidebar.html' %}
+{%  block sidebar %}
+    <h2> Kiltbestilling </h2>
+    <li>
+        <a href="{% url 'kilt:info' %}">Info</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:shop' %}">Shop</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:order' %}">Bestilling</a>
+    </li>
+     <li>
+         <a href="{% url 'kilt:admin' %}">Admin</a>
+    </li>
+    <li>
+        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
+    </li>
 
- <h2> Dette blir en statisk side som lister alle bestillingene bruker har valgt </h2>
+{%  endblock %}
+
+{% block text %}
+
+<style>
+
+    #table1 tr th{
+    width:25%;}
+
+    .table-items{
+        font-size: 20px;
+    }
+
+    .table-header{
+        font-size: 1.5em;
+        font-style: italic;
+    }
+
+    .button{
+        background-color: Transparent;
+        background-repeat:no-repeat;
+        border: none;
+        cursor:pointer;
+        overflow: hidden;
+        outline:none;
+    }
+
+
+</style>
+
+    {% if not products %}
+        <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
+    {% else %}
+        <h2>Din bestilling:</h2>
+        <form action="" method="post">
+            <table class="table table-bordereds" >
+                <thead class="table-header">
+                    <tr>
+                        <th class="col-xs-7">Produkt</th>
+                        <th class="col-xs-2">Type</th>
+                        <th class="col-xs-2">Størrelse</th>
+                        <th class="col-xs-1">Antall</th>
+                    </tr>
+                </thead>
+
+            {% csrf_token %}
+
+            {% for item in products %}
+                <tr class="table-items">
+                    <td>
+                            {{ item.name }}
+                    </td>
+                    <td>
+                        {% if item.type == 'K' %}
+                            Kilt
+                        {% elif item.type == 'S' %}
+                            Sporran
+                        {% else %}
+                            Ekstra
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.type == 'K' %}
+                            {% for info in productInfo %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.size }}
+                                {% endif %}
+                            {% endfor %}
+                        {% elif item.type == 'E' %}
+                            {% if item.pk == 34 or item.name == "Premium Sokker" %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.size }}
+                                {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                         {% for info in productInfo %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.number }}
+                                {% endif %}
+                            {% endfor %}
+                    </td>
+                    <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+        {% if order.comment %}
+            <p> Din kommentar: {{ order.comment }}</p>
+        {% endif %}
+    {% endif %}
+
+
+
 
 {% endblock %}

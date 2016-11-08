@@ -12,7 +12,6 @@
     <script src="{% static "lib/js/jquery-3.1.0.min.js" %}" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-theme.min.css" %}">
-    <link href='http://fonts.googleapis.com/css?family=Raleway+Dots' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/sidebar.css" %}">
     {% block link %}
@@ -35,9 +34,28 @@
         </div>
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'new_event' %}">Nytt Arrangement</a></li>{% endif %}
                 <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
+                <li><a href="{% url 'about' %}">Om Hybrida</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
+                {% else %}
+                    <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
+                {% endif %}
+                <li><a href="{% url 'contact_us' %}">Kontakt Oss</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span style="padding-right: .5em">Mer</span><span class="glyphicon glyphicon-menu-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'ballot:index' %}">Avstemning</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'kilt:info' %}">Kiltshop</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
@@ -54,11 +72,13 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{% firstof user.username 'Logg inn' %}</a>
+                       aria-expanded="false">
+                        <span style="padding-right: .5em">{% firstof user.username 'Logg inn' %}</span><span
+                            class="glyphicon glyphicon-menu-down"></span></a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                             <li>
-                                <a href="{% url 'profile' user.pk %}">Profil</a>
+                                <a href="{% url 'profile' user %}">Profil</a>
                             </li>
                             {% if user.is_superuser %}
                                 <li>
@@ -70,16 +90,29 @@
                             </li>
                         {% else %}
                             <li>
-                                <form class="navbar-form" method="post" action="{% url 'login' %}">
-                                    {% csrf_token %}
-                                    <label for="id_username">Username:</label>
-                                    <input autofocus="" id="id_username" maxlength="254" name="username" required=""
-                                           type="text" class="form-control">
-                                    <label for="id_password">Password:</label>
-                                    <input id="id_password" name="password" required="" type="password"
-                                           class="form-control">
-                                    <button class="btn btn-primary form-control" type="submit">Logg inn</button>
-                                </form>
+                                <div class="navbar-login">
+                                    <form class="navbar-form" method="post" action="{% url 'login' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="id_username">Brukernavn:</label>
+                                            <input autofocus="" id="id_username" maxlength="254" name="username"
+                                                   required=""
+                                                   type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_password">Passord:</label>
+                                            <input id="id_password" name="password" required="" type="password"
+                                                   class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary form-control" type="submit"
+                                                    style="width: 100%; margin: .25em 0;">Logg inn
+                                            </button>
+                                            <a href="{% url 'register' %}" class="btn btn-default" style="width: 100%">Registrer/Gjenoprett
+                                                bruker</a>
+                                        </div>
+                                    </form>
+                                </div>
                             </li>
                         {% endif %}
                     </ul>
@@ -88,31 +121,51 @@
         </div>
     </div>
 </nav>
-<button href="/artikkel/1" class="feedback btn btn-default btn-lg btn-responsive fixed-bottom-right"
-        onclick="toggleSuggestionBox()">
-    <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> Feedback
-</button>
 
-
-<div id="suggestionBox" class="white-box fixed-bottom-right" style="padding: 0 30px 20px">
-    <input id="suggestingUser" value="" hidden>
-    <h2 style="text-align: center">Forslag til Vevkom</h2>
-    <div class="form-group">
-        <!--<label for="suggestionContent">Forslag til forbedring</label>-->
-        <textarea class="form-control" rows="10" cols="50" id="suggestionContent" style="resize: none"
-                  placeholder="Gi oss ros eller ris, vi tar det med et glis!"></textarea>
-        <input type="checkbox" id="suggestAnonymously"> Send anonymt
-    </div>
-    <button type="submit" class="btn btn-primary form-control" id="suggestionButton" onclick="submitSuggestion()">Send
-    </button>
-</div>
+{% include './feedback.html' %}
 
 <div class="wrap">
-    <div class="content">
+    <div class="article-bg">
         {% block content %}
         {% endblock %}
     </div>
-    <div id="footer">
+    <div id="footer" class="container">
+        <div class="row">
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    et eller annet
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    <h4>Kontaktinfo</h4>
+                    <table class="info-table">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        <tr>
+                            <td>Mail</td>
+                            <td>styret@hybrida.no</td>
+                        </tr>
+                        <tr>
+                            <td>Telefon</td>
+                            <td>12345678</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td>Hva nå enn adressen er</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+                <div class="white-box">
+                    <div class="remove-whitebox-padding">
+                        {% include 'ringen.svg' %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="{% static "lib/js/bootstrap.min.js" %}"></script>
@@ -121,5 +174,3 @@
 {% endblock %}
 </body>
 </html>
-
-

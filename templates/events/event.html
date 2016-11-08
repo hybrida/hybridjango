@@ -1,19 +1,22 @@
 {% extends 'standard_sidebar.html' %}
+{% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
-    <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img">
-
+    <div class="remove-whitebox-padding">
+        <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img" width="100%">
+    </div>
     <h1 id="event_title">{{ event.title }}</h1>
     <h3 class="text-center">{{ event.ingress }}</h3>
     <h6 class="top-text">
         Av:
-        <a class="userLink" id="{{ event.author }}"
-           href="{% url 'profile' event.author.pk %}">{{ event.author.hybrid.get_full_name }}</a>
-        {% if user.is_authenticated %}
+        <a class="hybridLink" id="{{ event.author }}"
+           href="{% url 'profile' event.author %}">{{ event.author.get_full_name }}</a>
+        {% if perms.events.can_add_event %}
             <a class="pull-right" href="{% url 'edit_event' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
-
+        {% endif %}
+        {% if perms.events.can_add_event %}
             <a class="pull-right" href="{% url 'delete_event' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
@@ -23,124 +26,76 @@
     <p>{{ event.text|linebreaksbr }}</p>
     <p></p>
 
-
-    <h6 class="top-text">Påmeldte</h6>
-
-    <div class="col-md-12">
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide1' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 1 </p>
-            </div>
-            <div style="display: none" class="showhide1" id="showhide1" name="showhide1">
-
-            </div>
+    {% if event.max_participants %}
+        <h6 class="top-text">Påmeldte</h6>
+        <div>
+            {% for grade in "12345" %}
+                <div class="row">
+                    <div class="col-xs-1">
+                        {{ event.participants|grade:grade|length }}
+                    </div>
+                    <div class="col-xs-11">
+                        <p onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ;" style="cursor: pointer;">
+                            Klasse {{ grade }} </p>
+                    </div>
+                    <div style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
+                        {% for participant in event.participants|grade:grade %}
+                            {% include 'events/user_profile.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide2' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 2 </p>
-            </div>
-            <div style="display: none" class="showhide2" id="showhide2" name="showhide2">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide3' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 3 </p>
-            </div>
-            <div style="display: none" class="showhide3" id="showhide3" name="showhide3">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide4' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 4 </p>
-            </div>
-            <div style="display: none" class="showhide4" id="showhide4" name="showhide4">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-1">
-                0
-            </div>
-            <div class="col-md-11">
-                <p onclick="$ ( '.showhide5' ).toggle ( ) ;" style="cursor: pointer;"> Klasse 5 </p>
-            </div>
-            <div style="display: none" class="showhide5" id="showhide5" name="showhide5">
-
-            </div>
-        </div>
-
-    </div>
+    {% endif %}
 {% endblock text %}
 {% block sidebar %}
-    <table width="100%" class="info-table">
-        <tbody>
-        <tr>
-            <td>Åpnes</td>
-            <td>{{ event.signup_start }}</td>
-        </tr>
-        <tr>
-            <td>Frist</td>
-            <td>{{ event.signup_end }}</td>
-        </tr>
-        <tr>
-            <td>Start</td>
-            <td>{{ event.event_start }}</td>
-        </tr>
-        <tr>
-            <td>Slutt</td>
-            <td>{{ event.event_end }}</td>
-        </tr>
-        <tr>
-            <td>Sted</td>
-            <td>{{ event.location }}</td>
-        </tr>
-        </tbody>
+    <table class="info-table">
+        {% if event.signup_start %}
+            <tr>
+                <td>Åpnes</td>
+                <td>{{ event.signup_start }}</td>
+            </tr>
+        {% endif %}
+        {% if event.signup_end %}
+            <tr>
+                <td>Frist</td>
+                <td>{{ event.signup_end }}</td>
+            </tr>
+        {% endif %}
+        {% if event.event_start %}
+            <tr>
+                <td>Start</td>
+                <td>{{ event.event_start }}</td>
+            </tr>
+        {% endif %}
+        {% if event.event_end %}
+            <tr>
+                <td>Slutt</td>
+                <td>{{ event.event_end }}</td>
+            </tr>
+        {% endif %}
+        {% if event.location %}
+            <tr>
+                <td>Sted</td>
+                <td>{{ event.location }}</td>
+            </tr>
+        {% endif %}
     </table>
-    <br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="progress">
-                <div class="progress-bar"
-                     style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
-                </div>
-                <span>
-                    {{ event.participants.count }} / {{ event.max_participants }}
-                </span>
+    {% if event.max_participants %}
+        <div class="progress" style="margin-bottom: 0; margin-top: 1em">
+            <div class="progress-bar"
+                 style="width: {% widthratio event.participants.count event.max_participants 100 %}%;">
             </div>
-            <div class="progress">
-                <div data-toggle="Venteliste" class="progress-bar" style="width: 0">
-                </div>
-                <span>
-                    0 / 30
-                </span>
-            </div>
+            <span>
+            {{ event.participants.count }} / {{ event.max_participants }}
+        </span>
         </div>
-    </div>
-
-    {% if user.is_authenticated %}
+    {% endif %}
+    {% if hybrid.is_authenticated %}
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 {% if event.signup_open %}
-                    {% if user in event.participants.all %}
+                    {% if hybrid in event.participants.all %}
                         <form method="post" action="{% url 'leave_event' event.pk %}">
                             {% csrf_token %}
                             <input name="eventId" value="{{ event.pk }}" type="hidden">
@@ -174,15 +129,15 @@
         window.onload = adjust_height;
         window.onresize = adjust_height;
     </script>
-    <div class="col-xs-12 col-md-4 col-xl-5 space-above">
+    <div class="col-md-4 space-above">
         <div class="white-box comment-section" id="comment_box" style="overflow-y: scroll">
             <h6 class="top-text">Kommentarer</h6>
             {% for comment in event.eventcomment_set.all %}
                 <div class="row">
                     <div class="col-xs-2 col-lg-2" style="padding-right:0">
-                        <a class="userThumbnailLink" id="{{ comment.author }}"
-                           href="{% url 'profile' comment.author_id %}">
-                            <img class="userThumbnail" src="/uploads/{{ comment.author.hybrid.image }}"
+                        <a class="hybridThumbnailLink" id="{{ comment.author }}"
+                           href="{% url 'profile' comment.author.username %}">
+                            <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
                                  alt="{{ comment.author_id }}">
                         </a>
                     </div>
@@ -190,33 +145,17 @@
                         <div class="row">
                             <div class="col-xs-11">
                                 <strong>
-                                    <a class="userLink" id="{{ comment.author }}"
-                                       href="{% url 'profile' comment.author_id %}">{{ comment.author.hybrid.get_full_name }}</a>:</strong>
+                                    <a class="hybridLink" id="{{ comment.author }}"
+                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
                             </div>
-                            {% if user == comment.author %}
-                                <div class="col-xs-1" style="padding-left: 0;">
-                                    <div class="btn-group pull-right">
-                                        <button class="btn btn-default btn-xs dropdown-toggle" type="button"
-                                                data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right" role="menu"
-                                            style="min-width:0;padding:0;border:none;">
-                                            <form method="POST" action="/comment/delete/1">
-                                                <button type="submit" class="btn btn-sm btn-danger"> Slett</button>
-                                            </form>
-                                        </ul>
-                                    </div>
-                                </div>
-                            {% endif %}
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-xs-12">
                                 {{ comment.text }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-xs-12">
                                 <small>{{ comment.timestamp }}</small>
                             </div>
                         </div>
@@ -228,8 +167,8 @@
                     {% csrf_token %}
                     <input name="event_id" value="{{ event.pk }}" hidden>
                     <label for="comment" class="sr-only">Comment:</label>
-                        <input class="form-control" id="comment" name="text" autocomplete="off"
-                               maxlength="250" type="text">
+                    <input class="form-control" id="comment" name="text" autocomplete="off"
+                           maxlength="250" type="text">
                     <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
                 </form>
             </div>

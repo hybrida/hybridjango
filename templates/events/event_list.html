@@ -1,32 +1,8 @@
-{% extends "standard_sidebar.html" %}
+{% extends "unstyled_sidebar.html" %}
 
 {% block text %}
-    <h5 class="top-text">Nyhetsfeed</h5>
-    {% for event in object_list %}
-        <div class="col-lg-12">
-            <a href="{% url 'event' event.pk %}">
-                <div>
-                    <div style="max-height: 320px; overflow: hidden">
-                        <img src="/uploads/{{ event.image }}"
-                             alt="No image available"
-                             width="100%">
-                    </div>
-                    <div style="color: #000; width: 100%;">
-                        <div>{{ event.event_start }}</div>
-                        {% if event.max_participants > 0 %}
-                            <div class="progress" style="margin-bottom: 0;">
-                                <div class="progress-bar"
-                                     style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
-                                </div>
-                                <span>{{ event.participants.count }} / {{ event.max_participants }}</span>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <h3>{{ event.title }}</h3>
-            </a>
-            <p>{{ event.ingress }}</p>
-        </div>
-    {% endfor %}
-    <div class="clearfix"></div>
+    {% include 'events/events_thumblist.html' %}
+{% endblock %}
+{% block sidebar %}
+    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
 {% endblock %}

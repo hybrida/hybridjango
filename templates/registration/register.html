@@ -1,0 +1,17 @@
+{% extends 'standard_wide.html' %}
+{% block text %}
+    {% if username %}
+        {% if successful %}
+            Mail sendt til {{ username }}@stud.ntnu.no hvis {{ username }} ligger i databasen.
+        {% elif time_to_wait %}
+            {{ time_to_wait }}
+            Du må vente {{ time_to_wait|timeuntil }} før du kan sende en ny mail.
+        {% endif %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Brukernavn: </label>
+        <input id="username" name="username" type="text" class="form-control">
+        <button class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}

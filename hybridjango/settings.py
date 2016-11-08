@@ -26,7 +26,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = [
+    'vevsjef@hybrida.no',
+]
+
+SERVER_EMAIL = 'robot@hybrida.no'
+
 # Application definition
+
+AUTH_USER_MODEL = 'registration.Hybrid'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,7 +46,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'apps.kiltshop',
     'apps.bedkom',
-    'apps.accounts',
+    'apps.registration',
     'apps.quiz',
     'apps.events',
 ]
@@ -78,6 +86,14 @@ WSGI_APPLICATION = 'hybridjango.wsgi.application'
 
 DATABASES = {
     'default': {
+        #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #        'NAME': 'hybridjango',
+        #        'USER': 'hybriduser',
+        #        'PASSWORD': 'vevkom er 8',
+        #        'HOST': 'localhost',
+        #        'PORT': '',
+        #    },
+        #    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -104,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'nb-no'
 
 TIME_ZONE = 'UTC'
 
@@ -129,3 +145,21 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+# Selfmade, used to list files, must be changed on deployment
+STATIC_FOLDER = os.path.join(BASE_DIR, "static")
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'robot@hybrida.no'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+
+# If user has any local settings (local_settings.py), override the ones above
+# Must be at the bottom of the file
+# Used in production
+try:
+    from local_settings import *
+except ImportError as e:
+    pass
