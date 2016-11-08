@@ -16,6 +16,7 @@ class Product(models.Model):
     name = models.CharField(max_length=150)
     image = models.ImageField(upload_to='products', default='placeholder-event.png')
     type = models.CharField(max_length=1, choices=type_choices, default=kilt)
+    link = models.CharField(max_length=1000, default=" ")
 
     def __str__(self):
         return self.name
@@ -44,8 +45,8 @@ class OrderInfo(models.Model):
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)
     order = models.ForeignKey(Order)
-    number = models.IntegerField(default=1,)
-    size = models.CharField(max_length=64, blank=True)
+    number = models.IntegerField(default=1)
+    size = models.CharField(max_length=64, null=True)
 
     class Meta():
         auto_created = True
