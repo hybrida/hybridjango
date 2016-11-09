@@ -98,6 +98,10 @@
             .responsive {
                 width: 100%;
             }
+
+            .commentbox {
+                width: 100%;
+            }
         }
     </style>
 
@@ -217,12 +221,12 @@
          {% if not activated %}
             <div align="center" class="comment">
                 <p> Kommentar:</p>
-                <textarea  name="comment" disabled  placeholder="utilgjengelig" cols="50" rows="6" maxlength="250"></textarea>
+                <textarea  class="commentbox" disabled  placeholder="utilgjengelig" cols="50" rows="6" maxlength="250"></textarea>
             </div>
         {% else %}
             <div align="center" class="comment">
                 <p> Kommentar:</p>
-                <textarea  name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
+                <textarea  class="commentbox"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
             </div>
         {% endif %}
 
