@@ -10,7 +10,11 @@ def index(request):
 
 @login_required
 def order(request):
-
+        active_order = OrderInfo.objects.filter(status=True).first()
+        if active_order:
+            active = True
+        else:
+            active = False
         user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
             delete = request.POST.get('delete')
@@ -29,7 +33,7 @@ def order(request):
         return render(request,"kiltshop/bestilling.html",
             {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
              'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
-             'order': user_order}
+             'order': user_order, 'activated': active}
         )
 
 @login_required
