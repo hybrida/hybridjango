@@ -14,7 +14,13 @@ def order(request):
         user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
             delete = request.POST.get('delete')
-            user_order.products.remove(delete)
+            m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
+            try:
+                m = m_qs.get()
+                m.delete()
+            except:
+                pass
+
             if len(user_order.products.all()) == 0:
                 user_order.delete()
             else:
@@ -71,13 +77,28 @@ def shop(request):
                             if product.type == 'E':
                                 for item in products:
                                     if str(item) == str(product.pk):
-                                        order_list.products.remove(item)
+                                        m_qs = ProductInfo.objects.filter(order=order_list, product=item)
+                                        try:
+                                            m = m_qs.get()
+                                            m.delete()
+                                        except:
+                                            pass
 
                         if has_kilt and new_kilt:
-                            order_list.products.remove(has_kilt_id)
+                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_kilt_id)
+                            try:
+                                m = m_qs.get()
+                                m.delete()
+                            except:
+                                pass
 
                         if has_sporra and new_sporra:
-                            order_list.products.remove(has_sporra_id)
+                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_sporra_id)
+                            try:
+                                m = m_qs.get()
+                                m.delete()
+                            except:
+                                pass
 
                         comment = request.POST.get('comment', None)
                         print(comment)
@@ -85,15 +106,12 @@ def shop(request):
                         if comment:
                             order_list.comment = comment
 
-                        order_list.products.add(*products)
                         for product in products:
                             number = int(request.POST.get('number-{id}'.format(id=product), 1))
                             if number > 0:
-                                objectinfo = ProductInfo.objects.filter(order=order_list)
-                                productinfo = objectinfo.get(product=product)
                                 size = request.POST.get('size-{id}'.format(id=product), None)
-                                productinfo.number = number
-                                productinfo.size = size
+                                item = Product.objects.get(pk=product)
+                                productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
                                 productinfo.save()
                         order_list.save()
                         active_order.save()
@@ -102,15 +120,12 @@ def shop(request):
                         order_list = Order.objects.create(user=user)
                         comment = request.POST.get('comment', None)
                         order_list.comment = comment
-                        order_list.products.add(*products) # ignore this
                         for product in products:
                             number = int(request.POST.get('number-{id}'.format(id=product), 1))
                             if number > 0:
-                                objectinfo = ProductInfo.objects.filter(order=order_list)
-                                productinfo = objectinfo.get(product=product)
                                 size = request.POST.get('size-{id}'.format(id=product), None)
-                                productinfo.number = number
-                                productinfo.size = size
+                                item = Product.objects.get(pk=product)
+                                productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
                                 productinfo.save()
                         order_list.save()
                         active_order.orders.add(order_list)
