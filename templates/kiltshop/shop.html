@@ -109,6 +109,10 @@
 
     <form id="submit" action="" method="post">
         {% csrf_token %}
+        {% if not activated %}
+            <h1 style="color: red; font-size: 20px">Du kan ikke bestille enda.</h1>
+        {% endif %}
+
         <!-- Kilts -->
         <h1 id="header"> Kilt </h1>
         {% for product in products %}
@@ -179,19 +183,16 @@
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
-                                {% if product.pk == 34 %}
+                                {% if product.name == "Women's Knee-Hi" %}
                                     <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="S">Small</option>
                                         <option value="M" selected>Medium</option>
                                         <option value="L">Large</option>
                                         <option value="XL">X Large (XL)</option>
                                      </select>
                                 {% elif product.name == 'Premium Sokker' %}
                                     <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="S">Small</option>
                                         <option value="M" selected>Medium</option>
                                         <option value="L">Large</option>
-                                        <option value="XL">X Large (XL)</option>
                                     </select>
                                 {% endif %}
                                 Antall:

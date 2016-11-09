@@ -36,6 +36,10 @@ def order(request):
 def shop(request):
     user = request.user
     active_order = OrderInfo.objects.filter(status=True).first()
+    if active_order:
+        active = True
+    else:
+        active = False
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
         if not active_order:
@@ -132,7 +136,7 @@ def shop(request):
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
 
-    return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
+    return render(request, "kiltshop/shop.html", {"products": Product.objects.all(),'activated': active})
 
 
 def admin(request):
