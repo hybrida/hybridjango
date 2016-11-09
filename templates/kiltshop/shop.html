@@ -213,10 +213,18 @@
 
     <div class="clearfix"></div>
 
-    <div align="center" class="comment">
-        <p> Kommentar:</p>
-            <textarea  name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
-    </div>
+         {% if not activated %}
+            <div align="center" class="comment">
+                <p> Kommentar:</p>
+                <textarea  name="comment" disabled  placeholder="utilgjengelig" cols="50" rows="6" maxlength="250"></textarea>
+            </div>
+        {% else %}
+            <div align="center" class="comment">
+                <p> Kommentar:</p>
+                <textarea  name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="250"></textarea>
+            </div>
+        {% endif %}
+
 
 
 
