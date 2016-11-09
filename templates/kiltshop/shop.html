@@ -222,12 +222,19 @@
 
     <div class="clearfix"></div>
 
-
-        <div align="center" class="row">
-            <div class="col-md-12" id="submitContainer">
-                <button type="submit">Bestill</button>
+        {% if not activated %}
+            <div align="center" class="row">
+                <div class="col-md-12" id="submitContainer">
+                    <button class="btn btn-primary btn-lg" disabled type="submit">Bestill</button>
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div align="center" class="row">
+                <div class="col-md-12" id="submitContainer">
+                    <button class="btn btn-primary btn-lg" type="submit">Bestill</button>
+                </div>
+            </div>
+        {% endif %}
 
     </form>
 
