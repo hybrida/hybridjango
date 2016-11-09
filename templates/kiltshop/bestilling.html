@@ -108,7 +108,9 @@
                                 {% endif %}
                             {% endfor %}
                     </td>
-                    <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                    {% if activated %}
+                        <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </table>
