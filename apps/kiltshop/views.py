@@ -42,9 +42,7 @@ def shop(request):
         active = False
     if request.method == 'POST':
         products = request.POST.getlist('product', None)
-        if not active_order:
-            messages.warning(request, 'Kiltbestilling er ikke åpen. For spørsmål kontakt nestleder')
-        elif not len(products) > 0:
+        if not len(products) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
             new_kilt = False

@@ -115,7 +115,7 @@
     <form id="submit" action="" method="post">
         {% csrf_token %}
         {% if not activated %}
-            <h1 style="color: red; font-size: 20px">Du kan ikke bestille enda.</h1>
+            <h1 style="color: red; font-size: 20px">Kiltbestilling er ikke åpen</h1>
         {% endif %}
 
         <!-- Kilts -->
@@ -227,6 +227,7 @@
                 <div class="col-md-12" id="submitContainer">
                     <button class="btn btn-primary btn-lg" disabled type="submit">Bestill</button>
                 </div>
+                <h1 style="color: red; font-size: 1.5em;">Du kan ikke bestille enda.</h1>
             </div>
         {% else %}
             <div align="center" class="row">
