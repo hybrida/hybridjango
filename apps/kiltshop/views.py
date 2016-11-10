@@ -148,7 +148,7 @@ def admin(request):
                 if not count == len(unique_ordered):
                     if item[0] in unique_ordered[i][0]:
                         if item[1] is not None and unique_ordered[i][1] is not None:
-                            if item[1] in unique_ordered[i][1]:
+                            if item[1] == unique_ordered[i][1]:
                                 foundsize = True
                                 unique_ordered[i][2] += item[2]
                         else:
