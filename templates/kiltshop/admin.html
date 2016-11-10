@@ -1,6 +1,5 @@
 {% extends 'standard_sidebar.html' %}
 {%  block sidebar %}
-
     <h2> Kiltbestilling </h2>
     <li>
         <a href="{% url 'kilt:info' %}">Info</a>
@@ -19,15 +18,12 @@
     <li>
         <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
     </li>
-
 {%  endblock %}
 {% block text %}
-
 <style>
     .text-center{
      font-size: 3em;
     }
-
     #kiltkat {
         box-shadow: 8px 8px 10px #aaa;
         border-radius: 30%;
@@ -37,15 +33,11 @@
         height:300px;
         overflow:hidden;
     }
-
-
 </style>
-
 {% if request.user.is_superuser %}
-
     <div class="container" style="width:100%;">
         <h1>Administrasjon </h1>
-        <div>
+
         <form action="admin.html" method="post">
         {% csrf_token %}
             <!-- Tidstabell -->
@@ -100,7 +92,6 @@
             <hr/>
             </div>
 
-
             <!-- Ordre (totalt) -->
             <div id="allorders">
                 <p class ="text-center" >Bestilling:</p>
@@ -114,7 +105,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for item in products %}<!-- må finne ut 1. hvordan få lastet inn bare produkter med bestillinger, og 2. hvordan telle opp produktene.
+                    {% for item in orders %}<!-- må finne ut 1. hvordan få lastet inn bare produkter med bestillinger, og 2. hvordan telle opp produktene.
                         <!-- her må man ha en if else løkke for skjekke om produkter har en bestilling -->
                         <!-- her må man ha en if løkke for skjekke om det er størrelser på produktet, hvis den har et, må det skjøres underløkker -->
                         <tr class="table-items">
@@ -122,7 +113,6 @@
                             <th>
                                 <!-- her må navn på produkter i ordren bli satt inn, fra de produktene som har litt VALGT,
                                 dvs, at Hvis ingen har bestilt en bestemt størrelse, skal den ikke dukke opp-->
-
                             </th>
                             <!-- Evt størrelser-->
                             <td style="word-wrap: break-word; max-width: 40em;">
@@ -134,7 +124,6 @@
                             <!-- Status på ordren -->
                             <td style="word-wrap: break-word; max-width: 40em;">
                             </td>
-
                         </tr>
                       {% endfor %}
                     </tbody>
@@ -142,16 +131,16 @@
             <hr/>
             </div>
 
-        <!-- Ordre (for enkelt bruker) -->
+           <!-- Ordre (for enkelt bruker) -->
             <div id="userorder" align="center">
                 <select name="selected_user" id="{{ user.id }}">
+                        <option value="-1">Ingen</option>
                     {% for order in orders %}
                         <option value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
                     {% endfor %}
                 </select>
                 <input name="showUser" type="submit" value="Vis bestilling">
-        </div>
-        </form>
+
                 {% if not user_order == None %}
                     <div class="clearfix"></div>
                     <h2 style="font-size: 2em; padding-top: 1em"> Bestilling for {{ user_order.user.first_name }} {{ user_order.user.middle_name }} {{ user_order.user.last_name }} </h2>
@@ -211,11 +200,14 @@
                         {% endfor %}
                     </table>
                 {% endif %}
+            <hr>
             </div>
 
+
+        </form>
         <!-- Kommentarer -->
-        <div style="padding-top: 3em" id="comments">
-            <h2 style="font-size: 2em;"> Alle kommentarer </h2>
+        <div id="comments">
+            <p class ="text-center" style="font-size: 20px">Kommentarer:</p>
             <table class="table table-bordered" style="width:100%" id="comment_table">
                 <thead>
                     <tr>
@@ -228,7 +220,7 @@
                         {% if order.comment %}
                             <tr class="table-items">
                                 <th>
-                                    ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }}
+                                    {{ order.user.first_name }}  {{ order.user.last_name }}
                                 </th>
                                 <td style="word-wrap: break-word; max-width: 40em;">
                                     {{ order.comment }}
@@ -239,13 +231,10 @@
                 </tbody>
             </table>
         </div>
-
+ </div>
 {% else %}
-
         <p class=text-center style="padding-bottom: 0.15em" align="middle"> Kun tilgjengelig for admin</p>
         <img src=../../static/img/kiltkat.jpg id="kiltkat" align="middle">
         <p align="middle" style="padding-top: 0.4em">"u no has access"</p>
-
 {% endif %}
-
 {% endblock %}
