@@ -124,12 +124,22 @@ def shop(request):
 
 
 def admin(request):
-    user_order = Order.objects.all()
+    orders = Order.objects.all()
     products = Product.objects.all()
     orderinfo = OrderInfo.objects.all()
+    user_order = None
+    user_products = None
+    user_productinfo = None
+    if request.method == 'POST':
+        user_id = request.POST.get('selected_user')
+        user_order = Order.objects.filter(user=user_id).first()
+        user_products = user_order.products.all()
 
-    return render(request, "kiltshop/admin.html",
-                  {'products': products,
-                   'orders': user_order,
-                  'orderinfo': orderinfo},
-                  )
+    return render(request, "kiltshop/admin.html", {
+        'products': products,
+        'orders': orders,
+        'orderinfo': orderinfo,
+        'user_products': user_products,
+        'user_productinfo': ProductInfo.objects.filter(order=user_order),
+        'user_order': user_order},
+      )

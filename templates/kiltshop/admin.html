@@ -45,7 +45,7 @@
 
     <div class="container" style="width:100%;">
         <h1>Administrasjon </h1>
-
+        <div>
         <form action="admin.html" method="post">
         {% csrf_token %}
             <!-- Tidstabell -->
@@ -142,21 +142,80 @@
             <hr/>
             </div>
 
-        <!-- Ordre (for bruker) -->
+        <!-- Ordre (for enkelt bruker) -->
             <div id="userorder" align="center">
-                <select name="{{ user.id }}" id="{{ user.id }}">
-                    <option value="-1">Ingen
+                <select name="selected_user" id="{{ user.id }}">
                     {% for order in orders %}
-                        <option value="{{ order.user.pk }}">{{ order.user.first_name }} {{ order.user.last_name }}</option>
+                        <option value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
                     {% endfor %}
                 </select>
                 <input name="showUser" type="submit" value="Vis bestilling">
-            </div>
-            <hr>
+        </div>
         </form>
+                {% if not user_order == None %}
+                    <div class="clearfix"></div>
+                    <h2 style="font-size: 2em; padding-top: 1em"> Bestilling for {{ user_order.user.first_name }} {{ user_order.user.middle_name }} {{ user_order.user.last_name }} </h2>
+                    <table class="table table-bordereds" >
+                        <thead class="table-header">
+                            <tr>
+                                <th class="col-xs-4">Produkt</th>
+                                <th class="col-xs-2">Type</th>
+                                <th class="col-xs-2">Størrelse</th>
+                                <th class="col-xs-1">Antall</th>
+                            </tr>
+                        </thead>
+
+                        {% for item in user_products %}
+                            <tr class="table-items">
+                                <td>
+                                    {{ item.name }}
+                                </td>
+                                <td>
+                                    {% if item.type == 'K' %}
+                                        Kilt
+                                    {% elif item.type == 'S' %}
+                                        Sporran
+                                    {% else %}
+                                        Ekstra
+                                    {% endif %}
+                                </td>
+                                <td>
+                                {% if item.type == 'K' %}
+                                    {% for info in user_productinfo %}
+                                        {% if info.product_id == item.pk %}
+                                            {{ info.size }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% elif item.type == 'E' %}
+                                    {% for info in user_productinfo %}
+                                        {% if info.product_id == item.pk %}
+                                            {% if not item.name == 'Sokker' and not item.name == 'Flashes' %}
+                                                {{ info.size }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                                </td>
+                                <td>
+                                 {% for info in user_productinfo %}
+                                        {% if info.product_id == item.pk %}
+                                            {{ info.number }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+
         <!-- Kommentarer -->
-        <div id="comments">
-            <p class ="text-center" style="font-size: 20px">Kommentarer:</p>
+        <div style="padding-top: 3em" id="comments">
+            <h2 style="font-size: 2em;"> Alle kommentarer </h2>
             <table class="table table-bordered" style="width:100%" id="comment_table">
                 <thead>
                     <tr>
@@ -169,7 +228,7 @@
                         {% if order.comment %}
                             <tr class="table-items">
                                 <th>
-                                    {{ order.user.first_name }}  {{ order.user.last_name }}
+                                    ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }}
                                 </th>
                                 <td style="word-wrap: break-word; max-width: 40em;">
                                     {{ order.comment }}
@@ -180,7 +239,6 @@
                 </tbody>
             </table>
         </div>
- </div>
 
 {% else %}
 
