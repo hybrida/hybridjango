@@ -46,14 +46,28 @@
         outline:none;
     }
 
+    @media only screen and (max-width: 700px) {
+        .responsive {
+            width: 49.99999%;
+            margin: 6px 0;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        .responsive {
+            width: 100%;
+        }
+}
+
 
 </style>
-
+    <div class="responsive">
     {% if not products %}
         <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
         <h2>Din bestilling:</h2>
         <form action="" method="post">
+        <div class="table-responsive">
             <table class="table table-bordereds" >
                 <thead class="table-header">
                     <tr>
@@ -114,12 +128,15 @@
                 </tr>
             {% endfor %}
             </table>
+        </div>
         </form>
         {% if order.comment %}
-            <p> Din kommentar: {{ order.comment }}</p>
+            <div class="responsive" style="display: block; word-wrap: break-word;">
+               Din kommentar: {{ order.comment }}
+            </div>
         {% endif %}
     {% endif %}
-
+    </div>
 
 
 
