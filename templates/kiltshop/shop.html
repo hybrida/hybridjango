@@ -113,6 +113,46 @@
         }
     </style>
 
+    <script>
+        function uncheck_kilt() {
+            var myRadios = document.getElementsByName('product_k');
+            var setCheck;
+            var x = 0;
+            for(x = 0; x < myRadios.length; x++){
+
+                    myRadios[x].onclick = function(){
+                        if(setCheck != this){
+                             setCheck = this;
+                        }else{
+                            this.checked = false;
+                            setCheck = null;
+                        }
+                    }
+            }
+        }
+
+        function uncheck_sporra() {
+            var myRadios = document.getElementsByName('product_s');
+            var setCheck;
+            var x = 0;
+            for (x = 0; x < myRadios.length; x++) {
+
+                myRadios[x].onclick = function () {
+                    if (setCheck != this) {
+                        setCheck = this;
+                    } else {
+                        this.checked = false;
+                        setCheck = null;
+                    }
+                }
+
+            }
+        }
+
+
+
+    </script>
+
     {% if messages %}
         {% for message in messages %}
             <div{% if message.tags %} class="alert alert-warning"{% endif %}>
@@ -137,7 +177,7 @@
                 <div class="responsive">
                     <div class="img" align="center">
                         <div class="checkbox">
-                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="radio" value="{{ product.pk }}">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product_k" onclick="uncheck_kilt()" type="radio" value="{{ product.pk }}">
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
@@ -176,7 +216,7 @@
                 <div class="responsive">
                     <div class="img" align="center">
                         <div class="checkbox">
-                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="radio" value="{{ product.pk }}">
+                               <input style="opacity: 0" id="{{ product.pk }}" name="product_s" onclick="uncheck_sporra()" type="radio" value="{{ product.pk }}">
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
@@ -196,7 +236,7 @@
                 <div class="responsive">
                     <div class="img" align="center">
                         <div class="checkbox">
-                            <input style="opacity: 0" id="{{ product.pk }}" name="product" type="checkbox" value="{{ product.pk }}">
+                            <input style="opacity: 0" id="{{ product.pk }}" name="product_e" type="checkbox" value="{{ product.pk }}">
                             <label for="{{ product.pk }}">
                                 <img src="{{ product.image.url }}" width="200" height="200">
                                 <div class="desc">{{ product.name }}</div>
