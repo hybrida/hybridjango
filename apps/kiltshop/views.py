@@ -43,7 +43,10 @@ def shop(request):
     else:
         active = False
     if request.method == 'POST':
-        products = request.POST.getlist('product', None)
+        products = request.POST.getlist('product_k', None)
+        products += request.POST.getlist('product_s', None)
+        products += request.POST.getlist('product_e', None)
+
         if not len(products) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
