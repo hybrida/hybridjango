@@ -129,6 +129,42 @@ def admin(request):
     orderinfo = OrderInfo.objects.all()
     user_order = None
     user_products = None
+    total_items = ProductInfo.objects.all()
+    ordered_products = []
+    for item in total_items:
+        item_info = [item.product.name, item.size, item.number]
+        ordered_products.append(item_info)
+    unique_ordered = []
+    start = True
+    for item in ordered_products:
+        found = False
+        foundsize = False
+        if start:
+            unique_ordered.append([item[0],item[1],item[2]])
+            start = False
+        else:
+            for i in range(0, len(unique_ordered)):
+                count = 0
+                if not count == len(unique_ordered):
+                    if item[0] in unique_ordered[i][0]:
+                        if item[1] is not None and unique_ordered[i][1] is not None:
+                            if item[1] in unique_ordered[i][1]:
+                                foundsize = True
+                                unique_ordered[i][2] += item[2]
+                        else:
+                            unique_ordered[i][2] += item[2]
+                        count += 1
+                        found = True
+                        if item[1] is not None and unique_ordered[i][1] is not None:
+                            if found and not foundsize:
+                                unique_ordered.append([item[0], item[1], item[2]])
+                    count += 1
+            if not found:
+                unique_ordered.append([item[0],item[1],item[2]])
+    unique_ordered.sort()
+
+
+
     if request.method == 'POST':
         user_id = request.POST.get('selected_user')
         if int(user_id) == -1:
@@ -137,12 +173,13 @@ def admin(request):
             user_order = Order.objects.filter(user=user_id).first()
             user_products = user_order.products.all()
 
-
     return render(request, "kiltshop/admin.html", {
         'products': products,
         'orders': orders,
         'orderinfo': orderinfo,
+        'total_items': total_items,
         'user_products': user_products,
+        'ordered_products': unique_ordered,
         'user_productinfo': ProductInfo.objects.filter(order=user_order),
         'user_order': user_order},
       )

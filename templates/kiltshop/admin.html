@@ -101,31 +101,26 @@
                             <th class="col-xs-5">Produkt</th>
                             <th class="col-xs-3">Størrelse</th>
                             <th class="col-xs-3">Antall</th>
-                            <th class="col-xs-3">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for item in orders %}<!-- må finne ut 1. hvordan få lastet inn bare produkter med bestillinger, og 2. hvordan telle opp produktene.
-                        <!-- her må man ha en if else løkke for skjekke om produkter har en bestilling -->
-                        <!-- her må man ha en if løkke for skjekke om det er størrelser på produktet, hvis den har et, må det skjøres underløkker -->
-                        <tr class="table-items">
-                            <!--  Liste over alle produkt (pluss størrelser) -->
-                            <th>
-                                <!-- her må navn på produkter i ordren bli satt inn, fra de produktene som har litt VALGT,
-                                dvs, at Hvis ingen har bestilt en bestemt størrelse, skal den ikke dukke opp-->
-                            </th>
-                            <!-- Evt størrelser-->
-                            <td style="word-wrap: break-word; max-width: 40em;">
-                                <!--her kommer størrelser-->
-                            </td>
-                            <!-- Antall bestitlt -->
-                            <td style="word-wrap: break-word; max-width: 40em;">
-                            </td>
-                            <!-- Status på ordren -->
-                            <td style="word-wrap: break-word; max-width: 40em;">
-                            </td>
-                        </tr>
-                      {% endfor %}
+                        {% for item in ordered_products %}
+                            <tr>
+                                <!--  Liste over alle produkt (pluss størrelser) -->
+                                <td>
+                                        {{ item.0 }}
+                                </td>
+
+                                <!-- Evt størrelser-->
+                                <td align="Center" style="word-wrap: break-word; max-width: 40em;">
+                                    {{ item.1 }}
+                                </td>
+                                <!-- Antall bestitlt -->
+                                <td align="Center"  style="word-wrap: break-word; max-width: 40em;">
+                                    {{ item.2 }}
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             <hr/>
