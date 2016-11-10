@@ -35,6 +35,17 @@
     }
 </style>
 {% if request.user.is_superuser %}
+     {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-warning"{% endif %}>
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <p align="center" id="warning">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="container" style="width:100%;">
         <h1>Administrasjon </h1>
 
@@ -49,7 +60,6 @@
                             <th class="col-xs-3">Start</th>
                             <th class="col-xs-3">Slutt</th>
                             <th class="col-xs-2">Status</th>
-                            <th class="col-xs-2">Vis</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,23 +85,17 @@
                                             Avsluttet
                                         {% endif %}
                                     </td>
-                                    <!-- knapp som viser ordrene i liste under. -->
-                                    <td style="word-wrap: break-word; max-width: 40em;">
-                                        <input type="submit" value="Vis Bestilling">
-                                    </td>
                                 </tr>
                         {% endfor %}
                             <tr>
-                                <td><input maxlength="10" size="7" type="text" value="yyyy-mm-dd" name="start" id="start"></td>
-                                <td><input maxlength="10" size="7" type="text" value="yyyy-mm-dd" name="slutt" id="slutt"></td>
-                                <td>Ikke opprettet</td>
+                                <td><input maxlength="16" size="16" title="Skriv inn start tidspunkt" value="YYYY-MM-DD HH:MM" type="text" name="start" id="start"></td>
+                                <td><input maxlength="16" size="16" title="Skriv inn slutt tidspunkt" value="YYYY-MM-DD HH:MM" type="text" name="slutt" id="slutt"></td>
                                 <td><input name="createTime" type="submit" value="Lag tidsrom"></td>
                             </tr>
                     </tbody>
                 </table>
             <hr/>
             </div>
-
             <!-- Ordre (totalt) -->
             <div id="allorders">
                 <p class ="text-center" >Bestilling:</p>
@@ -132,7 +136,7 @@
 
            <!-- Ordre (for enkelt bruker) -->
             <div id="userorder" align="center">
-                <select name="selected_user" id="{{ user.id }}">
+                <select title="Velg person for å se bestilling" name="selected_user" id="{{ user.id }}">
                         <option value="-1">Ingen</option>
                     {% for order in orders %}
                         <option value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
