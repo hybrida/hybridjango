@@ -113,7 +113,11 @@
 
                                 <!-- Evt størrelser-->
                                 <td align="Center" style="word-wrap: break-word; max-width: 40em;">
-                                    {{ item.1 }}
+                                    {% if not item.1 %}
+                                        -
+                                    {% else %}
+                                        {{ item.1 }}
+                                    {% endif %}
                                 </td>
                                 <!-- Antall bestitlt -->
                                 <td align="Center"  style="word-wrap: break-word; max-width: 40em;">
@@ -215,7 +219,7 @@
                         {% if order.comment %}
                             <tr class="table-items">
                                 <th>
-                                    {{ order.user.first_name }}  {{ order.user.last_name }}
+                                   ({{ order.user.pk }}) {{ order.user.first_name }}  {{ order.user.last_name }}
                                 </th>
                                 <td style="word-wrap: break-word; max-width: 40em;">
                                     {{ order.comment }}
