@@ -19,11 +19,8 @@ def order(request):
         if request.method == 'POST':
             delete = request.POST.get('delete')
             m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
-            try:
-                m = m_qs.get()
-                m.delete()
-            except:
-                pass
+            m = m_qs.get()
+            m.delete()
 
             if len(user_order.products.all()) == 0:
                 user_order.delete()
@@ -35,6 +32,7 @@ def order(request):
              'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
              'order': user_order, 'activated': active}
         )
+
 
 @login_required
 def shop(request):
@@ -55,20 +53,11 @@ def shop(request):
             has_sporra = False
             has_kilt_id = 0
             has_sporra_id = 0
-            kilt_number = 0
-            sporra_number = 0
             for product in products:
                 if Product.objects.get(pk=product).type == 'K':
-                    kilt_number += 1
                     new_kilt = True
                 if Product.objects.get(pk=product).type == 'S':
-                    sporra_number += 1
                     new_sporra = True
-
-            if kilt_number > 1:
-                messages.warning(request, 'Du har valgt mer enn en kilt.')
-            elif sporra_number > 1:
-                messages.warning(request, 'Du har valgt mer enn en sporra.')
             else:
                 if products is not None:
                     if Order.objects.filter(user=user).exists():
@@ -84,30 +73,20 @@ def shop(request):
                                 for item in products:
                                     if str(item) == str(product.pk):
                                         m_qs = ProductInfo.objects.filter(order=order_list, product=item)
-                                        try:
-                                            m = m_qs.get()
-                                            m.delete()
-                                        except:
-                                            pass
+                                        m = m_qs.get()
+                                        m.delete()
 
                         if has_kilt and new_kilt:
                             m_qs = ProductInfo.objects.filter(order=order_list, product=has_kilt_id)
-                            try:
-                                m = m_qs.get()
-                                m.delete()
-                            except:
-                                pass
+                            m = m_qs.get()
+                            m.delete()
 
                         if has_sporra and new_sporra:
                             m_qs = ProductInfo.objects.filter(order=order_list, product=has_sporra_id)
-                            try:
-                                m = m_qs.get()
-                                m.delete()
-                            except:
-                                pass
+                            m = m_qs.get()
+                            m.delete()
 
                         comment = request.POST.get('comment', None)
-                        print(comment)
                         order_list = Order.objects.filter(user=user).first()
                         if comment:
                             order_list.comment = comment
