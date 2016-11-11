@@ -165,37 +165,39 @@ def admin(request):
     unique_ordered.sort()
 
     if request.method == 'POST':
-        user_id = request.POST.get('selected_user')
-        if int(user_id) == -1:
-            pass
-        else:
-            user_order = Order.objects.filter(user=user_id).first()
-            user_products = user_order.products.all()
+        if 'showUser' in request.POST:
+            user_id = request.POST.get('selected_user')
+            if int(user_id) == -1:
+                pass
+            else:
+                user_order = Order.objects.filter(user=user_id).first()
+                user_products = user_order.products.all()
 
-        start = request.POST.get('start')
-        slutt = request.POST.get('slutt')
-        split_s = start.split("-")
-        start_year = split_s[0]
-        start_month = split_s[1]
-        split_e = slutt.split("-")
-        end_year = split_e[0]
-        end_month = split_e[1]
-        split_s = split_s[2].split(" ")
-        start_day = split_s[0]
-        split_e = split_e[2].split(" ")
-        end_day = split_e[0]
-        split_s = split_e[1].split(":")
-        start_hour = split_s[0]
-        start_minute = split_s[1]
-        split_e = split_e[1].split(":")
-        end_hour = split_s[0]
-        end_minute = split_s[1]
-        now = datetime.datetime.now()
-        print(now.year)
-        if OrderInfo.objects.filter(status=True).first():
-            messages.warning(request, 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
-        else:
-            OrderInfo.objects.create(startTime=start,endTime=slutt)
+        if 'createTime' in request.POST:
+            start = request.POST.get('start')
+            slutt = request.POST.get('slutt')
+            split_s = start.split("-")
+            start_year = split_s[0]
+            start_month = split_s[1]
+            split_e = slutt.split("-")
+            end_year = split_e[0]
+            end_month = split_e[1]
+            split_s = split_s[2].split(" ")
+            start_day = split_s[0]
+            split_e = split_e[2].split(" ")
+            end_day = split_e[0]
+            split_s = split_e[1].split(":")
+            start_hour = split_s[0]
+            start_minute = split_s[1]
+            split_e = split_e[1].split(":")
+            end_hour = split_s[0]
+            end_minute = split_s[1]
+            now = datetime.datetime.now()
+            print(now.year)
+            if OrderInfo.objects.filter(status=True).first():
+                messages.warning(request, 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
+            else:
+                OrderInfo.objects.create(startTime=start,endTime=slutt)
 
     return render(request, "kiltshop/admin.html", {
         'products': products,
