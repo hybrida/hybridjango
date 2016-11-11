@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -124,6 +124,7 @@ def shop(request):
     return render(request, "kiltshop/shop.html", {"products": Product.objects.all(),'activated': active})
 
 
+@permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])
 def admin(request):
     orders = Order.objects.all()
     products = Product.objects.all()
