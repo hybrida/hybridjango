@@ -65,9 +65,10 @@
     {% if not products and not order.comment %}
         <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
+        <form action="" method="post">
+        {% csrf_token %}
         {% if products %}
             <h2>Din bestilling:</h2>
-            <form action="" method="post">
             <div class="table-responsive">
                 <table class="table table-bordereds" >
                     <thead class="table-header">
@@ -78,8 +79,6 @@
                             <th class="col-xs-1">Antall</th>
                         </tr>
                     </thead>
-
-                {% csrf_token %}
 
                 {% for item in products %}
                     <tr class="table-items">
@@ -124,20 +123,24 @@
                                 {% endfor %}
                         </td>
                         {% if activated %}
-                            <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                            <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
                         {% endif %}
                     </tr>
                 {% endfor %}
                 </table>
             </div>
-            </form>
         {% endif %}
         {% if order.comment %}
             <div class="responsive" style="display: block; word-wrap: break-word;">
+            <hr>
             <h2 style="font-size: 2em">Din kommentar:</h2>
                 {{ order.comment }}
+                <div class="clearfix"></div>
+                <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+            <hr>
             </div>
         {% endif %}
+        </form>
     {% endif %}
     </div>
 
