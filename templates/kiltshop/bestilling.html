@@ -10,7 +10,7 @@
     <li>
         <a href="{% url 'kilt:order' %}">Bestilling</a>
     </li>
-    {% if request.user.is_superuser %}
+    {% if perms.kiltshop.add_order %}
     <li>
         <a href="{% url 'kilt:admin' %}">Admin</a>
     </li>

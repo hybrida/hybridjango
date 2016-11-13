@@ -1,5 +1,5 @@
 {% extends 'standard_sidebar.html' %}
-{%  block sidebar %}
+{% block sidebar %}
     <h2> Kiltbestilling </h2>
     <li>
         <a href="{% url 'kilt:info' %}">Info</a>
@@ -10,7 +10,7 @@
     <li>
         <a href="{% url 'kilt:order' %}">Bestilling</a>
     </li>
-    {% if request.user.is_superuser %}
+    {% if perms.kiltshop.add_order %}
     <li>
         <a href="{% url 'kilt:admin' %}">Admin</a>
     </li>
@@ -19,7 +19,7 @@
         <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
     </li>
 
-{%  endblock %}
+{% endblock %}
 
 {% block text %}
 
