@@ -28,17 +28,17 @@ def order(request):
                     user_order.delete()
 
             elif 'delete_comment' in request.POST:
-                delete = request.POST.get('delete_comment')
                 user_order.comment = ""
                 if len(user_order.products.all()) == 0 and not user_order.comment:
                     user_order.delete()
             user_order.save()
 
-        return render(request,"kiltshop/bestilling.html",
+        return render(request, "kiltshop/bestilling.html",
             {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
-             'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
-             'order': user_order, 'activated': active}
-        )
+            'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
+            'order': user_order, 'activated': active
+            }
+                      )
 
 
 @login_required
@@ -149,21 +149,20 @@ def admin(request):
     start = True
     for item in ordered_products:
         found = False
-        foundsize = False
         if start:
-            unique_ordered.append([item[0],item[1],item[2]])
+            unique_ordered.append([item[0], item[1], item[2]])
             start = False
         else:
             for i in range(0, len(unique_ordered)):
                     if item[0] == unique_ordered[i][0]:
                         found = True
-                        if item[1] is not None and unique_ordered[i][1] is not None: #Hvis det er en gjenstand med størrelse
-                            if item[1] == unique_ordered[i][1]: #Hvis størrelsen er lik
+                        if item[1] is not None and unique_ordered[i][1] is not None:
+                            if item[1] == unique_ordered[i][1]:
                                 unique_ordered[i][2] += item[2]
                             else:
                                 new = True
-                                for i in range(0, len(unique_ordered)):
-                                    if item[1] == unique_ordered[i][1]:
+                                for j in range(0, len(unique_ordered)):
+                                    if item[1] == unique_ordered[j][1]:
                                         new = False
                                     else:
                                         pass
@@ -172,7 +171,7 @@ def admin(request):
                         else:
                             unique_ordered[i][2] += item[2]
             if not found:
-                unique_ordered.append([item[0],item[1],item[2]])
+                unique_ordered.append([item[0], item[1], item[2]])
     unique_ordered.sort()
 
     if request.method == 'POST':
@@ -187,9 +186,9 @@ def admin(request):
         if 'change_status' in request.POST:
             put = request.POST.get('order_status')
             status = put.split(':')
-            order=status[1]
-            status=status[0]
-            user_order = Order.objects.filter(pk=order).first()
+            order_pk = status[1]
+            status = status[0]
+            user_order = Order.objects.filter(pk=order_pk).first()
             user_order.status = status
             user_order.save()
             return HttpResponseRedirect("/kilt/admin")
@@ -200,9 +199,10 @@ def admin(request):
             now = datetime.datetime.now()
             print(now.year)
             if OrderInfo.objects.filter(status=True).first():
-                messages.warning(request, 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
+                messages.warning(request,
+                                 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
             else:
-                OrderInfo.objects.create(startTime=start,endTime=slutt)
+                OrderInfo.objects.create(startTime=start, endTime=slutt)
 
     return render(request, "kiltshop/admin.html", {
         'products': products,
