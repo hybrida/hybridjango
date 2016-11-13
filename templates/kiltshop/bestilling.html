@@ -62,77 +62,80 @@
 
 </style>
     <div class="responsive">
-    {% if not products %}
+    {% if not products and not order.comment %}
         <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
     {% else %}
-        <h2>Din bestilling:</h2>
-        <form action="" method="post">
-        <div class="table-responsive">
-            <table class="table table-bordereds" >
-                <thead class="table-header">
-                    <tr>
-                        <th class="col-xs-7">Produkt</th>
-                        <th class="col-xs-2">Type</th>
-                        <th class="col-xs-2">Størrelse</th>
-                        <th class="col-xs-1">Antall</th>
-                    </tr>
-                </thead>
+        {% if products %}
+            <h2>Din bestilling:</h2>
+            <form action="" method="post">
+            <div class="table-responsive">
+                <table class="table table-bordereds" >
+                    <thead class="table-header">
+                        <tr>
+                            <th class="col-xs-7">Produkt</th>
+                            <th class="col-xs-2">Type</th>
+                            <th class="col-xs-2">Størrelse</th>
+                            <th class="col-xs-1">Antall</th>
+                        </tr>
+                    </thead>
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            {% for item in products %}
-                <tr class="table-items">
-                    <td>
-                            {{ item.name }}
-                    </td>
-                    <td>
-                    {% if item.type == 'K' %}
-                            Kilt
-                        {% elif item.type == 'S' %}
-                            Sporran
-                        {% else %}
-                            Ekstra
-                        {% endif %}
-                    </td>
-                    <td>
+                {% for item in products %}
+                    <tr class="table-items">
+                        <td>
+                                {{ item.name }}
+                        </td>
+                        <td>
                         {% if item.type == 'K' %}
-                            {% for info in productInfo %}
-                                {% if info.product_id == item.pk %}
-                                    {{ info.size }}
-                                {% endif %}
-                            {% endfor %}
-                        {% elif item.type == 'E' %}
-                            {% for info in productInfo %}
-                                {% if info.product_id == item.pk %}
-                                    {% if not item.name == 'Sokker' and not item.name == 'Flashes' %}
+                                Kilt
+                            {% elif item.type == 'S' %}
+                                Sporran
+                            {% else %}
+                                Ekstra
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.type == 'K' %}
+                                {% for info in productInfo %}
+                                    {% if info.product_id == item.pk %}
                                         {{ info.size }}
-                                    {% else %}
-                                        -
                                     {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            -
+                                {% endfor %}
+                            {% elif item.type == 'E' %}
+                                {% for info in productInfo %}
+                                    {% if info.product_id == item.pk %}
+                                        {% if not item.name == 'Sokker' and not item.name == 'Flashes' %}
+                                            {{ info.size }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                             {% for info in productInfo %}
+                                    {% if info.product_id == item.pk %}
+                                        {{ info.number }}
+                                    {% endif %}
+                                {% endfor %}
+                        </td>
+                        {% if activated %}
+                            <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
                         {% endif %}
-                    </td>
-                    <td>
-                         {% for info in productInfo %}
-                                {% if info.product_id == item.pk %}
-                                    {{ info.number }}
-                                {% endif %}
-                            {% endfor %}
-                    </td>
-                    {% if activated %}
-                        <td><button class="button" name="delete" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-        </div>
-        </form>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+            </form>
+        {% endif %}
         {% if order.comment %}
             <div class="responsive" style="display: block; word-wrap: break-word;">
-               Din kommentar: {{ order.comment }}
+            <h2 style="font-size: 2em">Din kommentar:</h2>
+                {{ order.comment }}
             </div>
         {% endif %}
     {% endif %}

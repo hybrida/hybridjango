@@ -23,7 +23,7 @@ def order(request):
             m = m_qs.get()
             m.delete()
 
-            if len(user_order.products.all()) == 0:
+            if len(user_order.products.all()) == 0 and not user_order.comment:
                 user_order.delete()
             else:
                 user_order.save()
@@ -47,8 +47,11 @@ def shop(request):
         products = request.POST.getlist('product_k', None)
         products += request.POST.getlist('product_s', None)
         products += request.POST.getlist('product_e', None)
+        comment = request.POST.get('comment', None)
+        print(len(comment))
+        print(len(products))
 
-        if not len(products) > 0:
+        if not len(products) > 0 and not len(comment) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
             new_kilt = False
@@ -90,7 +93,6 @@ def shop(request):
                             m = m_qs.get()
                             m.delete()
 
-                        comment = request.POST.get('comment', None)
                         order_list = Order.objects.filter(user=user).first()
                         if comment:
                             order_list.comment = comment
@@ -107,7 +109,6 @@ def shop(request):
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
                         order_list = Order.objects.create(user=user)
-                        comment = request.POST.get('comment', None)
                         order_list.comment = comment
                         for product in products:
                             number = int(request.POST.get('number-{id}'.format(id=product), 1))
@@ -145,21 +146,22 @@ def admin(request):
             start = False
         else:
             for i in range(0, len(unique_ordered)):
-                count = 0
-                if not count == len(unique_ordered):
-                    if item[0] in unique_ordered[i][0]:
-                        if item[1] is not None and unique_ordered[i][1] is not None:
-                            if item[1] == unique_ordered[i][1]:
-                                foundsize = True
+                    if item[0] == unique_ordered[i][0]:
+                        found = True
+                        if item[1] is not None and unique_ordered[i][1] is not None: #Hvis det er en gjenstand med størrelse
+                            if item[1] == unique_ordered[i][1]: #Hvis størrelsen er lik
                                 unique_ordered[i][2] += item[2]
+                            else:
+                                new = True
+                                for i in range(0, len(unique_ordered)):
+                                    if item[1] == unique_ordered[i][1]:
+                                        new = False
+                                    else:
+                                        pass
+                                if new:
+                                    unique_ordered.append([item[0], item[1], item[2]])
                         else:
                             unique_ordered[i][2] += item[2]
-                        count += 1
-                        found = True
-                        if item[1] is not None and unique_ordered[i][1] is not None:
-                            if found and not foundsize:
-                                unique_ordered.append([item[0], item[1], item[2]])
-                    count += 1
             if not found:
                 unique_ordered.append([item[0],item[1],item[2]])
     unique_ordered.sort()
