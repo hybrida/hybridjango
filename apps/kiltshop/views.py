@@ -9,6 +9,7 @@ import datetime
 def index(request):
     return render(request, "kiltshop/info.html")
 
+
 @login_required
 def order(request):
         active_order = OrderInfo.objects.filter(status=True).first()
@@ -17,15 +18,20 @@ def order(request):
         else:
             active = False
         user_order = Order.objects.filter(user=request.user).first()
+        if len(user_order.products.all()) == 0 and not user_order.comment:
+            user_order.delete()
+        else:
+            user_order.save()
         if request.method == 'POST':
-            delete = request.POST.get('delete')
-            m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
-            m = m_qs.get()
-            m.delete()
+            if 'delete_product' in request.POST:
+                delete = request.POST.get('delete_product')
+                m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
+                m = m_qs.get()
+                m.delete()
 
-            if len(user_order.products.all()) == 0 and not user_order.comment:
-                user_order.delete()
-            else:
+            elif 'delete_comment' in request.POST:
+                delete = request.POST.get('delete_comment')
+                user_order.comment = ""
                 user_order.save()
 
         return render(request,"kiltshop/bestilling.html",
@@ -122,7 +128,11 @@ def shop(request):
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
 
-    return render(request, "kiltshop/shop.html", {"products": Product.objects.all(),'activated': active})
+    return render(request, "kiltshop/shop.html",
+                  {"products": Product.objects.all(),
+                   'activated': active,
+                   "order": Order.objects.filter(user=user).first()
+                   })
 
 
 @permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])
