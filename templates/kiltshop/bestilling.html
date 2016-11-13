@@ -1,26 +1,4 @@
-{% extends 'standard_sidebar.html' %}
-{%  block sidebar %}
-    <h2> Kiltbestilling </h2>
-    <li>
-        <a href="{% url 'kilt:info' %}">Info</a>
-    </li>
-    <li>
-        <a href="{% url 'kilt:shop' %}">Shop</a>
-    </li>
-    <li>
-        <a href="{% url 'kilt:order' %}">Bestilling</a>
-    </li>
-    {% if perms.kiltshop.add_order %}
-    <li>
-        <a href="{% url 'kilt:admin' %}">Admin</a>
-    </li>
-    {% endif %}
-    <li>
-        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
-    </li>
-
-{%  endblock %}
-
+{% extends 'kiltshop/sidebar.html' %}
 {% block text %}
 
 <style>
@@ -39,10 +17,10 @@
 
     .button{
         background-color: Transparent;
-        background-repeat:no-repeat;
+        background-repeat: no-repeat;
         border: none;
         cursor:pointer;
-        overflow: hidden;
+        overflow: hidden;++
         outline:none;
     }
 

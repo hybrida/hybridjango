@@ -1,30 +1,6 @@
-{% extends 'standard_sidebar.html' %}
-{% block sidebar %}
-    <h2> Kiltbestilling </h2>
-    <li>
-        <a href="{% url 'kilt:info' %}">Info</a>
-    </li>
-    <li>
-        <a href="{% url 'kilt:shop' %}">Shop</a>
-    </li>
-    <li>
-        <a href="{% url 'kilt:order' %}">Bestilling</a>
-    </li>
-    {% if perms.kiltshop.add_order %}
-    <li>
-        <a href="{% url 'kilt:admin' %}">Admin</a>
-    </li>
-    {% endif %}
-    <li>
-        <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
-    </li>
-
-{% endblock %}
-
+{% extends 'kiltshop/sidebar.html' %}
 {% block text %}
-
-    <style>
-
+<style>
         input[type=checkbox] + label {
           color: #000;
         }
@@ -113,45 +89,42 @@
         }
     </style>
 
-    <script>
-        function uncheck_kilt() {
-            var myRadios = document.getElementsByName('product_k');
-            var setCheck;
-            var x = 0;
-            for(x = 0; x < myRadios.length; x++){
+<script>
+    function uncheck_kilt() {
+        var myRadios = document.getElementsByName('product_k');
+        var setCheck;
+        var x;
+        for(x = 0; x < myRadios.length; x++){
 
-                    myRadios[x].onclick = function(){
-                        if(setCheck != this){
-                             setCheck = this;
-                        }else{
-                            this.checked = false;
-                            setCheck = null;
-                        }
-                    }
-            }
-        }
-
-        function uncheck_sporra() {
-            var myRadios = document.getElementsByName('product_s');
-            var setCheck;
-            var x = 0;
-            for (x = 0; x < myRadios.length; x++) {
-
-                myRadios[x].onclick = function () {
-                    if (setCheck != this) {
-                        setCheck = this;
-                    } else {
+                myRadios[x].onclick = function(){
+                    if(setCheck != this){
+                         setCheck = this;
+                    }else{
                         this.checked = false;
                         setCheck = null;
                     }
                 }
-
-            }
         }
+    }
 
+    function uncheck_sporra() {
+        var myRadios = document.getElementsByName('product_s');
+        var setCheck;
+        var x;
+        for (x = 0; x < myRadios.length; x++) {
 
+            myRadios[x].onclick = function () {
+                if (setCheck != this) {
+                    setCheck = this;
+                } else {
+                    this.checked = false;
+                    setCheck = null;
+                }
+            }
 
-    </script>
+        }
+    }
+</script>
 
     {% if messages %}
         {% for message in messages %}
