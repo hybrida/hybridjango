@@ -184,25 +184,19 @@ def admin(request):
                 user_order = Order.objects.filter(user=user_id).first()
                 user_products = user_order.products.all()
 
+        if 'change_status' in request.POST:
+            put = request.POST.get('order_status')
+            status = put.split(':')
+            order=status[1]
+            status=status[0]
+            user_order = Order.objects.filter(pk=order).first()
+            user_order.status = status
+            user_order.save()
+            return HttpResponseRedirect("/kilt/admin")
+
         if 'createTime' in request.POST:
             start = request.POST.get('start')
             slutt = request.POST.get('slutt')
-            split_s = start.split("-")
-            start_year = split_s[0]
-            start_month = split_s[1]
-            split_e = slutt.split("-")
-            end_year = split_e[0]
-            end_month = split_e[1]
-            split_s = split_s[2].split(" ")
-            start_day = split_s[0]
-            split_e = split_e[2].split(" ")
-            end_day = split_e[0]
-            split_s = split_e[1].split(":")
-            start_hour = split_s[0]
-            start_minute = split_s[1]
-            split_e = split_e[1].split(":")
-            end_hour = split_s[0]
-            end_minute = split_s[1]
             now = datetime.datetime.now()
             print(now.year)
             if OrderInfo.objects.filter(status=True).first():

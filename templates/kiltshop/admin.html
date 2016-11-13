@@ -24,17 +24,8 @@
     .text-center{
      font-size: 3em;
     }
-    #kiltkat {
-        box-shadow: 8px 8px 10px #aaa;
-        border-radius: 30%;
-        display: block;
-        margin: 0 auto;
-        width:300px;
-        height:300px;
-        overflow:hidden;
-    }
 </style>
-     {% if messages %}
+    {% if messages %}
         {% for message in messages %}
             <div{% if message.tags %} class="alert alert-warning"{% endif %}>
                 <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -138,7 +129,11 @@
                 <select title="Velg person for å se bestilling" name="selected_user" id="{{ user.id }}">
                         <option value="-1">Ingen</option>
                     {% for order in orders %}
-                        <option value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
+                        {% if order.status %}
+                            <option style="background-color: #90ee90"  value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
+                        {% else %}
+                            <option style="background-color: #FDD" value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 <input name="showUser" type="submit" value="Vis bestilling">
@@ -201,6 +196,17 @@
                             </tr>
                         {% endfor %}
                     </table>
+                    {% if user_order.status %}
+                        <label style="padding-right: 3em; color: #449d44">Status: Betalt</label>
+                        <label  style="padding-right: 2em" class="block"><input type="radio" name="order_status" value="True:{{ user_order.pk }}" checked="checked">Betalt</label>
+                        <label style="padding-right: 2em"  class="block"><input  type="radio" name="order_status" value="False:{{ user_order.pk }}">Ikke betalt</label>
+                        <input name="change_status" type="submit" value="Lagre">
+                    {% else %}
+                        <label style="padding-right: 3em; color: #ba2121">Status: Ikke betalt</label>
+                        <label  style="padding-right: 2em" class="block"><input type="radio" name="order_status" value="True:{{ user_order.pk }}">Betalt</label>
+                        <label style="padding-right: 2em"  class="block"><input  type="radio" name="order_status" value="False:{{ user_order.pk }}" checked="checked">Ikke betalt</label>
+                        <input name="change_status" type="submit" value="Lagre">
+                    {% endif %}
                 {% endif %}
             <hr>
             </div>
