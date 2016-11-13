@@ -18,21 +18,21 @@ def order(request):
         else:
             active = False
         user_order = Order.objects.filter(user=request.user).first()
-        if len(user_order.products.all()) == 0 and not user_order.comment:
-            user_order.delete()
-        else:
-            user_order.save()
         if request.method == 'POST':
             if 'delete_product' in request.POST:
                 delete = request.POST.get('delete_product')
                 m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
                 m = m_qs.get()
                 m.delete()
+                if len(user_order.products.all()) == 0 and not user_order.comment:
+                    user_order.delete()
 
             elif 'delete_comment' in request.POST:
                 delete = request.POST.get('delete_comment')
                 user_order.comment = ""
-                user_order.save()
+                if len(user_order.products.all()) == 0 and not user_order.comment:
+                    user_order.delete()
+            user_order.save()
 
         return render(request,"kiltshop/bestilling.html",
             {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
@@ -54,8 +54,6 @@ def shop(request):
         products += request.POST.getlist('product_s', None)
         products += request.POST.getlist('product_e', None)
         comment = request.POST.get('comment', None)
-        print(len(comment))
-        print(len(products))
 
         if not len(products) > 0 and not len(comment) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
