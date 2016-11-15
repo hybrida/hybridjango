@@ -40,5 +40,5 @@ urlpatterns = [
                   url(r'^updatek/', updatek, name='updatek'),
                   url(r'^komite/', TemplateView.as_view(template_name='staticpages/committees.html'), name='committees'),
                   url(r'^kontakt_oss/', TemplateView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
-
+                  url(r'^sangtekster/', TemplateView.as_view(template_name='lyrics.html'), name='lyrics'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
