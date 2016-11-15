@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'standard_sidebar.html' %}
 {% block title %}{{ name }}{% endblock %}
-{% block content %}
-    <h1>{{ name }}</h1>
-    <h3>Poeng: {{ points }}</h3>
+{% block text %}
+    <h1>{{ team.name }}</h1>
+    <h3>Poeng: {{ team.points }}</h3>
+    <img src="/uploads/{{ team.image }}">
 {% endblock %}

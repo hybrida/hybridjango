@@ -8,15 +8,14 @@ def index(request):
     template = loader.get_template('quiz/index.html')
     context = {
         'best_team': best_team,
+        'highest_score': best_team[0].points,
     }
     return HttpResponse(template.render(context, request))
 
 
 def results(request, team_id):
-    team = Team.objects.all().get(pk=team_id)
     template = loader.get_template('quiz/team.html')
     context = {
-        'name': team.name,
-        'points': team.points,
+        'team': Team.objects.all().get(pk=team_id)
     }
     return HttpResponse(template.render(context, request))
