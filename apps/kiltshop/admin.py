@@ -24,10 +24,10 @@ class OrderAdmin(admin.ModelAdmin):
                    'style': 'height: 10em;'})},
     }
 
+
 class OrderInfoAdmin(admin.ModelAdmin):
     filter_horizontal = ('orders',)
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderInfo, OrderInfoAdmin)
-

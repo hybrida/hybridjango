@@ -1,48 +1,61 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from .models import Product, Order, ProductInfo, OrderInfo
+import datetime
 
 
 def index(request):
     return render(request, "kiltshop/info.html")
 
 
+@login_required
 def order(request):
-
-    if not request.user.is_authenticated():
-        return render(request, 'registration/login.html')
-    else:
+        active_order = OrderInfo.objects.filter(status=True).first()
+        if active_order:
+            active = True
+        else:
+            active = False
         user_order = Order.objects.filter(user=request.user).first()
         if request.method == 'POST':
-            delete = request.POST.get('delete')
-            user_order.products.remove(delete)
-            if len(user_order.products.all()) == 0:
-                user_order.delete()
-            else:
-                user_order.save()
+            if 'delete_product' in request.POST:
+                delete = request.POST.get('delete_product')
+                m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
+                m = m_qs.get()
+                m.delete()
+                if len(user_order.products.all()) == 0 and not user_order.comment:
+                    user_order.delete()
 
-        return render(request,"kiltshop/bestilling.html",
+            elif 'delete_comment' in request.POST:
+                user_order.comment = ""
+                if len(user_order.products.all()) == 0 and not user_order.comment:
+                    user_order.delete()
+            user_order.save()
+
+        return render(request, "kiltshop/bestilling.html",
             {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
-             'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
-             'order': user_order}
-        )
+            'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
+            'order': user_order, 'activated': active
+            }
+                      )
 
 
+@login_required
 def shop(request):
-    if not request.user.is_staff:  # In case somebody unwanted starts "shopping"
-        return render(request, 'registration/login.html')
     user = request.user
     active_order = OrderInfo.objects.filter(status=True).first()
+    if active_order:
+        active = True
+    else:
+        active = False
     if request.method == 'POST':
-        products = request.POST.getlist('product', None)
-        size = request.POST.get('size', None)
-        number = request.POST.get('number', None)
-        print(number)
-        print(size)
-        if not active_order:
-            messages.warning(request, 'Kiltbestilling er ikke åpen. For spørsmål kontakt nestleder')
-        elif not len(products) > 0:
+        products = request.POST.getlist('product_k', None)
+        products += request.POST.getlist('product_s', None)
+        products += request.POST.getlist('product_e', None)
+        comment = request.POST.get('comment', None)
+
+        if not len(products) > 0 and not len(comment) > 0:
             messages.warning(request, 'Ingen produkter er valgt.')
         else:
             new_kilt = False
@@ -51,20 +64,11 @@ def shop(request):
             has_sporra = False
             has_kilt_id = 0
             has_sporra_id = 0
-            kilt_number = 0
-            sporra_number = 0
             for product in products:
                 if Product.objects.get(pk=product).type == 'K':
-                    kilt_number += 1
                     new_kilt = True
                 if Product.objects.get(pk=product).type == 'S':
-                    sporra_number += 1
                     new_sporra = True
-
-            if kilt_number > 1:
-                messages.warning(request, 'Du har valgt mer enn en kilt.')
-            elif sporra_number > 1:
-                messages.warning(request, 'Du har valgt mer enn en sporra.')
             else:
                 if products is not None:
                     if Order.objects.filter(user=user).exists():
@@ -79,44 +83,134 @@ def shop(request):
                             if product.type == 'E':
                                 for item in products:
                                     if str(item) == str(product.pk):
-                                        order_list.products.remove(item)
+                                        m_qs = ProductInfo.objects.filter(order=order_list, product=item)
+                                        m = m_qs.get()
+                                        m.delete()
 
                         if has_kilt and new_kilt:
-                            order_list.products.remove(has_kilt_id)
+                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_kilt_id)
+                            m = m_qs.get()
+                            m.delete()
 
                         if has_sporra and new_sporra:
-                            order_list.products.remove(has_sporra_id)
+                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_sporra_id)
+                            m = m_qs.get()
+                            m.delete()
 
-                        comment = request.POST.get('comment', None)
                         order_list = Order.objects.filter(user=user).first()
-                        if len(comment) > 0:
+                        if comment:
                             order_list.comment = comment
 
-                        order_list.products.add(*products)
+                        for product in products:
+                            number = int(request.POST.get('number-{id}'.format(id=product), 1))
+                            if number > 0:
+                                size = request.POST.get('size-{id}'.format(id=product), None)
+                                item = Product.objects.get(pk=product)
+                                productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
+                                productinfo.save()
                         order_list.save()
-                        active_order.orders.add(order_list)
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
                         order_list = Order.objects.create(user=user)
-                        comment = request.POST.get('comment', None)
                         order_list.comment = comment
-                        order_list.products.add(*products) # ignore this
+                        for product in products:
+                            number = int(request.POST.get('number-{id}'.format(id=product), 1))
+                            if number > 0:
+                                size = request.POST.get('size-{id}'.format(id=product), None)
+                                item = Product.objects.get(pk=product)
+                                productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
+                                productinfo.save()
                         order_list.save()
                         active_order.orders.add(order_list)
                         active_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
 
-    return render(request, "kiltshop/shop.html", {"products": Product.objects.all(), "kilts": Product.objects.filter(type="k")})
+    return render(request, "kiltshop/shop.html",
+                  {"products": Product.objects.all(),
+                   'activated': active,
+                   "order": Order.objects.filter(user=user).first()
+                   })
 
 
+@permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])
 def admin(request):
-    user_order = Order.objects.all()
+    orders = Order.objects.all()
     products = Product.objects.all()
     orderinfo = OrderInfo.objects.all()
+    user_order = None
+    user_products = None
+    total_items = ProductInfo.objects.all()
+    ordered_products = []
+    for item in total_items:
+        item_info = [item.product.name, item.size, item.number]
+        ordered_products.append(item_info)
+    unique_ordered = []
+    start = True
+    for item in ordered_products:
+        found = False
+        if start:
+            unique_ordered.append([item[0], item[1], item[2]])
+            start = False
+        else:
+            for i in range(0, len(unique_ordered)):
+                    if item[0] == unique_ordered[i][0]:
+                        found = True
+                        if item[1] is not None and unique_ordered[i][1] is not None:
+                            if item[1] == unique_ordered[i][1]:
+                                unique_ordered[i][2] += item[2]
+                            else:
+                                new = True
+                                for j in range(0, len(unique_ordered)):
+                                    if item[1] == unique_ordered[j][1]:
+                                        new = False
+                                    else:
+                                        pass
+                                if new:
+                                    unique_ordered.append([item[0], item[1], item[2]])
+                        else:
+                            unique_ordered[i][2] += item[2]
+            if not found:
+                unique_ordered.append([item[0], item[1], item[2]])
+    unique_ordered.sort()
 
-    return render(request, "kiltshop/admin.html",
-                  {'products': products,
-                   'orders': user_order,
-                  'orderinfo': orderinfo},
-                  )
+    if request.method == 'POST':
+        if 'showUser' in request.POST:
+            user_id = request.POST.get('selected_user')
+            if int(user_id) == -1:
+                pass
+            else:
+                user_order = Order.objects.filter(user=user_id).first()
+                user_products = user_order.products.all()
+
+        if 'change_status' in request.POST:
+            put = request.POST.get('order_status')
+            status = put.split(':')
+            order_pk = status[1]
+            status = status[0]
+            user_order = Order.objects.filter(pk=order_pk).first()
+            user_order.status = status
+            user_order.save()
+            return HttpResponseRedirect("/kilt/admin")
+
+        if 'createTime' in request.POST:
+            start = request.POST.get('start')
+            slutt = request.POST.get('slutt')
+            now = datetime.datetime.now()
+            print(now.year)
+            if OrderInfo.objects.filter(status=True).first():
+                messages.warning(request,
+                                 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
+            else:
+                OrderInfo.objects.create(startTime=start, endTime=slutt)
+
+    return render(request, "kiltshop/admin.html", {
+        'products': products,
+        'orders': orders,
+        'orderinfo': orderinfo,
+        'total_items': total_items,
+        'user_products': user_products,
+        'ordered_products': unique_ordered,
+        'user_productinfo': ProductInfo.objects.filter(order=user_order),
+        'user_order': user_order},
+      )
