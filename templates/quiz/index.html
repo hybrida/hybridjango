@@ -1,13 +1,63 @@
-{% extends 'base.html' %}
-{% block title %}Bedkom{% endblock %}
-{% block content %}
-    {% if best_team %}
-        <ul>
-            {% for team in best_team %}
-                <li><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Ingen tilgjengelige lag</p>
-    {% endif %}
+{% extends 'standard_sidebar.html' %}
+
+ <style>
+        #standing {
+            position: absolute;
+            top: 80px;
+            left: 50px;
+            width: 400px;
+        }
+
+        li {
+            font-size: 22px;
+            color: black;
+        }
+
+        a {
+            color: black;
+        }
+
+        a:hover {
+            color: blue;
+        }
+
+        #picture {
+            float: right;
+        }
+    </style>
+
+{% block title %}Quiz{% endblock %}
+{% block sidebar %}
+    <h5>En gang i måneden arrageres Hybrida Quiz.</h5>
 {% endblock %}
+{% block text %}
+    <h1>Quiz</h1>
+    <div id="standing">
+        <div id="list">
+            {% if best_team %}
+                <table class="info-table">
+                    {% for team in best_team %}
+                        <tr>
+                            <td><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></td>
+                            <td>{{ team.points }}</td>
+                            <td><meter value="{{ team.points|stringformat:"f" }}" min="0.0" max="{{ highest_score|stringformat:"f" }}">2 out of 10</meter><br></td>
+                            <td><meter style="width:75%;height:25px;" id="bars" title="Awesomeness" max="10" low="1" high="8" optimum="5" value="7"></meter></td>
+                            <td><div style="width: {{ team.points }}; color: #0f0f0f"></div></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Ingen tilgjengelige lag</p>
+            {% endif %}
+        </div>
+        <div id="points">
+            {% for team in best_team %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="picture">
+        <img src="/static/img/students1.png" alt="Students" height="422" width="590">
+    </div>
+{% endblock %}
+

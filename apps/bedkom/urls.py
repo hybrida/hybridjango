@@ -3,7 +3,7 @@ from apps.bedkom import views
 from apps.bedkom.views import BedriftEndre, BedriftLag
 
 urlpatterns = [
-    url(r'^$', views.index),
+    url(r'^$', views.index, name='bedkom'),
     url(r'^bedrift/(?P<pk>[0-9]+)$', views.bedrift, name='bedrift'),
     url(r'^(?P<pk>[0-9]+)/kommenter/$', views.comment, name='comment'),
     url(r'^bedrift/bedpress/(?P<pk>[0-9]+)$', views.bedpress, name='bedpress'),
