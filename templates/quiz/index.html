@@ -1,11 +1,9 @@
-{% extends 'base.html' %}
-{% block title %}Quiz{% endblock %}
-{% block content %}
-    <h1>Quiz</h1>
-    <style>
+{% extends 'standard_sidebar.html' %}
+
+ <style>
         #standing {
             position: absolute;
-            top: 50px;
+            top: 80px;
             left: 50px;
             width: 400px;
         }
@@ -27,8 +25,14 @@
             float: right;
         }
     </style>
+
+{% block title %}Quiz{% endblock %}
+{% block sidebar %}
+    <h5>En gang i måneden arrageres Hybrida Quiz.</h5>
+{% endblock %}
+{% block text %}
+    <h1>Quiz</h1>
     <div id="standing">
-        <h2>Resultat</h2>
         <div id="list">
             {% if best_team %}
                 <table class="info-table">
@@ -36,7 +40,9 @@
                         <tr>
                             <td><a href="/quiz/{{ team.id }}/">{{ team.name }}</a></td>
                             <td>{{ team.points }}</td>
+                            <td><meter value="{{ team.points|stringformat:"f" }}" min="0.0" max="{{ highest_score|stringformat:"f" }}">2 out of 10</meter><br></td>
                             <td><meter style="width:75%;height:25px;" id="bars" title="Awesomeness" max="10" low="1" high="8" optimum="5" value="7"></meter></td>
+                            <td><div style="width: {{ team.points }}; color: #0f0f0f"></div></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -49,7 +55,9 @@
             {% endfor %}
         </div>
     </div>
+
     <div id="picture">
         <img src="/static/img/students1.png" alt="Students" height="422" width="590">
     </div>
 {% endblock %}
+
