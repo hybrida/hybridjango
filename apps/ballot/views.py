@@ -6,13 +6,14 @@ from django.shortcuts import render, redirect
 
 class Ballot:
     nr = 0
-    title = 'Avsteming'
+    title = 'Avstemning'
     choices = [
         'Blank',
         'Vevkom',
         'Bedkom',
         'Arrkom',
         'Jentekom',
+        'Redaksjonen',
     ]
     only_members = True
     has_voted = []
