@@ -19,129 +19,23 @@
 </head>
 <body>
 
-
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid nav-container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation_menu">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" id="home" href="/"><img src="{% static "img/Griff, drop shadow.png" %}"
-                                                            id="logo"></a>
-        </div>
-        <div class="collapse navbar-collapse" id="navigation_menu">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
-                <li><a href="{% url 'about' %}">Om Hybrida</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
-                {% else %}
-                    <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
-                {% endif %}
-                <li><a href="{% url 'contact_us' %}">Kontakt Oss</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        <span style="padding-right: .5em">Mer</span><span class="glyphicon glyphicon-menu-down"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="{% url 'ballot:index' %}">Avstemning</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'kilt:info' %}">Kiltbestilling</a>
-                        </li>
-                        <li>
-                            <a href="{%  url 'lyrics' %}">Sangtekster</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"><span class="glyphicon glyphicon-search"></span></a>
-                    <div class="dropdown-menu">
-                        <form class="navbar-form" role="search" action="/search" method="GET">
-                            <div class="form-group">
-                                <input id="navbar-search" type="text" class="form-control" name="term"
-                                       placeholder="Søk"/>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        <span style="padding-right: .5em">{% firstof user.username 'Logg inn' %}</span><span
-                            class="glyphicon glyphicon-menu-down"></span></a>
-                    <ul class="dropdown-menu">
-                        {% if user.is_authenticated %}
-                            <li>
-                                <a href="{% url 'profile' user %}">Profil</a>
-                            </li>
-                            {% if user.is_superuser %}
-                                <li>
-                                    <a href="{% url 'admin:index' %}">Administrering</a>
-                                </li>
-                            {% endif %}
-                            <li>
-                                <a href="{% url 'logout' %}">Logg ut</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <div class="navbar-login">
-                                    <form class="navbar-form" method="post" action="{% url 'login' %}">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label for="id_username">Brukernavn:</label>
-                                            <input autofocus="" id="id_username" maxlength="254" name="username"
-                                                   required=""
-                                                   type="text" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_password">Passord:</label>
-                                            <input id="id_password" name="password" required="" type="password"
-                                                   class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <button class="btn btn-primary form-control" type="submit"
-                                                    style="width: 100%; margin: .25em 0;">Logg inn
-                                            </button>
-                                            <a href="{% url 'register' %}" class="btn btn-default" style="width: 100%">Registrer/Gjenoprett
-                                                bruker</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+{% include 'navbar.html' %}
 
 {% include './feedback.html' %}
 
-<div class="wrap">
-    <div class="article-bg">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <div id="footer" class="container">
-        <div class="row">
-            <div class="col-sm-4 col-xs-12">
-                <div class="white-box">
-                    et eller annet
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+<div id="footer">
+    <div class="white-box" style="overflow: visible">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-xs-12" style="overflow: visible; margin-top: -20px">
+                    {% include 'ringen.svg' %}
                 </div>
-            </div>
-            <div class="col-sm-4 col-xs-12">
-                <div class="white-box">
-                    <h4>Kontaktinfo</h4>
+                <div class="col-md-4 col-xs-12">
+                    <h4 style="text-align: center">Kontaktinfo</h4>
                     <table class="info-table">
                         <tr>
                             <td></td>
@@ -156,16 +50,11 @@
                         </tr>
                         <tr>
                             <td>Adresse</td>
-                            <td>Kjelleren i Gamle Kjemi, rom 19, Kolbjørn Hejes vei 4</td>
+                            <td>Kjelleren i Gamle Kjemi, rom 19,
+                                <br>Kolbjørn Hejes vei 4
+                            </td>
                         </tr>
                     </table>
-                </div>
-            </div>
-            <div class="col-sm-4 col-xs-12">
-                <div class="white-box">
-                    <div class="remove-whitebox-padding">
-                        {% include 'ringen.svg' %}
-                    </div>
                 </div>
             </div>
         </div>
