@@ -15,7 +15,8 @@ class Command(BaseCommand):
             if not u['graduation_year']:
                 print('{} har ikke avgangsår, blir ikke lagt til'.format(u['username']))
                 continue
-            Hybrid.objects.update_or_create(
+            Hybrid.objects.update(
+                id=u['pk'],
                 username=u['username'],
                 first_name=u['first_name'],
                 last_name=u['last_name'],
