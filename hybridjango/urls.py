@@ -27,7 +27,7 @@ urlpatterns = [
                   url(r'^bedkom/', include('apps.bedkom.urls')),
                   url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
-                  url(r'^arrangementer/', include('apps.events.urls'), name='events'),
+                  url(r'^hendelser/', include('apps.events.urls'), name='events'),
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
 
                   # Static pages, only temporary (short on time before genfors)
