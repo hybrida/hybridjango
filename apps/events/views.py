@@ -15,6 +15,13 @@ class EventList(generic.ListView):
     template_name = 'events/events.html'
     ordering = ['-timestamp']
 
+    def get_context_data(self, **kwargs):
+        context = super(EventList, self).get_context_data(**kwargs)
+        context['event_list_chronological'] = Event.objects.filter(
+            event_start__isnull=False
+        ).order_by('event_start')[:5]
+        return context
+
 
 class EventView(generic.DetailView):
     model = Event
