@@ -13,7 +13,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navigation_menu">
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'event_list' %}">Arrangementer</a></li>
                 <li><a href="{% url 'about' %}">Om Hybrida</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>

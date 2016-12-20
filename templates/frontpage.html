@@ -3,8 +3,8 @@
 {% block title %}Forside{% endblock %}
 {% block content %}
     <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
-    <div class="fp_white" style="margin-top: -.2%">
-    </div>
+    <div class="fp_white" style="margin-top: -.2%"></div>
+    {% if not user.is_authenticated %}
     <div class="container">
         <div class="row">
             <div class="col-xs-12 space-above">
@@ -22,8 +22,8 @@
             </div>
         </div>
     </div>
-    <a name="nyhetsfeed" style="position:relative; height: 1px; margin-top: -1px; top: -18px; display:block; ">
-        &nbsp;</a>
+    {% endif %}
+    <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
     <div class="container">
         <div class="row space-below space-above">
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
@@ -44,4 +44,11 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    {% if user.is_authenticated %}
+    <script>
+            window.location.hash = 'hendelser';
+    </script>
+    {% endif %}
 {% endblock %}
