@@ -30,15 +30,5 @@ urlpatterns = [
                   url(r'^hendelser/', include('apps.events.urls'), name='events'),
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
 
-                  # Static pages, only temporary (short on time before genfors)
-                  url(r'^strikk/', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
-                  url(r'^statutter/', TemplateView.as_view(template_name='staticpages/statutter.html')),
-                  url(r'^griffens_orden/', TemplateView.as_view(template_name='staticpages/griffens_orden.html'), name='griff_orden'),
-                  url(r'^om_hybrida/', TemplateView.as_view(template_name='staticpages/about.html'), name='about'),
-                  url(r'^for_bedrifter/', TemplateView.as_view(template_name='staticpages/for_companies.html'),
-                      name='for_companies'),
-                  url(r'^updatek/', updatek, name='updatek'),
-                  url(r'^komite/', TemplateView.as_view(template_name='staticpages/committees.html'), name='committees'),
-                  url(r'^kontakt_oss/', TemplateView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
-                  url(r'^sangtekster/', TemplateView.as_view(template_name='lyrics.html'), name='lyrics'),
+                  url(r'', include('apps.staticpages.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
