@@ -543,6 +543,17 @@ a.inverted {
     line-height: inherit;
 }
 
+.social-bar {
+    font-size: 4em;
+    text-align: center;
+}
+
+.social-bar svg {
+    height: 1em;
+    display: inline-block;
+    vertical-align: -.14em;
+}
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
