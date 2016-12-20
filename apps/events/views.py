@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.utils import timezone
 
 from apps.events.forms import EventForm
 from .models import Event, EventComment
@@ -18,7 +19,7 @@ class EventList(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(EventList, self).get_context_data(**kwargs)
         context['event_list_chronological'] = Event.objects.filter(
-            event_start__isnull=False
+            event_start__gte=timezone.now()
         ).order_by('event_start')[:5]
         return context
 
