@@ -12,7 +12,7 @@ from .models import Event, EventComment
 
 class EventList(generic.ListView):
     model = Event
-    template_name = 'events/event_list.html'
+    template_name = 'events/events.html'
     ordering = ['-timestamp']
 
 
