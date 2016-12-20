@@ -1,8 +1,10 @@
-{% extends "unstyled_sidebar.html" %}
-
-{% block text %}
-    {% include 'events/events_thumblist.html' %}
-{% endblock %}
-{% block sidebar %}
-    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
-{% endblock %}
+<div class="event_list">
+    {% for event in object_list %}
+        <div class="">
+            <a href="{% url 'event' event.pk %}" style="">
+                <i class="fa fa-square" style="color:{% if event.signup_start %}#005675{% else %}#9e9d98{% endif %}" aria-hidden="true"></i>
+                {{ event.title }}
+            </a>
+        </div>
+    {% endfor %}
+</div>

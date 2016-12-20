@@ -511,6 +511,19 @@ a.inverted {
 
 }
 
+.event_list {
+    list-style: none;
+}
+
+.event_list > div {
+    border-bottom: dotted thin;
+}
+
+.event_list > div > a {
+    display: block;
+    color: black;
+}
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
@@ -543,14 +556,6 @@ a.inverted {
 
     .nav-container {
         max-width: 1079px;
-    }
-
-    .space-above {
-        margin-top: 30px;
-    }
-
-    .space-below {
-        margin-bottom: 50px;
     }
 
     .page-box {

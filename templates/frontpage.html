@@ -27,14 +27,19 @@
     <div class="container">
         <div class="row space-below space-above">
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
-                <div class="white-box">
-                    {% if perms.events.can_add_event %}<a href="{% url 'new_event' %}">Nytt Arrangement</a>{% endif %}
+                <div class="white-box space space-below">
                     {{ events_chronological }}
+                    {% include 'events/event_list.html' %}
                 </div>
+                {% if perms.events.can_add_event %}
+                    <div class="white-box">
+                        <a href="{% url 'new_event' %}">Nytt Arrangement</a>
+                    </div>
+                {% endif %}
             </div>
             <div class="col-xs-12 col-md-8 col-md-pull-4">
                 <div class="unstyled-box">
-                    {% include 'events/events_thumblist.html' %}
+                    {% include 'events/event_thumblist.html' %}
                 </div>
             </div>
         </div>
