@@ -1,5 +1,6 @@
 {% extends 'standard_sidebar.html' %}
 {% load widget_tweaks %}
+{% load static %}
 {% block text %}
     <h3>Endre/Lag arrangement</h3>
     <form action="" method="post" enctype="multipart/form-data">
@@ -30,19 +31,19 @@
         </div>
         <div class="form-group">
             <label for="id_signup_start">Påmeldingsstart:</label>
-            {{ form.signup_start|add_class:"form-control" }}
+            {{ form.signup_start|add_class:"form-control form_datetime" }}
         </div>
         <div class="form-group">
             <label for="id_signup_end">Påmeldingsslutt:</label>
-            {{ form.signup_end|add_class:"form-control" }}
+            {{ form.signup_end|add_class:"form-control form_datetime" }}
         </div>
         <div class="form-group">
             <label for="id_event_start">Start:</label>
-            {{ form.event_start|add_class:"form-control" }}
+            {{ form.event_start|add_class:"form-control form_datetime" }}
         </div>
         <div class="form-group">
             <label for="id_event_end">Slutt:</label>
-            {{ form.event_end|add_class:"form-control" }}
+            {{ form.event_end|add_class:"form-control form_datetime" }}
         </div>
         <div class="form-group">
             <label for="id_weight">Vekting:</label>
@@ -69,3 +70,14 @@
     <p><strong>Grensen står for klassetrinnet som har lov til å melde seg opp. Tallet står for
         avslutningsår.</strong></p>
 {% endblock sidebar %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+    </script>
+{% endblock script %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+{% endblock %}
