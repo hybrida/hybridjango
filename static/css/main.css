@@ -515,13 +515,32 @@ a.inverted {
     list-style: none;
 }
 
-.event_list > div {
+.event_list div {
     border-bottom: dotted thin;
+    padding: 4px;
 }
 
-.event_list > div > a {
-    display: block;
+.event_list a {
     color: black;
+    white-space: nowrap;
+}
+
+.event_list time {
+    float: right;
+}
+
+.event_list span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 8px;
+}
+
+.event_list i {
+    float: left;
+    vertical-align: middle;
+    line-height: inherit;
 }
 
 /**
