@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.views import redirect_to_login
 from django.core.mail import send_mail
@@ -14,7 +15,7 @@ from .models import Hybrid, RecoveryMail
 from .forms import HybridForm
 
 
-class Profile(generic.DetailView):
+class Profile(LoginRequiredMixin, generic.DetailView):
     model = Hybrid
     slug_field = 'username'
     template_name = 'registration/profile.html'
