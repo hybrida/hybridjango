@@ -1,14 +1,11 @@
 {% extends 'staticpages/about.html' %}
 {% load static %}
-{% block sidebar_extra %}
-    <div class="white-box space-above" id="index">
-        <a href="#"><h2>Sangtekster</h2></a>
-        <li><a href="#Nu klinger">Nu klinger</a></li>
-        <li><a href="#Theodor">Theodor</a></li>
-        <li><a href="#Lambo">Lambo</a></li>
-        <li><a href="#Andra sidan e ni klara">Andra sidan e ni klara</a></li>
-        <li><a href="#Barnestemmer">Barnestemmer</a></li>
-    </div>
+{% block sublinks %}
+    <li><a href="#Nu klinger">Nu klinger</a></li>
+    <li><a href="#Theodor">Theodor</a></li>
+    <li><a href="#Lambo">Lambo</a></li>
+    <li><a href="#Andra sidan e ni klara">Andra sidan e ni klara</a></li>
+    <li><a href="#Barnestemmer">Barnestemmer</a></li>
 {% endblock %}
 {% block title %}Sangtekster{% endblock %}
 {% block text %}
@@ -167,20 +164,3 @@
         <div style="height: 50px; clear: both"></div>
     </div>
 {% endblock text %}
-{% block script %}
-    <script type="text/javascript">
-        textBox = $('#text-box');
-        sidebar = $('#sidebar');
-        adjust_margin = function () {
-            if (window.innerWidth >= 992 && scrollY > sidebar.height()) {
-                // 15px is height of space_above margin
-                index = $('#index');
-                index.css('margin-top', Math.min(scrollY, textBox.height() - index.height()) - sidebar.height() + 'px');
-            } else {
-                $('#index').css('margin-top', "")
-            }
-        };
-        window.onload = adjust_margin;
-        window.onscroll = adjust_margin;
-    </script>
-{% endblock script %}

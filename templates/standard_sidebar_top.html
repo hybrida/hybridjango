@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row space-below">
-            <div class="col-md-4 col-md-push-8 space-above">
+            <div id="sidebar-col" class="col-md-4 col-md-push-8 space-above">
                 {% block unstyled_sidebar %}
                     <div class="white-box" id="sidebar">
                         {% block sidebar %}
@@ -12,7 +12,7 @@
                 {% block sidebar_extra %}
                 {% endblock sidebar_extra %}
             </div>
-            <div class="col-md-8 col-md-pull-4 space-above">
+            <div id="content-col" class="col-md-8 col-md-pull-4 space-above">
                 {% block unstyled_text %}
                     <div class="white-box" id="text-box">
                         {% block text %}
