@@ -17,12 +17,34 @@
 {% block unstyled_sidebar %}
     <div id="sidebar">
         <ul class="sidebar-links">
-            <li><a href="{% url 'about' %}">Om Hybrida</a></li>
-            <li><a href="{% url 'contact_us' %}">Kontakt Oss</a></li>
-            <li><a href="{% url 'committees' %}">Komitéer</a></li>
-            <li><a href="{% url 'griff_orden' %}">Griffens Orden</a></li>
-            <li><a href="{% url 'statutter' %}">Statutter</a></li>
-            <li><a href="{% url 'lyrics' %}">Sangtekster</a></li>
+            {% for page, label in before_pages %}
+                <li><a href="{% url page %}">{{ label }}</a></li>
+            {% endfor %}
+            <li>
+                <ul>
+                    {% block sublinks %}
+                    {% endblock sublinks %}
+                </ul>
+            </li>
+            {% for page, label in after_pages %}
+                <li><a href="{% url page %}">{{ label }}</a></li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        textBox = $('#text-box');
+        adjust_margin = function () {
+            var sidebar = $('#sidebar');
+            if (window.innerWidth >= 992) {
+                sidebar.css('margin-top', Math.max(Math.min(scrollY, textBox.height() - sidebar.height() + 40), 0) + 'px');
+            } else {
+                sidebar.css('margin-top', "")
+            }
+        };
+        window.onload = adjust_margin;
+        window.onresize = adjust_margin;
+        window.onscroll = adjust_margin;
+    </script>
+{% endblock script %}

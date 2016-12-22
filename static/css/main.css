@@ -455,6 +455,10 @@ a.inverted {
     list-style: none;
 }
 
+.sidebar-links ul {
+    list-style: none;
+}
+
 .sidebar-links > li {
     width: 100%;
     display: block;
@@ -466,14 +470,18 @@ a.inverted {
     display: block;
     border-radius: 2px;
     font-size: large;
-    transition: 200ms;
+    transition: 100ms;
     box-shadow: 0 0 8px rgba(0, 0, 0, .5);
-    margin-bottom: 4px;
+    margin-top: 4px;
     background: white;
 }
 
+.sidebar-links  > li:first-child  > a {
+    margin-top: 0;
+}
+
 .sidebar-links a:hover {
-    transform: scale(1.05);
+    transform: translate(4px, 0)
 }
 
 #griff_fill {
