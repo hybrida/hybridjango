@@ -3,16 +3,20 @@
     <div class="container">
         <div class="row space-below">
             <div class="col-md-8 space-above">
-                <div class="white-box" id="text-box">
-                    {% block text %}
-                    {% endblock text %}
-                </div>
+                {% block unstyled_text %}
+                    <div class="white-box" id="text-box">
+                        {% block text %}
+                        {% endblock text %}
+                    </div>
+                {% endblock unstyled_text %}
             </div>
             <div class="col-md-4 space-above">
-                <div class="white-box" id="sidebar">
-                    {% block sidebar %}
-                    {% endblock sidebar %}
-                </div>
+                {% block unstyled_sidebar %}
+                    <div class="white-box" id="sidebar">
+                        {% block sidebar %}
+                        {% endblock sidebar %}
+                    </div>
+                {% endblock unstyled_sidebar %}
                 {% block sidebar_extra %}
                 {% endblock sidebar_extra %}
             </div>
