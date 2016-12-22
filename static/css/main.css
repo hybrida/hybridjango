@@ -468,7 +468,7 @@ a.inverted {
     font-size: large;
     transition: 200ms;
     box-shadow: 0 0 8px rgba(0, 0, 0, .5);
-    margin-top: 4px;
+    margin-bottom: 4px;
     background: white;
 }
 
