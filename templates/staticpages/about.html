@@ -34,11 +34,11 @@
 {% endblock %}
 {% block script %}
     <script type="text/javascript">
-        textBox = $('#text-box');
+        content = $('#content-col');
         adjust_margin = function () {
             var sidebar = $('#sidebar');
             if (window.innerWidth >= 992) {
-                sidebar.css('margin-top', Math.max(Math.min(scrollY, textBox.height() - sidebar.height() + 40), 0) + 'px');
+                sidebar.css('margin-top', Math.max(Math.min(scrollY, content.height() - sidebar.height()), 0) + 'px');
             } else {
                 sidebar.css('margin-top', "")
             }
