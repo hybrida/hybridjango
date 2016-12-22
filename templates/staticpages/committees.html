@@ -1,75 +1,125 @@
 {% extends 'staticpages/about.html' %}
-{% block text %}
-    <article>
+{% load static %}
+{% block unstyled_text %}
+    <article class="white-box">
         <h1>Hybridas komitéer:</h1>
         <p>
             Hybridas komitéer er underlagt styret. Medlemmer i komitéene tas opp ved behov av komitéens leder, vanligvis
             etter studiestart hver høst. Komitélederne velges på Hybridas generalforsamling.
         </p>
-        <section>
-            <h2>Arrangementskomitéen (ArrKom)</h2>
-            <p>ArrKom, ledet av Festivalus, er ansvarlig for organisering og gjennomføring av linjeforeningens sosiale
-                arrangementer og tilstelninger. Hybrida har en rekke tradisjonelle arrangementer som ArrKom organiserer.
-                Dette varierer fra månedlig quiz og lånepils, til storstilte gallaer som immatrikuleringsball og
-                nyttårsball. ArrKom bestemmer også hva slags nye arrangementer som skal avholdes i løpet av året.</p>
-        </section>
-        <section>
-            <h2>Bedriftskomitéen (BedKom)</h2>
-            <p>BedKom er Hybridas mellomledd til næringslivet og har ansvaret for å opprettholde kontakt med bedrifter.
-                BedKom skal profilere studieprogrammet opp mot næringsliv, ta imot henvendelser fra bedrifter, opprette
-                kontakt med nye bedrifter og videreformidle stillingsutlysninger. I hovedsak arrangerer BedKom
-                bedriftspresentasjoner slik at bedriftene får et talerør til studentene. Bedriftene holder en
-                presentasjon om seg selv der de forteller hva de gjør og hva de står for, før de serverer mat til
-                studentene. Det er BedKom som står for det meste av Hybridas inntekt.</p>
-        </section>
-        <section>
-            <h2>FadderKomitéen (FadderKom)</h2>
-            <p>FadderKom har ansvaret for planlegging og gjennomføring av fadderperioden samt De Årlige Prøvelsene,
-                opptaket til Hybrida. Faddersjef og medlemmer i komitéen utnevnes av styret på våren og har sitt virke
-                frem til fadderperioden er avsluttet i august. FadderKom ledes av Festivalus i samråd med
-                fadderskjefen.</p>
-        </section>
-        <section>
-            <h2>Jentekomitéen (JenteKom)</h2>
-            <p>JenteKom har ansvaret for det sosiale miljøet blant jentene på linja, kalt Ladybugs. Hvert semester
-                arrangeres det rekekveld, tapaskveld og cocktailaften, samt kafékvelder, frokost, lazertag og turer.
-                JenteKom jobber for å styrke jentemiljøet og åpne for å bli kjent på tvers av trinn.</p>
-        </section>
-        <section>
-            <h2>Vevkomitéen (VevKom)</h2>
-            <p>VevKom har i hovedsak ansvar for å utvikle og drifte hjemmesiden til Hybrida og ordne andre
-                dataorienterte ting linja har behov for. VevKom arrangerer også HybridLAN hvert semester.</p>
-        </section>
-        <section>
-            <h2>Redaksjonen (Updatek)</h2>
-            <p>Redaksjonen er ansvarlig for å gi ut linjeforeningsavisen Updatek. Redaksjonen består av journalister,
-                illustratører, fotografer, korrekturlesere, layoutmedarbeidere og en redaktør som formidler det som
-                foregår på linja. Redaksjonen sørger for å trykke og dele ut linjeavisa og lage en digital versjon.</p>
-        </section>
-        <br>
-        <br>
-        <section>
-            <h2>eXusKom</h2>
-            <p>Består av styremedlemmer i tidsrommet fra de avtreder sin stilling frem til neste generalforsamling.
-                Medlemmene her er ansvarlig for oppfølging av de nye styremedlemmene og kan bistå nyvalgte
-                styremedlemmer med sin erfaring.</p>
-        </section>
-        <section>
-            <h2>Pangkom</h2>
-            <p>Består av tidligere styremedlemmer som fortsatt går på studieprogrammet. Komiteen er tilgjengelig for
-                konsultasjoner fra styret ved behov.</p>
-        </section>
-        <section>
-            <h2>X-kom</h2>
-            <p>X-kom er ansvarlig for organisering, planlegging og gjennomføring av ekskursjonen. Nestleder i Hybrida er
-                ansvarlig for å opprette X-kom. Dette skal skje i løpet av høstsemesteret halvannet år før selve
-                ekskursjonen.</p>
-        </section>
-        <section>
-            <h2>Avproletariseringskomitéen (AvKom)</h2>
-            <p>Formålet med komitéen er å forsikre at femteklassestudentene får en verdig avslutning på studietiden.
-                Dette gjøres gjennom eksempelvis avslutningsfester og ved at det blir arrangert en seremoniell
-                begivenhet når masteroppgavene er levert.</p>
-        </section>
     </article>
+
+    <a name="arrkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/arrkom.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Arrangementskomitéen (ArrKom)</h2>
+        <p>ArrKom, ledet av Festivalus, er ansvarlig for organisering og gjennomføring av linjeforeningens sosiale
+            arrangementer og tilstelninger. Hybrida har en rekke tradisjonelle arrangementer som ArrKom organiserer.
+            Dette varierer fra månedlig quiz og lånepils, til storstilte gallaer som immatrikuleringsball og
+            nyttårsball. ArrKom bestemmer også hva slags nye arrangementer som skal avholdes i løpet av året.</p>
+    </article>
+
+    <a name="bedkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/bedkom.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Bedriftskomitéen (BedKom)</h2>
+        <p>BedKom er Hybridas mellomledd til næringslivet og har ansvaret for å opprettholde kontakt med bedrifter.
+            BedKom skal profilere studieprogrammet opp mot næringsliv, ta imot henvendelser fra bedrifter, opprette
+            kontakt med nye bedrifter og videreformidle stillingsutlysninger. I hovedsak arrangerer BedKom
+            bedriftspresentasjoner slik at bedriftene får et talerør til studentene. Bedriftene holder en
+            presentasjon om seg selv der de forteller hva de gjør og hva de står for, før de serverer mat til
+            studentene. Det er BedKom som står for det meste av Hybridas inntekt.</p>
+    </article>
+
+    <a name="jentekom" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/jentekom.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Jentekomitéen (JenteKom)</h2>
+        <p>JenteKom har ansvaret for det sosiale miljøet blant jentene på linja, kalt Ladybugs. Hvert semester
+            arrangeres det rekekveld, tapaskveld og cocktailaften, samt kafékvelder, frokost, lazertag og turer.
+            JenteKom jobber for å styrke jentemiljøet og åpne for å bli kjent på tvers av trinn.</p>
+    </article>
+
+    <a name="redaksjonen" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/redaksjonen.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Redaksjonen (Updatek)</h2>
+        <p>Redaksjonen er ansvarlig for å gi ut linjeforeningsavisen Updatek. Redaksjonen består av journalister,
+            illustratører, fotografer, korrekturlesere, layoutmedarbeidere og en redaktør som formidler det som
+            foregår på linja. Redaksjonen sørger for å trykke og dele ut linjeavisa og lage en digital versjon.</p>
+    </article>
+
+    <a name="vevkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/vevkom.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Vevkomitéen (VevKom)</h2>
+        <p>VevKom har i hovedsak ansvar for å utvikle og drifte hjemmesiden til Hybrida og ordne andre
+            dataorienterte ting linja har behov for. VevKom arrangerer også HybridLAN hvert semester.</p>
+    </article>
+
+    <br>
+
+    <br>
+
+    <a name="fadderkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>FadderKomitéen (FadderKom)</h2>
+        <p>FadderKom har ansvaret for planlegging og gjennomføring av fadderperioden samt De Årlige Prøvelsene,
+            opptaket til Hybrida. Faddersjef og medlemmer i komitéen utnevnes av styret på våren og har sitt virke
+            frem til fadderperioden er avsluttet i august. FadderKom ledes av Festivalus i samråd med
+            fadderskjefen.</p>
+    </article>
+
+    <a name="exuskom" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>eXusKom</h2>
+        <p>Består av styremedlemmer i tidsrommet fra de avtreder sin stilling frem til neste generalforsamling.
+            Medlemmene her er ansvarlig for oppfølging av de nye styremedlemmene og kan bistå nyvalgte
+            styremedlemmer med sin erfaring.</p>
+    </article>
+
+    <a name="pangkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>Pangkom</h2>
+        <p>Består av tidligere styremedlemmer som fortsatt går på studieprogrammet. Komiteen er tilgjengelig for
+            konsultasjoner fra styret ved behov.</p>
+    </article>
+
+    <a name="xkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>X-kom</h2>
+        <p>X-kom er ansvarlig for organisering, planlegging og gjennomføring av ekskursjonen. Nestleder i Hybrida er
+            ansvarlig for å opprette X-kom. Dette skal skje i løpet av høstsemesteret halvannet år før selve
+            ekskursjonen.</p>
+    </article>
+
+    <a name="avkom" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>Avproletariseringskomitéen (AvKom)</h2>
+        <p>Formålet med komitéen er å forsikre at femteklassestudentene får en verdig avslutning på studietiden.
+            Dette gjøres gjennom eksempelvis avslutningsfester og ved at det blir arrangert en seremoniell
+            begivenhet når masteroppgavene er levert.</p>
+    </article>
+{% endblock %}
+{% block sublinks %}
+    <a href="#arrkom">Arrangementskomitéen</a>
+    <a href="#bedkom">Bedriftskomitéen</a>
+    <a href="#jentekom">Jentekomitéen</a>
+    <a href="#redaksjonen">Redaksjonen</a>
+    <a href="#vevkom">Vevkomitéen</a>
+    <a href="#fadderkom">FadderKomitéen</a>
+    <a href="#exuskom">eXusKom</a>
+    <a href="#pangkom">Pangkom</a>
+    <a href="#xkom">X-kom</a>
+    <a href="#avkom">Avproletariseringskomitéen</a>
 {% endblock %}

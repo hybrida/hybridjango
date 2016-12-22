@@ -474,6 +474,9 @@ a.inverted {
     box-shadow: 0 0 8px rgba(0, 0, 0, .5);
     margin-top: 4px;
     background: white;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .sidebar-links  > li:first-child  > a {
@@ -482,6 +485,11 @@ a.inverted {
 
 .sidebar-links a:hover {
     transform: translate(4px, 0)
+}
+
+.anchor {
+    position: absolute;
+    margin-top: -50px;
 }
 
 #griff_fill {
