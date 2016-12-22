@@ -5,7 +5,7 @@ from apps.events.views import updatek
 
 urlpatterns = [
     url(r'^strikk/', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
-    url(r'^statutter/', TemplateView.as_view(template_name='staticpages/statutter.html')),
+    url(r'^statutter/', TemplateView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
     url(r'^griffens_orden/', TemplateView.as_view(template_name='staticpages/griffens_orden.html'), name='griff_orden'),
     url(r'^om_hybrida/', TemplateView.as_view(template_name='staticpages/about.html'), name='about'),
     url(r'^for_bedrifter/', TemplateView.as_view(template_name='staticpages/for_companies.html'),
