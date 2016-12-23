@@ -1,0 +1,150 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block unstyled_text %}
+    <article class="white-box">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/styret.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <br>
+        <h1>Styret</h1>
+    </article>
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/leder.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Martin Vee Akselsen</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#leder" style="color: #005675">
+                    <h3>Leder</h3>
+                </a>
+                <p>Vår ærede leder. Har det overordnede ansvaret i Hybrida, og er rett og slett helt sjef.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/nestleder.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Sigrid Bratsberg</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#nestleder" style="color: #005675">
+                    <h3>Nestleder</h3>
+                </a>
+                <p>"Samarbeider" med lederen om det organisatoriske og administrative ansvaret i styret.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/skattmester.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Jonas Åsnes Sagild</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#skattmester" style="color: #005675">
+                    <h3>Skattmester</h3>
+                </a>
+                <p>Ansvaret for pengestrømmen inn og, selvfølgelig mest, ut. Driver i følge pålitelige kilder ikke med
+                    underslag.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/bksjef.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Ludvig Lilleby Johansson</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#bksjef" style="color: #005675">
+                    <h3>Bedriftskomitésjef</h3>
+                </a>
+                <p>Fikser og ordner med profileringen av linja og linjeforeningen utad til bedrifter og næringslivet. Sørger for at vi får de saftigste jobbene på markedet.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/festivalus.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Nora Johanne Knudsen</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#festivalus" style="color: #005675">
+                    <h3>Festivalus</h3>
+                </a>
+                <p>Ansvaret for det som blir arrangert av fester, turer og en hel rekke andre festlige
+                    arrangementer.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/vevsjef.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Simen Norderud Jensen</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#vevsjef" style="color: #005675">
+                    <h3>Vevsjef</h3>
+                </a>
+                <p>Har ansvaret for utvikling og drift av nettsidene og HybridLAN, samt informasjonsflyten i linjeforeningen.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="white-box space-above">
+                <div class="remove-whitebox-padding">
+                    <img src="{% static 'img/about/jentekomsjef.jpg' %}" class="center-block img-responsive art-img"
+                         width="100%">
+                    <div class="image-info-overlay">
+                        <div>
+                            <h3>Jentekomitésjef</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <a href="{% url 'contact_us' %}#jentekomsjef" style="color: #005675">
+                    <h3>Guro Golberg Brøto</h3>
+                </a>
+                <p>Sjef for jentekomiteen, eller chicas united som det kalles i spania. Sørger for at damene oppfører seg i henhold til forskriftene.</p>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

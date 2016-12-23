@@ -1,11 +1,10 @@
-from collections import OrderedDict
-
 from django.urls import resolve
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 
 pages = [
     ('about', "Om Hybrida"),
     ('contact_us', "Kontakt Oss"),
+    ('board', "Styret"),
     ('committees', "Komitéer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),

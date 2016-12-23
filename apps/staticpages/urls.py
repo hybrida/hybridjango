@@ -13,6 +13,7 @@ urlpatterns = [
         name='for_companies'),
     url(r'^updatek/', updatek, name='updatek'),
     url(r'^komite/', AboutView.as_view(template_name='staticpages/committees.html'), name='committees'),
+    url(r'^styret/', AboutView.as_view(template_name='staticpages/board.html'), name='board'),
     url(r'^kontakt_oss/', AboutView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
     url(r'^sangtekster/', AboutView.as_view(template_name='staticpages/lyrics.html'), name='lyrics'),
 ]
