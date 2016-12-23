@@ -28,6 +28,9 @@ class Event(models.Model):
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
 
+    def signup_closed(self):
+        return self.signup_start and self.signup_end and timezone.now() > self.signup_end
+
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
 
