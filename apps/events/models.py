@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Event(models.Model):
     title = models.CharField(max_length=150)
-    ingress = models.CharField(max_length=500, blank=True)
+    ingress = models.CharField(max_length=500, blank=True, default='')
     text = models.TextField()
     author = models.ForeignKey(Hybrid, related_name='authored')
     timestamp = models.DateTimeField(default=timezone.now)
@@ -20,6 +20,7 @@ class Event(models.Model):
     event_start = models.DateTimeField(null=True, blank=True)
     event_end = models.DateTimeField(null=True, blank=True)
     weight = models.IntegerField(default=0)
+    hidden = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
