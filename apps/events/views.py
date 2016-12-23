@@ -14,7 +14,7 @@ from .models import Event, EventComment
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    ordering = ['-timestamp']
+    queryset = Event.objects.filter(hidden=False).order_by('-weight', '-timestamp')
 
     def get_context_data(self, **kwargs):
         context = super(EventList, self).get_context_data(**kwargs)
