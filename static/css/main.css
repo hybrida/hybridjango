@@ -46,14 +46,14 @@
 }
 
 body {
-    /*background: #cccccc;*/
+    /*background: #005675*/
     background: #cbc9c2 url("/static/img/kilt4.jpg") repeat;
     font-family: 'Raleway', sans-serif;
     padding-top: 50px;
 }
 
 article {
-    font-size: 16px;
+    word-wrap: break-word;
 }
 
 #feedbackBox {
@@ -408,13 +408,14 @@ a.inverted {
 }
 
 .image-info-overlay {
+    width: 100%;
     margin-top: -100px;
     min-height: 100px;
     position: relative;
     background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));
 }
 
-.image-info-overlay-content {
+.image-info-overlay div {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -422,11 +423,6 @@ a.inverted {
     text-shadow: 0 0 2px #000;
     font-weight: bold;
     padding: 0 4px;
-}
-
-.fill-width {
-    margin: 0 -20px;
-    overflow: hidden;
 }
 
 .event-preview {
@@ -616,6 +612,11 @@ a.inverted {
     #footer {
         padding-top: 75px;
     }
+
+    article {
+        font-size: 16px;
+    }
+
 }
 
 @media (min-width: 1200px) {
