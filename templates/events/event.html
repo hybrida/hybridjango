@@ -11,12 +11,12 @@
         Av:
         <a class="hybridLink" id="{{ event.author }}"
            href="{% url 'profile' event.author %}">{{ event.author.get_full_name }}</a>
-        {% if perms.events.can_add_event %}
+        {% if perms.events.add_event %}
             <a class="pull-right" href="{% url 'edit_event' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
         {% endif %}
-        {% if perms.events.can_add_event %}
+        {% if perms.events.add_event %}
             <a class="pull-right" href="{% url 'delete_event' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>

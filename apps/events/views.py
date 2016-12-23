@@ -30,7 +30,7 @@ class EventView(generic.DetailView):
 
 
 class EventCreate(PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'events.event.can_add_event'
+    permission_required = 'events.add_event'
     model = Event
     form_class = EventForm
 
@@ -40,13 +40,13 @@ class EventCreate(PermissionRequiredMixin, generic.CreateView):
 
 
 class EventEdit(PermissionRequiredMixin, generic.UpdateView):
-    permission_required = 'events.event.can_change_event'
+    permission_required = 'events.change_event'
     model = Event
     form_class = EventForm
 
 
 class EventDelete(PermissionRequiredMixin, generic.DeleteView):
-    permission_required = 'events.event.can_delete_event'
+    permission_required = 'events.delete_event'
     model = Event
     success_url = reverse_lazy('event_list')
 

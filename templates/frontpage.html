@@ -31,7 +31,7 @@
                     {{ events_chronological }}
                     {% include 'events/event_list.html' %}
                 </div>
-                {% if perms.events.can_add_event %}
+                {% if perms.events.add_event %}
                     <div class="white-box">
                         <a href="{% url 'new_event' %}">Nytt Arrangement</a>
                     </div>
