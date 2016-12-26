@@ -29,6 +29,6 @@ urlpatterns = [
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^hendelser/', include('apps.events.urls'), name='events'),
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
-
+                  url(r'^stillingsutlysninger/', include('apps.jobannouncements.urls'), name='announcements'),
                   url(r'', include('apps.staticpages.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

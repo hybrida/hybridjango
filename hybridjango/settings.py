@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.registration',
     'apps.quiz',
     'apps.events',
+    'apps.jobannouncements',
 ]
 
 MIDDLEWARE = [
