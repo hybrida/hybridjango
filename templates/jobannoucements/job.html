@@ -1,0 +1,11 @@
+{% extends 'standard_sidebar.html' %}
+{% block sidebar %}
+    <img src="/uploads/{{ job.logo }}" class="center-block img-responsive art-img" width="100%">
+    <p><b>Bedrift:</b> {{ job.Company.name }} </p>
+    <p><i>{{ job.Company.info }}</i></p>
+{% endblock %}
+{% block text %}
+    <h1 id="job_title">{{ job.title }}</h1>
+    <p><b>Søknadsfrist: </b>{{ job.deadline }} </p>
+    <p id="job_title">{{ job.descripion }}</p>
+{% endblock %}

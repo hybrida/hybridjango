@@ -1,7 +1,38 @@
 {% extends 'standard_sidebar.html' %}
+<style>
+    #logo{
+        height: 20em;
+    }
+</style>
+
+
 {% block text %}
-<h2>Stillingsutlysninger</h2>
+    <h2>Stillingsutlysninger</h2>
+    {% for job in jobs %}
+        <div>
+            <div>
+                <a href="{{ job.pk }}">
+                    <img id="logo" src="/uploads/{{ job.logo }}" class="left">
+                </a>
+            </div>
+            <div>
+                <div class="title">
+                    <strong>Tittel: </strong>
+                    <a href="{{ job.pk }}">
+                        <br>
+                        {{ job.title }}
+                    </a>
+                </div>
+                <div class="company">
+                    <strong>Bedrift: </strong>{{ job.Company.name }}
+                </div>
+                <div class="deadline">
+                    <strong>Søknadsfrist: </strong>{{ job.deadline }}
+                </div>
 
-
-
+            </div>
+       </div>
+        <br>
+    {% endfor %}
 {% endblock %}
+
