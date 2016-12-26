@@ -1,0 +1,10 @@
+from django.db import models
+from apps.bedkom.models import Company
+
+class Job(models.Model):
+    title = models.CharField(max_length=150)
+    Company = models.ForeignKey(Company)
+    deadline = models.DateTimeField(null=True, blank=True)
+    descripion = models.TextField()
+    priority = models.IntegerField(default=0)
+    logo = models.ImageField(upload_to='events', default='placeholder-event.png')
