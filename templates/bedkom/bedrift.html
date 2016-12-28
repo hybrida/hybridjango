@@ -138,6 +138,10 @@
                 <td class="text-left_1">{{ company.responsible }}</td>
             </tr>
             <tr>
+                <th class="text-left_1">Kontaktperson</th>
+                <td class="text-left_1">{{ company.contact_person.name }}</td>
+            </tr>
+            <tr>
                 <th class="text-left_1">Prioritet</th>
                 <td class="text-left_1">{{ company.priority }}</td>
             </tr>
@@ -147,10 +151,25 @@
         <div class="">
             <h3>Tidligere bedriftspresentasjoner</h3>
             {% for bedpress in bedpresses %}
-                <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.room }} | {{ bedpress.date }}</a></p>
+                <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.event.location }} | {{ bedpress.event.event_start|date:'d.m.o' }}</a></p>
             {% endfor %}
-        </div>
 
+            <p>
+                Det må lages en kobling mellom denne bedriften, og bedpressen som blir laget når man trykker "Lag bedriftspresentasjon".
+
+            </p>
+        </div>
+        <div>
+            <h3>Kontaktpersoner</h3>
+            <p>{{ company.contact_person.name }}</p>
+            <p>Hva burde være her?</p>
+            <p>Burde det være flere kontaktpersoner på en bedrift? Hvilke informasjon må kontaktperson inneholde?
+            </p>
+        </div>
     </div>
 
-{% endblock %}
+{% endblock text %}
+{% block sidebar %}
+    <p>legg til kommentarboks</p>
+    <p>Lag kontaktperson felt</p>
+{%  endblock %}

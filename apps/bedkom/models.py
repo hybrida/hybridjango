@@ -6,10 +6,18 @@ from django.forms import forms
 from apps.events.models import Event
 
 
+class Contact_person(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
+
+
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    contact_person = models.OneToOneField(Contact_person, blank=True, null=True)
     responsible = models.ForeignKey(Hybrid)
-    contact_person = models.CharField(max_length=150)
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
     description = models.CharField(max_length=400, null=True, blank=True)
@@ -47,11 +55,7 @@ class CompanyComment(models.Model):
     def __str__(self):
         return "Kommentar " + str(self.pk)
 
-class EarlierBedpresses(models.Model):
-    company = models.ForeignKey(Company)
-    room = models.CharField(max_length=25, null=True, blank=True)
-    date = models.DateField(default=datetime.datetime.now)
 
 class Bedpress(models.Model):
+    company = models.ForeignKey(Company)
     event = models.OneToOneField(Event)
-

@@ -1,5 +1,161 @@
 {% extends 'standard_sidebar.html' %}
-{% block title %}{{ company.name }}{% endblock %}
+{% block title %}{{ bedpress.company }}{% endblock %}
 {% block text %}
-    {{ bedpress }}
+
+    <style>
+        .big_wrapper {
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border-radius: 3px;
+        }
+
+        .table-fill {
+            background: white;
+            border-radius: 3px;
+            border-collapse: collapse;
+            margin: auto;
+            padding: 5px;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            animation: float 5s infinite;
+        }
+
+        th:first-child {
+            border-top-left-radius: 3px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 3px;
+            border-right: none;
+        }
+
+        tr {
+            border-top: 1px solid #C1C3D1;
+            border-bottom-: 1px solid #C1C3D1;
+            color: #666B85;
+            font-size: 16px;
+            font-weight: normal;
+            text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+        }
+
+        th {
+            background: #EBEBEB;
+            width: 20%;
+            border: 1px solid #C1C3D1;
+
+        }
+
+        td:last-child {
+            border-bottom: 1px solid #C1C3D1;
+        }
+
+        td {
+            background: #FFFFFF;
+            padding: 20px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 13px;
+            text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #C1C3D1;
+        }
+
+        .text-left_1 {
+            padding-left: 5px;
+        }
+
+        .big_wrapper {
+            background: white;
+        }
+
+        .table-title {
+            text-align: left;
+            width: 50%;
+        }
+
+        .pull-left {
+            text-align: left;
+            width: 50%;
+        }
+
+        .pull-right {
+            text-align: right;
+            width: 50%;
+        }
+
+    </style>
+
+
+    <div class="big_wrapper">
+        <div class="pull-left">
+            <h3> Bedpress med {{ bedpress.company.name }} den {{ bedpress.event.event_start|date:'d.m.o' }}</h3>
+        </div>
+        <div class="pull-right">
+            <a href="{% url 'bedrift' bedpress.company.id %}">
+                <button class="btn btn-xs btn-primary">Tilbake</button>
+            </a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'endre_bedrift' bedpress.company.id %}">
+                    <button class="btn btn-xs btn-primary">Rediger</button>
+
+                </a>
+            {% endif %}
+        </div>
+
+
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left_1">Type</th>
+                <td class="text-left_1">Kurs</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Dato</th>
+                <td class="text-left">{{ bedpress.event.event_start|date:'d.m.o' }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Auditorie</th>
+                <td class="text-left_1">{{ bedpress.event.location }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Mat/mingling/lokale</th>
+                <td class="text-left_1">Graffi</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Inviterte IKT</th>
+                <td class="text-left_1">Alle retninger og retninger</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Inviterte Andre</th>
+                <td class="text-left_1">Indøk Data</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Ansvarlig</th>
+                <td class="text-left_1"></td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Hvem jobbet?</th>
+                <td class="text-left_1"></td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Erfaringsoverføring</th>
+                <td class="text-left_1"></td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Deltakere fra Bedriften</th>
+                <td class="text-left_1">Navn på deltakere</td>
+            </tr>
+            </thead>
+        </table>
+        <h1>Oppsummering</h1>
+    <p>HER SKAL ERFARINGSOVERFØRINGEN STÅ</p>
+    <p>
+        Hva skal erfaringsoverføringen inneholde?
+    </p>
+    </div>
+{% endblock text %}
+{% block sidebar %}
+    <p>Her kan være linker til andre bedriftspresentasjoner? Link til faktisk arrangement?</p>
+    <p>Hent kommertarboks fra bedriften</p>
 {% endblock %}

@@ -105,7 +105,7 @@
                 <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
                 <td class="text-left"><a
                         href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
-                <td class="text-left">{{ company.contact_person }}</td>
+                <td class="text-left">{{ company.contact_person.name }}</td>
                 <td class="text-left">{{ company.last_comment.text }}</td>
                 <td class="text-left">
                     <button type="button">{{ company.status }} </button>
