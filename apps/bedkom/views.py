@@ -8,7 +8,7 @@ from django.views import generic
 
 from apps.bedkom.forms import CompanyForm
 from apps.events.models import Event
-from .models import Company, CompanyComment, EarlierBedpresses
+from .models import Company, CompanyComment, Bedpress
 
 
 def index(request):
@@ -20,7 +20,7 @@ def index(request):
 
 def bedrift(request, pk):
     companies = Company.objects.all()
-    bedpresses = EarlierBedpresses.objects.filter(company_id=pk)
+    bedpresses = Bedpress.objects.filter(company_id=pk)
     return render(request, "bedkom/bedrift.html", {"company": companies.get(pk=pk), "bedpresses": bedpresses})
 
 
@@ -32,7 +32,7 @@ def comment(request, pk):
 
 
 def bedpress(request, pk):
-    bedpresses = EarlierBedpresses.objects.all()
+    bedpresses = Bedpress.objects.all()
     bedpress = bedpresses.get(pk=pk)
     return render(request, "bedkom/bedpress.html", {"bedpress": bedpress})
 
