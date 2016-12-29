@@ -571,6 +571,14 @@ a.inverted {
     vertical-align: -.14em;
 }
 
+.unstyled-list {
+    list-style: none;
+}
+
+.unstyled-list ul {
+    list-style: none;
+}
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
