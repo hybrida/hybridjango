@@ -1,8 +1,9 @@
-{% extends 'standard_sidebar.html' %}
+{% extends 'jobannoucements/job_sidebar.html' %}
 {% block sidebar %}
-    <img src="/uploads/{{ job.logo }}" class="center-block img-responsive art-img" width="100%">
-    <p><b>Bedrift:</b> {{ job.Company.name }} </p>
-    <p><i>{{ job.Company.info }}</i></p>
+    <img src="/uploads/{{ job.company.logo }}" class="center-block img-responsive art-img" width="100%">
+    <br>
+    <p><b>Bedrift:</b> {{ job.company.name }} </p>
+    <p><i>{{ job.company.info }}</i></p>
 {% endblock %}
 {% block text %}
     <h1 id="job_title">{{ job.title }}</h1>
