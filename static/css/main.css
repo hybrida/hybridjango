@@ -119,31 +119,25 @@ article {
 
 h1,
 h2,
-h3,
-.big-title,
-.small-title,
-.big-sub-title {
+h3 {
     font-family: 'Raleway', sans-serif;
     text-align: center;
     margin-top: 0.6em;
     margin-bottom: 0.4em;
 }
 
-h1,
-.big-title {
+h1 {
     font-size: 3.2em;
     color: #005675;
 }
 
-h2,
-.small-title {
+h2 {
     text-align: inherit;
     font-size: 2.5em;
     color: #000;
 }
 
-h1 + h3,
-.big-title + .big-sub-title {
+h1 + h3 {
     font-size: 2.5em;
     color: #9e9d98;
     margin-top: -0.5em;
@@ -195,19 +189,6 @@ img {
     color: #7c3f63;
 }
 
-.container-with-set-aspect-ratio {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: hidden;
-    position: absolute;
-}
-
-#carousel-frontpage > div > .item > img {
-    width: 100%;
-}
-
 .progress {
     position: relative;
 }
@@ -239,69 +220,10 @@ img {
     padding: 20px;
 }
 
-.clean-white-box {
-    background-color: #fff;
-    padding: 20px;
-    overflow: auto;
-    border: solid rgba(0, 0, 0, 0.1) 2px;
-    border-bottom: white;
-}
-
-.sleek-box {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 1px;
-    margin: 1px;
-}
-
 .art-img {
     overflow: hidden;
     max-width: 100%;
     height: auto;
-}
-
-.row.container-height {
-    overflow: hidden;
-    background-color: #fff;
-}
-
-.row.container-height > [class*="col-"] {
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
-}
-
-.row.container-height > [class*="-box"]:after {
-    content: ' ';
-    display: block;
-    height: 20px;
-}
-
-.fixscroll {
-    position: fixed;
-}
-
-.subtitle_styled {
-    font-size: 25px;
-    color: #cbc9c2;
-    /*border-bottom: solid 2px #d3d3d3;*/
-    padding: 1%;
-}
-
-.fp_white {
-    background-color: #fff;
-    padding: 1%;
-}
-
-.fp_beige {
-    background-color: #f7eee7;
-    padding: .5%;
-}
-
-.no-outline:focus, .no-outline:active:focus {
-    outline: none;
-}
-
-.div_pointer {
-    cursor: pointer;
 }
 
 .clearfix {
@@ -311,34 +233,17 @@ img {
     clear: both;
 }
 
-.nav-container,
-.center-container {
+.nav-container {
     width: 100%;
     max-width: 892px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.page-box {
-    padding: 20px 15px 30px;
-    background: #fff;
-}
-
-.page-box,
-.sleek-box,
 .white-box,
-.transparent-box-addition,
 .styled-image,
 .drop-shadow {
     box-shadow: 0 0 8px rgba(0, 0, 0, .5);
-}
-
-.no-shadow {
-    box-shadow: none !important;
-}
-
-.rounded {
-    border-radius: 10px;
 }
 
 .top-text {
@@ -348,14 +253,6 @@ img {
     font: normal 16px "Playfair Display", serif;
     text-transform: uppercase;
     color: #9e9d98;
-}
-
-.buttons + .top-text {
-    margin-top: 8px;
-}
-
-.fc-state-highlight {
-    background-color: #b8c9d8 !important;
 }
 
 .space-above {
@@ -375,22 +272,6 @@ img {
 .inverted a,
 a.inverted {
     color: #fff;
-}
-
-.background-blue {
-    background-color: #005675;
-}
-
-.css-table {
-    display: table;
-}
-
-.css-table-row {
-    display: table-row;
-}
-
-.css-table-cell {
-    display: table-cell;
 }
 
 .info-table {
@@ -425,23 +306,8 @@ a.inverted {
     padding: 0 4px;
 }
 
-.event-preview {
-    padding: 0 20px 20px 20px;
-    background: linear-gradient(to top, rgba(0, 0, 0, .5), rgba(0, 0, 0, 0) 8px);
-}
-
 .remove-whitebox-padding {
     margin: -20px;
-}
-
-.is-table-row {
-    display: table;
-}
-
-.is-table-row [class*="col-"] {
-    float: none;
-    display: table-cell;
-    vertical-align: top;
 }
 
 .sidebar-links {
@@ -475,7 +341,7 @@ a.inverted {
     text-overflow: ellipsis;
 }
 
-.sidebar-links  > li:first-child  > a {
+.sidebar-links > li:first-child > a {
     margin-top: 0;
 }
 
@@ -502,7 +368,7 @@ a.inverted {
     transform: translate(-.5%, -.5%) scale(1.01, 1.01);
 }
 
-.ringen_company_logo:hover  {
+.ringen_company_logo:hover {
     transition: 2s;
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, .5));
 }
@@ -522,10 +388,6 @@ a.inverted {
 
 .navbar-login {
     padding: 15px;
-}
-
-.styled-image {
-
 }
 
 .event_list {
@@ -604,17 +466,9 @@ a.inverted {
 }
 
 @media (min-width: 992px) {
-    .center-container {
-        width: 90%;
-        max-width: 959px;
-    }
 
     .nav-container {
         max-width: 1079px;
-    }
-
-    .page-box {
-        padding: 40px 50px 80px;
     }
 
     #footer {
@@ -632,11 +486,6 @@ a.inverted {
         margin-right: 32px;
     }
 
-    .center-container {
-        width: 80%;
-        max-width: 1119px;
-    }
-
     .nav-container {
         width: 90%;
         max-width: 1279px;
@@ -648,10 +497,6 @@ a.inverted {
 }
 
 @media (min-width: 1600px) {
-    .center-container {
-        width: 70%;
-        max-width: 1799px;
-    }
 
     .nav-container {
         width: 80%;
@@ -660,11 +505,6 @@ a.inverted {
 }
 
 @media (min-width: 3000px) {
-    .center-container {
-        width: 60%;
-        max-width: 2000px;
-    }
-
     .nav-container {
         width: 70%;
         max-width: 2400px;

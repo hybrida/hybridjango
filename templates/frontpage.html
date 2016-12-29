@@ -3,25 +3,25 @@
 {% block title %}Forside{% endblock %}
 {% block content %}
     <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
-    <div class="fp_white" style="margin-top: -.2%"></div>
+    <div class="fp_white" style="margin-top: -.2%; background-color: #fff; padding: 1%;"></div>
     {% if not user.is_authenticated %}
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 space-above">
-                <div class="col-xs-12 drop-shadow">
-                    <div class="row container-height inverted">
-                        <div class="col-sm-6 white-box no-shadow inverted" style="background:#005675;">
-                            Velkommen til linjeforening Hybrida sin nettside
-                        </div>
-                        <div class="col-sm-6 white-box no-shadow inverted">
-                            <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 space-above">
+                    <div class="col-xs-12 drop-shadow">
+                        <div class="row inverted">
+                            <div class="col-sm-6 unstyled-box inverted" style="background:#005675;">
+                                Velkommen til linjeforening Hybrida sin nettside
+                            </div>
+                            <div class="col-sm-6 unstyled-box inverted">
+                                <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
+                            </div>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="clearfix"></div>
             </div>
         </div>
-    </div>
     {% endif %}
     <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
     <div class="container">
@@ -47,8 +47,8 @@
 {% endblock %}
 {% block script %}
     {% if user.is_authenticated %}
-    <script>
+        <script>
             window.location.hash = 'hendelser';
-    </script>
+        </script>
     {% endif %}
 {% endblock %}
