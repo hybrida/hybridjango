@@ -1,13 +1,16 @@
 from django.db import models
+from apps.registration.models import Hybrid
+from django.utils import timezone
 from apps.bedkom.models import Company
 
 class Job(models.Model):
     title = models.CharField(max_length=150)
-    Company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company)
     deadline = models.DateTimeField(null=True, blank=True)
     descripion = models.TextField()
     priority = models.IntegerField(default=0)
-    logo = models.ImageField(upload_to='companies', default='placeholder-event.png')
+    author = models.ForeignKey(Hybrid)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.title)
