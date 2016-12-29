@@ -23,7 +23,7 @@ class Company(models.Model):
     description = models.CharField(max_length=400, null=True, blank=True)
     telephone = models.CharField(max_length=30, null=True, blank=True)
     notes = models.CharField(max_length=100, null=True, blank=True)
-
+    logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),

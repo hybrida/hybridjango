@@ -1,33 +1,25 @@
-{% extends 'standard_sidebar.html' %}
-<style>
-    #logo{
-        height: 20em;
-    }
-</style>
-
-
+{% extends 'jobannoucements/job_sidebar.html' %}
 {% block text %}
-    <h2>Stillingsutlysninger</h2>
+    <h2>Aktive Stillingsutlysninger</h2>
     {% for job in jobs %}
-        <div>
+        <div class="job" style="background-color: yellow; height: 12em"  >
             <div>
                 <a href="{{ job.pk }}">
-                    <img id="logo" src="/uploads/{{ job.logo }}" class="left">
+                    <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
                 </a>
             </div>
-            <div>
+            <div style="padding-left: 250px; font-size: 20px" align="left">
                 <div class="title">
-                    <strong>Tittel: </strong>
+                    <b>Tittel: </b>
                     <a href="{{ job.pk }}">
-                        <br>
                         {{ job.title }}
                     </a>
                 </div>
                 <div class="company">
-                    <strong>Bedrift: </strong>{{ job.Company.name }}
+                    <b>Bedrift: </b>{{ job.company.name }}
                 </div>
                 <div class="deadline">
-                    <strong>Søknadsfrist: </strong>{{ job.deadline }}
+                    <b>Søknadsfrist: </b>{{ job.deadline }}
                 </div>
 
             </div>

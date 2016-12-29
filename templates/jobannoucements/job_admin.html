@@ -1,0 +1,38 @@
+{% extends 'jobannoucements/job_sidebar.html' %}
+<style>
+    table {
+    table-layout: fixed;
+    word-wrap: break-word;
+    }
+
+
+</style>
+{% block text %}
+    <div class="responsive">
+        <h2>Rediger stillingsutlysninger</h2>
+         <table class="table table-bordered" align="center">
+            <thead>
+                <tr>
+                    <th class="col-xs-5">Tittel</th>
+                    <th class="col-xs-1">Bedrift</th>
+                    <th class="col-xs-2">Søknadsfrist</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                    <tr>
+                        <td>
+                            {{ job.title }}
+                        </td>
+                        <td align="Center" style="word-wrap: break-word; max-width: 40em;">
+                            {{ job.Company.name }}
+                        </td>
+                        <td align="center">
+                            {{ job.deadline.date }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
