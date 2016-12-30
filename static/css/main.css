@@ -315,9 +315,6 @@ a.inverted {
     padding: 0;
     margin: 0;
     list-style: none;
-    max-height: calc(100vh - 65px);
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .sidebar-links ul {

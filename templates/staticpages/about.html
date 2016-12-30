@@ -37,7 +37,7 @@
         content = $('#content-col');
         adjust_margin = function () {
             var sidebar = $('#sidebar');
-            if (window.innerWidth >= 992) {
+            if (window.innerWidth >= 992 && window.innerHeight >= sidebar.height() + 65) {
                 sidebar.css('margin-top', Math.max(Math.min(scrollY, content.height() - sidebar.height()), 0) + 'px');
             } else {
                 sidebar.css('margin-top', "")
