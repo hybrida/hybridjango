@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Event(models.Model):
     title = models.CharField(max_length=150)
-    ingress = models.CharField(max_length=500, blank=True, default='')
+    ingress = models.CharField(max_length=350, blank=True, default='')
     text = models.TextField()
     author = models.ForeignKey(Hybrid, related_name='authored')
     timestamp = models.DateTimeField(default=timezone.now)
