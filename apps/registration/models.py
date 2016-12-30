@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 def get_graduation_year(grade):
-    return (timezone.now() + timedelta(weeks=-26)).year + int(grade)
+    return (timezone.now() + timedelta(weeks=26)).year - int(grade) + 5
 
 
 def five_years():
