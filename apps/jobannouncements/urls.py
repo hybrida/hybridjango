@@ -1,12 +1,13 @@
 from django.conf.urls import url
-from .views import JobView
-
-from . import views
+from .views import *
 
 app_name = 'kilt'
 urlpatterns = [
-    url(r'^$', views.index, name='info'),
-    url(r'^(?P<pk>[0-9]+)$', JobView.as_view(), name='job'),
-    url(r'ny', views.CreateJob, name='new'),
-    url(r'admin', views.JobAdmin, name='admin'),
+    url(r'^$', index, name='info'),
+    url(r'^alle$', job_all, name='job_all'),
+    url(r'^(?P<pk>[0-9]+)$', job_detail, name='job_detail'),
+    url(r'^(?P<pk>[0-9]+)/endre/$', job_edit, name='job_edit'),
+    url(r'ny', new_job, name='new'),
+
+    url(r'admin', JobAdmin, name='admin'),
 ]
