@@ -1,9 +1,16 @@
 {% extends 'standard_sidebar.html' %}
 {% block sidebar %}
     <h2 style="font-size: 18px;">Stillingsutlysninger</h2>
-    <a href="/stillingsutlysninger/">Vis Aktive</a>
-    <br>
-    <a href="/stillingsutlysninger/ny/">Lag Ny</a>
-    <br>
-    <a href="/stillingsutlysninger/admin/">Admin</a>
+    <li>
+        <a href="{% url 'jobs:info' %}">Vis Aktive</a>
+    </li>
+    <li>
+        <a href="{% url 'jobs:job_all' %}">Vis Alle</a>
+    </li>
+    <li>
+        <a href="{% url 'jobs:new' %}">Lag Ny</a>
+    </li>
+    <li>
+        <a href="{% url 'jobs:admin' %}">Administrer</a>
+    </li>
 {% endblock %}

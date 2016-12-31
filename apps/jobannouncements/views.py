@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.views import generic
 from .models import Job
 from .forms import JobForm
@@ -22,6 +23,7 @@ def job_detail(request, pk):
     return render(request, 'jobannoucements/job.html', {'job': job})
 
 
+@login_required
 def new_job(request):
     if request.method == "POST":
         form = JobForm(request.POST)
@@ -30,12 +32,13 @@ def new_job(request):
             job.author = request.user
             job.timestamp = timezone.now()
             job.save()
-            return redirect(index(request))
+            return redirect('jobs:new', pk=job.pk)
 
     form = JobForm(request.POST)
     return render(request, "jobannoucements/job_form.html", {'form':form })
 
 
+@login_required
 def job_edit(request, pk):
     job = get_object_or_404(Job, pk=pk)
     if request.method == "POST":
@@ -45,7 +48,7 @@ def job_edit(request, pk):
             job.author = request.user
             job.published_date = timezone.now()
             job.save()
-            return redirect('job_detail', pk=47)
+            return redirect('jobs:job_detail', pk=job.pk)
     else:
         form = JobForm(instance=job)
     return render(request, "jobannoucements/job_form.html", {'form':form })
@@ -56,6 +59,9 @@ def JobAdmin(request):
         if 'delete_job' in request.POST:
             delete = request.POST.get('delete_job')
             Job.objects.filter(pk=delete).get().delete()
+        if 'edit_job' in request.POST:
+            edit = request.POST.get('edit_job')
+            return redirect('jobs:job_edit', edit)
     return render(request, "jobannoucements/job_admin.html",
                   {'jobs': Job.objects.all(), })
 
