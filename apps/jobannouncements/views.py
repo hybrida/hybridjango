@@ -32,7 +32,7 @@ def new_job(request):
             job.author = request.user
             job.timestamp = timezone.now()
             job.save()
-            return redirect('jobs:new', pk=job.pk)
+            return redirect('jobs:job_detail', pk=job.pk)
 
     form = JobForm(request.POST)
     return render(request, "jobannoucements/job_form.html", {'form':form })
