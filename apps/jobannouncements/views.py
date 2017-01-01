@@ -18,7 +18,7 @@ def job_previous(request):
     now = datetime.datetime.now()
     status = "Tidligere"
     return render(request, "jobannoucements/announcements.html",
-                  {'status':status,'jobs': Job.objects.filter(deadline__lte=now).order_by('deadline')})
+                  {'status':status,'jobs': Job.objects.filter(deadline__lte=now).order_by('deadline').reverse()})
 
 def job_detail(request, pk):
     job = get_object_or_404(Job, pk=pk)
