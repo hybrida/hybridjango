@@ -1,11 +1,11 @@
 {% extends 'standard_sidebar.html' %}
 {% block sidebar %}
-    <h2 style="font-size: 18px;">Stillingsutlysninger</h2>
+    <h2 style="font-size: 25px;">Stillingsutlysninger</h2>
     <li>
         <a href="{% url 'jobs:info' %}">Vis Aktive</a>
     </li>
     <li>
-        <a href="{% url 'jobs:job_all' %}">Vis Alle</a>
+        <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
     </li>
     <li>
         <a href="{% url 'jobs:new' %}">Lag Ny</a>
