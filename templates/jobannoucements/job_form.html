@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block text %}
-    <h3>Endre/Lag Stillingsutlysning</h3>
+    <h3>{{ action }} Stillingsutlysning</h3>
      <form method="POST" class="post-form">{% csrf_token %}
         <div class="form-group">
             <label for="id_title">Tittel:</label>
