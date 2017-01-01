@@ -67,5 +67,5 @@ def JobAdmin(request):
             edit = request.POST.get('edit_job')
             return redirect('jobs:job_edit', edit)
     return render(request, "jobannoucements/job_admin.html",
-                  {'jobs': Job.objects.all(), })
+                  {'jobs': Job.objects.all().order_by('deadline').reverse(), })
 
