@@ -1,56 +1,58 @@
 {% extends 'jobannoucements/job_sidebar.html' %}
-<style>
-    table {
-    table-layout: fixed;
-    word-wrap: break-word;
-    }
-
-   .button{
-        background-color: Transparent;
-        background-repeat: no-repeat;
-        border: none;
-        cursor:pointer;
-        overflow: hidden;
-        outline:none;
-    }
-
-
-
-</style>
 {% block text %}
+    <style>
+    .button {
+    border:none;
+    background-color: transparent;
+    color:#005675;
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    align-self: center;
+    }
+    a{
+        color: #005675;
+    }
+</style>
     <div class="responsive">
-        <h2>Rediger stillingsutlysninger</h2>
-         <table class="table table-bordered" align="center">
-            <thead>
-                <tr>
-                    <th class="col-xs-5">Tittel</th>
-                    <th class="col-xs-1">Bedrift</th>
-                    <th class="col-xs-2">Søknadsfrist</th>
-                    <th class="col-xs-1"></th>
-                </tr>
-            </thead>
-            <tbody>
-            <form action="" method="post">
-            {% csrf_token %}
-                {% for job in jobs %}
+        <h2>Administrer Stillingsutlysnigner</h2>
+        <form action="" method="post">
+            <table class="table table-bordered" align="center">
+                <thead>
                     <tr>
-                        <td>
-                            <a href="/stillingsutlysninger/{{ job.pk }}">{{ job.title }}</a>
-                        </td>
-                        <td align="Center" style="word-wrap: break-word; max-width: 40em;">
-                            {{ job.company.name }}
-                        </td>
-                        <td align="center">
-                            {{ job.deadline.date }}
-                        </td>
-                        <td>
-                            <button class="button" name="delete_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button>
-                            <button class="button" name="edit_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </button>
-                        </td>
+                        <th class="col-xs-6">Tittel</th>
+                        <th class="col-xs-2">Bedrift</th>
+                        <th class="col-xs-2">Søknadsfrist</th>
+                        <th class="col-xs-1">Slett</th>
+                        <th class="col-xs-1">Endre</th>
+
                     </tr>
-                {% endfor %}
-            </form>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% csrf_token %}
+                    {% for job in jobs %}
+                        <tr>
+                            <td>
+                                <a href="/stillingsutlysninger/{{ job.pk }}">{{ job.title }}</a>
+                            </td>
+                            <td align="Center" style="word-wrap: break-word; max-width: 40em;">
+                                {{ job.company.name }}
+                            </td>
+                            <td align="center">
+                                {{ job.deadline.date }}
+                            </td>
+                            <td>
+                                <button class="button" name="delete_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></button>
+                            </td>
+                            <td>
+                                <button class="button" name="edit_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+
     </div>
 {% endblock %}
