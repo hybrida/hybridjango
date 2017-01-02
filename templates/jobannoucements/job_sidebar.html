@@ -1,16 +1,26 @@
 {% extends 'standard_sidebar.html' %}
 {% block sidebar %}
-    <h2 style="font-size: 25px;">Stillingsutlysninger</h2>
+    <style>
+        h2{
+            font-size: 25px;
+        }
+        a{
+            color:#005675;
+        }
+
+    </style>
+    <h2>Stillingsutlysninger</h2>
     <li>
         <a href="{% url 'jobs:info' %}">Vis Aktive</a>
     </li>
     <li>
         <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
     </li>
+    <h2>Admin</h2>
     <li>
         <a href="{% url 'jobs:new' %}">Lag Ny</a>
     </li>
     <li>
-        <a href="{% url 'jobs:admin' %}">Administrer</a>
+        <a href="{% url 'jobs:admin' %}">Oversikt</a>
     </li>
 {% endblock %}
