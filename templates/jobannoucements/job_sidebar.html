@@ -16,11 +16,13 @@
     <li>
         <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
     </li>
-    <h2>Admin</h2>
-    <li>
-        <a href="{% url 'jobs:new' %}">Lag Ny</a>
-    </li>
-    <li>
-        <a href="{% url 'jobs:admin' %}">Oversikt</a>
-    </li>
+    {% if perms.job.add_job %}
+        <h2>Admin</h2>
+        <li>
+            <a href="{% url 'jobs:new' %}">Lag Ny</a>
+        </li>
+        <li>
+            <a href="{% url 'jobs:admin' %}">Oversikt</a>
+        </li>
+    {% endif %}
 {% endblock %}
