@@ -1,0 +1,17 @@
+<div class="job_list">
+    {% for event in event_list_chronological %}
+        <div>
+            <a href="{% url 'event' event.pk %}">
+                <i class="fa fa-square"
+                   style="color:#ff5346"
+                   aria-hidden="true"></i>
+                <time datetime="{{ event.event_start|date:'c' }}">
+                    {{ event.event_start|date:'d. b' }}
+                </time>
+                <span>
+                    {{ event.title }}
+                </span>
+            </a>
+        </div>
+    {% endfor %}
+</div>
