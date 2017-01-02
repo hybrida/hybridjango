@@ -1,5 +1,5 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from .models import Job
 from .forms import JobForm
 import datetime
@@ -25,7 +25,7 @@ def job_detail(request, pk):
     return render(request, 'jobannoucements/job.html', {'job': job})
 
 
-@login_required
+@permission_required(['jobannoucements.add_job'])
 def new_job(request):
     action = 'Lag ny'
     if request.method == "POST":
@@ -41,7 +41,7 @@ def new_job(request):
     return render(request, "jobannoucements/job_form.html", {'action':action,'form':form })
 
 
-@login_required
+@permission_required(['jobannoucements.change_job'])
 def job_edit(request, pk):
     action = "Rediger"
     job = get_object_or_404(Job, pk=pk)
@@ -58,6 +58,7 @@ def job_edit(request, pk):
     return render(request, "jobannoucements/job_form.html", {'action':action,'form':form })
 
 
+@permission_required(['jobannoucements.delete_job'])
 def JobAdmin(request):
     if request.method == "POST":
         if 'delete_job' in request.POST:
