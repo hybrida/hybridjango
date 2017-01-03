@@ -17,11 +17,10 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
-from apps.events.views import EventList, updatek
+from apps.staticpages.views import FrontPage
 
 urlpatterns = [
-                  url(r'^$', EventList.as_view(template_name='frontpage.html'), name='home'),
+                  url(r'^$', FrontPage.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', admin.site.urls),
                   url(r'^kilt/', include('apps.kiltshop.urls'), name='kiltshop'),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
