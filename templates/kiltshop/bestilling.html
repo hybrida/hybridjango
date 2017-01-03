@@ -39,38 +39,32 @@
 
 
 </style>
-    <div class="responsive">
-    {% if not products and not order.comment %}
-        <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
-    {% else %}
-        <form action="" method="post">
-        {% csrf_token %}
-        {% if products %}
-            <h2>Din bestilling:</h2>
-            <div class="table-responsive">
-                <table class="table table-bordereds" >
-                    <thead class="table-header">
-                        <tr>
-                            <th class="col-xs-7">Produkt</th>
-                            <th class="col-xs-2">Type</th>
-                            <th class="col-xs-2">Størrelse</th>
-                            <th class="col-xs-1">Antall</th>
-                        </tr>
-                    </thead>
 
+<div class="responsive">
+{% if not products and not order.comment %}
+    <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
+{% else %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {% if products %}
+        <h2>Din bestilling:</h2>
+        <div class="table-responsive">
+            <table class="table table-bordereds" >
+                <thead class="table-header">
+                    <tr>
+                        <th class="col-xs-7">Produkt</th>
+                        <th class="col-xs-2">Type</th>
+                        <th class="col-xs-2">Størrelse</th>
+                        <th class="col-xs-1">Antall</th>
+                    </tr>
+                </thead>
                 {% for item in products %}
                     <tr class="table-items">
                         <td>
-                                {{ item.name }}
+                            {{ item.name }}
                         </td>
                         <td>
-                        {% if item.type == 'K' %}
-                                Kilt
-                            {% elif item.type == 'S' %}
-                                Sporran
-                            {% else %}
-                                Ekstra
-                            {% endif %}
+                            {{ item.get_type_display }}
                         </td>
                         <td>
                             {% if item.type == 'K' %}
@@ -94,34 +88,38 @@
                             {% endif %}
                         </td>
                         <td>
-                             {% for info in productInfo %}
-                                    {% if info.product_id == item.pk %}
-                                        {{ info.number }}
-                                    {% endif %}
-                                {% endfor %}
+                            {% for info in productInfo %}
+                                {% if info.product_id == item.pk %}
+                                    {{ info.number }}
+                                {% endif %}
+                            {% endfor %}
                         </td>
                         {% if activated %}
-                            <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                            <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                         {% endif %}
                     </tr>
                 {% endfor %}
-                </table>
-            </div>
-        {% endif %}
-        {% if order.comment %}
-            <div class="responsive" style="display: block; word-wrap: break-word;">
-            <hr>
-            <h2 style="font-size: 2em">Din kommentar:</h2>
-                {{ order.comment }}
-                <div class="clearfix"></div>
-                <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
-            <hr>
-            </div>
-        {% endif %}
-        </form>
+            </table>
+        </div>
     {% endif %}
-    </div>
-
-
-
+    {% if order.comment %}
+        <div class="responsive" style="display: block; word-wrap: break-word;">
+            <table class="table table-bordereds" >
+                <thead class="table-header">
+                    <tr>
+                        <th class="col-xs-11">Kommentar:    </th>
+                        <th class="col-xs-1"></th>
+                    </tr>
+                </thead>
+                <tr class="table-items">
+                    <td>{{ order.comment }}</td>
+                    <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                </tr>
+            </table>
+        <hr>
+        </div>
+    {% endif %}
+    </form>
+{% endif %}
+</div>
 {% endblock %}

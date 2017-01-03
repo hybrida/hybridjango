@@ -1,5 +1,13 @@
 {% extends 'standard_sidebar.html' %}
 {%  block sidebar %}
+<style>
+    h2{
+        font-size: 25px;
+    }
+    a{
+        color:#005675;
+    }
+</style>
     <h2> Kiltbestilling </h2>
     <li>
         <a href="{% url 'kilt:info' %}">Info</a>
@@ -10,14 +18,24 @@
     <li>
         <a href="{% url 'kilt:order' %}">Bestilling</a>
     </li>
-    {% if perms.kiltshop.add_order %}
-    <li>
-        <a href="{% url 'kilt:admin' %}">Admin</a>
-    </li>
-    {% endif %}
     <li>
         <a href="https://sportkilt.com/" target="_blank" >Sport Kilt</a>
     </li>
+    {% if perms.kiltshop.add_order %}
+    <h2> Admin </h2>
+    <h2 style="font-size: 18px">Bestillinger</h2>
+
+    <li>
+        <a href="{% url 'kilt:admin' %}">Bestillingsoversikt</a>
+    </li>
+    <h2 style="font-size: 18px">Produkter</h2>
+    <li>
+        <a href="{% url 'kilt:product_new' %}">Lag nytt produkt</a>
+    </li>
+    <li>
+        <a href="{% url 'kilt:admin_productoverview' %}">Produktoversikt</a>
+    </li>
+    {% endif %}
 {%  endblock %}
 {% block text %}
 {% endblock %}

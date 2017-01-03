@@ -1,12 +1,12 @@
 from django.db import models
 from apps.registration.models import Hybrid
+from django.utils import timezone
 
 
 class Product(models.Model):
     kilt = 'K'
     sporran = 'S'
     extra = 'E'
-
     type_choices = (
         (kilt, 'Kilt'),
         (sporran, 'Sporran'),
@@ -17,6 +17,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products', default='placeholder-event.png')
     type = models.CharField(max_length=1, choices=type_choices, default=kilt)
     link = models.CharField(max_length=1000, default=" ")
+    author = models.ForeignKey(Hybrid)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name

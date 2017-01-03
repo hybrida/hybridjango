@@ -1,8 +1,12 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.utils import timezone
+
 from .models import Product, Order, ProductInfo, OrderInfo
+from .forms import ProductForm
 import datetime
 
 
@@ -214,3 +218,48 @@ def admin(request):
         'user_productinfo': ProductInfo.objects.filter(order=user_order),
         'user_order': user_order},
       )
+
+
+@permission_required(['kilt.delete_product'])
+def admin_productoverview(request):
+    if request.method == "POST":
+        if 'delete_product' in request.POST:
+            delete = request.POST.get('delete_product')
+            Product.objects.filter(pk=delete).get().delete()
+        if 'edit_product' in request.POST:
+            edit = request.POST.get('edit_product')
+            return redirect('kilt:product_edit', edit)
+    return render(request, "kiltshop/admin_productoverview.html",
+                  {'products': Product.objects.all()})
+
+@permission_required(['jobannoucements.add_job'])
+def product_new(request):
+    action = 'Lag nytt'
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.author = request.user
+            product.timestamp = timezone.now()
+            product.save()
+            return redirect('kilt:admin_productoverview')
+
+    form = ProductForm(request.POST)
+    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
+
+
+@permission_required(['jobannoucements.change_job'])
+def product_edit(request, pk):
+    action = "Rediger"
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.author = request.user
+            product.published_date = timezone.now()
+            product.save()
+            return redirect('kilt:admin_productoverview')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
