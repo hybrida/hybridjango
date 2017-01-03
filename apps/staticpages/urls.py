@@ -1,8 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.events.views import updatek
-from apps.staticpages.views import AboutView
+from apps.staticpages.views import AboutView, updatek
 
 urlpatterns = [
     url(r'^strikk/', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
