@@ -1,4 +1,4 @@
-{% extends 'standard_sidebar.html' %}
+{% extends 'staticpages/about.html' %}
 {% load static %}
 {% block text %}
     <article>
@@ -14,12 +14,18 @@
                 og studenter mulighet til å skape nettverk.
             </p>
             <p>
-                %%%%%[Trengs kontaktinformasjon i neste avsnitt] Arrangementer av denne typen krever samarbeid fra
-                bedrifter. Hvis dere kan bidra, kontakt oss gjerne via [KONTAKTMETODE!!!!]. For en komplett liste med
-                Hybrida Bedriftkomités oppgaver og gjøremål,%%% se våre statutter i samme meny.%%% [Statutter har ikke
-                vært synlig for andre enn de som er medlem av bedriftskomitéen]
+                Arrangementer av denne typen krever samarbeid fra bedrifter. Hvis dere kan bidra, kontakt oss gjerne via
+                bedrift@hybrida.no. For en komplett liste med
+                Hybrida Bedriftkomités oppgaver og gjøremål, se våre <a href="#statutter">statutter</a>.
             </p>
         </section>
+        <section>
+            <a name="kontaktinfo" class="anchor"></a>
+            <h2>Kontaktinformasjon</h2>
+            <p>Mail til bedriftskomiteen: bedrift@hybrida.no</p>
+            <p>Annen kontaktinformasjon: <a href="{% url 'contact_us' %}">Kontakt Oss</a></p>
+        </section>
+
         <section>
             <h2>Bedriftsbesøk:</h2>
             <p>
@@ -87,24 +93,14 @@
                 avtale. Slike arrangement tar vi selvsagt et lavere honorar for.
             </p>
         </section>
+        <section>
+            <h2>Statutter</h2>
+            <a name="statutter" href="{% static 'pdf/Hybrida Bedriftskomité statutter 12042011.pdf' %}">PDF</a>
+        </section>
     </article>
 {% endblock %}
-{% block sidebar %}
-    <h3>Kontaktinformasjon</h3>
-    <table class="info-table">
-        <tr>
-            <td>Mail</td>
-            <td>bedrift@hybrida.no</td>
-        </tr>
-         <tr>
-            <td>Telefon</td>
-            <td>12345678</td>
-        </tr>
-         <tr>
-            <td>Adresse</td>
-            <td>Hva nå enn adressen er</td>
-        </tr>
-    </table>
-    <h3>Diverse</h3>
-    <a href="{% static 'pdf/Hybrida Bedriftskomité statutter 12042011.pdf' %}">Statutter</a>
+
+{% block sublinks %}
+    <li><a href="#kontaktinfo">Kontaktinformasjon</a></li>
+    <li><a href="#statutter">Statutter</a></li>
 {% endblock %}
