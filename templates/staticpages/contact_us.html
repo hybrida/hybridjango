@@ -6,11 +6,7 @@
         <h4>Hovedstyret</h4>
         <p>styret@hybrida.no</p>
         <br>
-        <h4>Leder</h4>
-        <p>Martin Vee Akselsen</p>
-        <p>leder@hybrida.no</p>
-        <p>98815404</p>
-        <br>
+
         <h4>Kontor</h4>
         <p>Kjelleren i Gamle Kjemi, rom 19</p>
         <p>Kolbjørn Hejes vei 4</p>
@@ -21,6 +17,56 @@
         <p>Alfred Getz' vei 3</p>
         <p>SB 1</p>
         <p>7034 Trondheim</p>
+        <br>
+
+        <a name="leder" class="anchor"></a>
+        <h4>Leder</h4>
+        <p>{{ leder.get_full_name }}</p>
+        <p>leder@hybrida.no</p>
+        <p>98815404</p>
+        <br>
+
+        <a name="nestleder" class="anchor"></a>
+        <h4>Nestleder</h4>
+        <p>{{ nestleder.get_full_name }}</p>
+        <p>nestleder@hybrida.no</p>
+        <br>
+
+        <a name="skattmester" class="anchor"></a>
+        <h4>Skattmester</h4>
+        <p>{{ skattmester.get_full_name }}</p>
+        <p>skattmester@hybrida.no</p>
+        <br>
+
+        <a name="festivalus" class="anchor"></a>
+        <h4>Festivalus</h4>
+        <p>{{ festivalus.get_full_name }}</p>
+        <p>festivalus@hybrida.no</p>
+        <br>
+
+        <a name="bksjef" class="anchor"></a>
+        <h4>Bedriftskomitesjef</h4>
+        <p>{{ bksjef.get_full_name }}</p>
+        <p>bksjef@hybrida.no</p>
+        <br>
+
+        <a name="vevsjef" class="anchor"></a>
+        <h4>Vevsjef</h4>
+        <p>{{ vevsjef.get_full_name }}</p>
+        <p>vevsjef@hybrida.no</p>
+        <br>
+
+        <a name="jentekomsjef" class="anchor"></a>
+        <h4>Jentekomitesjef</h4>
+        <p>{{ jentekomsjef.get_full_name }}</p>
+        <p>jentekomsjef@hybrida.no</p>
+        <br>
+
+        <a name="redaktor" class="anchor"></a>
+        <h4>Redaktør</h4>
+        <p>{{ redaktor.get_full_name }}</p>
+        <p>redaktor@hybrida.no</p>
+        <br>
 
     </article>
 {% endblock %}

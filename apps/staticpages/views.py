@@ -7,6 +7,7 @@ from apps.jobannouncements.models import Job
 from django.utils import timezone
 
 from apps.events.views import EventList
+from apps.registration.models import Hybrid
 from hybridjango.settings import STATIC_FOLDER
 
 
@@ -23,11 +24,23 @@ aboutpages = [
     ('about', "Om Hybrida"),
     ('contact_us', "Kontakt Oss"),
     ('board', "Styret"),
-    ('committees', "Komitéer"),
+    ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
     ('lyrics', "Sangtekster"),
+    ('for_companies', "For Bedrifter"),
 ]
+
+contact_people = {
+        'leder': Hybrid.objects.get(username='martiaks'),
+        'nestleder': Hybrid.objects.get(username='sigribra'),
+        'skattmester': Hybrid.objects.get(username='jonasasa'),
+        'bksjef': Hybrid.objects.get(username='ludviglj'),
+        'festivalus': Hybrid.objects.get(username='njknudse'),
+        'vevsjef': Hybrid.objects.get(username='simennje'),
+        'jentekomsjef': Hybrid.objects.get(username='gurogb'),
+        'redaktor': Hybrid.objects.get(username='hanneove'),
+}
 
 class AboutView(TemplateResponseMixin, ContextMixin, View):
 
@@ -47,6 +60,7 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+        context.update(contact_people)
         return self.render_to_response(context)
 
 
