@@ -22,13 +22,13 @@ class FrontPage(EventList):
 
 aboutpages = [
     ('about', "Om Hybrida"),
-    ('contact_us', "Kontakt Oss"),
+    ('contact_us', "Kontakt oss"),
     ('board', "Styret"),
     ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
     ('lyrics', "Sangtekster"),
-    ('for_companies', "For Bedrifter"),
+    ('for_companies', "For bedrifter"),
 ]
 
 contact_people = {
