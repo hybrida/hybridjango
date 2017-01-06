@@ -4,13 +4,14 @@
 
 {% block text %}
     <h3>{{ action }} Produkt</h3>
+    <p><i>Felt med * må være fylt</i></p>
      <form method="POST" class="post-form">{% csrf_token %}
         <div class="form-group">
-            <label for="id_title">Navn:</label>
+            <label for="id_title">*Navn:</label>
             {{ form.name|add_class:"form-control" }}
         </div>
         <div class="form-group">
-            <label for="id_company">Type:</label>
+            <label for="id_company">*Type:</label>
             {{ form.type|add_class:"form-control" }}
         </div>
         <div class="form-group">
@@ -18,10 +19,15 @@
             {{ form.image }}
         </div>
         <div class="form-group">
-            <label for="id_text">*Link:</label>
+            <label for="id_text">Link:</label>
             {{ form.link|add_class:"form-control" }}
+         <p><i>Link til produktets side på nettsiden som selger produktet, vil være tilgjengelig under produktet i butikken)</i></p>
         </div>
-         <p>*(Link til produktets side på nettsiden som selger produktet, vil være tilgjengelig under produktet i butikken)</p>
+         <div class="form-group">
+            <label for="id_sizes">Størrelser:</label>
+            {{ form.sizes|add_class:"form-control" }}
+         <p><i>Skriv inn størrelsene, kun separert ved komma, eks: [S,M,L,XL]</i></p>
+        </div>
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
     </form>
 {% endblock %}
