@@ -1,9 +1,10 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek
+from apps.staticpages.views import AboutView, updatek, search
 
 urlpatterns = [
+    url(r'^s[oø]k/', search, name='search'),
     url(r'^strikk/', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
     url(r'^statutter/', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
     url(r'^griffens_orden/', AboutView.as_view(template_name='staticpages/griffens_orden.html'), name='griff_orden'),
