@@ -1,12 +1,12 @@
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import DateField
-from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
-from apps.bedkom.forms import CompanyForm
+from apps.bedkom.forms import CompanyForm, BedpressForm
 from apps.events.models import Event
 from .models import Company, CompanyComment, Bedpress
 
@@ -51,6 +51,25 @@ class BedriftLag(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         return reverse('bedrift', kwargs={'pk': self.object.pk})
+
+class BedpressLag(LoginRequiredMixin, generic.CreateView):
+    model = Bedpress
+    form_class = BedpressForm
+
+@login_required
+def comment_company(request, pk):
+    companies = Company.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST)
+        company_id = request.POST['company_id']
+        text = request.POST['text']
+        if user.is_authenticated:
+            comment = CompanyComment(author=user, company=companies.get(pk=company_id), text=text)
+            print(comment.full_clean())
+            comment.save()
+    return redirect('bedrift', pk)
+
 
 
 

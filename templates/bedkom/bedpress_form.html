@@ -1,0 +1,99 @@
+{% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <h3>Lag Bedpress</h3>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ bedpress_form }}
+        <div class="form-group">
+            <label for="event.title">Tittel:</label>
+            {{ form.event.title|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="ingress">Ingress:</label>
+            {{ form.eventingress.errors }}
+            {{ form.ingress|add_class:"form-control"|attr:"rows:3"|attr:"maxlength:350" }}
+        </div>
+        <div class="form-group">
+            <label for="event.text">Tekst:</label>
+            {{ form.text|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="company">Bedrift</label>
+            {{ form.company|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_image">Bilde:</label>
+            {{ form.image.errors }}
+            {{ form.image }}
+        </div>
+        <div class="form-group">
+            <label for="id_max_participants">Deltagere:</label>
+            {{ form.max_participants.errors }}
+            {{ form.max_participants|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_price">Pris:</label>
+            {{ form.price.errors }}
+            {{ form.price|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_signup_start">Påmeldingsstart:</label>
+            {{ form.signup_start.errors }}
+            {{ form.signup_start|add_class:"form-control form_datetime" }}
+        </div>
+        <div class="form-group">
+            <label for="id_signup_end">Påmeldingsslutt:</label>
+            {{ form.signup_end.errors }}
+            {{ form.signup_end|add_class:"form-control form_datetime" }}
+        </div>
+        <div class="form-group">
+            <label for="id_event_start">Start:</label>
+            {{ form.event_start.errors }}
+            {{ form.event_start|add_class:"form-control form_datetime" }}
+        </div>
+        <div class="form-group">
+            <label for="id_event_end">Slutt:</label>
+            {{ form.event_end.errors }}
+            {{ form.event_end|add_class:"form-control form_datetime" }}
+        </div>
+        <div class="form-group">
+            <label for="id_weight">Vekting:</label>
+            {{ form.weight.errors }}
+            {{ form.weight|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_weight">Sted:</label>
+            {{ form.location.errors }}
+            {{ form.location|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_hidden">Utkast:</label>
+            {{ form.hidden.errors }}
+            {{ form.hidden|add_class:"form-control" }}
+        </div>
+        <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+    </form>
+{% endblock text %}
+{% block sidebar %}
+    <h3>Her skal det stå en del informasjon om denne formen:</h3>
+    <hr>
+    <p>Det skal stå litt om hva de forskjellige feltene betyr, samt litt om hvordan vi liker å ha det her på
+        hybridasiden!</p>
+    <p>Før du oppretter ett nytt event eller en artikkel, ser vi gjerne at du leser igjennom disse retningslinjene slik
+        at vi får en kul side, med kule bilder, og kul formatering, som ser sinnsykt kul ut hele tiden, alltid!</p>
+    <p><strong>Grensen står for klassetrinnet som har lov til å melde seg opp. Tallet står for avslutningsår.</strong>
+    </p>
+{% endblock sidebar %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+    </script>
+{% endblock script %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+{% endblock %}

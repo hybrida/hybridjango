@@ -96,7 +96,7 @@
                 <button class="btn btn-xs btn-primary">Tilbake</button>
             </a>
             {% if user.is_authenticated %}
-                <a href="{% url 'new_event' %}">
+                <a href="{% url 'lag_bedpress' %}">
                     <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
                 </a>
                 <a href="{% url 'endre_bedrift' company.id %}">
@@ -173,3 +173,64 @@
     <p>legg til kommentarboks</p>
     <p>Lag kontaktperson felt</p>
 {%  endblock %}
+{% block extra %}
+    <script type="text/javascript">
+        textBox = $('#text-box');
+        sidebar = $('#sidebar');
+        adjust_height = function () {
+            if (window.innerWidth >= 992) {
+                // 15px is height of space_above margin
+                $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
+            } else {
+                $('#comment_box').css('max-height', "")
+            }
+        };
+        window.onload = adjust_height;
+        window.onresize = adjust_height;
+    </script>
+    <div class="col-md-4 space-above">
+        <div class="white-box comment-section" id="comment_box">
+            <h6 class="top-text">Kommentarer</h6>
+            {% for comment in company.companycomment_set.all %}
+                <div class="row">
+                    <div class="col-xs-2 col-lg-2" style="padding-right:0">
+                        <a class="hybridThumbnailLink" id="{{ comment.author }}"
+                           href="{% url 'profile' comment.author.username %}">
+                            <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
+                                 alt="{{ comment.author_id }}">
+                        </a>
+                    </div>
+                    <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
+                        <div class="row">
+                            <div class="col-xs-11">
+                                <strong>
+                                    <a class="hybridLink" id="{{ comment.author }}"
+                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {{ comment.text }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <small>{{ comment.timestamp }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div style="margin:1em">
+                <form action="{% url 'comment_company' company.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="company_id" value="{{ company.pk }}" hidden>
+                    <label for="comment" class="sr-only">Comment:</label>
+                    <input class="form-control" id="comment" name="text" autocomplete="off"
+                           maxlength="250" type="text" required>
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock extra %}
