@@ -6,7 +6,7 @@
             Hybrida er linjeforeningen for studieprogrammet Ingeniørvitenskap og IKT ved NTNU i Trondheim.
         </p>
         <p>
-            Foreningens formål er å fremme samhold og kameratskap innad på studieprogrammet ved bla.a. å avholde
+            Foreningens formål er å fremme samhold og kameratskap innad på studieprogrammet ved blant annet å avholde
             arrangementer av både sosial og faglig karakter. Mer informasjon om oss finner du under menyen til høyre.
         </p>
     </article>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <ul class="sidebar-links">
             {% for page, label in before_pages %}
-                <li><a href="{% url page %}">{{ label }}</a></li>
+                <li><a href="{% url 'page' %}">{{ label }}</a></li>
             {% endfor %}
             <li>
                 <ul>
@@ -27,7 +27,7 @@
                 </ul>
             </li>
             {% for page, label in after_pages %}
-                <li><a href="{% url page %}">{{ label }}</a></li>
+                <li><a href="{% url 'page' %}">{{ label }}</a></li>
             {% endfor %}
         </ul>
     </div>
