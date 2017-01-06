@@ -103,8 +103,7 @@
         {% for company in companies %}
             <tr>
                 <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
-                <td class="text-left"><a
-                        href="?ansvarlig={{ company.responsible }}">{{ company.responsible }}</a></td>
+                <td class="text-left">{{ company.responsible.first_name }} {{ company.responsible.last_name }}</td>
                 <td class="text-left">{{ company.contact_person.name }}</td>
                 <td class="text-left">{{ company.last_comment.text }}</td>
                 <td class="text-left">

@@ -1,7 +1,6 @@
 from django.db import models
 from apps.registration.models import Hybrid
-from django.db.models.functions import datetime
-from django.forms import forms
+from django.utils import timezone
 
 from apps.events.models import Event
 
@@ -46,16 +45,13 @@ class Company(models.Model):
         return self.name
 
 
-class CompanyComment(models.Model):
-    company = models.ForeignKey(Company)
-    commenter = models.ForeignKey(Hybrid)
-    text = models.TextField()
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-
-    def __str__(self):
-        return "Kommentar " + str(self.pk)
-
 
 class Bedpress(models.Model):
     company = models.ForeignKey(Company)
     event = models.OneToOneField(Event)
+
+class CompanyComment(models.Model):
+    company = models.ForeignKey(Company)
+    author = models.ForeignKey(Hybrid)
+    timestamp = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
