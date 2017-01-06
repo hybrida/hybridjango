@@ -26,7 +26,7 @@
     <p>{{ event.text|linebreaksbr }}</p>
     <p></p>
 
-    {% if event.max_participants %}
+    {% if event.max_participants and user.is_authenticated %}
         <h6 class="top-text">Påmeldte</h6>
         <ul class="unstyled-list">
             {% for grade in "12345" %}
@@ -35,7 +35,7 @@
                         {{ grade }}. Klasse: {{ event.participants|grade:grade|length }} påmeldte
                     </strong>
                     <ul style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
-                        {% for participant in event.participants|grade:grade %}
+                        {% for participant in event.participants|grade:grade|dictsort:'first_name' %}
                             <li>
                                 <div class="space-above">
                                     <a href="{% url 'profile' participant.username %}">
