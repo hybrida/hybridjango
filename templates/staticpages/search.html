@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container space-below space-above" style="padding: 20px">
+        {% include 'events/event_thumblist.html' %}
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        adjust_height = function () {
+            image = $('.event_thumb_image');
+            image.css('max-height', image.width()/1.61803398875 + "px")
+        };
+        window.onload = adjust_height;
+        window.onresize = adjust_height;
+        window.onscroll = adjust_height;
+    </script>
+{% endblock %}
