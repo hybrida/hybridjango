@@ -1,17 +1,11 @@
 {% extends 'kiltshop/sidebar.html' %}
 {% block text %}
 <style>
-        input[type=checkbox] + label {
-          color: #000;
-        }
         input[type=checkbox]:checked + label {
             box-shadow: 0 0 5px #005675;
             color: #005675;
         }
 
-         input[type=radio] + label {
-          color: #000;
-        }
         input[type=radio]:checked + label {
             box-shadow: 0 0 5px #005675;
             color: #005675;
@@ -21,18 +15,10 @@
             width: 50px;
         }
 
-        #header {
+       div.desc {
+            font-size: 20px;
             padding-bottom: 0.5em;
-        }
-
-        div.desc {
-            font-size: 18px;
-            padding-bottom: 0.5em;
-        }
-
-        textarea {
-            resize: none;
-            overflow: auto;
+            padding-top: 0.2em;
         }
 
         .checkbox label, .radio label{
@@ -42,8 +28,8 @@
 
         select{
            -webkit-appearance: button;
-           -webkit-border-radius: 2px;
-           -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+           -webkit-border-radius: 200px;
+           -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
            -webkit-user-select: none;
            background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
            background-position: 95% center;
@@ -89,6 +75,91 @@
         }
     </style>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-warning"{% endif %}>
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <p align="center" id="warning">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form id="submit" action="" method="post">
+        {% csrf_token %}
+        {% if not active %}
+            <h1 style="color: red; font-size: 20px">Kiltbestilling er ikke åpen</h1>
+        {% endif %}
+
+        {% for choice in types %}
+            <h1> {{ choice.1 }} </h1>
+            {% for product in products %}
+                {% if product.type == choice.0 %}
+                    <div class="responsive">
+                        <div class="img" align="center">
+                            <div class="checkbox">
+                            {% if product.type == 'K' %}
+                                <input style="opacity: 0" id="{{ product.pk }}" name="product_k" onclick="uncheck_kilt()" type="radio" value="{{ product.pk }}">
+                            {% elif product.type == 'S' %}
+                                  <input style="opacity: 0" id="{{ product.pk }}" name="product_s" onclick="uncheck_sporra()" type="radio" value="{{ product.pk }}">
+                            {% else %}
+                                 <input style="opacity: 0" id="{{ product.pk }}" name="product_e" type="checkbox" value="{{ product.pk }}">
+                            {% endif %}
+                                <label for="{{ product.pk }}">
+                                    <img src="{{ product.image.url }}" width="200" height="200">
+                                    <div class="desc">{{ product.name }}</div>
+                                        {% if product.sizes %}
+                                            <select name="size-{{ product.pk }}" id="{{ product.pk }}">
+                                            {% for size in product.sizes_as_list %}
+                                                <option>{{ size }}</option>
+                                            {% endfor %}
+                                            </select>
+                                        {% endif %}
+                                    {% if product.type == 'E' %}
+                                        <p>Antall:</p>
+                                        <input name="number-{{ product.pk }}" type="number" class="form-control" min="1" max="9" value="1">
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                    <a href="{{ product.link }}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="clearfix"></div>
+        {% endfor %}
+    <br><hr>
+    <div class="clearfix"></div>
+        {% if not active %}
+            <div align="center" class="comment">
+                <p> Kommentar:</p>
+                <textarea  class="commentbox" disabled  placeholder="utilgjengelig" cols="50" rows="6" maxlength="250"></textarea>
+            </div>
+        {% else %}
+            <div align="center" class="comment">
+                <p> Kommentar:</p>
+                <textarea  class="commentbox" name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="200">{{ order.comment }}</textarea>
+            </div>
+        {% endif %}
+    <div class="clearfix"></div>
+        {% if not active %}
+            <div align="center" class="row">
+                <div class="col-md-12" id="submitContainer">
+                    <button class="btn btn-primary btn-lg" disabled type="submit">Bestill</button>
+                </div>
+                <h1 style="color: red; font-size: 1.5em;">Du kan ikke bestille enda.</h1>
+            </div>
+        {% else %}
+            <div align="center" class="row">
+                <div class="col-md-12" id="submitContainer">
+                    <button class="btn btn-primary btn-lg" type="submit">Bestill</button>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}
+{% block script %}
 <script>
     function uncheck_kilt() {
         var myRadios = document.getElementsByName('product_k');
@@ -125,152 +196,4 @@
         }
     }
 </script>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div{% if message.tags %} class="alert alert-warning"{% endif %}>
-                <a class="close" data-dismiss="alert" href="#">&times;</a>
-                <p align="center" id="warning">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
-                </p>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    <form id="submit" action="" method="post">
-        {% csrf_token %}
-        {% if not activated %}
-            <h1 style="color: red; font-size: 20px">Kiltbestilling er ikke åpen</h1>
-        {% endif %}
-
-        <!-- Kilts -->
-        <h1 id="header"> Kilt </h1>
-        {% for product in products %}
-            {% if product.type == 'K' %}
-                <div class="responsive">
-                    <div class="img" align="center">
-                        <div class="checkbox">
-                            <input style="opacity: 0" id="{{ product.pk }}" name="product_k" onclick="uncheck_kilt()" type="radio" value="{{ product.pk }}">
-                            <label for="{{ product.pk }}">
-                                <img src="{{ product.image.url }}" width="200" height="200">
-                                <div class="desc">{{ product.name }}</div>
-                                {% if product.name == 'Gutt' %}
-                                   <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="S">Small</option>
-                                        <option value="M">Medium</option>
-                                        <option value="ML" selected >Medium Long</option>
-                                        <option value="L">Large</option>
-                                        <option value="XL">X Large (XL)</option>
-                                        <option value="XXL">2X Large (XXL)</option>
-                                    </select>
-                                {% else %}
-                                     <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="S">Small</option>
-                                        <option value="M" selected>Medium</option>
-                                        <option value="L">Large</option>
-                                        <option value="XL">X Large (XL)</option>
-                                     </select>
-                                {% endif %}
-                            </label>
-                        </div>
-                    </div>
-
-                <a href="{{ product.link }}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-
-                </div>
-            {% endif %}
-        {% endfor %}
-
-    <div class="clearfix"></div>
-        <!-- Sporran -->
-        <h1> Sporran </h1>
-        {% for product in products %}
-            {% if product.type == 'S' %}
-                <div class="responsive">
-                    <div class="img" align="center">
-                        <div class="checkbox">
-                               <input style="opacity: 0" id="{{ product.pk }}" name="product_s" onclick="uncheck_sporra()" type="radio" value="{{ product.pk }}">
-                            <label for="{{ product.pk }}">
-                                <img src="{{ product.image.url }}" width="200" height="200">
-                                <div class="desc">{{ product.name }}</div>
-                            </label>
-                        </div>
-                    </div>
-                <a href="{{ product.link }}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-                </div>
-            {% endif %}
-        {% endfor %}
-
-    <div class="clearfix"></div>
-        <!-- ekstra -->
-        <h1 id="header"> Ekstra </h1>
-        {% for product in products %}
-            {% if product.type == 'E' %}
-                <div class="responsive">
-                    <div class="img" align="center">
-                        <div class="checkbox">
-                            <input style="opacity: 0" id="{{ product.pk }}" name="product_e" type="checkbox" value="{{ product.pk }}">
-                            <label for="{{ product.pk }}">
-                                <img src="{{ product.image.url }}" width="200" height="200">
-                                <div class="desc">{{ product.name }}</div>
-                                {% if product.name == "Women's Knee-Hi" %}
-                                    <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="M" selected>Medium</option>
-                                        <option value="L">Large</option>
-                                        <option value="XL">X Large (XL)</option>
-                                     </select>
-                                {% elif product.name == 'Premium Sokker' %}
-                                    <select name="size-{{ product.pk }}" id="{{ product.pk }}">
-                                        <option value="M" selected>Medium</option>
-                                        <option value="L">Large</option>
-                                    </select>
-                                {% endif %}
-                                <div class="clearfix"></div>
-                               <p>Antall:</p>
-                               <input name="number-{{ product.pk }}" type="number" class="form-control" min="1" max="9" value="1">
-                            </label>
-                        </div>
-                    </div>
-                <a href="{{ product.link }}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
-                </div>
-            {% endif %}
-        {% endfor %}
-
-
-    <div class="clearfix"></div>
-
-         {% if not activated %}
-            <div align="center" class="comment">
-                <p> Kommentar:</p>
-                <textarea  class="commentbox" disabled  placeholder="utilgjengelig" cols="50" rows="6" maxlength="250"></textarea>
-            </div>
-        {% else %}
-            <div align="center" class="comment">
-                <p> Kommentar:</p>
-                <textarea  class="commentbox" name="comment"  placeholder="Eventuell kommentar om bestillingen skrives her..." cols="50" rows="6" maxlength="200">{{ order.comment }}</textarea>
-            </div>
-        {% endif %}
-
-
-
-
-    <div class="clearfix"></div>
-
-        {% if not activated %}
-            <div align="center" class="row">
-                <div class="col-md-12" id="submitContainer">
-                    <button class="btn btn-primary btn-lg" disabled type="submit">Bestill</button>
-                </div>
-                <h1 style="color: red; font-size: 1.5em;">Du kan ikke bestille enda.</h1>
-            </div>
-        {% else %}
-            <div align="center" class="row">
-                <div class="col-md-12" id="submitContainer">
-                    <button class="btn btn-primary btn-lg" type="submit">Bestill</button>
-                </div>
-            </div>
-        {% endif %}
-
-    </form>
-
 {% endblock %}

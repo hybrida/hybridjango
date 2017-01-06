@@ -6,7 +6,7 @@ function clicked() {
 }
 
 </script>
-    <style>
+<style>
     .button {
         border:none;
         background-color: transparent;
@@ -31,6 +31,7 @@ function clicked() {
                     <tr>
                         <th class="col-xs-6">Navn</th>
                         <th class="col-xs-2">Type</th>
+                        <th class="col-xs-2">Størrelser</th>
                         <th class="col-xs-1">Slett</th>
                         <th class="col-xs-1">Endre</th>
 
@@ -45,6 +46,9 @@ function clicked() {
                             </td>
                             <td align="Center" style="word-wrap: break-word; max-width: 40em;">
                                 {{ product.get_type_display }}
+                            </td>
+                            <td>
+                                {{ product.sizes }}
                             </td>
                             <td>
                                 <button class="button" onclick="return confirm('Er du sikker på at du vil slette dette produktet?')" name="delete_product" type="submit" value="{{ product.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>

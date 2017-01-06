@@ -4,9 +4,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
-
 from .models import Product, Order, ProductInfo, OrderInfo
-from .forms import ProductForm
+from .forms import ProductForm, OrderInfoForm
 import datetime
 
 
@@ -16,43 +15,257 @@ def index(request):
 
 @login_required
 def order(request):
-        active_order = OrderInfo.objects.filter(status=True).first()
-        if active_order:
-            active = True
+    now = datetime.datetime.now()
+    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+    active=False
+    if active_order:
+        active = True
+    user_order = Order.objects.filter(user=request.user).first()
+    if request.method == 'POST':
+        if 'delete_product' in request.POST:
+            delete = request.POST.get('delete_product')
+            m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
+            m = m_qs.get()
+            m.delete()
+        elif 'delete_comment' in request.POST:
+            user_order.comment = ""
+        user_order.save()
+    if user_order:
+        if not user_order.products.first() and not user_order.comment:
+            user_order.delete()
+    return render(request, "kiltshop/bestilling.html",
+        {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
+        'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
+        'order': user_order, 'active': active
+        }
+                  )
+
+
+def admin_orderoverview(request):
+    if request.method == 'POST':
+        if 'delete_orders' in request.POST:
+            delete = request.POST.get('delete_orders')
+            OrderInfo.objects.filter(pk=delete).get().delete()
+        if 'edit_order' in request.POST:
+            edit = request.POST.get('edit_order')
+            return redirect('kilt:order_edit', edit)
+        if 'show_order' in request.POST:
+            show = request.POST.get('show_order')
+            return redirect('kilt:order_view', show)
+
+    return render(request, "kiltshop/order_display.html",
+                {'orderinfo':  OrderInfo.objects.all(),}
+    )
+
+
+def order_view(request, pk):
+    current_order = OrderInfo.objects.filter(pk=pk).get()
+    all_products = ProductInfo.objects.all()
+    ordered_products = []
+    orders = current_order.orders.all()
+    for order in orders:
+        for product in order.products.all():
+            ordered_products.append(product)
+    print(ordered_products)
+
+    return render(request, "kiltshop/order_view.html",
+                  {'order':current_order, 'products':ordered_products,'orders':orders  }
+                  )
+
+
+@permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])
+def admin(request):
+    orders = Order.objects.all()
+    products = Product.objects.all()
+    orderinfo = OrderInfo.objects.all()
+    user_order = None
+    user_products = None
+    total_items = ProductInfo.objects.all()
+    ordered_products = []
+    for item in total_items:
+        item_info = [item.product.name, item.size, item.number]
+        ordered_products.append(item_info)
+    unique_ordered = []
+    start = True
+    for item in ordered_products:
+        found = False
+        if start:
+            unique_ordered.append([item[0], item[1], item[2]])
+            start = False
         else:
-            active = False
-        user_order = Order.objects.filter(user=request.user).first()
-        if request.method == 'POST':
-            if 'delete_product' in request.POST:
-                delete = request.POST.get('delete_product')
-                m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
-                m = m_qs.get()
-                m.delete()
-                if len(user_order.products.all()) == 0 and not user_order.comment:
-                    user_order.delete()
+            for i in range(0, len(unique_ordered)):
+                    if item[0] == unique_ordered[i][0]:
+                        found = True
+                        if item[1] is not None and unique_ordered[i][1] is not None:
+                            if item[1] == unique_ordered[i][1]:
+                                unique_ordered[i][2] += item[2]
+                            else:
+                                new = True
+                                for j in range(0, len(unique_ordered)):
+                                    if item[1] == unique_ordered[j][1]:
+                                        new = False
+                                    else:
+                                        pass
+                                if new:
+                                    unique_ordered.append([item[0], item[1], item[2]])
+                        else:
+                            unique_ordered[i][2] += item[2]
+            if not found:
+                unique_ordered.append([item[0], item[1], item[2]])
+    unique_ordered.sort()
 
-            elif 'delete_comment' in request.POST:
-                user_order.comment = ""
-                if len(user_order.products.all()) == 0 and not user_order.comment:
-                    user_order.delete()
+    if request.method == 'POST':
+        if 'showUser' in request.POST:
+            user_id = request.POST.get('selected_user')
+            if int(user_id) == -1:
+                pass
+            else:
+                user_order = Order.objects.filter(user=user_id).first()
+                user_products = user_order.products.all()
+
+        if 'change_status' in request.POST:
+            put = request.POST.get('order_status')
+            status = put.split(':')
+            order_pk = status[1]
+            status = status[0]
+            user_order = Order.objects.filter(pk=order_pk).first()
+            user_order.status = status
             user_order.save()
+            return HttpResponseRedirect("/kilt/admin")
 
-        return render(request, "kiltshop/bestilling.html",
-            {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
-            'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
-            'order': user_order, 'activated': active
-            }
-                      )
+    return render(request, "kiltshop/admin.html", {
+        'products': products,
+        'orders': orders,
+        'orderinfo': orderinfo,
+        'total_items': total_items,
+        'user_products': user_products,
+        'ordered_products': unique_ordered,
+        'user_productinfo': ProductInfo.objects.filter(order=user_order),
+        'user_order': user_order},
+      )
 
 
-@login_required
-def shop(request):
-    user = request.user
-    active_order = OrderInfo.objects.filter(status=True).first()
+@permission_required(['kilt.delete_product'])
+def admin_productoverview(request):
+    if request.method == "POST":
+        if 'delete_product' in request.POST:
+            delete = request.POST.get('delete_product')
+            Product.objects.filter(pk=delete).get().delete()
+        if 'edit_product' in request.POST:
+            edit = request.POST.get('edit_product')
+            return redirect('kilt:product_edit', edit)
+    return render(request, "kiltshop/admin_productoverview.html",
+                  {'products': Product.objects.all()})
+
+@permission_required(['kilt.add_product'])
+def product_new(request):
+    action = 'Lag nytt'
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.author = request.user
+            product.timestamp = timezone.now()
+            product.save()
+            return redirect('kilt:admin_productoverview')
+
+    form = ProductForm(request.POST)
+    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
+
+
+@permission_required(['kilt.change_product'])
+def product_edit(request, pk):
+    action = "Rediger"
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.author = request.user
+            product.published_date = timezone.now()
+            product.save()
+            return redirect('kilt:admin_productoverview')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
+
+@permission_required(['kilt.add_order'])
+def order_new(request):
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
     if active_order:
         active = True
     else:
         active = False
+    action = 'Lag ny'
+    if request.method == "POST":
+        form = OrderInfoForm(request.POST)
+        startTime = form['startTime'].value()
+        endTime = form['endTime'].value()
+        print(startTime)
+        print(endTime)
+        if startTime == "" or endTime == "":
+            messages.warning(request, 'Ugyldig input!')
+            return redirect('kilt:order_new')
+        elif startTime >= endTime:
+            messages.warning(request, 'Starten må være før slutten!')
+            return redirect('kilt:order_new')
+        elif active:
+            if endTime>=str(now):
+                messages.warning(request, 'Man kan kun ha et aktivt tidsrom for bestilling')
+                return redirect('kilt:order_new')
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect('kilt:admin_orderoverview')
+
+    form = OrderInfoForm(request.POST)
+    return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
+
+@permission_required(['kilt.change_order'])
+def order_edit(request, pk):
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+    if active_order:
+        active = True
+    else:
+        active = False
+    action = "Rediger"
+    order = get_object_or_404(OrderInfo, pk=pk)
+    if request.method == "POST":
+        form = OrderInfoForm(request.POST, instance=order)
+        startTime=form['startTime'].value()
+        endTime=form['endTime'].value()
+        if startTime == "" or endTime == "":
+            messages.warning(request, 'Ugyldig input!')
+            return redirect('kilt:order_edit', order.pk)
+        elif startTime >= endTime:
+            messages.warning(request, 'Starten må være før slutten!')
+            return redirect('kilt:order_edit', order.pk)
+        if active:
+            if str(active_order.pk) == str(pk):
+                pass
+            elif endTime>=str(now):
+                messages.warning(request, 'Man kan kun ha et aktivt tidsrom for bestilling')
+                return redirect('kilt:order_edit', order.pk)
+
+        if form.is_valid():
+                order = form.save(commit=False)
+                order.save()
+                return redirect('kilt:admin_orderoverview')
+
+    form = OrderInfoForm(instance=order)
+    return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
+
+@login_required
+def shop(request):
+    user = request.user
+    types = Product.type_choices
+    now = datetime.datetime.now()
+    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+    active=False
+    if active_order:
+        active=True
     if request.method == 'POST':
         products = request.POST.getlist('product_k', None)
         products += request.POST.getlist('product_s', None)
@@ -132,134 +345,7 @@ def shop(request):
 
     return render(request, "kiltshop/shop.html",
                   {"products": Product.objects.all(),
-                   'activated': active,
-                   "order": Order.objects.filter(user=user).first()
+                   'types':types,
+                   'order': Order.objects.filter(user=user).first(),
+                   'active':active
                    })
-
-
-@permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])
-def admin(request):
-    orders = Order.objects.all()
-    products = Product.objects.all()
-    orderinfo = OrderInfo.objects.all()
-    user_order = None
-    user_products = None
-    total_items = ProductInfo.objects.all()
-    ordered_products = []
-    for item in total_items:
-        item_info = [item.product.name, item.size, item.number]
-        ordered_products.append(item_info)
-    unique_ordered = []
-    start = True
-    for item in ordered_products:
-        found = False
-        if start:
-            unique_ordered.append([item[0], item[1], item[2]])
-            start = False
-        else:
-            for i in range(0, len(unique_ordered)):
-                    if item[0] == unique_ordered[i][0]:
-                        found = True
-                        if item[1] is not None and unique_ordered[i][1] is not None:
-                            if item[1] == unique_ordered[i][1]:
-                                unique_ordered[i][2] += item[2]
-                            else:
-                                new = True
-                                for j in range(0, len(unique_ordered)):
-                                    if item[1] == unique_ordered[j][1]:
-                                        new = False
-                                    else:
-                                        pass
-                                if new:
-                                    unique_ordered.append([item[0], item[1], item[2]])
-                        else:
-                            unique_ordered[i][2] += item[2]
-            if not found:
-                unique_ordered.append([item[0], item[1], item[2]])
-    unique_ordered.sort()
-
-    if request.method == 'POST':
-        if 'showUser' in request.POST:
-            user_id = request.POST.get('selected_user')
-            if int(user_id) == -1:
-                pass
-            else:
-                user_order = Order.objects.filter(user=user_id).first()
-                user_products = user_order.products.all()
-
-        if 'change_status' in request.POST:
-            put = request.POST.get('order_status')
-            status = put.split(':')
-            order_pk = status[1]
-            status = status[0]
-            user_order = Order.objects.filter(pk=order_pk).first()
-            user_order.status = status
-            user_order.save()
-            return HttpResponseRedirect("/kilt/admin")
-
-        if 'createTime' in request.POST:
-            start = request.POST.get('start')
-            slutt = request.POST.get('slutt')
-            now = datetime.datetime.now()
-            print(now.year)
-            if OrderInfo.objects.filter(status=True).first():
-                messages.warning(request,
-                                 'Du kan kun ha en aktiv tidsperiode om gangen, dette kan endres på hybrida.no/admin')
-            else:
-                OrderInfo.objects.create(startTime=start, endTime=slutt)
-
-    return render(request, "kiltshop/admin.html", {
-        'products': products,
-        'orders': orders,
-        'orderinfo': orderinfo,
-        'total_items': total_items,
-        'user_products': user_products,
-        'ordered_products': unique_ordered,
-        'user_productinfo': ProductInfo.objects.filter(order=user_order),
-        'user_order': user_order},
-      )
-
-
-@permission_required(['kilt.delete_product'])
-def admin_productoverview(request):
-    if request.method == "POST":
-        if 'delete_product' in request.POST:
-            delete = request.POST.get('delete_product')
-            Product.objects.filter(pk=delete).get().delete()
-        if 'edit_product' in request.POST:
-            edit = request.POST.get('edit_product')
-            return redirect('kilt:product_edit', edit)
-    return render(request, "kiltshop/admin_productoverview.html",
-                  {'products': Product.objects.all()})
-
-@permission_required(['jobannoucements.add_job'])
-def product_new(request):
-    action = 'Lag nytt'
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.author = request.user
-            product.timestamp = timezone.now()
-            product.save()
-            return redirect('kilt:admin_productoverview')
-
-    form = ProductForm(request.POST)
-    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
-
-
-@permission_required(['jobannoucements.change_job'])
-def product_edit(request, pk):
-    action = "Rediger"
-    product = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
-        form = ProductForm(request.POST, instance=product)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.author = request.user
-            product.published_date = timezone.now()
-            product.save()
-            return redirect('kilt:admin_productoverview')
-    else:
-        form = ProductForm(instance=product)
-    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
