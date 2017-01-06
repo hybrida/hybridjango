@@ -1,69 +1,35 @@
 {% extends 'kiltshop/sidebar.html' %}
-{% load widget_tweaks %}
-{% load static %}
-<style>
-     @media only screen and (max-width: 700px) {
-        .responsive {
-            width: 49.99999%;
-            margin: 6px 0;
-        }
-    }
-
-    @media only screen and (max-width: 500px) {
-        .responsive {
-            width: 100%;
-        }
-    }
-</style>
-
 {% block text %}
-
-    <div class = responsive>
-        <div class="container" style="width:100%;">
-            <p align="center" style="font-size: 2.6em;">Bestillingsoversikt</p>
-            <hr>
-            <form action="" method="post">
-            {% csrf_token %}
-                <!-- Ordre (totalt) -->
-                <div id="allorders">
-                    <p style="font-size: 3em;">Bestilling:</p>
-                    <table class="table table-bordered" style="width:100%" id="orders_table">
-                        <thead>
-                            <tr>
-                                <th class="col-xs-5">Produkt</th>
-                                <th class="col-xs-3">Størrelse</th>
-                                <th class="col-xs-3">Antall</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in ordered_products %}
-                                <tr>
-                                    <!--  Liste over alle produkt (pluss størrelser) -->
-                                    <td>
-                                            {{ item.0 }}
-                                    </td>
-
-                                    <!-- Evt størrelser-->
-                                    <td align="Center" style="word-wrap: break-word; max-width: 40em;">
-                                        {% if not item.1 %}
-                                            -
-                                        {% else %}
-                                            {{ item.1 }}
-                                        {% endif %}
-                                    </td>
-                                    <!-- Antall bestitlt -->
-                                    <td align="Center"  style="word-wrap: break-word; max-width: 40em;">
-                                        {{ item.2 }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                <hr/>
-                </div>
-
-               <!-- Ordre (for enkelt bruker) -->
-                <div id="userorder" align="center">
+<h2>Bestilling: {{ order.startTime }} - {{ order.endTime }}</h2>
+<div id="allorders">
+    <p style="font-size: 2em;">Antall produkter:</p>
+    <table class="table table-bordered" style="width:100%" id="orders_table">
+        <thead>
+            <tr>
+                <th class="col-xs-5">Produkt</th>
+                <th class="col-xs-3">Størrelse</th>
+                <th class="col-xs-3">Antall</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in products %}
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.type }}
+                    </td>
+                    <td>
+                        {{ item.number }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<hr/>
+</div>
+     <div id="userorder" align="center">
                     <select title="Velg person for å se bestilling" name="selected_user" id="{{ user.id }}">
                             <option value="-1">Ingen</option>
                         {% for order in orders %}
@@ -149,43 +115,29 @@
                 <hr>
                 </div>
 
+<p align="center" style="font-size: 2em;">Kommentarer:</p>
+<table class="table table-bordered" style="width:100%" id="comment_table">
+    <thead>
+        <tr>
+            <th class="col-xs-4">Navn</th>
+            <th class="col-xs-8">Kommentar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            {% if order.comment %}
+                <tr class="table-items">
+                    <th>
+                       ({{ order.user.pk }}) {{ order.user.first_name }}  {{ order.user.last_name }}
+                    </th>
+                    <td style="word-wrap: break-word; max-width: 40em;">
+                        {{ order.comment }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
 
-            </form>
-            <!-- Kommentarer -->
-            <p align="center" style="font-size: 2em;">Kommentarer:</p>
-            <table class="table table-bordered" style="width:100%" id="comment_table">
-                <thead>
-                    <tr>
-                        <th class="col-xs-4">Navn</th>
-                        <th class="col-xs-8">Kommentar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                        {% if order.comment %}
-                            <tr class="table-items">
-                                <th>
-                                   ({{ order.user.pk }}) {{ order.user.first_name }}  {{ order.user.last_name }}
-                                </th>
-                                <td style="word-wrap: break-word; max-width: 40em;">
-                                    {{ order.comment }}
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-    </div>
- </div>
-{% endblock %}
-{% block script %}
-    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
-            charset="UTF-8"></script>
-    <script type="text/javascript">
-        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
-</script>
-{% endblock %}
-{% block link %}
-    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+
 {% endblock %}

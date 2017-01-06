@@ -1,0 +1,79 @@
+{% extends 'kiltshop/sidebar.html' %}
+{% block text %}
+<style>
+    .button {
+        border:none;
+        background-color: transparent;
+        color:#005675;
+        text-align: center;
+        font-size: 21px;
+        cursor: pointer;
+        align-self: center;
+        width: 100%;
+        height: 100%;
+    }
+    a{
+        color: #005675;
+    }
+</style>
+{% load widget_tweaks %}
+{% load static %}
+<p align="center" style="font-size: 2.6em;">Bestillingsoversikt</p>
+{% csrf_token %}
+<!-- Tidstabell -->
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="timetable">
+        <div class="table-responsive">
+            <table class="table table-bordered" style="width:100%" id="comment_table">
+                <thead>
+                    <tr>
+                        <th class="col-xs-1">Vis</th>
+                        <th class="col-xs-4">Start</th>
+                        <th class="col-xs-4">Slutt</th>
+                        <th class="col-xs-4">Status</th>
+                        <th class="col-xs-1">Endre</th>
+                        <th class="col-xs-1">Slett</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Her skal alle order tidsrom vises -->
+
+                    {% for timeframe in orderinfo %}
+                        {% if timeframe.active_order %}
+                            <tr style="background-color: #90ee90">
+                        {% else %}
+                            <tr  style="background-color: #FDD">
+                        {% endif %}
+                            <td><button class="button" name="show_order" type="submit" value="{{ timeframe.pk }}"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></button></td>
+                            <td>{{ timeframe.startTime }}</td>
+                            <td>{{ timeframe.endTime }}</td>
+                            {% if timeframe.active_order %}
+                                <td>Aktiv</td>
+                            {% else %}
+                                <td>Avsluttet</td>
+                            {% endif %}
+                            <td><button class="button" name="edit_order" type="submit" value="{{ timeframe.pk }}"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></td>
+                            <td><button class="button" name="delete_orders" type="submit" value="{{ timeframe.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+        </table>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript">
+        $('input[name="start"]').datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+        $('input[name="slutt"]').datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+
+</script>
+{% endblock %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+{% endblock %}
