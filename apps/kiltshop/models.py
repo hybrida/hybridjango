@@ -1,7 +1,7 @@
 from django.db import models
 from apps.registration.models import Hybrid
 from django.utils import timezone
-
+import datetime
 
 class Product(models.Model):
     kilt = 'K'
@@ -16,9 +16,14 @@ class Product(models.Model):
     name = models.CharField(max_length=150)
     image = models.ImageField(upload_to='products', default='placeholder-event.png')
     type = models.CharField(max_length=1, choices=type_choices, default=kilt)
-    link = models.CharField(max_length=1000, default=" ")
+    sizes = models.CharField(max_length=100, blank=True)
+    link = models.CharField(max_length=1000, blank=True)
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
+
+    def sizes_as_list(self):
+        return self.sizes.split(',')
+
 
     def __str__(self):
         return self.name
@@ -38,10 +43,18 @@ class OrderInfo(models.Model):
     orders = models.ManyToManyField(Order, blank=True)
     startTime = models.DateTimeField(null=True, blank=True)
     endTime = models.DateTimeField(null=True, blank=True)
-    status = models.BooleanField(default=True)
+
+    def active_order(self):
+        now = datetime.datetime.now()
+        active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+        current_rorder = OrderInfo.objects.filter(pk=self.pk).first()
+        if active_order==current_rorder:
+            return True
+        else:
+            return False
 
     def __str__(self):
-        return str(str(self.startTime)+" - "+str(self.endTime)+" ("+str(self.status)+")")
+        return str(str(self.startTime)+" - "+str(self.endTime))
 
 
 class ProductInfo(models.Model):
