@@ -18,7 +18,7 @@
     <div id="sidebar">
         <ul class="sidebar-links">
             {% for page, label in before_pages %}
-                <li><a href="{% url 'page' %}">{{ label }}</a></li>
+                <li><a href="{% url page %}">{{ label }}</a></li>
             {% endfor %}
             <li>
                 <ul>
@@ -27,7 +27,7 @@
                 </ul>
             </li>
             {% for page, label in after_pages %}
-                <li><a href="{% url 'page' %}">{{ label }}</a></li>
+                <li><a href="{% url page %}">{{ label }}</a></li>
             {% endfor %}
         </ul>
     </div>
