@@ -11,7 +11,7 @@ def index(request):
     now = datetime.datetime.now()
     status = "Aktive"
     return render(request, "jobannoucements/announcements.html",
-                  {'status':status, 'jobs': Job.objects.filter(deadline__gte=now).order_by('deadline')})
+                  {'status':status,'priorities': Job.objects.filter(deadline__gte=now).order_by('deadline').filter(priority=1), 'jobs': Job.objects.filter(deadline__gte=now).order_by('deadline').filter(priority=0)})
 
 
 def job_previous(request):

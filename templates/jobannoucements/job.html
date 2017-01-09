@@ -1,5 +1,13 @@
 {% extends 'jobannoucements/job_sidebar.html' %}
 {% block sidebar %}
+    <style>
+        h2{
+            font-size: 25px;
+        }
+        a{
+            color: #005675;
+        }
+    </style>
       <h2>Stillingsutlysninger</h2>
     <li>
         <a href="{% url 'jobs:info' %}">Vis Aktive</a>
@@ -25,5 +33,5 @@
 {% block text %}
     <h1 id="job_title">{{ job.title }}</h1>
     <p><b>Søknadsfrist: </b>{{ job.deadline }} </p>
-    <p id="job_title">{{ job.descripion|linebreaksbr }}</p>
+    <p id="job_title">{{ job.description|linebreaksbr }}</p>
 {% endblock %}

@@ -7,8 +7,8 @@ class Job(models.Model):
     title = models.CharField(max_length=150)
     company = models.ForeignKey(Company)
     deadline = models.DateTimeField(null=True, blank=True)
-    descripion = models.TextField()
-    priority = models.IntegerField(default=0)
+    description = models.TextField()
+    priority = models.BooleanField(default=0)
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
 
