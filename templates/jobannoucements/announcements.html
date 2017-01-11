@@ -1,48 +1,55 @@
 {% extends 'jobannoucements/job_sidebar.html' %}
-{% block text %}
-    {% if priorities or jobs %}
-        {% if priorities %}
+{% block unstyled_text %}
+    {% if priorities %}
+        <div class="white-box space-above">
             <h2>Fremhevede Stillingsutlysninger</h2>
-             {% for job in priorities %}
-             <div class="job_list" style="background-color: white; height: 12em"  >
-                 <div>
-                     <a href="{{ job.pk }}">
-                         <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
-                     </a>
-                     <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
-                         <b>Tittel: </b>
-                         <a href="{{ job.pk }}">
-                             {{ job.title }}
-                         </a>
-                         <br><b>Bedrift: </b>{{ job.company.name }}
-                         <br><b>Søknadsfrist: </b>{{ job.deadline }}
+            {% for job in priorities %}
+            <div class="job_list" style="background-color: white; height: 12em"  >
+                <div>
+                    <a href="{{ job.pk }}">
+                        <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
+                    </a>
+                    <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
+                        <b>Tittel: </b>
+                        <a href="{{ job.pk }}">
+                            {{ job.title }}
+                        </a>
+                        <br><b>Bedrift: </b>{{ job.company.name }}
+                        <br><b>Søknadsfrist: </b>{{ job.deadline }}
                     </div>
-                 </div>
-             </div>
-             <br>
-        {% endfor %}
-        {% endif %}
-         <h2>{{ status }} Stillingsutlysninger</h2>
-         {% for job in jobs %}
-             <div class="job_list" style="background-color: white; height: 12em"  >
-                 <div>
-                     <a href="{{ job.pk }}">
-                         <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
-                     </a>
-                     <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
-                         <b>Tittel: </b>
-                         <a href="{{ job.pk }}">
-                             {{ job.title }}
-                         </a>
-                         <br><b>Bedrift: </b>{{ job.company.name }}
-                         <br><b>Søknadsfrist: </b>{{ job.deadline }}
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if jobs %}
+        <div class="white-box space-above">
+            <h2>{{ status }} Stillingsutlysninger</h2>
+            {% for job in jobs %}
+            <div class="job_list" style="background-color: white; height: 12em"  >
+                <div>
+                    <a href="{{ job.pk }}">
+                        <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
+                    </a>
+                    <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
+                        <b>Tittel: </b>
+                        <a href="{{ job.pk }}">
+                            {{ job.title }}
+                        </a>
+                        <br><b>Bedrift: </b>{{ job.company.name }}
+                        <br><b>Søknadsfrist: </b>{{ job.deadline }}
                     </div>
-                 </div>
-             </div>
-             <br>
-        {% endfor %}
-    {% else %}
-         <h2>Det finnes for øyeblikket ingen {{ status.lower }} stillingsutlysninger</h2>
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if not priorities and not jobs %}
+        <div class="white-box space-above">
+            <h2>Det finnes for øyeblikket ingen {{ status.lower }} stillingsutlysninger</h2>
+        </div>
     {% endif %}
 {% endblock %}
 

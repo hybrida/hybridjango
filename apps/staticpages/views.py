@@ -26,7 +26,8 @@ class FrontPage(EventList):
         context['bedpress_list_chronological'] = Event.objects.filter(
             event_start__gte=timezone.now(), bedpress__isnull=False
         ).order_by('event_start')[:5]
-        context['jobs'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-deadline')
+        context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-deadline').filter(priority=True).reverse()
+        context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
         return context
 
 
