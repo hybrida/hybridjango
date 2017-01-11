@@ -1,6 +1,10 @@
 {% extends 'staticpages/about.html' %}
+{% load static %}
 {% block text %}
     <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/vago.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
         <h1>Griffens Orden</h1>
         <p>
             Griffens Orden består av de medlemmer som har gjort seg verdige å utnevnes til Ridder av Griffens Orden.
