@@ -9,29 +9,27 @@
         }
     </style>
     <div class="white-box space-above">
-    <h3>Stillingsutlysninger</h3>
+    <h2>Stillingsutlysninger</h2>
     <li>
         <a href="{% url 'jobs:info' %}">Vis Aktive</a>
     </li>
     <li>
         <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
     </li>
-    </div>
-
     {% if perms.job.add_job %}
-    <div class="white-box space-above">
-        <h3>Admin</h3>
+        <h2>Admin</h2>
         <li>
-        <a href="{% url 'jobs:new' %}">Lag ny</a>
+            <a href="{% url 'jobs:new' %}">Lag ny</a>
         </li>
         <li>
             <a href="{% url 'jobs:admin' %}">Oversikt</a>
         </li>
-    </div>
     {% endif %}
-
-     <div class="white-box space-above">
-        <h3>Alle Stillingsutlysninger</h3>
-        {% include 'jobannoucements/job_list_sidebar.html' %}
+    </div>
+    <div class="white-box space-above">
+        <img src="/uploads/{{ job.company.logo }}" class="center-block img-responsive art-img" width="100%">
+        <br>
+        <p><b>Bedrift:</b> {{ job.company.name }} </p>
+        <p><i>{{ job.company.info }}</i></p>
     </div>
 {% endblock %}
