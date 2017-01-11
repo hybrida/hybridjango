@@ -1,37 +1,8 @@
-{% extends 'jobannoucements/job_sidebar.html' %}
-{% block sidebar %}
-    <style>
-        h2{
-            font-size: 25px;
-        }
-        a{
-            color: #005675;
-        }
-    </style>
-      <h2>Stillingsutlysninger</h2>
-    <li>
-        <a href="{% url 'jobs:info' %}">Vis Aktive</a>
-    </li>
-    <li>
-        <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
-    </li>
-    {% if perms.job.add_job %}
-        <h2>Admin</h2>
-        <li>
-            <a href="{% url 'jobs:new' %}">Lag Ny</a>
-        </li>
-        <li>
-            <a href="{% url 'jobs:admin' %}">Oversikt</a>
-        </li>
-    {% endif %}
-    <hr>
-    <img src="/uploads/{{ job.company.logo }}" class="center-block img-responsive art-img" width="100%">
-    <br>
-    <p><b>Bedrift:</b> {{ job.company.name }} </p>
-    <p><i>{{ job.company.info }}</i></p>
-{% endblock %}
-{% block text %}
-    <h1 id="job_title">{{ job.title }}</h1>
-    <p><b>Søknadsfrist: </b>{{ job.deadline }} </p>
-    <p id="job_title">{{ job.description|linebreaksbr }}</p>
+{% extends 'jobannoucements/jobview_sidebar.html' %}
+{% block unstyled_text %}
+    <div class="white-box space-above">
+        <h1 id="job_title">{{ job.title }}</h1>
+        <p><b>Søknadsfrist: </b>{{ job.deadline }} </p>
+        <p id="job_title">{{ job.description|linebreaksbr }}</p>
+    </div>
 {% endblock %}
