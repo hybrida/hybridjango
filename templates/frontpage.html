@@ -33,13 +33,15 @@
                     </div>
                 {% endif %}
                 <div class="white-box space space-below">
+                    <h3>Bedpresser</h3>
+                    {% include 'events/bedpress_list.html' %}
+                </div>
+                <div class="white-box space space-below">
                     <h3>Arrangementer</h3>
-                    {{ events_chronological }}
                     {% include 'events/event_list.html' %}
                 </div>
                 <div class="white-box space space-below">
                     <h3><a style="height: 3px;" href="{% url 'jobs:info' %}">Stillingsutlysninger</a></h3>
-                    {{ events_chronological }}
                     {% include 'jobannoucements/job_list.html' %}
                 </div>
             </div>

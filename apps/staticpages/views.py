@@ -19,9 +19,15 @@ class FrontPage(EventList):
     queryset = EventList.queryset
 
     def get_context_data(self, **kwargs):
-        context_data = EventList.get_context_data(self, **kwargs)
-        context_data['jobs'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-timestamp')
-        return context_data
+        context = super(EventList, self).get_context_data(**kwargs)
+        context['event_list_chronological'] = Event.objects.filter(
+            event_start__gte=timezone.now(), bedpress__isnull=True
+        ).order_by('event_start')[:5]
+        context['bedpress_list_chronological'] = Event.objects.filter(
+            event_start__gte=timezone.now(), bedpress__isnull=False
+        ).order_by('event_start')[:5]
+        context['jobs'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-deadline')
+        return context
 
 
 aboutpages = [
