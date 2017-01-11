@@ -2,7 +2,8 @@
 {% load widget_tweaks %}
 {% load static %}
 
-{% block text %}
+{% block unstyled_text %}
+    <div class="white-box space-above">
     <h3>{{ action }} Stillingsutlysning</h3>
      <form method="POST" class="post-form">{% csrf_token %}
         <div class="form-group">
@@ -27,6 +28,7 @@
         </div>
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
     </form>
+    </div>
 {% endblock %}
 
 {% block script %}
