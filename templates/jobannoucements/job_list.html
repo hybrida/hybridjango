@@ -1,17 +1,33 @@
-<div class="list">
+<style>
+
+.iconDetails {
+    float:right;
+    margin-left: 20px;
+    height:110px;
+    width:115px;
+    }
+
+.container2 {
+	width:100%;
+	height:auto;
+    display: inline-block;
+}
+
+h4 {
+    margin:0px;
+}
+
+</style>
+
+
+
     {% for job in job_list %}
-        <div>
-            <a href="{% url 'jobs:job_detail' job.pk %}">
-                   <i class="fa fa-square"
-                   style="color:#005675"
-                   aria-hidden="true"></i>
-                <time datetime="{{ job.deadline|date:'c' }}">
-                    {{ job.deadline|date:'d. b' }}
-                </time>
-                <span>
-                    {{ job }}
-                </span>
-        </a>
+        <hr>
+        <a style="color: black;" href="{% url 'jobs:job_detail' job.pk %}">
+        <div class='container2'>
+                <img src="/uploads/{{ job.company.logo }}" class="iconDetails">
+	            <h4 style="font-size: 1.2em">{{ job }}</h4>
+                <div style="font-size:.8em; padding-top: 15px">Søknadsfrist: {{ job.deadline }}</div>
         </div>
+        </a>
     {% endfor %}
-</div>
