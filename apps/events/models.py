@@ -23,6 +23,8 @@ class Event(models.Model):
     hidden = models.BooleanField(default=False)
 
     def get_absolute_url(self):
+        if(self.pk < 0): # TODO: replace this
+            return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
 
     def signup_open(self):
