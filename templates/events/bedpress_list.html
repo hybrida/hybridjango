@@ -1,9 +1,9 @@
 <div class="list">
     {% for event in bedpress_list_chronological %}
         <div>
-            <a href="{% url 'event' event.pk %}">
+            <a href="{{ event.get_absolute_url }}">
                 <i class="fa fa-square"
-                   style="color:{% if event.signup_start %}#005675{% else %}#9e9d98{% endif %}"
+                   style="color:{% if event.signup_start %}#005675{% elif event.pk < 0 %}#9e9d98{% else %}#2bb1e1{% endif %}"
                    aria-hidden="true"></i>
                 <time datetime="{{ event.event_start|date:'c' }}">
                     {{ event.event_start|date:'d. b' }}
