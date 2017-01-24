@@ -12,14 +12,12 @@ class CompanyForm(forms.ModelForm):
         fields = [
             'name',
             'responsible',
-            'contact_person',
             'address',
             'description',
             'info',
             'notes',
             'priority',
             'status',
-            'telephone',
         ]
         model = Company
 
