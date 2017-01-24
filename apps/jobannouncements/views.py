@@ -11,8 +11,8 @@ def index(request):
     now = datetime.datetime.now()
     status = "Aktive"
     return render(request, "jobannoucements/announcements.html",
-                  {'status':status,'priorities': Job.objects.filter(deadline__gte=now).order_by('deadline').filter(priority=1),
-                   'jobs': Job.objects.filter(deadline__gte=now).order_by('deadline').filter(priority=0),
+                  {'status':status,'priorities': Job.objects.filter(deadline__gte=now).order_by('-weight', 'deadline').filter(priority=1),
+                   'jobs': Job.objects.filter(deadline__gte=now).order_by('-weight','deadline').filter(priority=0),
                    'job_list':Job.objects.filter(deadline__gte=datetime.datetime.now()).order_by('deadline')})
 
 
@@ -20,7 +20,7 @@ def job_previous(request):
     now = datetime.datetime.now()
     status = "Tidligere"
     return render(request, "jobannoucements/announcements.html",
-                  {'status':status,'jobs': Job.objects.filter(deadline__lte=now).order_by('deadline').reverse(),'job_list':Job.objects.filter(deadline__gte=datetime.datetime.now()).order_by('deadline')})
+                  {'status':status,'jobs': Job.objects.filter(deadline__lte=now).order_by('-deadline'),'job_list':Job.objects.filter(deadline__gte=datetime.datetime.now()).order_by('deadline')})
 
 def job_detail(request, pk):
     job = get_object_or_404(Job, pk=pk)
