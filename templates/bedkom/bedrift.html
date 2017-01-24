@@ -154,17 +154,11 @@
                 <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.event.location }} | {{ bedpress.event.event_start|date:'d.m.o' }}</a></p>
             {% endfor %}
 
-            <p>
-                Det må lages en kobling mellom denne bedriften, og bedpressen som blir laget når man trykker "Lag bedriftspresentasjon".
-
-            </p>
         </div>
         <div>
             <h3>Kontaktpersoner</h3>
-            <p>{{ company.contact_person.name }}</p>
-            <p>Hva burde være her?</p>
-            <p>Burde det være flere kontaktpersoner på en bedrift? Hvilke informasjon må kontaktperson inneholde?
-            </p>
+            <p>{{ company.contact_person.name }} || {{ company.contact_person.email }}</p>
+
         </div>
     </div>
 

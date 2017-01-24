@@ -93,7 +93,6 @@
         <tr>
             <th class="text-left_1">Navn</th>
             <th class="text-left_1">Ansvarlig</th>
-            <th class="text-left_1">Kontaktperson</th>
             <th class="text-left_1">Siste Kommentar</th>
             <th class="text-left_1">Status</th>
             <th class="text-left_1">Prioritet</th>
@@ -104,7 +103,6 @@
             <tr>
                 <td class="text-left"><a href="bedrift/{{ company.id }}">{{ company.name }}</a></td>
                 <td class="text-left">{{ company.responsible.first_name }} {{ company.responsible.last_name }}</td>
-                <td class="text-left">{{ company.contact_person.name }}</td>
                 <td class="text-left">{{ company.last_comment.text }}</td>
                 <td class="text-left">
                     <button type="button">{{ company.status }} </button>
