@@ -9,6 +9,7 @@ class Job(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     description = models.TextField()
     priority = models.BooleanField(default=0)
+    weight = models.IntegerField(default=0)
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
 
