@@ -78,12 +78,12 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context.update({
             'leder': Hybrid.objects.get(username='martiaks'),
             'nestleder': Hybrid.objects.get(username='sigribra'),
-            'skattmester': Hybrid.objects.get(username='jonasasa'),
+            'skattmester': Hybrid.objects.get(username='shahiths'),
             'bksjef': Hybrid.objects.get(username='ludviglj'),
             'festivalus': Hybrid.objects.get(username='njknudse'),
-            'vevsjef': Hybrid.objects.get(username='simennje'),
-            'jentekomsjef': Hybrid.objects.get(username='gurogb'),
-            'redaktor': Hybrid.objects.get(username='hanneove'),
+            'vevsjef': Hybrid.objects.get(username='anstra'),
+            'jentekomsjef': Hybrid.objects.get(username='andrsly'),
+            'redaktor': Hybrid.objects.get(username='amaliams'),
         }) # Can be initialized only on startup (using middleware for example) if it becomes too costly
         return self.render_to_response(context)
 
