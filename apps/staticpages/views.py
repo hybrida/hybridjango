@@ -48,13 +48,14 @@ class FrontPage(EventList):
 
 aboutpages = [
     ('about', "Om Hybrida"),
-    ('contact_us', "Kontakt oss"),
+    ('history', "Hybridas historie"),
     ('board', "Styret"),
     ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
+    ('contact_us', "Kontakt oss"),
 ]
 
 
@@ -87,6 +88,36 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         }) # Can be initialized only on startup (using middleware for example) if it becomes too costly
         return self.render_to_response(context)
 
+
+ringenpages = [
+    ('ringen', "Ringen"),
+    ('ringen_IIKT', 'Studiet I&IKT'),
+    ('ringen_visjon', 'Visjon'),
+    ('ringen_styret', 'Styret'),
+    ('ringen_bidrag', 'Bedriftens Bidrag'),
+    ('ringen_medlemmer', 'Medlemmer'),
+    ('ringen_promotering', 'Promotering'),
+    ('ringen_kontakt', 'Kontaktinformasjon'),
+]
+
+class RingenView(TemplateResponseMixin, ContextMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        active_page = resolve(request.path_info).url_name
+        before_pages = []
+        after_pages = []
+        page_found = False
+        for page in ringenpages:
+            if page_found:
+                after_pages.append(page)
+            else:
+                before_pages.append(page)
+                if page[0] == active_page:
+                    page_found = True
+
+        context['before_pages'] = before_pages
+        context['after_pages'] = after_pages
+        return self.render_to_response(context)
 
 UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
 

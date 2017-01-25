@@ -1,0 +1,27 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/ringen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h1>Promotering</h1>
+        <p>Ved medlemskap blir det anledning for bedriften til å promotere seg særskilt ovenfor studenter ved I&IKT.
+            I&IKT-ringen er den eneste som kan tilby eksklusiv kontakt med sivilingeniører med en slik kompetanse i
+            Norge.</p>
+
+        <p>Hybrida Bedriftskomité sørger for promotering av bedrifter opp mot studentene ved I&IKT. Promoteringsmetoder
+            som kan nevnes er blant annet:</p>
+
+        <ul>
+            <li>Bedriftspresentasjoner</li>
+            <li>Annonser og intervjuer i linjeforeningsavis, Update^K</li>
+            <li>Plakater hengt opp på campus</li>
+            <li>Hjemmeside</li>
+            <li>Ekskursjoner</li>
+            <li>Mail til studenter angående stillingsannonser, sommerjobber o.l.</li>
+            <li>Stands</li>
+        </ul>
+        Det er også mulighet for andre promoteringsmetoder.
+    </article>
+{% endblock %}
