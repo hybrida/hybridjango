@@ -167,7 +167,12 @@ img {
     border: none;
     text-align: center;
     vertical-align: bottom;
-    font-size: 16px;
+    font-size: 14px;
+}
+
+.navbar li > a{
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .form-control:focus {
@@ -484,6 +489,11 @@ a.inverted {
 
     article {
         font-size: 16px;
+    }
+
+    .navbar li > a{
+        padding-right: 15px;
+        padding-left: 15px;
     }
 
 }

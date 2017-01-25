@@ -18,8 +18,9 @@
                     <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
                 {% else %}
                     <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
+                    <li><a href="{% url 'ringen' %}">I&IKT-ringen</a></li>
+                    <li><a href="{% url 'contact_us' %}">Kontakt oss</a></li>
                 {% endif %}
-                <li><a href="{% url 'contact_us' %}">Kontakt oss</a></li>
                 {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

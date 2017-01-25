@@ -1,0 +1,22 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/ringen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h1>Kontaktinformasjon</h1>
+        <br>
+        <h4>Daglig leder</h4>
+        <p>Arnt Kristoffer Sørli</p>
+        <p>arntks@stud.ntnu.no</p>
+        <br>
+        <h4>Studieprogramleder I&IKT</h4>
+        <p>Terje Midtbø</p>
+        <p>Mail: terje.midtbo@ntnu.no</p>
+        <br>
+        <h4>Studentenes bedriftskontakt</h4>
+        <p>Hybrida Bedriftskomité v/ Bedriftskomitésjef Ludvig Lilleby Johansson</p>
+        <p>Mail: bedrift@hybrida.no</p>
+    </article>
+{% endblock %}
