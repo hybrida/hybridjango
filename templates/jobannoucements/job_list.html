@@ -1,10 +1,12 @@
 <style>
 
-.iconDetails {
+.logo {
     float:right;
     margin-left: 20px;
-    height:110px;
-    width:115px;
+    height:auto;
+    width: auto;
+    max-width:115px;
+    max-height: 80px;
     }
 
 .container2 {
@@ -25,7 +27,7 @@ h4 {
         <hr>
         <a style="color: black;" href="{% url 'jobs:job_detail' job.pk %}">
         <div class='container2'>
-                <img src="/uploads/{{ job.company.logo }}" class="iconDetails">
+                <img src="/uploads/{{ job.company.logo }}" class="logo">
 	            <h4 style="font-size: 1.2em">{{ job }}</h4>
                 <div style="font-size:.8em; padding-top: 15px">Søknadsfrist: {{ job.deadline }}</div>
         </div>
