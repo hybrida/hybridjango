@@ -1,0 +1,21 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/ringen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h1>Medlemmer</h1>
+        <p>
+            Følgende bedrifter er medlem av I&IKT-ringen:
+        </p>
+        <ul>
+            <li>Aker Solutions KBe Design. Hjemmeside: http://www.kbedesign.com/</li>
+            <li>Focus Software AS. Hjemmeside: http://www.focus.no/</li>
+            <li>Norkart AS. Hjemmeside: http://www.nkgs.no/</li>
+            <li>Anko AS.  Hjemmeside: http://anko.no/</li>
+            <li>Geodata AS.  Hjemmeside: http://geodata.no/</li>
+            <li>Holte Consulting Hjemmeside: http://holteconsulting.no/</li>
+        </ul>
+    </article>
+{% endblock %}
