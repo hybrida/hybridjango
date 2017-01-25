@@ -1,15 +1,37 @@
 {% extends 'jobannoucements/job_sidebar.html' %}
 {% block unstyled_text %}
+    <style>
+
+    .logo{
+        position: relative;
+        height: auto;
+        width: auto;
+        max-height: 180px;
+        max-width: 200px;
+        padding-left: 20px;
+    }
+    .text{
+        font-size: 18px;
+        line-height: 28px;
+        padding-left: 245px;
+    }
+    .job_list{
+        height: auto;
+        display: inline-block;
+    }
+
+    </style>
     {% if priorities %}
         <div class="white-box space-above">
             <h2>Fremhevede Stillingsutlysninger</h2>
             {% for job in priorities %}
-            <div class="job_list" style="background-color: white; height: 12em"  >
+            <div class="job_list">
+            <hr>
                 <div>
-                    <a href="{{ job.pk }}">
-                        <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
+                    <a  href="{{ job.pk }}">
+                        <img class="logo" src="/uploads/{{ job.company.logo }}" align="left">
                     </a>
-                    <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
+                    <div class="text">
                         <b>Tittel: </b>
                         <a href="{{ job.pk }}">
                             {{ job.title }}
@@ -27,12 +49,13 @@
         <div class="white-box space-above">
             <h2>{{ status }} Stillingsutlysninger</h2>
             {% for job in jobs %}
-            <div class="job_list" style="background-color: white; height: 12em"  >
+            <hr>
+            <div class="job_list" >
                 <div>
                     <a href="{{ job.pk }}">
-                        <img id="logo" src="/uploads/{{ job.company.logo }}" style="height: 11.5em; padding-left: 3px;" align="left" width="200em">
+                        <img class="logo" src="/uploads/{{ job.company.logo }}" align="left">
                     </a>
-                    <div style="padding-left: 220px; font-size: 20px; line-height: 32px" align="left">
+                    <div class="text">
                         <b>Tittel: </b>
                         <a href="{{ job.pk }}">
                             {{ job.title }}
