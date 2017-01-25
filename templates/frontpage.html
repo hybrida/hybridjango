@@ -2,8 +2,7 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
-    <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true">
-    <div class="fp_white" style="margin-top: -.2%; background-color: #fff; padding: 1%;"></div>
+    <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true" id="banner">
     {% if not user.is_authenticated %}
         <div class="container">
             <div class="row">
