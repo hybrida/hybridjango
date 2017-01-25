@@ -344,7 +344,7 @@ a.inverted {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: #000;
+    color: #005675;
 }
 
 .sidebar-links > li:first-child > a {
