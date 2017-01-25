@@ -1,0 +1,52 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block title %}Ringen{% endblock %}
+{% block text %}
+    <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/ringen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h1>Om I&IKT-Ringen</h1>
+        <p>
+            I&IKT-ringen er et samarbeidsforum med partene: linjeforeningen Hybrida, fakultet for Ingeniørvitenskap og
+            bedriftene som er medlemmer i samarbeidet. Formålet med samarbeidet er å tilby bedrifter helhetlig kontakt
+            med studenter fra sivilingeniørstudiet Ingeniørvitenskap og IKT (I&IKT) ved NTNU og dets tilhørende
+            fakultet.
+        </p>
+        <p>
+            Medlemskap i I&IKT-ringen gir bedriften mulighet til å komme med innspill til fakultetet om studieformen ved
+            I&IKT, samtidig som bedriften oppnår fordeler med et slikt samarbeid med Hybrida Bedriftskomité. Blant disse
+            fordelene er muligheten til å promotere seg særskilt ovenfor studenter på I&IKT.
+        </p>
+        <p>
+            Hybrida Bedriftskomité er en underkomité av linjeforeningen Hybrida. Komiteen har ansvaret for kontakten med
+            bedrifter for I&IKT. Komiteen ble etablert for å opprette kontakt mellom studentene og bedrifter og gi
+            bedrifter
+            informasjon om hvilken kompetanse våre studenter innehar.
+        </p>
+        <p>
+            Hovedmålet til komiteen er å hjelpe studentene på linjen til prosjektoppgaver, hovedoppgaver, sommerjobber
+            og
+            fast ansettelse i samarbeid med bedrifter. I tillegg kan bedriftsbesøk, ekskursjoner og lignende arrangert i
+            samarbeid med komiteen gi bedrifter og studenter mulighet til å snakke sammen.
+        </p>
+    </article>
+{% endblock %}
+{% block unstyled_sidebar %}
+    <div id="sidebar">
+        <ul class="sidebar-links">
+            {% for page, label in before_pages %}
+                <li><a href="{% url page %}">{{ label }}</a></li>
+            {% endfor %}
+            <li>
+                <ul>
+                    {% block sublinks %}
+                    {% endblock sublinks %}
+                </ul>
+            </li>
+            {% for page, label in after_pages %}
+                <li><a href="{% url page %}">{{ label }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

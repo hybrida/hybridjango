@@ -1,0 +1,36 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <article>
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/ringen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h1>Bedriftens bidrag</h1>
+        <p>Bedriftens bidrag gjennom medlemskap i I&IKT-ringen</p>
+        <p>Bedriften bidrar med en årlig medlemskapsavgift gjennom sitt medlemskap i I&IKT-ringen. Styret i I&IKT-ringen
+            ivaretar inntektene fra avgiften og disse pengene brukes til å forbedre studieprogrammet I&IKT. Denne
+            medlemskapsavgiften avhenger selvsagt av bedriftens størrelse. En oversikt over bidraget fra hver
+            størrelsesgruppe finnes i tabellen under.</p>
+        <table class="info-table">
+            <tr style="font-weight: bold">
+                <td>Antall ansatte i bedriften</td>
+                <td>Medlemskapsavgift</td>
+            </tr>
+            <tr>
+                <td>< 500</td>
+                <td>10 000 kr</td>
+            </tr>
+            <tr>
+                <td>500 - 2000</td>
+                <td>12 500 kr</td>
+            </tr>
+            <tr>
+                <td>> 2000</td>
+                <td>15 000 kr</td>
+            </tr>
+        </table>
+        <br>
+        <p>Et samarbeid gjennom I&IKT-ringen vil være avtalefestet gjennom en samarbeidsavtale som oppsummerer
+            forpliktelsene til alle parter i samarbeidet.</p>
+    </article>
+{% endblock %}
