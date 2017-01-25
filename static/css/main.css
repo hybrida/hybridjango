@@ -164,7 +164,6 @@ img {
 }
 
 .navbar {
-    box-shadow: 0 0 8px #000;
     border: none;
     text-align: center;
     vertical-align: bottom;
@@ -181,8 +180,9 @@ img {
 .btn,
 .form-control,
 .white-box,
-.dropdown-menu {
-    border-radius: 2px;
+.dropdown-menu,
+.sidebar-links a {
+    border-radius: 0;
 }
 
 .error {
@@ -240,10 +240,17 @@ img {
     margin-right: auto;
 }
 
+.navbar,
+#banner,
 .white-box,
 .styled-image,
-.drop-shadow {
-    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+.drop-shadow,
+.sidebar-links a {
+    box-shadow: 0 0 4px rgba(0, 0, 0, .4);
+}
+
+#banner {
+    width: 100%;
 }
 
 .top-text {
@@ -330,15 +337,14 @@ a.inverted {
     padding: 12px;
     line-height: 20px;
     display: block;
-    border-radius: 2px;
     font-size: large;
     transition: 100ms;
-    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
     margin-top: 4px;
     background: white;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: #000;
 }
 
 .sidebar-links > li:first-child > a {
