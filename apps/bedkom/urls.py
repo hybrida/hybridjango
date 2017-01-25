@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from apps.bedkom import views
-from apps.bedkom.views import BedriftEndre, BedriftLag, BedpressLag, comment_company
+from apps.bedkom.views import BedriftEndre, BedriftLag, BedpressLag, comment_company, bedpress_company_comment
 
 urlpatterns = [
     url(r'^$', views.index, name='bedkom'),
@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^nybedrift/', BedriftLag.as_view(), name='lag_bedrift'),
     url(r'^nybedpress/', BedpressLag.as_view(), name='lag_bedpress'),
     url(r'^(?P<pk>[0-9]+)/comment$', comment_company, name='comment_company'),
+    url(r'^/bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
 
 ]
