@@ -1,10 +1,14 @@
 <div class="list">
     {% for event in bedpress_list_chronological %}
         <div>
-            <a href="{% url 'event' event.pk %}">
-                <i class="fa fa-square"
-                   style="color:{% if event.signup_start %}#005675{% else %}#9e9d98{% endif %}"
-                   aria-hidden="true"></i>
+            <a href="{{ event.get_absolute_url }}">
+                {% if event.pk < 0 %}
+                    <i style="color: #082437; font-size: 12px; font-style: normal; line-height: 20px; margin-right: 6px" aria-hidden="true">TP</i>
+                {% else %}
+                    <i class="fa fa-square"
+                       style="color:{% if event.signup_start %}#005675{% else %}#2bb1e1{% endif %}"
+                       aria-hidden="true"></i>
+                {% endif %}
                 <time datetime="{{ event.event_start|date:'c' }}">
                     {{ event.event_start|date:'d. b' }}
                 </time>
