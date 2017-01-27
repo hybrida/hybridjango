@@ -39,7 +39,7 @@ class FrontPage(EventList):
         ).order_by('event_start')[:5]
         context['bedpress_list_chronological'] = sorted(chain(
             Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False, hidden=False).order_by('event_start')[:5],
-            temporary_quickfix_for_tp_events
+            [tp_event for tp_event in temporary_quickfix_for_tp_events if tp_event.event_start > timezone.now()]
         ), key=lambda event: event.event_start)[:5]
         context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight','deadline').filter(priority=True)
         context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
@@ -118,6 +118,7 @@ class RingenView(TemplateResponseMixin, ContextMixin, View):
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+        context['ringen'] = True
         return self.render_to_response(context)
 
 UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
