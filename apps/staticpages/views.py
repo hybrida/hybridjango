@@ -4,16 +4,15 @@ from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import resolve
+from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from django.utils import timezone
-
-from hybridjango.settings import STATIC_FOLDER
 
 from apps.events.models import Event
 from apps.events.views import EventList
-from apps.registration.models import Hybrid
 from apps.jobannouncements.models import Job
+from apps.registration.models import Hybrid
+from hybridjango.settings import STATIC_FOLDER
 
 
 class FrontPage(EventList):
@@ -56,6 +55,7 @@ aboutpages = [
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
+    ('holte', "Holte"),
 ]
 
 

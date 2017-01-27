@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^kontakt_oss/$', AboutView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
     url(r'^sangtekster/$', AboutView.as_view(template_name='staticpages/lyrics.html'), name='lyrics'),
     url(r'^historie/$', AboutView.as_view(template_name='staticpages/history.html'), name='history'),
+    url(r'^holte/$', AboutView.as_view(template_name='staticpages/holte.html'), name='holte'),
     url(r'^ringen/$', RingenView.as_view(template_name='staticpages/ringen.html'), name='ringen'),
     url(r'^ringen/studiet', RingenView.as_view(template_name='staticpages/ringen/studiet.html'), name='ringen_IIKT'),
     url(r'^ringen/visjon', RingenView.as_view(template_name='staticpages/ringen/visjon.html'), name='ringen_visjon'),
