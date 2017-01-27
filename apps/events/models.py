@@ -21,6 +21,7 @@ class Event(models.Model):
     event_end = models.DateTimeField(null=True, blank=True)
     weight = models.IntegerField(default=0)
     hidden = models.BooleanField(default=False)
+    news = models.BooleanField(default=True)
 
     def get_absolute_url(self):
         if(self.pk < 0): # TODO: replace this

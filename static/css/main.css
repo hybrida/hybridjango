@@ -446,6 +446,10 @@ a.inverted {
     list-style: none;
 }
 
+.holte span {
+    margin-left: 25px;
+}
+
 /**
  * Bootstrap:
  * 'xs': any size    -- Extra small, for phones
@@ -504,8 +508,19 @@ a.inverted {
 }
 
 @media (max-width: 992px) {
+
     #nav-container {
         width: 100%;
         padding: 0;
     }
+
+    .hidden-on-sm {
+        display: none;
+    }
+
+    .holte {
+        margin-right: 15px;
+        margin-left: 0;
+    }
+
 }
