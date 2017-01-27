@@ -1,6 +1,6 @@
 {% load static %}
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid nav-container">
+    <div class="container" id="nav-container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation_menu">
                 <span class="sr-only">Toggle navigation</span>
@@ -52,6 +52,7 @@
                         </form>
                     </div>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
@@ -98,6 +99,13 @@
                             </li>
                         {% endif %}
                     </ul>
+                </li>
+                <li>
+                    <a href="http://www.holteconsulting.no/" target="_blank"
+                       style="padding-top: 0; padding-bottom: 0; position: relative; height: 50px">
+                        <span style="position: absolute; right: 0; left: 0; bottom: 0; font-size: 12px">Hovedsamarbeidspartner</span>
+                        <img src="{% static "img/holte.jpg" %}" style="height: 40px">
+                    </a>
                 </li>
             </ul>
         </div>
