@@ -53,6 +53,7 @@ aboutpages = [
     ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
+    ('studiet', "Studiet I&IKT"),
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
@@ -118,7 +119,7 @@ class RingenView(TemplateResponseMixin, ContextMixin, View):
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
-        context['ringen'] = True
+        context['ringen'] = 'img/bannerIKT.png'
         return self.render_to_response(context)
 
 UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
