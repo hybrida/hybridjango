@@ -37,7 +37,7 @@ class FrontPage(EventList):
             event_start__gte=timezone.now(), bedpress__isnull=True
         ).order_by('event_start')[:5]
         context['bedpress_list_chronological'] = sorted(chain(
-            Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False).order_by('event_start')[:5],
+            Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False, hidden=False).order_by('event_start')[:5],
             temporary_quickfix_for_tp_events
         ), key=lambda event: event.event_start)[:5]
         context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight','deadline').filter(priority=True)
@@ -55,7 +55,7 @@ aboutpages = [
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
-    ('holte', "Holte"),
+    #('holte', "Holte"),
 ]
 
 

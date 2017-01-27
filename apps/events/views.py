@@ -14,7 +14,7 @@ from .models import Event, EventComment
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    queryset = Event.objects.filter(hidden=False).order_by('-weight', '-timestamp')
+    queryset = Event.objects.filter(hidden=False, news=True).order_by('-weight', '-timestamp')
 
 class EventView(generic.DetailView):
     model = Event

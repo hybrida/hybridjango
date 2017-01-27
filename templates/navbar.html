@@ -18,9 +18,9 @@
                     <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
                 {% else %}
                     <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
-                    <li><a href="{% url 'ringen' %}">I&IKT-ringen</a></li>
                     <li><a href="{% url 'contact_us' %}">Kontakt oss</a></li>
                 {% endif %}
+                <li><a href="{% url 'ringen' %}">I&IKT-ringen</a></li>
                 {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -42,7 +42,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"><span class="glyphicon glyphicon-search"></span></a>
+                       aria-expanded="false" style="padding-left: 2px; padding-right: 2px"><span class="glyphicon glyphicon-search"></span></a>
                     <div class="dropdown-menu">
                         <form class="navbar-form" role="search" action="{% url 'search' %}" method="GET">
                             <div class="form-group">
@@ -57,13 +57,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
                         <span style="padding-right: .5em">{% firstof user.username 'Logg inn' %}</span><span
-                            class="glyphicon glyphicon-menu-down"></span></a>
+                            class="glyphicon glyphicon-menu-down hidden-on-sm"></span></a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                             <li>
                                 <a href="{% url 'profile' user %}">Profil</a>
                             </li>
-                            {% if user.is_superuser %}
+                            {% if user.is_staff %}
                                 <li>
                                     <a href="{% url 'admin:index' %}">Administrering</a>
                                 </li>
@@ -102,9 +102,9 @@
                 </li>
                 <li>
                     <a href="http://www.holteconsulting.no/" target="_blank"
-                       style="padding-top: 0; padding-bottom: 0; position: relative; height: 50px">
-                        <span style="position: absolute; right: 0; left: 0; bottom: 0; font-size: 12px">Hovedsamarbeidspartner</span>
-                        <img src="{% static "img/holte.jpg" %}" style="height: 40px">
+                       style="padding-top: 5px; padding-bottom: 0; position: relative; height: 50px; padding-left: 0;" class="holte">
+                        <span style="position: absolute; right: 0; left: 0; bottom: 0; font-size: 11px;">Hovedsamarbeidspartner</span>
+                        <img src="{% static "img/holte.jpg" %}" style="height: 30px">
                     </a>
                 </li>
             </ul>
