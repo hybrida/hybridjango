@@ -45,15 +45,22 @@ class Contact_person(models.Model):
     job = models.CharField(max_length=100, default="hei")
     company = models.OneToOneField(Company, blank=True, null=True)
     def __str__(self):
-        return self.name
+        return str(self.name)+" at "+str(self.company)
 
 
 class Bedpress(models.Model):
     company = models.ForeignKey(Company)
     event = models.OneToOneField(Event)
 
+    def __str__(self):
+        return str(self.event)
+
+
 class CompanyComment(models.Model):
     company = models.ForeignKey(Company)
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
     text = models.TextField()
+
+    def __str__(self):
+        return str(str(self.author.first_name)+" "+str(self.author.last_name)+" in "+str(self.company)+": "+str(self.text))
