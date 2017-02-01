@@ -31,6 +31,7 @@ class FrontPage(EventList):
             Event(pk=-1, title='DNV GL Opportunity Day', event_start=tz.localize(datetime(2017, 3, 2, 10, 15)), text='432'),
             Event(pk=-1, title='Teknologiporten FOKUS: InnoVention', event_start=tz.localize(datetime(2017, 3, 16, 17)), text='422'),
             Event(pk=-1, title='AF Gruppen', event_start=tz.localize(datetime(2017, 2, 1, 17, 15)), text='428'),
+            Event(pk=-1, title='Multiconsult', event_start=tz.localize(datetime(2017, 2, 8, 17)), text='391'),
         ]
 
         context = super(EventList, self).get_context_data(**kwargs)
