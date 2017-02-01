@@ -11,6 +11,6 @@ urlpatterns = [
     url(r'^nybedrift/', BedriftLag.as_view(), name='lag_bedrift'),
     url(r'^nybedpress/', BedpressLag.as_view(), name='lag_bedpress'),
     url(r'^(?P<pk>[0-9]+)/comment$', comment_company, name='comment_company'),
-    url(r'^/bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
+    url(r'^bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
 
 ]
