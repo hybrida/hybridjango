@@ -39,24 +39,6 @@ def bedpress(request, pk):
     return render(request, "bedkom/bedpress.html", {"bedpress": bedpress, "bedpresses": bedpresses})
 
 
-class BedriftEndre(LoginRequiredMixin, generic.UpdateView):
-    model = Company
-    form_class = CompanyForm
-
-    def get_success_url(self):
-        return reverse('bedrift', kwargs={'pk': self.object.pk})
-
-class BedriftLag(LoginRequiredMixin, generic.CreateView):
-    model = Company
-    form_class = CompanyForm
-
-    def get_success_url(self):
-        return reverse('bedrift', kwargs={'pk': self.object.pk})
-
-class BedpressLag(LoginRequiredMixin, generic.CreateView):
-    model = Bedpress
-    form_class = BedpressForm
-
 @login_required
 def comment_company(request, pk):
     companies = Company.objects.all()
