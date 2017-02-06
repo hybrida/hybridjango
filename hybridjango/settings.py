@@ -135,7 +135,7 @@ MEDIA_ROOT = 'uploads/'
 MEDIA_URL = '/uploads/'
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'redirect_to_profile'
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Static files (CSS, JavaScript, Images)
