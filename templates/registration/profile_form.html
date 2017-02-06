@@ -29,13 +29,20 @@
         </div>
         <div class="form-group">
             <label for="id_specialization">Spesialisering</label>
-            {{ form.specialization|add_class:"form-control" }}
+            <select class="form-control" id="id_specialization" maxlength="50" name="specialization" type="">
+                <option value="Konstruksjonsteknikk">Konstruksjonsteknikk</option>
+                <option value="Marin Teknikk">Marin Teknikk</option>
+                <option value="Geomatikk">Geomatikk</option>
+                <option value="Produksjon og Ledelse">Produksjonsledelse</option>
+                <option value="Petroleumsteknologi">Petroleumsteknologi</option>
+                <option value="Produktutvikling og Materialer">Produktutvikling og Materialer</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="id_image">Bilde:</label>
             {{ form.image }}
         </div>
-        {{ form.password}}
+        {{ form.password }}
         {{ form.errors }}
         <button type="submit">Lagre</button>
     </form>
