@@ -96,13 +96,7 @@
                 <button class="btn btn-xs btn-primary">Tilbake</button>
             </a>
             {% if user.is_authenticated %}
-                <a href="{% url 'lag_bedpress' %}">
-                    <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
-                </a>
-                <a href="{% url 'endre_bedrift' company.id %}">
-                    <button class="btn btn-xs btn-primary">Rediger</button>
 
-                </a>
             {% endif %}
         </div>
 
