@@ -13,8 +13,6 @@ class Company(models.Model):
     responsible = models.ForeignKey(Hybrid)
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
-    description = models.CharField(max_length=400, null=True, blank=True)
-    notes = models.CharField(max_length=100, null=True, blank=True)
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
 
     CHOICES_STATUS = (

@@ -2,11 +2,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.urls import reverse
-from django.views import generic
-
-from apps.bedkom.forms import CompanyForm, BedpressForm
-from apps.events.models import Event
 from .models import Company, CompanyComment, Bedpress
 
 @permission_required(['bedkom.add_company'])
