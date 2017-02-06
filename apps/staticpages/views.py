@@ -54,10 +54,12 @@ aboutpages = [
     ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
+    ('tillitsvalgte','Tillitsvalgte'),
     ('studiet', "Studiet I&IKT"),
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
+
     #('holte', "Holte"),
 ]
 
