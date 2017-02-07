@@ -65,10 +65,6 @@
             padding-left: 5px;
         }
 
-        .big_wrapper {
-            background: white;
-        }
-
         .table-title {
             text-align: left;
             width: 50%;
@@ -84,33 +80,38 @@
             width: 50%;
         }
 
+    .header {
+        text-align: center;
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
     </style>
+
+    <div class="header">
+        <a href="{% url 'bedkom'  %}">
+            <button style="float: left" class="btn btn-primary">Tilbake</button>
+        </a>
+        <div class="pull-right">
+        <a href="{% url 'admin:index'%}">
+            <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
+        </a>
+        <a href="{{ company.pk }}/endre">
+            <button class="btn btn-primary">Rediger</button>
+        </a>
+        </div>
+    </div>
 
 
     <div class="big_wrapper">
-        <div class="pull-left">
-            <h1 class="table-title">{{ company.name }}</h1>
-        </div>
-        <div class="pull-right">
-            <a href="{% url 'bedkom'  %}">
-                <button class="btn btn-xs btn-primary">Tilbake</button>
-            </a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'admin:index'%}">
-                    <button class="btn btn-xs btn-primary">Rediger</button>
-                </a>
-                <a href="{% url 'admin:index'%}">
-                    <button class="btn btn-xs btn-primary">Lag Bedriftspresentasjon</button>
-                </a>
-            {% endif %}
-        </div>
+            <h1>{{ company.name }}</h1>
 
 
         <table class="table-fill">
             <thead>
             <tr>
                 <th class="text-left_1">Status</th>
-                <td class="text-left">{{ company.status }}</td>
+                <td class="text-left_1">{{ company.status }}</td>
             </tr>
             <tr>
                 <th class="text-left_1">Prioritet</th>
@@ -122,7 +123,7 @@
             </tr>
             <tr>
                 <th class="text-left_1">Bedriftskontakt</th>
-                <td class="text-left_1">{{ company.responsible }}</td>
+                <td class="text-left_1">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
             </tr>
             <tr>
                 <th class="text-left_1">Adresse</th>
