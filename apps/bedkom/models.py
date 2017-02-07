@@ -17,7 +17,7 @@ class Company(models.Model):
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
-        ('Opprettet kontaktet', 'KONTAKTET'),
+        ('Opprettet kontakt', 'KONTAKTET'),
         ('Takket nei', 'NEI'),
         ('Ikke kontaktet', 'IKKE_KONTAKTET'),
         ('Sendt mail', 'SENDT_MAIL')
