@@ -9,7 +9,7 @@ from apps.events.models import Event
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name='Navn')
     responsible = models.ForeignKey(Hybrid)
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
@@ -17,7 +17,7 @@ class Company(models.Model):
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
-        ('Opprettet kontaktet', 'KONTAKTET'),
+        ('Opprettet kontakt', 'KONTAKTET'),
         ('Takket nei', 'NEI'),
         ('Ikke kontaktet', 'IKKE_KONTAKTET'),
         ('Sendt mail', 'SENDT_MAIL')
@@ -35,6 +35,11 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Bedrift'
+        verbose_name_plural  = 'Bedrifter'
+
+
 
 class Contact_person(models.Model):
     name = models.CharField(max_length=50)
@@ -46,12 +51,25 @@ class Contact_person(models.Model):
         return str(self.name)+" at "+str(self.company)
 
 
+    class Meta:
+        verbose_name = 'Kontaktperson'
+        verbose_name_plural  = 'Kontaktpersoner'
+
+
+
 class Bedpress(models.Model):
     company = models.ForeignKey(Company)
     event = models.OneToOneField(Event)
+    verbose_name = "Bedriftspresentasjoner"
 
     def __str__(self):
-        return str(self.event)
+        return str(self.company.name) + " den " + str(self.event)
+
+
+
+    class Meta:
+        verbose_name = 'Bedriftspresentasjon'
+        verbose_name_plural  = 'Bedriftspresentasjoner'
 
 
 class CompanyComment(models.Model):

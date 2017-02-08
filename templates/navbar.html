@@ -38,6 +38,11 @@
                             <li>
                                 <a href="{% url 'ringen' %}">I&IKT-ringen</a>
                             </li>
+                            {% if perms.bedkom.add_company %}
+                            <li>
+                                <a href="{% url 'bedkom' %}">Bedriftsiden</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li>
                 {% endif %}
