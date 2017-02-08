@@ -1,3 +1,4 @@
+{% load event_extras %}
 <div class="remove-whitebox-padding">
     {% for event in object_list %}
         <div class="white-box space-above">
@@ -17,11 +18,11 @@
                             </span>
                             <span style="float: right">
                             {% if event.signup_open %}
-                                Påmelding åpent i {{ event.signup_end|timeuntil }}
+                                Påmelding åpent i {{ event.signup_end|timeuntil2 }}
                             {% elif event.signup_closed %}
                                 Påmelding er stengt
                             {% elif event.signup_start and event.signup_end %}
-                                Påmelding åpner om {{ event.signup_start|timeuntil }}
+                                Påmelding åpner om {{ event.signup_start|timeuntil2 }}
                             {% endif %}
                             </span>
 
