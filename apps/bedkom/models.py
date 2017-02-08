@@ -10,9 +10,9 @@ from apps.events.models import Event
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Navn')
-    responsible = models.ForeignKey(Hybrid)
-    address = models.CharField(max_length=150, null=True, blank=True)
-    info = models.CharField(max_length=300, null=True, blank=True)
+    responsible = models.ForeignKey(Hybrid, verbose_name='Bedriftskontakt')
+    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Adresse')
+    info = models.CharField(max_length=300, null=True, blank=True, verbose_name='Ingress')
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
 
     CHOICES_STATUS = (
@@ -29,8 +29,8 @@ class Company(models.Model):
         ('Lav', 'LAV')
     )
 
-    status = models.CharField(choices=CHOICES_STATUS, max_length=20)
-    priority = models.CharField(choices=CHOICES_PRIORITY, max_length=20, null=True)
+    status = models.CharField(choices=CHOICES_STATUS, max_length=20, verbose_name='Status')
+    priority = models.CharField(choices=CHOICES_PRIORITY, max_length=20, null=True, verbose_name='Prioritet')
 
     def __str__(self):
         return self.name
@@ -42,11 +42,11 @@ class Company(models.Model):
 
 
 class Contact_person(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='Navn')
     email = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=50, default="99253420")
-    job = models.CharField(max_length=100, default="hei")
-    company = models.OneToOneField(Company, blank=True, null=True)
+    telephone = models.CharField(max_length=50, default="99253420", verbose_name='Telefon')
+    job = models.CharField(max_length=100, default="hei", verbose_name='Stilling')
+    company = models.OneToOneField(Company, blank=True, null=True, verbose_name='Bedrift')
     def __str__(self):
         return str(self.name)+" at "+str(self.company)
 
