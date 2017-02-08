@@ -123,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'nb-no'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Oslo'
 
 USE_I18N = True
 
@@ -135,7 +135,7 @@ MEDIA_ROOT = 'uploads/'
 MEDIA_URL = '/uploads/'
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'redirect_to_profile'
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Static files (CSS, JavaScript, Images)
