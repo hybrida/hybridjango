@@ -17,7 +17,7 @@
                             </span>
                             <span style="float: right">
                             {% if event.signup_open %}
-                                Påmelding åpent i {{ event.signup_end|timeuntil }}
+                                Påmelding åpen i {{ event.signup_end|timeuntil }}
                             {% elif event.signup_closed %}
                                 Påmelding er stengt
                             {% elif event.signup_start and event.signup_end %}
