@@ -10,7 +10,7 @@
                     <div class="col-xs-12 drop-shadow">
                         <div class="row inverted">
                             <div class="col-sm-6 unstyled-box inverted" style="background:#005675;">
-                                Velkommen til linjeforening Hybrida sin nettside
+                                Velkommen til linjeforeningen Hybrida sin nettside
                             </div>
                             <div class="col-sm-6 unstyled-box inverted">
                                 <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
@@ -28,7 +28,7 @@
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
                 {% if perms.events.add_event %}
                     <div class="white-box space space-below">
-                        <a href="{% url 'new_event' %}">Ny hendelse</a>
+                        <h3><a style="color: black;" href="{% url 'new_event' %}">Lag ny hendelse</><h3>
                     </div>
                 {% endif %}
                 <div class="white-box space space-below">
