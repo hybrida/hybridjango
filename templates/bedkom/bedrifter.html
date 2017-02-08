@@ -63,10 +63,10 @@
         <div class="panel panel-default">
             <div class="test">
                 <p style="display: inline-block;">Bedriftsdatabase</p>
-                <a style="float: right; padding-right: 10px" href="bedrift/ny">
+                <a style="float: right; padding-right: 10px" href="{% url 'admin:index'%}">
                     <button class="btn btn-ss btn-primary">Lag ny bedrift</button>
                 </a>
-                <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="">
+                <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:index'%}">
                     <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
                 </a>
             </div>
@@ -83,7 +83,7 @@
                 <tbody>
                 {% for company in companies %}
                     <tr>
-                        <td class="text-left" style="font-size: x-large;"><a href="bedrift/{{ company.id }}" style="color: #005675;">{{ company.name }}</a></td>
+                        <td class="text-left" style="font-size: x-large;"><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
                         <td class="text-left">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
                         <td class="text-left">{{ company.last_comment.text }}</td>
                         <td style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>

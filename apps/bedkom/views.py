@@ -12,9 +12,10 @@ def index(request):
 
 @permission_required(['bedkom.add_company'])
 def bedrift(request, pk):
-    companies = Company.objects.all()
+    company = Company.objects.get(pk=pk)
+    comments = company.companycomment_set.order_by('-timestamp')
     bedpresses = Bedpress.objects.filter(company_id=pk)
-    return render(request, "bedkom/bedrift.html", {"company": companies.get(pk=pk), "bedpresses": bedpresses})
+    return render(request, "bedkom/bedrift.html", {"company": company, "bedpresses": bedpresses, "comments": comments})
 
 @permission_required(['bedkom.add_company'])
 def new_company(request):
@@ -51,7 +52,7 @@ def edit_company(request, pk):
 def comment(request, pk):
     companies = Company.objects.all()
     for company in companies:
-        company.last_comment = company.companycomment_set.order_by('timestamp').last()
+        company.last_comment = company.companycomment_set.order_by('-timestamp').last()
     return render(request, "bedkom/bedrifter.html", {"companies": companies})
 
 
