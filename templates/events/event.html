@@ -98,11 +98,11 @@
         </span>
         </div>
     {% endif %}
-    {% if hybrid.is_authenticated %}
+    {% if user.is_authenticated %}
         <div class="row">
             <div class="col-xs-12">
                 {% if event.signup_open %}
-                    {% if hybrid in event.participants.all %}
+                    {% if user in event.participants.all %}
                         <form method="post" action="{% url 'leave_event' event.pk %}">
                             {% csrf_token %}
                             <input name="eventId" value="{{ event.pk }}" type="hidden">
