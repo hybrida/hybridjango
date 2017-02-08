@@ -1,5 +1,8 @@
 {% extends 'standard_sidebar.html' %}
 {% block title %}{{ name }}{% endblock %}
+{% block sidebar %}
+    <h5>En gang i måneden arrageres Hybrida Quiz.</h5>
+{% endblock %}
 {% block text %}
     <h1>{{ team.name }}</h1>
     <h3>Poeng: {{ team.points }}</h3>
