@@ -13,13 +13,11 @@ class Company(models.Model):
     responsible = models.ForeignKey(Hybrid)
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
-    description = models.CharField(max_length=400, null=True, blank=True)
-    notes = models.CharField(max_length=100, null=True, blank=True)
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
-        ('Opprettet kontaktet', 'KONTAKTET'),
+        ('Opprettet kontakt', 'KONTAKTET'),
         ('Takket nei', 'NEI'),
         ('Ikke kontaktet', 'IKKE_KONTAKTET'),
         ('Sendt mail', 'SENDT_MAIL')
@@ -45,15 +43,22 @@ class Contact_person(models.Model):
     job = models.CharField(max_length=100, default="hei")
     company = models.OneToOneField(Company, blank=True, null=True)
     def __str__(self):
-        return self.name
+        return str(self.name)+" at "+str(self.company)
 
 
 class Bedpress(models.Model):
     company = models.ForeignKey(Company)
     event = models.OneToOneField(Event)
 
+    def __str__(self):
+        return str(self.event)
+
+
 class CompanyComment(models.Model):
     company = models.ForeignKey(Company)
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
     text = models.TextField()
+
+    def __str__(self):
+        return str(str(self.author.first_name)+" "+str(self.author.last_name)+" in "+str(self.company)+": "+str(self.text))
