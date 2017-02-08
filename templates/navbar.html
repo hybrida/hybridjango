@@ -43,9 +43,11 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
+
+            {% if user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" style="padding-left: 2px; padding-right: 2px"><span class="glyphicon glyphicon-search"></span></a>
+                       aria-expanded="false"><span class="glyphicon glyphicon-search"></span></a>
                     <div class="dropdown-menu">
                         <form class="navbar-form" role="search" action="{% url 'search' %}" method="GET">
                             <div class="form-group">
@@ -55,6 +57,7 @@
                         </form>
                     </div>
                 </li>
+            {% endif %}
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -105,7 +108,7 @@
                 </li>
                 <li>
                     <a href="http://www.holteconsulting.no/" target="_blank"
-                       style="padding-top: 5px; padding-bottom: 0; position: relative; height: 50px; padding-left: 0;" class="holte">
+                       style="padding-top: 5px; padding-bottom: 0; position: relative; height: 50px; padding-left: 5px;" class="holte">
                         <span style="position: absolute; bottom: 0; font-size: 11px;">Hovedsamarbeidspartner</span>
                         <img src="{% static "img/holte.jpg" %}" style="height: 30px">
                     </a>
