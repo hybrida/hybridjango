@@ -8,11 +8,11 @@ from django.utils import timezone
 
 
 def get_graduation_year(grade):
-    return (timezone.now() + timedelta(weeks=26)).year - int(grade) + 5
+    return five_years() - int(grade)
 
 
 def five_years():
-    return timezone.now().year + 5
+    return (timezone.now() + timedelta(weeks=26)).year + 5
 
 
 def user_folder(instance, filename):
@@ -39,7 +39,7 @@ class Hybrid(AbstractUser):
         return first_name + ' ' + self.last_name
 
     def get_grade(self):
-        return self.graduation_year - (timezone.now() - timedelta(weeks=26)).year
+        return five_years() - self.graduation_year
 
     def __str__(self):
         return self.username
