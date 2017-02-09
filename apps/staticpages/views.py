@@ -111,6 +111,11 @@ ringenpages = [
     ('ringen_kontakt', 'Kontaktinformasjon'),
 ]
 
+def members(request):
+    return render(request, "staticpages/students.html",
+                  {'students': Hybrid.objects.all()})
+
+
 class RingenView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
