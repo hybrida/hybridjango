@@ -31,7 +31,7 @@
     {% if event.max_participants and user.is_authenticated %}
         <h6 class="top-text">Påmeldte</h6>
         <ul class="unstyled-list">
-            {% for grade in "12345" %}
+            {% for grade in event.grades %}
                 <li class="space-above">
                     <strong onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
