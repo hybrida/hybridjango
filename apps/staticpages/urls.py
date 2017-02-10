@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members
 
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^ringen/bedriftens_bidrag', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'), name='ringen_bidrag'),
     url(r'^ringen/promotering', RingenView.as_view(template_name='staticpages/ringen/promotering.html'), name='ringen_promotering'),
     url(r'^ringen/kontakt', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'), name='ringen_kontakt'),
+    url(r'^studenter', members, name='members')
 ]
