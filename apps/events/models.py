@@ -47,11 +47,8 @@ class Event(models.Model):
         return self.waiting_list.order_by('id').first()
 
     def can_join(self, user):
-        if self.waiting_list.count():
-            print(user)
-            print(self.waiting_list.order_by('id').first().username)
-            return user.username == self.get_first_waiting()
-        return self.signup_open() and self.participants.count() < self.max_participants and self.invited(user)
+        wait = self.waiting_list.count() and not user.username == self.get_first_waiting()
+        return self.signup_open() and self.participants.count() < self.max_participants and self.invited(user) and not wait
 
 
     def __str__(self):
