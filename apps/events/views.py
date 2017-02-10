@@ -82,8 +82,9 @@ def leave_event(request, pk):
         event.waiting_list.remove(user)
         if event.waiting_list.count():
             first_waiting = event.get_first_waiting()
-            event.participants.add(first_waiting)
-            event.waiting_list.remove(first_waiting)
+            if event.can_join(first_waiting):
+                event.participants.add(first_waiting)
+                event.waiting_list.remove(first_waiting)
     return redirect('event', pk)
 
 
