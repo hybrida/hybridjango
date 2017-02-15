@@ -74,6 +74,9 @@
                             <li>
                                 <a href="{% url 'profile' user %}">Profil</a>
                             </li>
+                            <li>
+                                <a href={% url 'members' %}>Medlemmer</a>
+                            </li>
                             {% if user.is_staff %}
                                 <li>
                                     <a href="{% url 'admin:index' %}">Administrering</a>
