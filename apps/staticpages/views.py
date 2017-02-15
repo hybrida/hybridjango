@@ -7,7 +7,7 @@ from django.urls import resolve
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-
+from apps.registration.models import get_graduation_year
 from apps.events.models import Event
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
@@ -112,8 +112,12 @@ ringenpages = [
 ]
 
 def members(request):
+    if request.method == 'GET':
+        endyear = get_graduation_year(1)
+    elif request.method == 'POST':
+        endyear = get_graduation_year(request.POST.get("grade"))
     return render(request, "staticpages/students.html",
-                  {'students': Hybrid.objects.all()})
+        {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
 
 class RingenView(TemplateResponseMixin, ContextMixin, View):
