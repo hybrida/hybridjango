@@ -189,6 +189,9 @@ img {
 .sidebar-links a {
     border-radius: 0;
 }
+.btn{
+    border-radius: 10px;
+}
 
 .error {
     color: #7c3f63;

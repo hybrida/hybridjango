@@ -30,17 +30,17 @@
 
     {% if event.max_participants and user.is_authenticated %} <!-- Påmeldingsliste med brukere -->
         <h6 class="top-text">Påmeldte</h6>
-        <ul class="unstyled-list">
+
             {% for grade in event.grades %}
-                <li class="space-above">
+                <div style="margin-top: 10px">
                     <strong onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
                         {{ grade }}. Klasse: {{ event.participants|grade:grade|length }} påmeldte
                     </strong>
-                    <ul style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
+                    <div style="display: none" class="row showhide{{ grade }}" id="showhide{{ grade }}">
                         {% for participant in event.participants|grade:grade|dictsort:'first_name' %}
-                            <li>
-                                <div style="margin-top: 7px">
+
+                                <div style="margin-top: 7px" class="col-sm-6">
                                     <a href="{% url 'profile' participant.username %}">
                                         <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
                                             <img src="/uploads/{{ participant.image }}" width="45px"
@@ -50,12 +50,12 @@
                                         {{ participant.get_full_name }}
                                     </a>
                                 </div>
-                            </li>
+
                         {% endfor %}
-                    </ul>
-                </li>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+
     {% endif %}
 {% endblock text %}
 {% block sidebar %}
