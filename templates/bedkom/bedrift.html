@@ -180,7 +180,17 @@
     <div class="col-md-4 space-above">
         <div class="white-box comment-section" id="comment_box">
             <h6 class="top-text">Kommentarer</h6>
-            {% for comment in company.companycomment_set.all %}
+         <div style="margin:1em">
+                <form action="{% url 'comment_company' company.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="company_id" value="{{ company.pk }}" hidden>
+                    <label for="comment" class="sr-only">Comment:</label>
+                    <input class="form-control" id="comment" name="text" autocomplete="off"
+                           maxlength="250" type="text" required>
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
+                </form>
+            </div>
+            {% for comment in comments %}
                 <div class="row">
                     <div class="col-xs-2 col-lg-2" style="padding-right:0">
                         <a class="hybridThumbnailLink" id="{{ comment.author }}"
@@ -210,16 +220,6 @@
                     </div>
                 </div>
             {% endfor %}
-            <div style="margin:1em">
-                <form action="{% url 'comment_company' company.pk %}" method="POST">
-                    {% csrf_token %}
-                    <input name="company_id" value="{{ company.pk }}" hidden>
-                    <label for="comment" class="sr-only">Comment:</label>
-                    <input class="form-control" id="comment" name="text" autocomplete="off"
-                           maxlength="250" type="text" required>
-                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
-                </form>
-            </div>
         </div>
     </div>
 {% endblock extra %}

@@ -1,0 +1,38 @@
+{% extends 'standard_sidebar_top.html' %}
+{% block text %}
+  <h2 style="text-align: center">Medlemmer</h2>
+  <table class="table">
+<thead>
+      <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-2">Navn</th>
+        <th class="col-xs-1">Medlemskap</th>
+        <th class="col-xs-1">Spesialisering</th>
+      </tr>
+    </thead>
+    {% for student in students %}
+        <tr>
+            <td><img src="uploads/{{ student.image }}"></td>
+            <td><a href="hybrid/{{ student.username }}">{{ student.get_full_name }}</a></td>
+            <td>
+                {% if student.member %}
+                    Medlem
+                {% else %}
+                    Ikke medlem
+                {% endif %}
+            </td>
+            <td>{{ student.specialization }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block sidebar %}
+    <h3 style="font-size: 25px">Avgangsår</h3>
+    <hr>
+    <br>    1. Klasse
+    <br>    2. Klasse
+    <br>    3. Klasse
+    <br>    4. Klasse
+    <br>    5. Klasse
+{% endblock %}

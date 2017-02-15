@@ -9,7 +9,6 @@ class EventCommentForm(forms.ModelForm):
 
 
 class EventForm(forms.ModelForm):
-    ingress = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         exclude = [
@@ -17,4 +16,7 @@ class EventForm(forms.ModelForm):
             'participants',
             'timestamp',
         ]
+        widgets = {
+            'ingress': forms.Textarea(attrs={'rows': 3}),
+        }
         model = Event
