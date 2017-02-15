@@ -1,10 +1,12 @@
-{% extends 'standard_sidebar.html' %}
+{% extends 'events/event_sidebar.html' %}
 {% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
+    {% if event.image %}
     <div class="remove-whitebox-padding">
         <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img" width="100%">
     </div>
+    {% endif %}
     <h1 id="event_title">{{ event.title }}</h1>
     <h4 class="text-center">{{ event.ingress }}</h4>
     <h6 class="top-text">
@@ -29,9 +31,10 @@
     {% if event.max_participants and user.is_authenticated %}
         <h6 class="top-text">Påmeldte</h6>
         <ul class="unstyled-list">
-            {% for grade in "12345" %}
+            {% for grade in event.grades %}
                 <li class="space-above">
-                    <strong onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ; adjust_height()" style="cursor: pointer;">
+                    <strong onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ; adjust_height()"
+                            style="cursor: pointer;">
                         {{ grade }}. Klasse: {{ event.participants|grade:grade|length }} påmeldte
                     </strong>
                     <ul style="display: none" class="showhide{{ grade }}" id="showhide{{ grade }}">
@@ -87,6 +90,14 @@
                 <td>{{ event.location }}</td>
             </tr>
         {% endif %}
+        {% if event.waiting_list.count %}
+            <tr>
+                <td>Kø</td>
+                <td>
+                    {% if waiting_position %}Plass {{ waiting_position }} av {% endif %}{{ event.waiting_list.count }}
+                </td>
+            </tr>
+        {% endif %}
     </table>
     {% if event.max_participants %}
         <div class="progress" style="margin-bottom: 0; margin-top: 1em">
@@ -102,18 +113,18 @@
         <div class="row">
             <div class="col-xs-12">
                 {% if event.signup_open %}
-                    {% if user in event.participants.all %}
+                    {% if user in event.participants.all or user in event.waiting_list.all %}
                         <form method="post" action="{% url 'leave_event' event.pk %}">
                             {% csrf_token %}
                             <input name="eventId" value="{{ event.pk }}" type="hidden">
-                            <button type="submit" class=" btn btn-danger btn-block">Meld meg av
-                            </button>
+                            <button type="submit" class=" btn btn-danger btn-block">Meld meg av</button>
                         </form>
-                    {% else %}
+                    {% elif invited %}
                         <form method="post" action="{% url 'join_event' event.pk %}">
                             {% csrf_token %}
                             <input name="eventId" value="{{ event.pk }}" type="hidden">
-                            <button type="submit" class=" btn btn-primary btn-block">Meld meg på
+                            <button type="submit" class=" btn btn-primary btn-block">
+                                {% if can_join %}Meld meg på{% else %}Meld meg på ventelisten{% endif %}
                             </button>
                         </form>
                     {% endif %}

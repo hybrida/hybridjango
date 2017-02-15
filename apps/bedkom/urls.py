@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/kommenter/$', comment, name='comment'),
     url(r'^bedrift/bedpress/(?P<pk>[0-9]+)$', bedpress, name='bedpress'),
     url(r'^(?P<pk>[0-9]+)/comment$', comment_company, name='comment_company'),
-    url(r'^/bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
+    url(r'^bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
     url(r'^bedrift/ny', new_company, name='new_company'),
     url(r'^bedrift/(?P<pk>[0-9]+)/endre$', edit_company, name='edit_company'),
 
