@@ -16,5 +16,6 @@ class HybridForm(forms.ModelForm):
             'date_joined',
             'member',
             'graduation_year',
-            'specialization'
+            'specialization',
+            'gender'
         )
