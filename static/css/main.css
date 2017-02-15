@@ -198,16 +198,6 @@ img {
     position: relative;
 }
 
-.progress-bar {
-    position: absolute;
-}
-
-.progress span {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-}
-
 .fixed-bottom-right {
     position: fixed;
     z-index: 9999;
