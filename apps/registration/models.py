@@ -19,13 +19,17 @@ def user_folder(instance, filename):
     return os.path.join('users', instance.username, filename)
 
 
+class Specialization(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+
+
 class Hybrid(AbstractUser):
     middle_name = models.CharField(max_length=50, blank=True)
     member = models.BooleanField(default=False)
     graduation_year = models.IntegerField(default=five_years)
     image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg')
     gender = models.CharField(max_length=1, blank=True)
-    specialization = models.CharField(max_length=50, blank=True)
+    specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT)
     date_of_birth = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=150, blank=True, default='Hybrid')
 
@@ -46,6 +50,7 @@ class Hybrid(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.username})
+
 
 class RecoveryMail(models.Model):
     hybrid = models.ForeignKey(Hybrid)
