@@ -5,22 +5,12 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
-def copy_specialization(apps, schema_editor):
-    Hybrid = apps.get_model('registration', 'Hybrid')
-    Specialization = apps.get_model('registration', 'Specialization')
-    for hybrid in Hybrid.objects.all().order_by('specialization'):
-        spec, created = Specialization.objects.get_or_create(name=hybrid.specialization)
-        hybrid.specialization_object = spec
-        hybrid.save()
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('registration', '0003_create_specialization_model'),
     ]
 
     operations = [
-        migrations.RunPython(copy_specialization),
         migrations.RemoveField(
             model_name='hybrid',
             name='specialization',
