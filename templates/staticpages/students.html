@@ -1,39 +1,42 @@
 {% extends 'standard_sidebar_top.html' %}
 {% block text %}
-    <h2 style="text-align: center">Medlemmer</h2>
+<h2 style="text-align: center">Medlemmer</h2>
     <table class="table">
         <thead>
-        <tr>
-            <th class="col-xs-1"></th>
-            <th class="col-xs-2">Navn</th>
-            <th class="col-xs-1">Medlemskap</th>
-            <th class="col-xs-1">Spesialisering</th>
-        </tr>
+            <tr>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-2">Navn</th>
+                <th class="col-xs-1">Medlemskap</th>
+                <th class="col-xs-1">Spesialisering</th>
+            </tr>
         </thead>
         <tbody>
-        {% for student in students %}
-            <tr>
-                <td><img src="uploads/{{ student.image }}"></td>
-                <td><a href="hybrid/{{ student.username }}">{{ student.get_full_name }}</a></td>
-                <td>
-                    {% if student.member %}
-                        Medlem
-                    {% else %}
-                        Ikke medlem
-                    {% endif %}
-                </td>
-                <td>{{ student.specialization.name }}</td>
-            </tr>
-        {% endfor %}
+            {% for student in students %}
+                <tr>
+                    <td><img src="uploads/{{ student.image }}"></td>
+                    <td><a href="hybrid/{{ student.username }}">{{ student.get_full_name }}</a></td>
+                    <td>
+                        {% if student.member %}
+                            Medlem
+                        {% else %}
+                            Ikke medlem
+                        {% endif %}
+                    </td>
+                    <td>{{ student.specialization.name }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
 {% block sidebar %}
-    <h3 style="font-size: 25px">Avgangsår</h3>
-    <hr>
-    <br>    1. Klasse
-    <br>    2. Klasse
-    <br>    3. Klasse
-    <br>    4. Klasse
-    <br>    5. Klasse
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h3 style="font-size: 25px">Avgangsår</h3>
+        <hr>
+            <td><button  type="submit" class="btn btn-link" name="grade" value="1">1. Klasse</button></td><br>
+            <td><button  type="submit" class="btn btn-link" name="grade" value="2">2. Klasse</button></td><br>
+            <td><button  type="submit" class="btn btn-link" name="grade" value="3">3. Klasse</button></td><br>
+            <td><button  type="submit" class="btn btn-link" name="grade" value="4">4. Klasse</button></td><br>
+            <td><button  type="submit" class="btn btn-link" name="grade" value="5">5. Klasse</button></td>
+    </form>
 {% endblock %}
