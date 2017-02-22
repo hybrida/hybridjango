@@ -30,4 +30,6 @@ urlpatterns = [
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
                   url(r'^stillingsutlysninger/', include('apps.jobannouncements.urls'), name='announcements'),
                   url(r'', include('apps.staticpages.urls')),
+                  url(r'^griffensorden/', include('apps.griffensorden.urls'), name='griffensorden'),
+                  url(r'^search/', include('apps.search.urls'), name='search'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

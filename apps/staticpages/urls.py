@@ -5,9 +5,9 @@ from apps.staticpages.views import AboutView, updatek, search, RingenView, membe
 
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
-    url(r'^strikk/$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html')),
+    url(r'^strikk/$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
     url(r'^statutter/$', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
-    url(r'^griffens_orden/$', AboutView.as_view(template_name='staticpages/griffens_orden.html'), name='griff_orden'),
+    url(r'^griffens_orden/$', AboutView.as_view(template_name='staticpages/../../templates/griffensorden/griffens_orden.html'), name='griff_orden'),
     url(r'^om_hybrida/$', AboutView.as_view(template_name='staticpages/about.html'), name='about'),
     url(r'^for_bedrifter/$', AboutView.as_view(template_name='staticpages/for_companies.html'), name='for_companies'),
     url(r'^updatek/$', updatek, name='updatek'),
