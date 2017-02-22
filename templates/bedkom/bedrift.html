@@ -38,13 +38,13 @@
             font-size: 16px;
             font-weight: normal;
             text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+            width:69%;
         }
 
         th {
             background: #EBEBEB;
-            width: 20%;
+            width: 31%;
             border: 1px solid #C1C3D1;
-
         }
 
         td:last-child {
@@ -65,10 +65,6 @@
             padding-left: 5px;
         }
 
-        .big_wrapper {
-            background: white;
-        }
-
         .table-title {
             text-align: left;
             width: 50%;
@@ -84,69 +80,73 @@
             width: 50%;
         }
 
+    .header {
+        text-align: center;
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
     </style>
+
+    <div class="header">
+        <a href="{% url 'bedkom'  %}">
+            <button style="float: left" class="btn btn-primary">Tilbake</button>
+        </a>
+        <div class="pull-right">
+        <a href="{% url 'admin:index'%}">
+            <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
+        </a>
+        <a href="{{ company.pk }}/endre">
+            <button class="btn btn-primary">Rediger</button>
+        </a>
+        </div>
+    </div>
 
 
     <div class="big_wrapper">
-        <div class="pull-left">
-            <h1 class="table-title">{{ company.name }}</h1>
-        </div>
-        <div class="pull-right">
-            <a href="{% url 'bedkom'  %}">
-                <button class="btn btn-xs btn-primary">Tilbake</button>
-            </a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'lag_bedpress' %}">
-                    <button class="btn btn-xs btn-primary">Lag bedriftspresentasjon</button>
-                </a>
-                <a href="{% url 'endre_bedrift' company.id %}">
-                    <button class="btn btn-xs btn-primary">Rediger</button>
-
-                </a>
-            {% endif %}
-        </div>
+            <h1>{{ company.name }}</h1>
 
 
         <table class="table-fill">
             <thead>
             <tr>
                 <th class="text-left_1">Status</th>
-                <td class="text-left">{{ company.status }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Adresse</th>
-                <td class="text-left_1">{{ company.address }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Kort intro</th>
-                <td class="text-left_1">{{ company.info }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Beskrivelse</th>
-                <td class="text-left_1">{{ company.description }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Telefon</th>
-                <td class="text-left_1">{{ company.telephone }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Notater</th>
-                <td class="text-left_1">{{ company.notes }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Ansvarlig</th>
-                <td class="text-left_1">{{ company.responsible }}</td>
-            </tr>
-            <tr>
-                <th class="text-left_1">Kontaktperson</th>
-                <td class="text-left_1">{{ company.contact_person.name }}</td>
+                <td class="text-left_1">{{ company.status }}</td>
             </tr>
             <tr>
                 <th class="text-left_1">Prioritet</th>
                 <td class="text-left_1">{{ company.priority }}</td>
             </tr>
+            <tr>
+                <th class="text-left_1">Ingress</th>
+                <td class="text-left_1">{{ company.info }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Bedriftskontakt</th>
+                <td class="text-left_1">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+            </tr>
+            <tr>
+                <th class="text-left_1">Adresse</th>
+                <td class="text-left_1">{{ company.address }}</td>
+            </tr>
             </thead>
         </table>
+<br/>
+       <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left_1">Bedriftsrepresentant  </th>
+                <td class="text-left_1">{{ company.contact_person.name }} </td>
+            </tr>
+
+            <tr>
+                <th class="text-left_1">Email</th>
+                <td class="text-left_1">{{ company.contact_person.email }}</td>
+            </tr>
+            </thead>
+        </table>
+
+
 
         <div class="">
             <h3>Tidligere bedriftspresentasjoner</h3>
@@ -155,17 +155,12 @@
             {% endfor %}
 
         </div>
-        <div>
-            <h3>Kontaktpersoner</h3>
-            <p>{{ company.contact_person.name }} || {{ company.contact_person.email }}</p>
 
-        </div>
     </div>
 
 {% endblock text %}
 {% block sidebar %}
-    <p>legg til kommentarboks</p>
-    <p>Lag kontaktperson felt</p>
+    <p>Hva skal vi ha har er? </p>
 {%  endblock %}
 {% block extra %}
     <script type="text/javascript">
@@ -185,7 +180,17 @@
     <div class="col-md-4 space-above">
         <div class="white-box comment-section" id="comment_box">
             <h6 class="top-text">Kommentarer</h6>
-            {% for comment in company.companycomment_set.all %}
+         <div style="margin:1em">
+                <form action="{% url 'comment_company' company.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="company_id" value="{{ company.pk }}" hidden>
+                    <label for="comment" class="sr-only">Comment:</label>
+                    <input class="form-control" id="comment" name="text" autocomplete="off"
+                           maxlength="250" type="text" required>
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
+                </form>
+            </div>
+            {% for comment in comments %}
                 <div class="row">
                     <div class="col-xs-2 col-lg-2" style="padding-right:0">
                         <a class="hybridThumbnailLink" id="{{ comment.author }}"
@@ -215,16 +220,6 @@
                     </div>
                 </div>
             {% endfor %}
-            <div style="margin:1em">
-                <form action="{% url 'comment_company' company.pk %}" method="POST">
-                    {% csrf_token %}
-                    <input name="company_id" value="{{ company.pk }}" hidden>
-                    <label for="comment" class="sr-only">Comment:</label>
-                    <input class="form-control" id="comment" name="text" autocomplete="off"
-                           maxlength="250" type="text" required>
-                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
-                </form>
-            </div>
         </div>
     </div>
 {% endblock extra %}

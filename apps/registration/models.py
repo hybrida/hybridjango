@@ -8,15 +8,19 @@ from django.utils import timezone
 
 
 def get_graduation_year(grade):
-    return (timezone.now() + timedelta(weeks=26)).year - int(grade) + 5
+    return five_years() - int(grade)
 
 
 def five_years():
-    return timezone.now().year + 5
+    return (timezone.now() + timedelta(weeks=26)).year + 5
 
 
 def user_folder(instance, filename):
     return os.path.join('users', instance.username, filename)
+
+
+class Specialization(models.Model):
+    name = models.CharField(max_length=50, blank=True)
 
 
 class Hybrid(AbstractUser):
@@ -25,7 +29,7 @@ class Hybrid(AbstractUser):
     graduation_year = models.IntegerField(default=five_years)
     image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg')
     gender = models.CharField(max_length=1, blank=True)
-    specialization = models.CharField(max_length=50, blank=True)
+    specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT)
     date_of_birth = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=150, blank=True, default='Hybrid')
 
@@ -39,13 +43,14 @@ class Hybrid(AbstractUser):
         return first_name + ' ' + self.last_name
 
     def get_grade(self):
-        return self.graduation_year - (timezone.now() - timedelta(weeks=26)).year
+        return five_years() - self.graduation_year
 
     def __str__(self):
         return self.username
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.username})
+
 
 class RecoveryMail(models.Model):
     hybrid = models.ForeignKey(Hybrid)

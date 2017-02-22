@@ -4,18 +4,14 @@ from apps.bedkom.models import Company, Bedpress
 
 
 class CompanyForm(forms.ModelForm):
-    description = forms.CharField(widget=forms.Textarea)
-
-
 
     class Meta:
         fields = [
             'name',
             'responsible',
             'address',
-            'description',
             'info',
-            'notes',
+            'logo',
             'priority',
             'status',
         ]

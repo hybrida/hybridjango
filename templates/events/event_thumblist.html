@@ -1,40 +1,44 @@
+{% load event_extras %}
 <div class="remove-whitebox-padding">
     {% for event in object_list %}
         <div class="white-box space-above">
             <a href="{% url 'event' event.pk %}" style="color: black">
                 <div class="remove-whitebox-padding" style="margin-bottom: 0">
-                    <div class="event_thumb_image" style="max-height: 320px; overflow: hidden">
-                        <img src="/uploads/{{ event.image }}"
-                             alt="No image available"
-                             width="100%">
-                    </div>
-                    <div class="image-info-overlay">
-                        <div>
+                    {% if event.image %}
+                        <div class="event_thumb_image" style="max-height: 320px; overflow: hidden">
+                            <img src="/uploads/{{ event.image }}"
+                                 alt="No image available"
+                                 width="100%">
+                        </div>
+                        <div class="image-info-overlay">
+                            <div>
                             <span style="float: left">
                             {% if event.event_start and event.event_end %}
                                 {{ event.event_start }}
                             {% endif %}
                             </span>
-                            <span style="float: right">
+                                <span style="float: right">
                             {% if event.signup_open %}
-                                Påmelding åpent i {{ event.signup_end|timeuntil }}
+                                Påmelding åpen i {{ event.signup_end|timeuntil2 }}
                             {% elif event.signup_closed %}
                                 Påmelding er stengt
                             {% elif event.signup_start and event.signup_end %}
-                                Påmelding åpner om {{ event.signup_start|timeuntil }}
+                                Påmelding åpner om {{ event.signup_start|timeuntil2 }}
                             {% endif %}
                             </span>
 
+                            </div>
                         </div>
-                    </div>
-
+                    {% else %}
+                        <div style="height: 20px"></div>
+                    {% endif %}
                     <div style="clear: both">
                         {% if event.max_participants > 0 %}
                             <div class="progress" style="margin-bottom: 0">
                                 <div class="progress-bar"
-                                     style="width: {% widthratio event.participants.count event.max_participants 100 %}%">
+                                     style="min-width: 4em; width: {% widthratio event.participants.count event.max_participants 100 %}%">
+                                    {{ event.participants.count }} / {{ event.max_participants }}
                                 </div>
-                                <span>{{ event.participants.count }} / {{ event.max_participants }}</span>
                             </div>
                         {% endif %}
                     </div>

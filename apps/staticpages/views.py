@@ -7,7 +7,7 @@ from django.urls import resolve
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-
+from apps.registration.models import get_graduation_year
 from apps.events.models import Event
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
@@ -35,13 +35,19 @@ class FrontPage(EventList):
         ]
 
         context = super(EventList, self).get_context_data(**kwargs)
-        context['event_list_chronological'] = Event.objects.filter(
+        event_list_chronological = Event.objects.filter(
             event_start__gte=timezone.now(), bedpress__isnull=True
-        ).order_by('event_start')[:7]
-        context['bedpress_list_chronological'] = sorted(chain(
-            Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False, hidden=False).order_by('event_start')[:7],
-            [tp_event for tp_event in temporary_quickfix_for_tp_events if tp_event.event_start > timezone.now()]
-        ), key=lambda event: event.event_start)[:7]
+        )
+        bedpress_list_chronological = Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False, hidden=False)
+        if not self.request.user.is_authenticated:
+            event_list_chronological = event_list_chronological.filter(public=True)
+            bedpress_list_chronological = bedpress_list_chronological.filter(public=True)
+
+        context['event_list_chronological'] = event_list_chronological.order_by('event_start')[:7]
+        context['bedpress_list_chronological'] = sorted(chain(bedpress_list_chronological.order_by('event_start')[:7],
+                     [tp_event for tp_event in temporary_quickfix_for_tp_events if tp_event.event_start > timezone.now()]
+                     ), key=lambda event: event.event_start)[:7]
+
         context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight','deadline').filter(priority=True)
         context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
         return context
@@ -54,10 +60,12 @@ aboutpages = [
     ('committees', "Komiteer"),
     ('griff_orden', "Griffens Orden"),
     ('statutter', "Statutter"),
+    ('tillitsvalgte','Tillitsvalgte'),
     ('studiet', "Studiet I&IKT"),
     ('lyrics', "Sangtekster"),
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
+
     #('holte', "Holte"),
 ]
 
@@ -102,6 +110,15 @@ ringenpages = [
     ('ringen_promotering', 'Promotering'),
     ('ringen_kontakt', 'Kontaktinformasjon'),
 ]
+
+def members(request):
+    if request.method == 'GET':
+        endyear = get_graduation_year(1)
+    elif request.method == 'POST':
+        endyear = get_graduation_year(request.POST.get("grade"))
+    return render(request, "staticpages/students.html",
+        {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
+
 
 class RingenView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
