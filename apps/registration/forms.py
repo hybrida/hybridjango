@@ -15,4 +15,7 @@ class HybridForm(forms.ModelForm):
             'is_active',
             'date_joined',
             'member',
+            'graduation_year',
+            'specialization',
+            'gender'
         )

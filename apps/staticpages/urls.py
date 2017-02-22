@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members
 
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^kontakt_oss/$', AboutView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
     url(r'^sangtekster/$', AboutView.as_view(template_name='staticpages/lyrics.html'), name='lyrics'),
     url(r'^historie/$', AboutView.as_view(template_name='staticpages/history.html'), name='history'),
+    url(r'^tillitsvalgte/$',AboutView.as_view(template_name='staticpages/tillitsvalgte.html'), name='tillitsvalgte'),
     #url(r'^holte/$', AboutView.as_view(template_name='staticpages/holte.html'), name='holte'),
     url(r'^studiet', AboutView.as_view(template_name='staticpages/ringen/studiet.html'), name='studiet'),
     url(r'^ringen/$', RingenView.as_view(template_name='staticpages/ringen.html'), name='ringen'),
@@ -26,4 +27,5 @@ urlpatterns = [
     url(r'^ringen/bedriftens_bidrag', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'), name='ringen_bidrag'),
     url(r'^ringen/promotering', RingenView.as_view(template_name='staticpages/ringen/promotering.html'), name='ringen_promotering'),
     url(r'^ringen/kontakt', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'), name='ringen_kontakt'),
+    url(r'^studenter', members, name='members')
 ]

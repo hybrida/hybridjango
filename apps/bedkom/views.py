@@ -1,61 +1,68 @@
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.shortcuts import render
-from django.urls import reverse
-from django.views import generic
-
-from apps.bedkom.forms import CompanyForm, BedpressForm
-from apps.events.models import Event
+from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import CompanyForm
 from .models import Company, CompanyComment, Bedpress
 
-
+@permission_required(['bedkom.add_company'])
 def index(request):
     companies = Company.objects.all()
     for company in companies:
         company.last_comment = company.companycomment_set.order_by('timestamp').last()
     return render(request, "bedkom/bedrifter.html", {"companies": companies})
 
-
+@permission_required(['bedkom.add_company'])
 def bedrift(request, pk):
-    companies = Company.objects.all()
+    company = Company.objects.get(pk=pk)
+    comments = company.companycomment_set.order_by('-timestamp')
     bedpresses = Bedpress.objects.filter(company_id=pk)
-    return render(request, "bedkom/bedrift.html", {"company": companies.get(pk=pk), "bedpresses": bedpresses})
+    return render(request, "bedkom/bedrift.html", {"company": company, "bedpresses": bedpresses, "comments": comments})
+
+@permission_required(['bedkom.add_company'])
+def new_company(request):
+    action = 'Lag ny'
+    if request.method == "POST":
+        print("een")
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            print("hhe")
+            company = form.save(commit=False)
+            company.save()
+            return redirect('bedrift', pk=company.pk)
+
+    form = CompanyForm(request.POST)
+    return render(request, "bedkom/company_form.html", {'action':action,'form':form, })
+
+@permission_required(['bedkom.change_company'])
+def edit_company(request, pk):
+    action = "Rediger"
+    company = get_object_or_404(Company, pk=pk)
+    if request.method == "POST":
+        form = CompanyForm(request.POST, instance=company)
+        if form.is_valid():
+            company = form.save(commit=False)
+            company.save()
+            return redirect('bedrift', pk=company.pk)
+    else:
+        form = CompanyForm(instance=company)
+    return render(request, "bedkom/company_form.html", {'action':action,'form':form, })
 
 
+
+@permission_required(['bedkom.add_company'])
 def comment(request, pk):
     companies = Company.objects.all()
     for company in companies:
-        company.last_comment = company.companycomment_set.order_by('timestamp').last()
+        company.last_comment = company.companycomment_set.order_by('-timestamp').last()
     return render(request, "bedkom/bedrifter.html", {"companies": companies})
 
 
+@permission_required(['bedkom.add_company'])
 def bedpress(request, pk):
     bedpresses = Bedpress.objects.all()
     bedpress = bedpresses.get(pk=pk)
     bedpresses = Bedpress.objects.filter(company_id=pk)
     return render(request, "bedkom/bedpress.html", {"bedpress": bedpress, "bedpresses": bedpresses})
 
-
-class BedriftEndre(LoginRequiredMixin, generic.UpdateView):
-    model = Company
-    form_class = CompanyForm
-
-    def get_success_url(self):
-        return reverse('bedrift', kwargs={'pk': self.object.pk})
-
-
-class BedriftLag(LoginRequiredMixin, generic.CreateView):
-    model = Company
-    form_class = CompanyForm
-
-    def get_success_url(self):
-        return reverse('bedrift', kwargs={'pk': self.object.pk})
-
-class BedpressLag(LoginRequiredMixin, generic.CreateView):
-    model = Bedpress
-    form_class = BedpressForm
 
 @login_required
 def comment_company(request, pk):
