@@ -33,6 +33,9 @@
                                 <a href="{% url 'ballot:index' %}">Avstemning</a>
                             </li>
                             <li>
+                                <a href="{% url 'strikk' %}">Hybridastrikk</a>
+                            </li>
+                            <li>
                                 <a href="{% url 'kilt:info' %}">Kiltbestilling</a>
                             </li>
                             <li>
@@ -43,6 +46,9 @@
                                 <a href="{% url 'bedkom' %}">Bedriftsiden</a>
                             </li>
                             {% endif %}
+                            <li>
+                                <a href="{% url 'jobs:info' %}">Stillingsutlysninger</a>
+                            </li>
                         </ul>
                     </li>
                 {% endif %}
@@ -54,7 +60,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"><span class="glyphicon glyphicon-search"></span></a>
                     <div class="dropdown-menu">
-                        <form class="navbar-form" role="search" action="{% url 'search' %}" method="GET">
+                        <form class="navbar-form" role="search" action="#" method="GET">
                             <div class="form-group">
                                 <input id="navbar-search" type="text" class="form-control" name="tekst"
                                        placeholder="Søk"/>
