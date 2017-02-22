@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'apps.quiz',
     'apps.events',
     'apps.jobannouncements',
+    'apps.search',
+    'apps.griffensorden',
 ]
 
 MIDDLEWARE = [
