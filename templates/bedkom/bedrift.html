@@ -93,10 +93,10 @@
             <button style="float: left" class="btn btn-primary">Tilbake</button>
         </a>
         <div class="pull-right">
-        <a href="{% url 'admin:index'%}">
+        <a href="{%  url 'admin:bedkom_bedpress_add'%}">
             <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
         </a>
-        <a href="{{ company.pk }}/endre">
+        <a href="{% url 'admin:bedkom_company_change' company.pk %}">
             <button class="btn btn-primary">Rediger</button>
         </a>
         </div>
