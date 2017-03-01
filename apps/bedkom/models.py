@@ -1,8 +1,8 @@
 from django.db import models
-from apps.registration.models import Hybrid
 from django.utils import timezone
 
 from apps.events.models import Event
+from apps.registration.models import Hybrid
 
 
 class Contact_person(models.Model):
@@ -22,7 +22,7 @@ class Company(models.Model):
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
-    contact_person = models.ForeignKey(Contact_person, default=None)
+    contact_person = models.ForeignKey(Contact_person, blank=True, null=True)
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
