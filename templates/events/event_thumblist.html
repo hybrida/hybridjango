@@ -17,17 +17,9 @@
                                 {{ event.event_start }}
                             {% endif %}
                             </span>
-                                {% for attendance in event.attendance_set.all %}
-                                    <span style="float: right">
-                                        {% if attendance.signup_open %}
-                                            Påmelding åpen i {{ attendance.signup_end|timeuntil2 }}
-                                        {% elif attendance.signup_closed %}
-                                            Påmelding er stengt
-                                        {% elif attendance.signup_start and event.signup_end %}
-                                            Påmelding åpner om {{ attendance.signup_start|timeuntil2 }}
-                                        {% endif %}
+                                <span style="float: right">
+                                        {{ event.location }}
                                     </span>
-                                {% endfor %}
                             </div>
                         </div>
                     {% else %}
@@ -40,6 +32,18 @@
                                      style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
                                     {{ attendance.participants.count }} / {{ attendance.max_participants }}
                                 </div>
+                            </div>
+                            <div style="float: right; padding: 0 .5em;">
+                                {% if attendance.signup_open %}
+                                    Åpen i {{ attendance.signup_end|timeuntil2 }}
+                                {% elif attendance.signup_closed %}
+                                    Påmelding er stengt
+                                {% elif attendance.signup_start and event.signup_end %}
+                                    Åpner om {{ attendance.signup_start|timeuntil2 }}
+                                {% endif %}
+                            </div>
+                            <div style="padding: 0 .5em;">
+                                {{ attendance.name }}:
                             </div>
                         {% endfor %}
                     </div>
