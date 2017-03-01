@@ -165,4 +165,5 @@ EMAIL_USE_SSL = True
 try:
     from local_settings import *
 except ImportError as e:
+    print(e.msg)
     pass
