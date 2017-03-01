@@ -1,7 +1,9 @@
-from apps.registration.models import Hybrid
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
+
+from apps.registration.models import Hybrid, Specialization
 
 
 class Event(models.Model):
@@ -13,25 +15,77 @@ class Event(models.Model):
     image = models.ImageField(upload_to='events', blank=True)
     event_start = models.DateTimeField(null=True, blank=True)
     event_end = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=50, blank=True)
     weight = models.IntegerField(default=0)
     hidden = models.BooleanField(default=False)
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
 
-    participants = models.ManyToManyField(Hybrid, related_name='participating', blank=True)
-    waiting_list = models.ManyToManyField(Hybrid, related_name='waiting', blank=True, )
-    max_participants = models.PositiveIntegerField(default=0)
-    price = models.PositiveIntegerField(default=0)
-    location = models.CharField(max_length=50, blank=True)
-    signup_start = models.DateTimeField(null=True, blank=True)
-    signup_end = models.DateTimeField(null=True, blank=True)
-    genders = models.CharField(max_length=3, default='MFU')
-    grades = models.CharField(max_length=5, default='12345')
-
     def get_absolute_url(self):
-        if(self.pk < 0): # TODO: replace this
+        if (self.pk < 0):  # TODO: replace this
             return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
+
+    # def signup_open(self):
+    #     return any([a.signup_open for a in self.attendance_set.all()])
+
+    # def signup_closed(self):
+    #     return any([a.signup_closed for a in self.attendance_set.all()])
+
+    # def invited(self, user):
+    #     return any([a.invited for a in self.attendance_set.all()])
+
+    # def get_first_waiting(self):
+    #    return any([a.get_first_waiting for a in self.attendance_set.all()])
+
+    # def can_join(self, user):
+    #    return any([a.can_join for a in self.attendance_set.all()])
+
+    def __str__(self):
+        return '{}: {}'.format(self.timestamp.date(), self.title)
+
+
+class Participation(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    hybrid = models.ForeignKey(Hybrid)
+    attendance = models.ForeignKey('Attendance')
+
+    class Meta:
+        unique_together = ('hybrid', 'attendance')
+
+    def __str__(self):
+        return '{timestamp}-{hybrid}-{attendance}'.format(hybrid=self.hybrid, attendance=self.attendance,
+                                                          timestamp=self.timestamp)
+
+
+class AttendanceManager(models.Manager):
+    def open(self):
+        return super(AttendanceManager, self).filter(signup_start__lt=timezone.now(),
+                                                     signup_end__gt=timezone.now())
+
+    def joinable(self, user):
+        return user.is_authenticated() and self.open().filter(
+            Q(specializations=None) | Q(specializations=user.specialization),
+            genders__contains=user.gender,
+            grades__contains=str(user.get_grade()),
+        )
+
+
+class Attendance(models.Model):
+    objects = AttendanceManager()
+    event = models.ForeignKey(Event)
+    name = models.CharField(max_length=50, default='Påmelding')
+    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
+    max_participants = models.PositiveIntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
+    signup_start = models.DateTimeField()
+    signup_end = models.DateTimeField()
+    genders = models.CharField(max_length=3, default='MFU')
+    grades = models.CharField(max_length=50, default='12345')
+    specializations = models.ManyToManyField(Specialization, blank=True, limit_choices_to={'active': True})
+
+    def invited_specialization(self, specialization):
+        return not self.specializations.count() or specialization in self.specializations.all()
 
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
@@ -40,19 +94,26 @@ class Event(models.Model):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
 
     def invited(self, user):
-        if self.signup_open:
-            return user.gender in self.genders and str(user.get_grade()) in self.grades
+        return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
+            user.specialization)
+
+    def get_signed(self):
+        return Participation.objects.filter(attendance_id=self).order_by('-timestamp')[:self.max_participants]
+
+    def get_waiting(self):
+        return Participation.objects.filter(attendance_id=self).order_by('-timestamp')[self.max_participants:]
 
     def get_first_waiting(self):
-        return self.waiting_list.order_by('id').first()
+        return self.get_waiting().first()
+
+    def full(self):
+        return self.participants.count() >= self.max_participants
 
     def can_join(self, user):
-        wait = self.waiting_list.count() and not user.username == self.get_first_waiting()
-        return self.signup_open() and self.participants.count() < self.max_participants and self.invited(user) and not wait
-
+        return self.signup_open() and self.invited(user)
 
     def __str__(self):
-        return '{}: {}'.format(self.timestamp.date(), self.title)
+        return '{}, {}'.format(self.name, self.event)
 
 
 class EventComment(models.Model):

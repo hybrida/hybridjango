@@ -29,7 +29,7 @@
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
                 {% if perms.events.add_event %}
                     <div class="white-box space space-below">
-                        <h3><a style="color: black;" href="{% url 'new_event' %}">Lag ny hendelse</a></h3>
+                        <h3><a style="color: black;" href="{% url 'admin:events_event_add' %}">Lag ny hendelse</a></h3>
                     </div>
                 {% endif %}
                 <div class="white-box space space-below">
