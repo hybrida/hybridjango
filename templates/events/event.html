@@ -3,9 +3,9 @@
 {% block title %}{{ event.title }}{% endblock title %}
 {% block text %}
     {% if event.image %}
-    <div class="remove-whitebox-padding">
-        <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img" width="100%">
-    </div>
+        <div class="remove-whitebox-padding">
+            <img src="/uploads/{{ event.image }}" class="center-block img-responsive art-img" width="100%">
+        </div>
     {% endif %}
     <h1 id="event_title">{{ event.title }}</h1>
     <h4 class="text-center">{{ event.ingress }}</h4>
@@ -14,12 +14,12 @@
         <a class="hybridLink" id="{{ event.author }}"
            href="{% url 'profile' event.author %}">{{ event.author.get_full_name }}</a>
         {% if perms.events.add_event %}
-            <a class="pull-right" href="{% url 'edit_event' event.pk %}">
+            <a class="pull-right" href="{% url 'admin:events_event_change' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
         {% endif %}
         {% if perms.events.add_event %}
-            <a class="pull-right" href="{% url 'delete_event' event.pk %}">
+            <a class="pull-right" href="{% url 'admin:events_event_delete' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
         {% endif %}
@@ -28,50 +28,60 @@
     <p>{{ event.text|linebreaksbr }}</p>
     <p></p>
 
-    {% if event.max_participants and user.is_authenticated %} <!-- Påmeldingsliste med brukere -->
-        <h6 class="top-text">Påmeldte</h6>
+    {% if user.is_authenticated %}
+        {% for attendance in event.attendance_set.all %}
+            <h6 class="top-text">{{ attendance.name }}</h6>
 
-            {% for grade in event.grades %}
+            {% for grade in attendance.grades %}
                 <div style="margin-top: 10px">
-                    <strong onclick="$ ( '.showhide{{ grade }}' ).toggle ( ) ; adjust_height()"
+                    <strong onclick="$ ( '#showhide{{ attendance.id }}_{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        {{ grade }}. Klasse: {{ event.participants|grade:grade|length }} påmeldte
+                        {{ grade }}. Klasse: {{ attendance|signed_hybrids|grade_list:grade|length }} påmeldte
                     </strong>
-                    <div style="display: none" class="row showhide{{ grade }}" id="showhide{{ grade }}">
-                        {% for participant in event.participants|grade:grade|dictsort:'first_name' %}
-
-                                <div style="margin-top: 7px" class="col-sm-6">
-                                    <a href="{% url 'profile' participant.username %}">
-                                        <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
-                                            <img src="/uploads/{{ participant.image }}" width="45px"
-                                                 style="vertical-align: middle">
-                                            <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
-                                        </div>
-                                        {{ participant.get_full_name }}
-                                    </a>
-                                </div>
-
+                    <div style="display: none" class="row" id="showhide{{ attendance.id }}_{{ grade }}">
+                        {% for participant in attendance|signed_hybrids|grade_list:grade|dictsort:'first_name' %}
+                            <div style="margin-top: 7px" class="col-sm-6">
+                                <a href="{% url 'profile' participant.username %}">
+                                    <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
+                                        <img src="/uploads/{{ participant.image }}" width="45px"
+                                             style="vertical-align: middle">
+                                        <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
+                                    </div>
+                                    {{ participant.get_full_name }}
+                                </a>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
             {% endfor %}
-
+            {% if attendance.full %}
+                <div style="margin-top: 10px">
+                    <strong onclick="$ ( '#showhide{{ attendance.id }}_waiting' ).toggle ( ) ; adjust_height()"
+                            style="cursor: pointer;">
+                        Venteliste: {{ attendance|waiting_hybrids|length }} påmeldte
+                    </strong>
+                    <div style="display: none" class="row" id="showhide{{ attendance.id }}_waiting">
+                        {% for waiting in attendance|waiting_hybrids|dictsort:'first_name' %}
+                            <div style="margin-top: 7px" class="col-sm-6">
+                                <a href="{% url 'profile' waiting.username %}">
+                                    <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
+                                        <img src="/uploads/{{ waiting.image }}" width="45px"
+                                             style="vertical-align: middle">
+                                        <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
+                                    </div>
+                                    {{ waiting.get_full_name }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+
 {% endblock text %}
 {% block sidebar %}
     <table class="info-table">
-        {% if event.signup_start %}
-            <tr>
-                <td>Åpnes</td>
-                <td>{{ event.signup_start }}</td>
-            </tr>
-        {% endif %}
-        {% if event.signup_end %}
-            <tr>
-                <td>Frist</td>
-                <td>{{ event.signup_end }}</td>
-            </tr>
-        {% endif %}
         {% if event.event_start %}
             <tr>
                 <td>Start</td>
@@ -90,48 +100,67 @@
                 <td>{{ event.location }}</td>
             </tr>
         {% endif %}
-        {% if event.waiting_list.count %}
-            <tr>
-                <td>Kø</td>
-                <td>
-                    {% if waiting_position %}Plass {{ waiting_position }} av {% endif %}{{ event.waiting_list.count }}
-                </td>
-            </tr>
-        {% endif %}
     </table>
-    {% if event.max_participants %}
+    {% for attendance in event.attendance_set.all %}
+        <h3>{{ attendance.name }}</h3>
+        <table class="info-table">
+            {% if attendance.signup_start %}
+                <tr>
+                    <td>Åpnes</td>
+                    <td>{{ attendance.signup_start }}</td>
+                </tr>
+            {% endif %}
+            {% if attendance.signup_end %}
+                <tr>
+                    <td>Frist</td>
+                    <td>{{ attendance.signup_end }}</td>
+                </tr>
+            {% endif %}
+            {% if attendance.price %}
+                <tr>
+                    <td>Pris</td>
+                    <td>{{ attendance.price }}</td>
+                </tr>
+            {% endif %}
+            {% if attendance.specializations.count %}
+                <tr>
+                    <td>Spesialiseringer</td>
+                    <td>
+                        {% for specialization in attendance.specializations.all %}
+                            {{ specialization }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
         <div class="progress" style="margin-bottom: 0; margin-top: 1em">
             <div class="progress-bar"
-                 style="width: {% widthratio event.participants.count event.max_participants 100 %}%;">
+                 style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
+                {{ attendance.participants.count }} / {{ attendance.max_participants }}
             </div>
-            <span>
-            {{ event.participants.count }} / {{ event.max_participants }}
-        </span>
         </div>
-    {% endif %}
-    {% if user.is_authenticated %}
-        <div class="row">
-            <div class="col-xs-12">
-                {% if event.signup_open %}
-                    {% if user in event.participants.all or user in event.waiting_list.all %}
-                        <form method="post" action="{% url 'leave_event' event.pk %}">
+        {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-xs-12">
+                    {% if attendance.signup_open %}
+                        <form method="post">
                             {% csrf_token %}
-                            <input name="eventId" value="{{ event.pk }}" type="hidden">
-                            <button type="submit" class=" btn btn-danger btn-block">Meld meg av</button>
-                        </form>
-                    {% elif invited %}
-                        <form method="post" action="{% url 'join_event' event.pk %}">
-                            {% csrf_token %}
-                            <input name="eventId" value="{{ event.pk }}" type="hidden">
-                            <button type="submit" class=" btn btn-primary btn-block">
-                                {% if can_join %}Meld meg på{% else %}Meld meg på ventelisten{% endif %}
-                            </button>
+                            <input name="attendance" value="{{ attendance.pk }}" type="hidden">
+                            {% if user in attendance.participants.all %}
+                                <input name="action" value="leave" type="hidden">
+                                <button type="submit" class=" btn btn-danger btn-block">Meld meg av</button>
+                            {% elif attendance in joinable %}
+                                <input name="action" value="join" type="hidden">
+                                <button type="submit" class=" btn btn-primary btn-block">
+                                    {% if attendance.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
+                                </button>
+                            {% endif %}
                         </form>
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+    {% endfor %}
 {% endblock sidebar %}
 {% block extra %}
     <script type="text/javascript">

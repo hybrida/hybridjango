@@ -17,17 +17,19 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+
 from apps.staticpages.views import FrontPage
 
 urlpatterns = [
                   url(r'^$', FrontPage.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', include(admin.site.urls)),
-                  url(r'^kilt/', include('apps.kiltshop.urls'), name='kiltshop'),
+                  url(r'^kilt/', include('apps.kiltshop.urls', namespace='kilt'), name='kiltshop'),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
                   url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^hendelser/', include('apps.events.urls'), name='events'),
                   url(r'^avstemning/', include('apps.ballot.urls'), name='ballot'),
-                  url(r'^stillingsutlysninger/', include('apps.jobannouncements.urls'), name='announcements'),
+                  url(r'^stillingsutlysninger/', include('apps.jobannouncements.urls', namespace='jobs'),
+                      name='announcements'),
                   url(r'', include('apps.staticpages.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -13,7 +13,7 @@ def create_empty_specialization(apps, schema_editor):
 def copy_specialization(apps, schema_editor):
     Hybrid = apps.get_model('registration', 'Hybrid')
     Specialization = apps.get_model('registration', 'Specialization')
-    for hybrid in Hybrid.objects.all().order_by('specialization'):
+    for hybrid in Hybrid.objects.all().order_by('-graduation_year'):
         spec, created = Specialization.objects.get_or_create(name=hybrid.specialization)
         hybrid.specialization_object = spec
         hybrid.save()
