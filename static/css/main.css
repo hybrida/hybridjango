@@ -159,6 +159,16 @@ img {
     height: auto;
 }
 
+.square_img {
+    width: 5em;
+    height: 5em;
+    overflow: hidden;
+}
+
+.square_img img {
+    width: 100%;
+}
+
 .btn {
     font-family: Raleway, sans-serif;
 }
