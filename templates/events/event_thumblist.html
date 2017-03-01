@@ -17,30 +17,31 @@
                                 {{ event.event_start }}
                             {% endif %}
                             </span>
-                                <span style="float: right">
-                            {% if event.signup_open %}
-                                Påmelding åpen i {{ event.signup_end|timeuntil2 }}
-                            {% elif event.signup_closed %}
-                                Påmelding er stengt
-                            {% elif event.signup_start and event.signup_end %}
-                                Påmelding åpner om {{ event.signup_start|timeuntil2 }}
-                            {% endif %}
-                            </span>
-
+                                {% for attendance in event.attendance_set.all %}
+                                    <span style="float: right">
+                                        {% if attendance.signup_open %}
+                                            Påmelding åpen i {{ attendance.signup_end|timeuntil2 }}
+                                        {% elif attendance.signup_closed %}
+                                            Påmelding er stengt
+                                        {% elif attendance.signup_start and event.signup_end %}
+                                            Påmelding åpner om {{ attendance.signup_start|timeuntil2 }}
+                                        {% endif %}
+                                    </span>
+                                {% endfor %}
                             </div>
                         </div>
                     {% else %}
                         <div style="height: 20px"></div>
                     {% endif %}
                     <div style="clear: both">
-                        {% if event.max_participants > 0 %}
+                        {% for attendance in event.attendance_set.all %}
                             <div class="progress" style="margin-bottom: 0">
                                 <div class="progress-bar"
-                                     style="min-width: 4em; width: {% widthratio event.participants.count event.max_participants 100 %}%">
-                                    {{ event.participants.count }} / {{ event.max_participants }}
+                                     style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
+                                    {{ attendance.participants.count }} / {{ attendance.max_participants }}
                                 </div>
                             </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <h3>{{ event.title }}</h3>

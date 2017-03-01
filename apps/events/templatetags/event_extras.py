@@ -1,14 +1,34 @@
-from django import template
-
-from apps.registration.models import get_graduation_year
-
 from datetime import datetime
 
+from django import template
+
+from apps.registration.models import get_graduation_year, Hybrid
+
 register = template.Library()
+
 
 @register.filter
 def grade(value, arg):
     return value.filter(graduation_year=get_graduation_year(arg))
+
+
+@register.filter
+def grade_list(value, arg):
+    return [hybrid for hybrid in value if hybrid.graduation_year == get_graduation_year(arg)]
+
+@register.filter
+def signed_hybrids(value):
+    return get_sorted_hybrids(value)[:value.max_participants]
+
+
+@register.filter
+def waiting_hybrids(value):
+    return get_sorted_hybrids(value)[value.max_participants:]
+
+
+def get_sorted_hybrids(value):
+    return Hybrid.objects.filter(participation__attendance=value).order_by('participation__timestamp')
+
 
 TIMEUNTIL_CHUNKS = (
     (60 * 60 * 24 * 365, '1 år',     '%d år'),
