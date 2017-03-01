@@ -1,4 +1,4 @@
-{% extends 'standard_wide.html' %}
+{% extends 'standard_sidebar.html' %}
 {% block text %}
     {% if username %}
         {% if successful %}
@@ -10,8 +10,11 @@
     {% endif %}
     <form method="post">
         {% csrf_token %}
-        <label for="username">Brukernavn: </label>
+        <label for="username">NTNU- Brukernavn: </label>
         <input id="username" name="username" type="text" class="form-control">
         <button class="btn btn-primary">Send</button>
     </form>
 {% endblock %}
+{% block sidebar %}
+    <p style="text-align: center">Skriv inn ditt NTNU-brukernavn for å opprette bruker</p>
+{%  endblock %}

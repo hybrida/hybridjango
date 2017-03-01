@@ -22,13 +22,14 @@
             </div>
         </div>
     {% endif %}
+
     <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
     <div class="container">
         <div class="row space-below space-above">
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
                 {% if perms.events.add_event %}
                     <div class="white-box space space-below">
-                        <h3><a style="color: black;" href="{% url 'new_event' %}">Lag ny hendelse</><h3>
+                        <h3><a style="color: black;" href="{% url 'new_event' %}">Lag ny hendelse</a></h3>
                     </div>
                 {% endif %}
                 <div class="white-box space space-below">
@@ -44,6 +45,7 @@
                     {% include 'jobannoucements/job_list.html' %}
                 </div>
             </div>
+            <!--Hvert event hentes inn her samlet fra event_thumblist.html-->
             <div class="col-xs-12 col-md-8 col-md-pull-4">
                 <div class="unstyled-box">
                     {% include 'events/event_thumblist.html' %}
