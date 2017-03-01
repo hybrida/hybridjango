@@ -27,23 +27,23 @@
                     {% endif %}
                     <div style="clear: both">
                         {% for attendance in event.attendance_set.all %}
-                            <div class="progress" style="margin-bottom: 0">
-                                <div class="progress-bar"
-                                     style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
-                                    {{ attendance.participants.count }} / {{ attendance.max_participants }}
-                                </div>
-                            </div>
                             <div style="float: right; padding: 0 .5em;">
                                 {% if attendance.signup_open %}
                                     Åpen i {{ attendance.signup_end|timeuntil2 }}
                                 {% elif attendance.signup_closed %}
                                     Påmelding er stengt
-                                {% elif attendance.signup_start and event.signup_end %}
+                                {% else %}
                                     Åpner om {{ attendance.signup_start|timeuntil2 }}
                                 {% endif %}
                             </div>
                             <div style="padding: 0 .5em;">
                                 {{ attendance.name }}:
+                            </div>
+                            <div class="progress" style="margin-bottom: 0">
+                                <div class="progress-bar"
+                                     style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
+                                    {{ attendance.participants.count }} / {{ attendance.max_participants }}
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
