@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Bedkom{% endblock %}
+{% block link %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+{% endblock %}
 {% block content %}
     <style>
         div.big_wrapper {
@@ -63,14 +67,14 @@
         <div class="panel panel-default">
             <div class="test">
                 <p style="display: inline-block;">Bedriftsdatabase</p>
-                <a style="float: right; padding-right: 10px" href="{% url 'admin:index'%}">
+                <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add'%}">
                     <button class="btn btn-ss btn-primary">Lag ny bedrift</button>
                 </a>
-                <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:index'%}">
+                <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:bedkom_bedpress_add'%}">
                     <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
                 </a>
             </div>
-            <table class="table-fill">
+            <table class="table-fill table-bordered sortable">
                 <thead>
                     <tr style="background-color: #005675; height: 40px; color: white;">
                         <th class="col-xs-3">Navn</th>
@@ -105,4 +109,8 @@
         </div>
     </div>
 
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{% static "lib/js/bootstrap-sortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/js/moment.min.js" %}"></script>
 {% endblock %}
