@@ -34,15 +34,26 @@
 {% endblock %}
 {% block script %}
     <script type="text/javascript">
-        content = $('#content-col');
+        var content = $('#content-col');
+        var sidebar = $('#sidebar');
+
+        var prev = 0;
+        var offset = 0;
+        var margin = 0;
         adjust_margin = function () {
-            var sidebar = $('#sidebar');
-            if (window.innerWidth >= 992 && window.innerHeight >= sidebar.height() + 65) {
-                sidebar.css('margin-top', Math.max(Math.min(scrollY, content.height() - sidebar.height()), 0) + 'px');
-            } else {
-                sidebar.css('margin-top', "")
+            if (window.innerWidth >= 992 && sidebar.height() > window.innerHeight + 65) {
+                var delta = scrollY - prev;
+                if (delta > 0) {
+                    offset = Math.max(offset - delta, window.innerHeight - sidebar.height() - 80);
+                } else if (delta < 0) {
+                    offset = Math.min(offset - delta, 0);
+                }
+                margin = Math.max(Math.min(scrollY + offset, content.height() - sidebar.height()), 0);
+                sidebar.css('margin-top', margin != null ? margin + 'px' : '');
+                prev = scrollY;
             }
         };
+
         window.onload = adjust_margin;
         window.onresize = adjust_margin;
         window.onscroll = adjust_margin;
