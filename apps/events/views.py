@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from apps.events.forms import EventForm
-from .models import Event, EventComment
+from .models import Event, EventComment, Attendance, Participation
 
 
 class EventList(generic.ListView):
@@ -23,18 +23,22 @@ class EventView(generic.DetailView):
     model = Event
     template_name = 'events/event.html'
 
+    def post(self, request, *args, **kwargs):
+        attendance = Attendance.objects.get(pk=request.POST['attendance'])
+        user = request.user
+        if request.POST['action'] == 'leave' and attendance.signup_open():
+            Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+        elif request.POST['action'] == 'join' and attendance.can_join(user):
+            Participation.objects.get_or_create(hybrid=user, attendance=attendance)
+
+        self.object = self.get_object()
+        return self.render_to_response(context=self.get_context_data(**kwargs))
+
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
         user = self.request.user
         event = context['event']
-        if user in event.waiting_list.all():
-            waiting_position = event.waiting_list.filter(id__lt=event.waiting_list.get(id=user.pk).pk).count() + 1
-        else:
-            waiting_position = 0
-        if user.is_authenticated:
-            context['invited'] = event.invited(self.request.user)
-            context['can_join'] = event.can_join(self.request.user)
-            context['waiting_position'] = waiting_position
+        context['joinable'] = event.attendance_set.joinable(user)
         return context
 
 
@@ -58,34 +62,6 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
     permission_required = 'events.delete_event'
     model = Event
     success_url = reverse_lazy('event_list')
-
-
-@login_required
-def join_event(request, pk):
-    user = request.user
-    event = Event.objects.get(pk=pk)
-    if user.is_authenticated and user not in event.participants.all():
-        if event.can_join(user):
-            event.participants.add(user)
-            event.waiting_list.remove(user)
-        elif event.invited(user):
-            event.waiting_list.add(user)
-    return redirect('event', pk)
-
-
-@login_required
-def leave_event(request, pk):
-    user = request.user
-    event = Event.objects.get(pk=pk)
-    if user.is_authenticated and event.signup_open():
-        event.participants.remove(user)
-        event.waiting_list.remove(user)
-        if event.waiting_list.count():
-            first_waiting = event.get_first_waiting()
-            if event.can_join(first_waiting):
-                event.participants.add(first_waiting)
-                event.waiting_list.remove(first_waiting)
-    return redirect('event', pk)
 
 
 @login_required
