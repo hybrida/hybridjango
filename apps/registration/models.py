@@ -21,6 +21,10 @@ def user_folder(instance, filename):
 
 class Specialization(models.Model):
     name = models.CharField(max_length=50, blank=True)
+    active = models.BooleanField(default=True, blank=False, null=False)
+
+    def __str__(self):
+        return self.name
 
 
 class Hybrid(AbstractUser):
