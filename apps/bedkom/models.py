@@ -5,6 +5,14 @@ from django.utils import timezone
 from apps.events.models import Event
 
 
+class Contact_person(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
+    telephone = models.CharField(max_length=50, default="99253420")
+    job = models.CharField(max_length=100, default="hei")
+
+    def __str__(self):
+        return str(self.name)+" at "+str(self.company)
 
 
 
@@ -14,6 +22,7 @@ class Company(models.Model):
     address = models.CharField(max_length=150, null=True, blank=True)
     info = models.CharField(max_length=300, null=True, blank=True)
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
+    contact_person = models.ForeignKey(Contact_person, default=None)
 
     CHOICES_STATUS = (
         ('Booket', 'BOOKET'),
@@ -40,15 +49,6 @@ class Company(models.Model):
         verbose_name_plural  = 'Bedrifter'
 
 
-
-class Contact_person(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=50, default="99253420")
-    job = models.CharField(max_length=100, default="hei")
-    company = models.OneToOneField(Company, blank=True, null=True)
-    def __str__(self):
-        return str(self.name)+" at "+str(self.company)
 
 
     class Meta:
