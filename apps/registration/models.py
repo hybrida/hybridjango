@@ -32,7 +32,7 @@ class Hybrid(AbstractUser):
     member = models.BooleanField(default=False)
     graduation_year = models.IntegerField(default=five_years)
     image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg')
-    gender = models.CharField(max_length=1, blank=True)
+    gender = models.CharField(max_length=1, blank=False, choices=(('M', 'Mann'), ('F', 'Dame'), ('U', 'Ukjent')))
     specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT)
     date_of_birth = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=150, blank=True, default='Hybrid')
