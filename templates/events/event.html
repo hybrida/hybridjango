@@ -122,6 +122,19 @@
                     <td>{{ attendance.price }}</td>
                 </tr>
             {% endif %}
+            <tr>
+                <td>Trinn</td>
+                <td>
+                    {% for grade in attendance.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Kjønn</td>
+                <td>
+                    {% for gender in attendance.genders %}<span class="comma_seperated"
+                    >{{ gender|readable_gender }}</span>{% endfor %}
+                </td>
+            </tr>
             {% if attendance.specializations.count %}
                 <tr>
                     <td>Spesialiseringer</td>
