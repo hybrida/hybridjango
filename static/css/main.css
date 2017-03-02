@@ -173,6 +173,11 @@ img {
     font-family: Raleway, sans-serif;
 }
 
+.navbar-default {
+    background-color: white;
+    background-image: none;
+}
+
 .navbar {
     border: none;
     text-align: center;
