@@ -28,14 +28,16 @@ class Specialization(models.Model):
 
 
 class Hybrid(AbstractUser):
-    middle_name = models.CharField(max_length=50, blank=True)
-    member = models.BooleanField(default=False)
-    graduation_year = models.IntegerField(default=five_years)
-    image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg')
-    gender = models.CharField(max_length=1, blank=False, choices=(('M', 'Mann'), ('F', 'Dame'), ('U', 'Ukjent')))
-    specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT)
-    date_of_birth = models.DateField(null=True, blank=True)
-    title = models.CharField(max_length=150, blank=True, default='Hybrid')
+    middle_name = models.CharField(max_length=50, blank=True, verbose_name='Mellomnavn')
+    member = models.BooleanField(default=False, verbose_name='Medlem')
+    graduation_year = models.IntegerField(default=five_years, verbose_name='Avgangsår')
+    image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg', verbose_name='Bilde')
+    gender = models.CharField(max_length=1, blank=False, choices=(('M', 'Mann'), ('F', 'Dame'), ('U', 'Ukjent')),
+                              verbose_name='Kjønn')
+    specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT,
+                                       verbose_name='Spesialisering')
+    date_of_birth = models.DateField(null=True, blank=True, verbose_name='Fødselsår')
+    title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
 
     def get_full_name(self):
         if self.middle_name:
