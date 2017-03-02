@@ -8,6 +8,15 @@ register = template.Library()
 
 
 @register.filter
+def readable_gender(value):
+    if value == 'M':
+        return 'Menn'
+    elif value == 'F':
+        return 'Damer'
+    return 'Andre'
+
+
+@register.filter
 def grade(value, arg):
     return value.filter(graduation_year=get_graduation_year(arg))
 
@@ -15,6 +24,7 @@ def grade(value, arg):
 @register.filter
 def grade_list(value, arg):
     return [hybrid for hybrid in value if hybrid.graduation_year == get_graduation_year(arg)]
+
 
 @register.filter
 def signed_hybrids(value):
@@ -31,13 +41,14 @@ def get_sorted_hybrids(value):
 
 
 TIMEUNTIL_CHUNKS = (
-    (60 * 60 * 24 * 365, '1 år',     '%d år'),
-    (60 * 60 * 24 * 30,  '1 måned',  '%d måneder'),
-    (60 * 60 * 24 * 7,   '1 uke',    '%d uker'),
-    (60 * 60 * 24,       '1 dag',    '%d dager'),
-    (60 * 60,            '1 time',   '%d timer'),
-    (60,                 '1 minutt', '%d minutter')
+    (60 * 60 * 24 * 365, '1 år', '%d år'),
+    (60 * 60 * 24 * 30, '1 måned', '%d måneder'),
+    (60 * 60 * 24 * 7, '1 uke', '%d uker'),
+    (60 * 60 * 24, '1 dag', '%d dager'),
+    (60 * 60, '1 time', '%d timer'),
+    (60, '1 minutt', '%d minutter')
 )
+
 
 @register.filter
 def timeuntil2(d):

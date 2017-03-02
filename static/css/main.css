@@ -394,6 +394,10 @@ a.inverted {
     padding: 15px;
 }
 
+.comma_seperated + .comma_seperated:before {
+    content: ', ';
+}
+
 .list {
     list-style: none;
 }
