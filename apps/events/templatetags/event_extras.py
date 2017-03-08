@@ -1,23 +1,61 @@
-from django import template
-
-from apps.registration.models import get_graduation_year
-
 from datetime import datetime
 
+from django import template
+from django.conf import settings
+
+from apps.registration.models import get_graduation_year, Hybrid
+
 register = template.Library()
+
+
+@register.filter
+def readable_gender(value):
+    if value == 'M':
+        return 'Menn'
+    elif value == 'F':
+        return 'Damer'
+    return 'Andre'
+
 
 @register.filter
 def grade(value, arg):
     return value.filter(graduation_year=get_graduation_year(arg))
 
+
+# settings value
+@register.simple_tag
+def absolute_uploads_url(relative_url):
+    return "{}/uploads/{}".format(getattr(settings, "SERVER_URL", ""), relative_url)
+
+
+@register.filter
+def grade_list(value, arg):
+    return [hybrid for hybrid in value if hybrid.graduation_year == get_graduation_year(arg)]
+
+
+@register.filter
+def signed_hybrids(value):
+    return get_sorted_hybrids(value)[:value.max_participants]
+
+
+@register.filter
+def waiting_hybrids(value):
+    return get_sorted_hybrids(value)[value.max_participants:]
+
+
+def get_sorted_hybrids(value):
+    return Hybrid.objects.filter(participation__attendance=value).order_by('participation__timestamp')
+
+
 TIMEUNTIL_CHUNKS = (
-    (60 * 60 * 24 * 365, '1 år',     '%d år'),
-    (60 * 60 * 24 * 30,  '1 måned',  '%d måneder'),
-    (60 * 60 * 24 * 7,   '1 uke',    '%d uker'),
-    (60 * 60 * 24,       '1 dag',    '%d dager'),
-    (60 * 60,            '1 time',   '%d timer'),
-    (60,                 '1 minutt', '%d minutter')
+    (60 * 60 * 24 * 365, '1 år', '%d år'),
+    (60 * 60 * 24 * 30, '1 måned', '%d måneder'),
+    (60 * 60 * 24 * 7, '1 uke', '%d uker'),
+    (60 * 60 * 24, '1 dag', '%d dager'),
+    (60 * 60, '1 time', '%d timer'),
+    (60, '1 minutt', '%d minutter')
 )
+
 
 @register.filter
 def timeuntil2(d):
