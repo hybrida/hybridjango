@@ -178,7 +178,9 @@
                             <input name="attendance" value="{{ attendance.pk }}" type="hidden">
                             {% if user in attendance.participants.all %}
                                 <input name="action" value="leave" type="hidden">
-                                <button type="submit" class=" btn btn-danger btn-block">Meld meg av</button>
+                                <button type="submit" class=" btn btn-danger btn-block">
+                                    Meld meg av{% if user in attendance|waiting_hybrids %} ventelisten{% endif %}
+                                </button>
                             {% elif attendance in joinable %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
