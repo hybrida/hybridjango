@@ -41,8 +41,20 @@
                             </div>
                             <div class="progress" style="margin-bottom: 0">
                                 <div class="progress-bar"
-                                     style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
-                                    {{ attendance.participants.count }} / {{ attendance.max_participants }}
+                                     style="min-width: 4em;
+                                             {% if attendance.full %}
+                                                 width: 100%">
+                                                 {{ attendance.max_participants }}
+                                                 / {{ attendance.max_participants }}
+                                                 + {{ attendance.get_waiting|length }}
+                                             {% else %}
+                                                 width:
+                                                 {% widthratio attendance.participants.count attendance.max_participants 100 %}
+                                                 %">
+                                                 {{ attendance.participants.count }}
+                                                 / {{ attendance.max_participants }}
+                                             {% endif %}
+
                                 </div>
                             </div>
                         {% endfor %}
