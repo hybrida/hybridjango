@@ -159,8 +159,23 @@ img {
     height: auto;
 }
 
+.square_img {
+    width: 5em;
+    height: 5em;
+    overflow: hidden;
+}
+
+.square_img img {
+    width: 100%;
+}
+
 .btn {
     font-family: Raleway, sans-serif;
+}
+
+.navbar-default {
+    background-color: white;
+    background-image: none;
 }
 
 .navbar {
@@ -382,6 +397,10 @@ a.inverted {
 
 .navbar-login {
     padding: 15px;
+}
+
+.comma_seperated + .comma_seperated:before {
+    content: ', ';
 }
 
 .list {
