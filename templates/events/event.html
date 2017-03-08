@@ -5,7 +5,7 @@
     <link rel="image_src" href="{% absolute_uploads_url event.image %}"/>
     <meta property="og:image" content="{% absolute_uploads_url event.image %}">
     <meta property="og:title" content="{{ event.title }}"/>
-    <meta property="og:description" content="{{ event.description }}"/>
+    <meta property="og:description" content="{{ event.ingress }}"/>
 {% endblock %}
 {% block text %}
     {% if event.image %}
