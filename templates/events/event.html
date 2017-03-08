@@ -1,6 +1,11 @@
 {% extends 'events/event_sidebar.html' %}
 {% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
+{% block link %}
+    <link rel="image_src" href="/uploads/{{ event.image }}"/>
+    <meta property="og:image" content="/uploads/{{ event.image }}">
+    <meta property="og:description" content="{{ event.ingress }}"/>
+{% endblock %}
 {% block text %}
     {% if event.image %}
         <div class="remove-whitebox-padding">
