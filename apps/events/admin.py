@@ -4,9 +4,14 @@ from apps.bedkom.models import Bedpress
 from .models import Event, Attendance
 
 
-class AttendanceInline(admin.StackedInline):
+class AttendanceAdmin(admin.ModelAdmin):
     model = Attendance
     filter_horizontal = ('participants', 'specializations')
+
+
+class AttendanceInline(admin.StackedInline):
+    model = Attendance
+    filter_horizontal = ('participants', 'specializations')  # TODO: participants won't show up
     extra = 0
 
 
@@ -23,3 +28,4 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event, EventAdmin)
+admin.site.register(Attendance, AttendanceAdmin)
