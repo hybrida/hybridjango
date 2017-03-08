@@ -2,3 +2,4 @@ Django
 Pillow
 pytz
 django-widget-tweaks
+psycopg2
