@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import template
+from django.conf import settings
 
 from apps.registration.models import get_graduation_year, Hybrid
 
@@ -19,6 +20,12 @@ def readable_gender(value):
 @register.filter
 def grade(value, arg):
     return value.filter(graduation_year=get_graduation_year(arg))
+
+
+# settings value
+@register.simple_tag
+def absolute_uploads_url(relative_url):
+    return "{}/uploads/{}".format(getattr(settings, "SERVER_URL", ""), relative_url)
 
 
 @register.filter
