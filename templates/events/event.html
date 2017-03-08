@@ -28,11 +28,6 @@
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
         {% endif %}
-        {% if perms.events.change_event %}
-            <a class="pull-right" href="{% url 'participants' event.pk %}">
-                <button class="btn btn-xs btn-info">Deltakere</button>
-            </a>
-        {% endif %}
     </h6>
     <p class="text-center"></p>
     <p>{{ event.text|linebreaksbr }}</p>
