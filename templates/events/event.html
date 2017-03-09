@@ -2,8 +2,9 @@
 {% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
 {% block link %}
-    <link rel="image_src" href="/uploads/{{ event.image }}"/>
-    <meta property="og:image" content="/uploads/{{ event.image }}">
+    <link rel="image_src" href="{% absolute_uploads_url event.image %}"/>
+    <meta property="og:image" content="{% absolute_uploads_url event.image %}">
+    <meta property="og:title" content="{{ event.title }}"/>
     <meta property="og:description" content="{{ event.ingress }}"/>
 {% endblock %}
 {% block text %}
