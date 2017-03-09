@@ -25,7 +25,6 @@
                         <th class="col-xs-6">Tittel</th>
                         <th class="col-xs-2">Bedrift</th>
                         <th class="col-xs-2">Søknadsfrist</th>
-                        <th class="col-xs-1">Slett</th>
                         <th class="col-xs-1">Endre</th>
 
                     </tr>
@@ -44,10 +43,9 @@
                                 {{ job.deadline.date }}
                             </td>
                             <td>
-                                <button class="button" name="delete_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></button>
-                            </td>
-                            <td>
-                                <button class="button" name="edit_job" type="submit" value="{{ job.pk }}"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></button>
+                                 <a href="{% url 'admin:jobannouncements_job_change' job.pk %}">
+                                    <p class="glyphicon glyphicon-pencil" style="font-size: 22px" aria-hidden="true"></p>
+                                 </a>
                             </td>
                         </tr>
                     {% endfor %}
