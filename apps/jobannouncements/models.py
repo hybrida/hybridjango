@@ -6,12 +6,12 @@ from apps.bedkom.models import Company
 class Job(models.Model):
     title = models.CharField(max_length=150)
     company = models.ForeignKey(Company)
-    deadline = models.DateTimeField(null=True, blank=True)
-    description = models.TextField()
-    priority = models.BooleanField(default=0)
+    deadline = models.DateTimeField(null=True)
+    description = models.TextField(blank=True, null=True, default="")
+    ingress = models.CharField(max_length=250, default="", blank=True)
+    link = models.CharField(max_length=150, blank=True, default="")
     weight = models.IntegerField(default=0)
-    author = models.ForeignKey(Hybrid)
-    timestamp = models.DateTimeField(default=timezone.now)
+    priority = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.title)

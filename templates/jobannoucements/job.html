@@ -1,8 +1,30 @@
-{% extends 'jobannoucements/jobview_sidebar.html' %}
+{% extends 'jobannoucements/job_sidebar.html' %}
 {% block unstyled_text %}
+    <style>
+        .pull-right{
+            position: relative;
+        }
+    </style>
     <div class="white-box space-above">
         <h1 id="job_title">{{ job.title }}</h1>
-        <p><b>Søknadsfrist: </b>{{ job.deadline }} </p>
+        <h4 class="text-center">{{ job.ingress }}</h4>
+        <h6 class="top-text">
+            <p style="color: #1b6d85; font-family: ">Søknadsfrist: {{ job.deadline }}</p>
+            {% if perms.jobannouncements.add_job %}
+            <a class="pull-right" style="padding-right: 5px" href="{% url 'admin:jobannouncements_job_change' job.pk %}">
+                <button class="btn btn-xs btn-primary">Rediger</button>
+            </a>
+            {% endif %}
+            {% if perms.jobannouncements.add_job %}
+            <a class="pull-right" style="padding-right: 5px" href="{% url 'admin:jobannouncements_job_delete' job.pk %}">
+                <button class="btn btn-xs btn-danger">Slett</button>
+            </a>
+        {% endif %}
+        </h6>
         <p id="job_title">{{ job.description|linebreaksbr }}</p>
+    </h6>
+        {% if job.link != "" %}
+            <p><b>Link: </b><a href={{ job.link }}>{{ job.title }}</a></p>
+        {% endif %}
     </div>
 {% endblock %}
