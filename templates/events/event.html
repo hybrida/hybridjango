@@ -1,6 +1,12 @@
 {% extends 'events/event_sidebar.html' %}
 {% load event_extras %}
 {% block title %}{{ event.title }}{% endblock title %}
+{% block link %}
+    <link rel="image_src" href="{% absolute_uploads_url event.image %}"/>
+    <meta property="og:image" content="{% absolute_uploads_url event.image %}">
+    <meta property="og:title" content="{{ event.title }}"/>
+    <meta property="og:description" content="{{ event.ingress }}"/>
+{% endblock %}
 {% block text %}
     {% if event.image %}
         <div class="remove-whitebox-padding">
@@ -128,7 +134,7 @@
                     {% if attendance.grades|length_is:5 %}
                         Alle
                     {% else %}
-                    {% for grade in attendance.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
+                        {% for grade in attendance.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
                     {% endif %}
                 </td>
             </tr>
@@ -145,7 +151,7 @@
             </tr>
             {% if attendance.specializations.count %}
                 <tr>
-                    <td>Spesialiseringer</td>
+                    <td>Profiler</td>
                     <td>
                         {% for specialization in attendance.specializations.all %}
                             {{ specialization }}
@@ -154,10 +160,15 @@
                 </tr>
             {% endif %}
         </table>
-        <div class="progress" style="margin-bottom: 0; margin-top: 1em">
+        <div class="progress" style="margin-bottom: 0">
             <div class="progress-bar"
-                 style="min-width: 4em; width: {% widthratio attendance.participants.count attendance.max_participants 100 %}%">
-                {{ attendance.participants.count }} / {{ attendance.max_participants }}
+                 style="min-width: 4em;
+                         width: {% widthratio attendance.get_signed|length attendance.max_participants 100 %}%">
+                {{ attendance.get_signed|length }}
+                / {{ attendance.max_participants }}
+                {% if attendance.get_waiting %}
+                    + {{ attendance.get_waiting|length }}
+                {% endif %}
             </div>
         </div>
         {% if user.is_authenticated %}
@@ -169,7 +180,9 @@
                             <input name="attendance" value="{{ attendance.pk }}" type="hidden">
                             {% if user in attendance.participants.all %}
                                 <input name="action" value="leave" type="hidden">
-                                <button type="submit" class=" btn btn-danger btn-block">Meld meg av</button>
+                                <button type="submit" class=" btn btn-danger btn-block">
+                                    Meld meg av{% if user in attendance|waiting_hybrids %} ventelisten{% endif %}
+                                </button>
                             {% elif attendance in joinable %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
