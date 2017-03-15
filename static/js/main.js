@@ -87,12 +87,21 @@ function submitFeedback() {
                             .replaceAll('>', '&gt;'));
     };
 
+    var urlWithParams = function(url, params) {
+        var params_str = [];
+        for (var param in params) {
+            params_str.push(param + '=' + encodeURIComponent(params[param]));
+        }
+        return url + '?' + params_str.join('&');
+    };
+
     var fallback = "Feedback received";
     var authorName = anonymous ? "" : slackSafe(user);
     var authorLink = anonymous ? "" : encodeURI("mailto:" + email + "?subject=") + encodeURIComponent(subject) + encodeURI("&body=") + encodeURIComponent(bodyPreText + content);
     var authorIcon = "https://slack-files.com/T0CAJ0U4A-F2WLMK087-7d8bf05908";
     var color = "good";
-    var footer = "Sent from " + url
+    var sentFromUrl = "Sent from " + url;
+    var issueUrl = "Generate issue: " + urlWithParams(window.location.origin + "/gitlab/ny", {"a": authorName, "t": Math.floor(Date.now() / 1000), "m": slackSafe(content), "u": url});
     var text = slackSafe(content);
 
     // Verify request
@@ -113,7 +122,7 @@ function submitFeedback() {
           "author_link": authorLink,
           "author_icon": authorIcon,
           "color": color,
-          "footer": footer,
+          "footer": sentFromUrl + "\n" + issueUrl,
           "text": text
         }
       ]
