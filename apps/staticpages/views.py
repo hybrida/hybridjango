@@ -15,6 +15,7 @@ from apps.registration.models import Hybrid
 from hybridjango.settings import STATIC_FOLDER
 
 
+
 class FrontPage(EventList):
     model = EventList.model
     queryset = EventList.queryset
@@ -58,7 +59,7 @@ aboutpages = [
     ('history', "Hybridas historie"),
     ('board', "Styret"),
     ('committees', "Komiteer"),
-    ('griff_orden', "Griffens Orden"),
+    ('griffensorden', "Griffens Orden"),
     ('statutter', "Statutter"),
     ('tillitsvalgte','Tillitsvalgte'),
     ('studiet', "Studiet I&IKT"),

@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 
 from apps.staticpages.views import AboutView, updatek, search, RingenView, members
 
+from apps.griffensorden.views import index
+
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
     url(r'^strikk/$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
@@ -26,5 +28,6 @@ urlpatterns = [
     url(r'^ringen/bedriftens_bidrag', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'), name='ringen_bidrag'),
     url(r'^ringen/promotering', RingenView.as_view(template_name='staticpages/ringen/promotering.html'), name='ringen_promotering'),
     url(r'^ringen/kontakt', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'), name='ringen_kontakt'),
-    url(r'^studenter', members, name='members')
+    url(r'^studenter', members, name='members'),
+    url(r'^griffensorden', index, name='griffensorden')
 ]
