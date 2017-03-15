@@ -49,6 +49,7 @@ class Participation(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     hybrid = models.ForeignKey(Hybrid)
     attendance = models.ForeignKey('Attendance')
+    excursion = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('hybrid', 'attendance')
