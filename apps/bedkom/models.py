@@ -12,8 +12,11 @@ class Contact_person(models.Model):
     job = models.CharField(max_length=100, default="hei")
 
     def __str__(self):
-        return str(self.name)+" at "+str(self.company)
+        return str(self.name)
 
+    class Meta:
+        verbose_name = 'Kontaktperson'
+        verbose_name_plural = 'Kontaktpersoner'
 
 
 class Company(models.Model):
@@ -46,15 +49,7 @@ class Company(models.Model):
 
     class Meta:
         verbose_name = 'Bedrift'
-        verbose_name_plural  = 'Bedrifter'
-
-
-
-
-    class Meta:
-        verbose_name = 'Kontaktperson'
-        verbose_name_plural  = 'Kontaktpersoner'
-
+        verbose_name_plural = 'Bedrifter'
 
 
 class Bedpress(models.Model):
@@ -65,11 +60,9 @@ class Bedpress(models.Model):
     def __str__(self):
         return str(self.company.name) + " den " + str(self.event)
 
-
-
     class Meta:
         verbose_name = 'Bedriftspresentasjon'
-        verbose_name_plural  = 'Bedriftspresentasjoner'
+        verbose_name_plural = 'Bedriftspresentasjoner'
 
 
 class CompanyComment(models.Model):
@@ -79,4 +72,6 @@ class CompanyComment(models.Model):
     text = models.TextField()
 
     def __str__(self):
-        return str(str(self.author.first_name)+" "+str(self.author.last_name)+" in "+str(self.company)+": "+str(self.text))
+        return str(
+            str(self.author.first_name) + " " + str(self.author.last_name) + " in " + str(self.company) + ": " + str(
+                self.text))

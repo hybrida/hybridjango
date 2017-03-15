@@ -24,11 +24,15 @@ SECRET_KEY = 'kxdw@f27f@c73b1064g%dtvm-=uke%2eqscww8k4k3@_ak&cit'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 ADMINS = [
     'vevsjef@hybrida.no',
 ]
+
+# used in templates when an absolute url to a page is required
+# (for example to tell facebokk what image to use when an event is shared)
+SERVER_URL = 'https://hybrida.no'
 
 SERVER_EMAIL = 'robot@hybrida.no'
 
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'widget_tweaks',
     'apps.kiltshop',
     'apps.bedkom',
