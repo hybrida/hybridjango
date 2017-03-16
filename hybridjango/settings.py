@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.search',
     'apps.griffensorden',
     'apps.gitlab',
+    'apps.staticpages',
 ]
 
 MIDDLEWARE = [

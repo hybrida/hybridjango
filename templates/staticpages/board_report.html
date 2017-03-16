@@ -1,0 +1,34 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <style>
+        #rapport {
+            font-size: 18px;
+            color: #005675;
+        }
+        .buttons {
+            position: absolute;
+            left: 535px;
+            top: 80px;
+        }
+    </style>
+
+    <div class="container" style="width: 70%">
+        <h1>Møtereferat</h1>
+        <div class="buttons">
+            {% if perms.staticpages.boardreport %}
+                <a href="{% url 'admin:staticpages_boardreport_add'%}">
+                    <button class="btn btn-xs btn-primary">Ny</button>
+                </a>
+                <a href="{% url 'admin:staticpages_boardreport_changelist'%}">
+                    <button class="btn btn-xs btn-primary">Oversikt</button>
+                </a>
+            {% endif %}
+        </div>
+        <div class="list-group">
+            {% for report in reports %}
+                <a id="rapport" href="http://hybrida.no/uploads/{{ report.report }}" class="list-group-item" target="_blank">Referat {{ report.date }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
