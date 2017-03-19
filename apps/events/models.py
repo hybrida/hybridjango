@@ -59,21 +59,7 @@ class Participation(models.Model):
                                                           timestamp=self.timestamp)
 
 
-class AttendanceManager(models.Manager):
-    def open(self):
-        return super(AttendanceManager, self).filter(signup_start__lt=timezone.now(),
-                                                     signup_end__gt=timezone.now())
-
-    def joinable(self, user):
-        return user.is_authenticated() and self.open().filter(
-            Q(specializations=None) | Q(specializations=user.specialization),
-            genders__contains=user.gender,
-            grades__contains=str(user.get_grade()),
-        )
-
-
 class Attendance(models.Model):
-    objects = AttendanceManager()
     event = models.ForeignKey(Event)
     name = models.CharField(max_length=50, default='Påmelding')
     participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
