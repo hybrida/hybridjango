@@ -1,18 +1,20 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView, members
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members, board_report
+
+from apps.griffensorden.views import GriffenView
 
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
     url(r'^strikk/$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
     url(r'^statutter/$', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
-    url(r'^griffens_orden/$', AboutView.as_view(template_name='staticpages/../../templates/griffensorden/griffens_orden.html'), name='griff_orden'),
     url(r'^om_hybrida/$', AboutView.as_view(template_name='staticpages/about.html'), name='about'),
     url(r'^for_bedrifter/$', AboutView.as_view(template_name='staticpages/for_companies.html'), name='for_companies'),
     url(r'^updatek/$', updatek, name='updatek'),
     url(r'^komite/$', AboutView.as_view(template_name='staticpages/committees.html'), name='committees'),
     url(r'^styret/$', AboutView.as_view(template_name='staticpages/board.html'), name='board'),
+    url(r'^styret/møtereferat$', board_report, name='board_report'),
     url(r'^kontakt_oss/$', AboutView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
     url(r'^sangtekster/$', AboutView.as_view(template_name='staticpages/lyrics.html'), name='lyrics'),
     url(r'^historie/$', AboutView.as_view(template_name='staticpages/history.html'), name='history'),
@@ -27,5 +29,6 @@ urlpatterns = [
     url(r'^ringen/bedriftens_bidrag', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'), name='ringen_bidrag'),
     url(r'^ringen/promotering', RingenView.as_view(template_name='staticpages/ringen/promotering.html'), name='ringen_promotering'),
     url(r'^ringen/kontakt', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'), name='ringen_kontakt'),
-    url(r'^studenter', members, name='members')
+    url(r'^studenter', members, name='members'),
+    url(r'^griffensorden', GriffenView.as_view(template_name='griffensorden/griffens_orden.html'), name='griffensorden')
 ]

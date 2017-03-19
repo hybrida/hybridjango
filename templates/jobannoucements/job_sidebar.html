@@ -10,28 +10,48 @@
     </style>
     <div class="white-box space-above">
     <h3>Stillingsutlysninger</h3>
-    <li>
-        <a href="{% url 'jobs:info' %}">Vis Aktive</a>
-    </li>
-    <li>
-        <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
-    </li>
+        <div align="center  ">
+            <a href="{% url 'jobs:info' %}">Vis Aktive</a><br>
+            <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
+        </div>
     </div>
 
     {% if perms.job.add_job %}
     <div class="white-box space-above">
         <h3>Admin</h3>
-        <li>
-        <a href="{% url 'jobs:new' %}">Lag ny</a>
-        </li>
-        <li>
+        <div align="center  ">
+            <a href="{%  url 'admin:jobannouncements_job_add'%}">Lag ny</a><br>
             <a href="{% url 'jobs:admin' %}">Oversikt</a>
-        </li>
+        </div>
     </div>
     {% endif %}
 
-     <div class="white-box space-above">
-        <h3>Alle Stillingsutlysninger</h3>
-        {% include 'jobannoucements/job_list_sidebar.html' %}
+ <!-- Shows company information if user is on specific jobannoucement site, or lists all announcements on other pages -->
+    <div class="white-box space-above">
+        {% if job.company.name %}
+                <img src="/uploads/{{ job.company.logo }}" class="center-block img-responsive art-img" width="100%">
+                <br>
+                <p><b>Bedrift:</b> {{ job.company.name }} </p>
+                <p><i>{{ job.company.info }}</i></p>
+        {% else %}
+            <h3>Alle Stillingsutlysninger</h3>
+            <div class="list">
+            {% for job in job_list %}
+                <div>
+                    <a href="{% url 'jobs:job_detail' job.pk %}">
+                        <i class="fa fa-square"
+                            style="color:#005675"
+                            aria-hidden="true"></i>
+                        <time datetime="{{ job.deadline|date:'c' }}">
+                            {{ job.deadline|date:'d. b' }}
+                        </time>
+                        <span>
+                            {{ job }}
+                        </span>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

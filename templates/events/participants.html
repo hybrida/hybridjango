@@ -1,0 +1,34 @@
+{% extends 'events/event_sidebar.html' %}
+{% load event_extras %}
+{% block unstyled_text %}
+    {% for attendance in event.attendance_set.all %}
+        <div class="white-box" id="{{ attendance.pk }}">
+            <a name="attendance{{ attendance.id }}" class="anchor"></a>
+            <h1>{{ attendance.name }}</h1>
+            <table>
+                <tr>
+                    <th>Navn</th>
+                    <th>Trinn</th>
+                    <th>Spesialisering</th>
+                    <th>Kjønn</th>
+                </tr>
+                {% for participant in attendance|signed_hybrids|dictsort:'get_full_name' %}
+                    <tr>
+                        <td>{{ participant.get_full_name }}</td>
+                        <td>{{ participant.get_grade }}</td>
+                        <td>{{ participant.specialization }}</td>
+                        <td>{{ participant.gender }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block sidebar %}
+    <h2>Påmeldinger</h2>
+    {% for attendance in event.attendance_set.all %}
+        <a href="#attendance{{ attendance.id }}">{{ attendance.name }}</a>
+    {% endfor %}
+    <br>
+    <a class="btn btn-default" href="{% url 'participants_csv' event.pk %}">Eksporter</a>
+{% endblock %}

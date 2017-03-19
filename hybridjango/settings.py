@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'apps.jobannouncements',
     'apps.search',
     'apps.griffensorden',
+    'apps.gitlab',
+    'apps.staticpages',
 ]
 
 MIDDLEWARE = [
