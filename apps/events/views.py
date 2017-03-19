@@ -1,5 +1,8 @@
+import csv
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -62,6 +65,30 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
     permission_required = 'events.delete_event'
     model = Event
     success_url = reverse_lazy('event_list')
+
+
+@login_required
+def participants_csv(request, pk):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(pk)
+    writer = csv.writer(response)
+    for attendance in Event.objects.get(pk=pk).attendance_set.all():
+        writer.writerow((attendance.name,))
+        writer.writerow([
+            'Navn',
+            'Trinn',
+            'Spesialisering',
+            'Kjønn',
+        ])
+        for participation in attendance.get_signed():
+            participant = participation.hybrid
+            writer.writerow([
+                participant.get_full_name(),
+                participant.get_grade(),
+                participant.specialization,
+                participant.gender,
+            ])
+    return response
 
 
 @login_required
