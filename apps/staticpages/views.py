@@ -12,6 +12,7 @@ from apps.events.models import Event
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
+from apps.staticpages.models import BoardReport
 from hybridjango.settings import STATIC_FOLDER
 
 
@@ -118,6 +119,10 @@ def members(request):
         endyear = get_graduation_year(request.POST.get("grade"))
     return render(request, "staticpages/students.html",
         {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
+
+def board_report(request):
+    return render(request, "staticpages/board_report.html",
+    {'reports': BoardReport.objects.all().order_by('date').reverse()})
 
 
 class RingenView(TemplateResponseMixin, ContextMixin, View):

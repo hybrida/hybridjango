@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView, members
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members, board_report
 
 from apps.griffensorden.views import GriffenView
 
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^updatek/$', updatek, name='updatek'),
     url(r'^komite/$', AboutView.as_view(template_name='staticpages/committees.html'), name='committees'),
     url(r'^styret/$', AboutView.as_view(template_name='staticpages/board.html'), name='board'),
+    url(r'^styret/møtereferat$', board_report, name='board_report'),
     url(r'^kontakt_oss/$', AboutView.as_view(template_name='staticpages/contact_us.html'), name='contact_us'),
     url(r'^sangtekster/$', AboutView.as_view(template_name='staticpages/lyrics.html'), name='lyrics'),
     url(r'^historie/$', AboutView.as_view(template_name='staticpages/history.html'), name='history'),
