@@ -11,6 +11,7 @@
                     <th>Trinn</th>
                     <th>Spesialisering</th>
                     <th>Kjønn</th>
+                    <th>Matpreferanser</th>
                 </tr>
                 {% for participant in attendance|signed_hybrids|dictsort:'get_full_name' %}
                     <tr>
@@ -18,6 +19,7 @@
                         <td>{{ participant.get_grade }}</td>
                         <td>{{ participant.specialization }}</td>
                         <td>{{ participant.gender }}</td>
+                        <td>{{ participant.food_preferences }}</td>
                     </tr>
                 {% endfor %}
             </table>
