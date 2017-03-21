@@ -16,4 +16,5 @@ class HybridForm(forms.ModelForm):
             'graduation_year',
             'specialization',
             'gender',
+            'food_preferences',
         )
