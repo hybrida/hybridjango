@@ -79,6 +79,7 @@ def participants_csv(request, pk):
             'Trinn',
             'Spesialisering',
             'Kjønn',
+            'Matpreferanser',
         ])
         for participation in attendance.get_signed():
             participant = participation.hybrid
@@ -87,6 +88,7 @@ def participants_csv(request, pk):
                 participant.get_grade(),
                 participant.specialization,
                 participant.gender,
+                participant.food_preferences,
             ])
     return response
 
