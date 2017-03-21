@@ -5,6 +5,7 @@
         #rapport {
             font-size: 18px;
             color: #005675;
+            text-align: center;
         }
         .buttons {
             position: absolute;
@@ -27,8 +28,11 @@
         </div>
         <div class="list-group">
             {% for report in reports %}
-                <a id="rapport" href="http://hybrida.no/uploads/{{ report.report }}" class="list-group-item" target="_blank">Referat {{ report.date }}</a>
+                <a id="rapport" href="/uploads/{{ report.report }}" class="list-group-item" target="_blank">Referat {{ report.date }} <br> {{ report.description }}</a>
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block sublinks %}
+    <a href="møtereferat">Møtereferat</a>
 {% endblock %}
