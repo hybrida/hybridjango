@@ -29,13 +29,14 @@
 
     <div class="container" style="text-align: center; max-width: 40em; margin: auto">
 
-        {% for ridder in Ridder %}
+
+        {% for ridder in Ridder|dictsortreversed:'awarded'%}
+
             <a data-toggle="collapse" href="#ridder{{ ridder.id }}"><h2>{{ ridder.name }}</h2>
             </a>
             <div id="ridder{{ ridder.id }}" class="collapse">
                 <i>Avgangsår: {{ ridder.finished }}</i> <br>
-                <p> {{ ridder.description }}
-                </p>
+                <p> {{ ridder.description }}</p>
             </div>
         {% endfor %}
 
