@@ -96,6 +96,7 @@
                                 <div class="navbar-login">
                                     <form class="navbar-form" method="post" action="{% url 'login' %}">
                                         {% csrf_token %}
+                                        <input name="next" value="{{ request.path }}" hidden>
                                         <div class="form-group">
                                             <label for="id_username">Brukernavn:</label>
                                             <input autofocus="" id="id_username" maxlength="254" name="username"
