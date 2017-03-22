@@ -1,10 +1,22 @@
 {% extends 'staticpages/about.html' %}
 {% load static %}
 {% block text %}
+    <style>
+        #statuette{
+            text-align: center;
+            color: #1b6d85;
+            font-size: 22px;
+        }
+    </style>
     <h1>Statutter</h1>
-   <h4><a href="{% static 'pdf/statutter/Statutter2016.11.01.pdf' %}">Hybridas Statutter</a> (sist oppdatert 1. November 2016)</h4>
+    <div class="container" style="width: 70%">
+         <div class="list-group">
+            <h4><a id="statuette" href="{% static 'pdf/statutter/Statutter2016.11.01.pdf' %}" class="list-group-item" target="_blank">Hybridas Statutter <br> (sist oppdatert 1. November 2016)</a></h4>
 
-    <h4><a href="{% static 'pdf/VAGOStautter.pdf' %}">Statutter og retningslinjer for Griffens Orden</a></h4>
+            <h4><a id="statuette" href="{% static 'pdf/VAGOStautter.pdf' %}" class="list-group-item" target="_blank">Statutter og retningslinjer for Griffens Orden</a></h4>
 
-    <h4><a href="{% static 'pdf/Hybrida Bedriftskomité statutter 12042011.pdf' %}">Statutter Bedriftskomitéen</a></h4>
+            <h4><a id="statuette" href="{% static 'pdf/Hybrida Bedriftskomité statutter 12042011.pdf' %}" class="list-group-item" target="_blank">Statutter for Bedriftskomitéen</a></h4>
+         </div>
+    </div>
+
 {% endblock text %}
