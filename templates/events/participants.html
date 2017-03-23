@@ -34,3 +34,10 @@
     <br>
     <a class="btn btn-default" href="{% url 'participants_csv' event.pk %}">Eksporter</a>
 {% endblock %}
+{% block link %}
+    <style>
+        td, th {
+            padding: 0 8px;
+        }
+    </style>
+{% endblock %}
