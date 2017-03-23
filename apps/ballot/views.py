@@ -31,7 +31,8 @@ def overview(request):
         return redirect('login')
     if request.method == 'POST':
         Ballot.title = request.POST.get('title', 'Avstemning')
-        Ballot.only_members = request.POST.get('membersOnly', True)
+        Ballot.only_members = True if request.POST.get('membersOnly') else False
+        Ballot.empty_votes = True if request.POST.get('empty_votes') else False
         Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
         Ballot.votes = []
         Ballot.has_voted = []

@@ -36,6 +36,11 @@
                 <input type="checkbox" name="membersOnly" checked> Kun for medlemmer
             </label>
         </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="empty_votes" checked>Tomme stemmer
+            </label>
+        </div>
         <div class="btn-group btn-group-justified" role="group">
             <div class="btn-group" role="group">
                 <button class="btn btn-success" type="button" onclick="addInput()"><span
@@ -87,7 +92,7 @@
                             for (candidate of response.results) {
                                 newResults += '<tr><th>' + candidate.name + '</th>';
                                 newResults += '<th>' + candidate.votes + '</th>';
-                                newResults += '<th>' + ((candidate.votes * 100.0) / response.total).toFixed(1) + '%</th></tr>';
+                                newResults += '<th>' + ((candidate.votes * 100.0) / response.total_nonblank).toFixed(1) + '%</th></tr>';
                             }
                             newResults += '<tr><th>Totalt</th>';
                             newResults += '<th>' + response.total + '</th>';
