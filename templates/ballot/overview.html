@@ -21,6 +21,16 @@
 {% endblock %}
 
 {% block sidebar %}
+    <form method="get" action="#" id="form">
+        {% csrf_token %}
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <input type="submit" name="active" value="{% if active %}Deaktiver{% else %}Aktiver{% endif %}"
+                       class="btn btn-default">
+            </div>
+        </div>
+    </form>
+    <hr>
     <h2>Ny avstemning</h2>
     <form method="post" action="{% url 'ballot:overview' %}" id="form">
         {% csrf_token %}
@@ -70,39 +80,39 @@
         var choices = 0;
         function addInput() {
             $('#new-choices').append(
-                    '<div class="input-group" id="choice-' + choices + '">' +
-                    '<input class="form-control choice" type="text" name="choice-' + choices + '"/>' +
-                    '<span class="input-group-btn">' +
-                    '<button type="button" class="btn btn-danger" onclick="removeChoice(' + choices + ')">' +
-                    '<span class="glyphicon glyphicon-remove">' +
-                    '</span>' +
-                    '</button>' +
-                    '</span>' +
-                    '</div>'
+                '<div class="input-group" id="choice-' + choices + '">' +
+                '<input class="form-control choice" type="text" name="choice-' + choices + '"/>' +
+                '<span class="input-group-btn">' +
+                '<button type="button" class="btn btn-danger" onclick="removeChoice(' + choices + ')">' +
+                '<span class="glyphicon glyphicon-remove">' +
+                '</span>' +
+                '</button>' +
+                '</span>' +
+                '</div>'
             );
             choices++;
         }
 
         setInterval(function () {
-                    $.ajax({
-                        url: '{% url 'ballot:results' %}',
-                        type: 'GET',
-                        success: function (response) {
-                            var newResults = "";
-                            for (candidate of response.results) {
-                                newResults += '<tr><th>' + candidate.name + '</th>';
-                                newResults += '<th>' + candidate.votes + '</th>';
-                                newResults += '<th>' + ((candidate.votes * 100.0) / response.total_nonblank).toFixed(1) + '%</th></tr>';
-                            }
-                            newResults += '<tr><th>Totalt</th>';
-                            newResults += '<th>' + response.total + '</th>';
-                            newResults += '<th></th></tr>';
-                            $('#resultater').html(newResults);
-                            $('#title').html(response.title);
+                $.ajax({
+                    url: '{% url 'ballot:results' %}',
+                    type: 'GET',
+                    success: function (response) {
+                        var newResults = "";
+                        for (candidate of response.results) {
+                            newResults += '<tr><th>' + candidate.name + '</th>';
+                            newResults += '<th>' + candidate.votes + '</th>';
+                            newResults += '<th>' + ((candidate.votes * 100.0) / response.total_nonblank).toFixed(1) + '%</th></tr>';
                         }
-                    })
-                },
-                500);
+                        newResults += '<tr><th>Totalt</th>';
+                        newResults += '<th>' + response.total + '</th>';
+                        newResults += '<th></th></tr>';
+                        $('#resultater').html(newResults);
+                        $('#title').html(response.title);
+                    }
+                })
+            },
+            500);
 
         $('#submit').click(function () {
             $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {
