@@ -23,8 +23,9 @@
             <a class="pull-right" href="{% url 'admin:events_event_change' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
-        {% endif %}
-        {% if perms.events.add_event %}
+            <a class="pull-right" href="{% url 'participants' event.pk %}">
+                <button class="btn btn-xs btn-primary">Deltakere (beta)</button>
+            </a>
             <a class="pull-right" href="{% url 'admin:events_event_delete' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
