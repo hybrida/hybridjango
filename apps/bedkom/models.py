@@ -8,8 +8,8 @@ from apps.registration.models import Hybrid
 class Contact_person(models.Model):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=50, default="99253420")
-    job = models.CharField(max_length=100, default="hei")
+    telephone = models.CharField(max_length=50, default="")
+    job = models.CharField(max_length=100, default="")
 
     def __str__(self):
         return str(self.name)
