@@ -42,7 +42,7 @@ def overview(request):
 
 @login_required
 def ballot(request):
-    choices = Ballot.choices
+    choices = Ballot.choices.copy()
     if Ballot.empty_votes:
         choices.append(empty_vote)
     context = {'choices': choices, 'title': Ballot.title, 'nr': Ballot.nr}
