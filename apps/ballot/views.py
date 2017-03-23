@@ -19,6 +19,7 @@ class Ballot:
     empty_votes = True
     has_voted = []
     votes = []
+    active = True
 
 
 empty_vote = 'Tomt'
@@ -37,7 +38,9 @@ def overview(request):
         Ballot.votes = []
         Ballot.has_voted = []
         Ballot.nr += 1
-    return render(request, 'ballot/overview.html')
+    elif 'active' in request.GET:
+        Ballot.active = not (request.GET['active'] == 'Deaktiver')
+    return render(request, 'ballot/overview.html', context={'active': Ballot.active})
 
 
 @login_required
@@ -55,6 +58,8 @@ def vote(request):
 
         if not user.is_authenticated:
             return HttpResponse("Du må være innlogget for å stemme")
+        if not Ballot.active:
+            return HttpResponse("Avstemningen er ikke aktiv")
         if user.pk < 2:
             return HttpResponse("Linjeforeningen Hybrida kan ikke stemme selv")
         if Ballot.only_members and not user.member:
