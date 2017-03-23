@@ -16,8 +16,12 @@ class Ballot:
         'Redaksjonen',
     ]
     only_members = True
+    empty_votes = True
     has_voted = []
     votes = []
+
+
+empty_vote = 'Tomt'
 
 
 @login_required
@@ -37,7 +41,10 @@ def overview(request):
 
 @login_required
 def ballot(request):
-    context = {'choices': Ballot.choices, 'title': Ballot.title, 'nr': Ballot.nr}
+    choices = Ballot.choices
+    if Ballot.empty_votes:
+        choices.append(empty_vote)
+    context = {'choices': choices, 'title': Ballot.title, 'nr': Ballot.nr}
     return render(request, 'ballot/voteview.html', context=context)
 
 
@@ -55,7 +62,7 @@ def vote(request):
             return HttpResponse("Du har allerede stemt")
 
         new_vote = request.POST.get("choice", None)
-        if new_vote in Ballot.choices:
+        if new_vote in Ballot.choices or (Ballot.empty_votes and new_vote == empty_vote):
             Ballot.has_voted.append(user.pk)
             Ballot.votes.append(new_vote)
             return HttpResponse("Du stemte på {}.".format(new_vote))
@@ -74,4 +81,8 @@ def get_results(request):
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001})
     results = [{'name': choice, 'votes': Ballot.votes.count(choice)} for choice in Ballot.choices]
-    return JsonResponse({'title': Ballot.title, 'results': results, 'total': len(Ballot.votes)})
+    total_nonblank = total = len(Ballot.votes)
+    if Ballot.empty_votes:
+        results.append({'name': empty_vote, 'votes': Ballot.votes.count(empty_vote)})
+        total -= Ballot.votes.count(empty_vote)
+    return JsonResponse({'title': Ballot.title, 'results': results, 'total': total, 'total_nonblank': total_nonblank})
