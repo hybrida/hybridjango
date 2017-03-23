@@ -85,7 +85,7 @@ def get_results(request):
     if not (user.is_authenticated and user.username == 'simennje'):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
-             "total": 9001})
+             "total": 9001, "total_nonblank": 9001})
     results = [{'name': choice, 'votes': Ballot.votes.count(choice)} for choice in Ballot.choices]
     total_nonblank = total = len(Ballot.votes)
     if Ballot.empty_votes:
