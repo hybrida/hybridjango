@@ -41,6 +41,7 @@ class EventView(generic.DetailView):
         context = super(EventView, self).get_context_data(**kwargs)
         user = self.request.user
         event = context['event']
+        context['joinable'] = event.attendance_set.joinable(user)
         return context
 
 
