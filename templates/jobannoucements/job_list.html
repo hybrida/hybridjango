@@ -22,14 +22,18 @@ h4 {
 </style>
 
 
-
-    {% for job in job_list %}
+    {% if job_list %}
+        {% for job in job_list %}
+            <hr>
+            <a style="color: black;" href="{% url 'jobs:job_detail' job.pk %}">
+            <div class='container2'>
+                    <img src="/uploads/{{ job.company.logo }}" class="logo">
+                    <h4 style="font-size: 1.2em">{{ job }}</h4>
+                    <div style="font-size:.8em; padding-top: 15px">Søknadsfrist: {{ job.deadline }}</div>
+            </div>
+            </a>
+        {% endfor %}
+    {% else %}
         <hr>
-        <a style="color: black;" href="{% url 'jobs:job_detail' job.pk %}">
-        <div class='container2'>
-                <img src="/uploads/{{ job.company.logo }}" class="logo">
-	            <h4 style="font-size: 1.2em">{{ job }}</h4>
-                <div style="font-size:.8em; padding-top: 15px">Søknadsfrist: {{ job.deadline }}</div>
-        </div>
-        </a>
-    {% endfor %}
+        <p>Det finnes ingen fremhevede stillingsutlysninger.</p>
+    {% endif %}
