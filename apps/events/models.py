@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 
@@ -26,21 +25,6 @@ class Event(models.Model):
             return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
 
-    # def signup_open(self):
-    #     return any([a.signup_open for a in self.attendance_set.all()])
-
-    # def signup_closed(self):
-    #     return any([a.signup_closed for a in self.attendance_set.all()])
-
-    # def invited(self, user):
-    #     return any([a.invited for a in self.attendance_set.all()])
-
-    # def get_first_waiting(self):
-    #    return any([a.get_first_waiting for a in self.attendance_set.all()])
-
-    # def can_join(self, user):
-    #    return any([a.can_join for a in self.attendance_set.all()])
-
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
 
@@ -59,21 +43,7 @@ class Participation(models.Model):
                                                           timestamp=self.timestamp)
 
 
-class AttendanceManager(models.Manager):
-    def open(self):
-        return super(AttendanceManager, self).filter(signup_start__lt=timezone.now(),
-                                                     signup_end__gt=timezone.now())
-
-    def joinable(self, user):
-        return user.is_authenticated() and self.open().filter(
-            Q(specializations=None) | Q(specializations=user.specialization),
-            genders__contains=user.gender,
-            grades__contains=str(user.get_grade()),
-        )
-
-
 class Attendance(models.Model):
-    objects = AttendanceManager()
     event = models.ForeignKey(Event)
     name = models.CharField(max_length=50, default='Påmelding')
     participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
@@ -103,9 +73,6 @@ class Attendance(models.Model):
 
     def get_waiting(self):
         return Participation.objects.filter(attendance_id=self).order_by('-timestamp')[self.max_participants:]
-
-    def get_first_waiting(self):
-        return self.get_waiting().first()
 
     def full(self):
         return self.participants.count() >= self.max_participants
