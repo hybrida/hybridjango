@@ -44,8 +44,8 @@ class EventView(generic.DetailView):
         context['attendances'] = [
             {
                 'o': attendance,
-                'is_invited': attendance.invited(user),
-                'can_join': attendance.can_join(user),
+                'is_invited': attendance.invited(user) if user.is_authenticated else False,
+                'can_join': attendance.can_join(user) if user.is_authenticated else False,
                 'is_participant': attendance.is_participant(user),
                 'is_signed': attendance.is_signed(user),
                 'is_waiting': attendance.is_waiting(user),
