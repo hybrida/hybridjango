@@ -49,7 +49,7 @@ class EventView(generic.DetailView):
                 'can_join': attendance.can_join(user),
                 'signed': attendance.is_signed(user),
                 'waiting': attendance.is_waiting(user),
-                'placement': attendance.get_placement(user),
+                'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
             } for attendance in list(event.attendance_set.all())]
         return context
 
