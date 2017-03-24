@@ -108,53 +108,53 @@
             </tr>
         {% endif %}
     </table>
-    {% for attendance in event.attendance_set.all %}
-        <h3>{{ attendance.name }}</h3>
+    {% for attendance in attendances %}
+        <h3>{{ attendance.o.name }}</h3>
         <table class="info-table">
-            {% if attendance.signup_start %}
+            {% if attendance.o.signup_start %}
                 <tr>
                     <td>Åpnes</td>
-                    <td>{{ attendance.signup_start }}</td>
+                    <td>{{ attendance.o.signup_start }}</td>
                 </tr>
             {% endif %}
-            {% if attendance.signup_end %}
+            {% if attendance.o.signup_end %}
                 <tr>
                     <td>Frist</td>
-                    <td>{{ attendance.signup_end }}</td>
+                    <td>{{ attendance.o.signup_end }}</td>
                 </tr>
             {% endif %}
-            {% if attendance.price %}
+            {% if attendance.o.price %}
                 <tr>
                     <td>Pris</td>
-                    <td>{{ attendance.price }}</td>
+                    <td>{{ attendance.o.price }}</td>
                 </tr>
             {% endif %}
             <tr>
                 <td>Trinn</td>
                 <td>
-                    {% if attendance.grades|length_is:5 %}
+                    {% if attendance.o.grades|length_is:5 %}
                         Alle
                     {% else %}
-                        {% for grade in attendance.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
+                        {% for grade in attendance.o.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
                     {% endif %}
                 </td>
             </tr>
             <tr>
                 <td>Kjønn</td>
                 <td>
-                    {% if attendance.genders|length_is:3 %}
+                    {% if attendance.o.genders|length_is:3 %}
                         Alle
                     {% else %}
-                        {% for gender in attendance.genders %}<span class="comma_seperated"
+                        {% for gender in attendance.o.genders %}<span class="comma_seperated"
                         >{{ gender|readable_gender }}</span>{% endfor %}
                     {% endif %}
                 </td>
             </tr>
-            {% if attendance.specializations.count %}
+            {% if attendance.o.specializations.count %}
                 <tr>
                     <td>Profiler</td>
                     <td>
-                        {% for specialization in attendance.specializations.all %}
+                        {% for specialization in attendance.o.specializations.all %}
                             {{ specialization }}
                         {% endfor %}
                     </td>
@@ -164,30 +164,30 @@
         <div class="progress" style="margin-bottom: 0">
             <div class="progress-bar"
                  style="min-width: 4em;
-                         width: {% widthratio attendance.get_signed|length attendance.max_participants 100 %}%">
-                {{ attendance.get_signed|length }}
-                / {{ attendance.max_participants }}
-                {% if attendance.get_waiting %}
-                    + {{ attendance.get_waiting|length }}
+                         width: {% widthratio attendance.o.get_signed|length attendance.o.max_participants 100 %}%">
+                {{ attendance.o.get_signed|length }}
+                / {{ attendance.o.max_participants }}
+                {% if attendance.o.get_waiting %}
+                    + {{ attendance.o.get_waiting|length }}
                 {% endif %}
             </div>
         </div>
         {% if user.is_authenticated %}
             <div class="row">
                 <div class="col-xs-12">
-                    {% if attendance.signup_open %}
+                    {% if attendance.o.signup_open %}
                         <form method="post">
                             {% csrf_token %}
-                            <input name="attendance" value="{{ attendance.pk }}" type="hidden">
-                            {% if user in attendance.participants.all %}
+                            <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
+                            {% if user in attendance.o.participants.all %}
                                 <input name="action" value="leave" type="hidden">
                                 <button type="submit" class=" btn btn-danger btn-block">
-                                    Meld meg av{% if user in attendance|waiting_hybrids %} ventelisten{% endif %}
+                                    Meld meg av{% if user in attendance.o|waiting_hybrids %} ventelisten{% endif %}
                                 </button>
-                            {% elif attendance in joinable %}
+                            {% elif attendance.o in joinable %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
-                                    {% if attendance.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
+                                    {% if attendance.o.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
                                 </button>
                             {% endif %}
                         </form>
