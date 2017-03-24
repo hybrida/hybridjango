@@ -160,6 +160,20 @@
                     </td>
                 </tr>
             {% endif %}
+            <tr>
+                <td>Du er</td>
+                <td>
+                    {% if not user.is_authenticated %}
+                        Ikke pålogget
+                    {% elif attendance.signed %}
+                        Påmeldt
+                    {% elif attendance.waiting %}
+                        Nummer {{ attendance.waiting_placement }} i kø
+                    {% elif not attendance.can_join %}
+                        Ikke invitert
+                    {% endif %}
+                </td>
+            </tr>
         </table>
         <div class="progress" style="margin-bottom: 0">
             <div class="progress-bar"
