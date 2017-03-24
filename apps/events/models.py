@@ -113,6 +113,28 @@ class Attendance(models.Model):
     def can_join(self, user):
         return self.signup_open() and self.invited(user)
 
+    def get_placements(self):
+        return enumerate(self.participants.order_by('participation__timestamp'))
+
+    def get_placement(self, hybrid):
+        for index, participant in self.get_placements():
+            if participant == hybrid:
+                return index
+        raise ValueError('Hybrid is not a participant')
+
+    def is_participant(self, hybrid):
+        return self.participants.filter(pk=hybrid.pk).exists()
+
+    def is_signed(self, hybrid):
+        if self.is_participant(hybrid):
+            return self.get_placement(hybrid) < self.max_participants
+        return False
+
+    def is_waiting(self, hybrid):
+        if self.is_participant(hybrid):
+            return self.get_placement(hybrid) >= self.max_participants
+        return False
+
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
