@@ -42,6 +42,15 @@ class EventView(generic.DetailView):
         user = self.request.user
         event = context['event']
         context['joinable'] = event.attendance_set.joinable(user)
+        context['attendances'] = [
+            {
+                'o': attendance,
+                'invited': attendance.invited(user),
+                'can_join': attendance.can_join(user),
+                'signed': attendance.is_signed(user),
+                'waiting': attendance.is_waiting(user),
+                'placement': attendance.get_placement(user),
+            } for attendance in list(event.attendance_set.all())]
         return context
 
 
