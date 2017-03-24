@@ -108,6 +108,10 @@
             </tr>
         {% endif %}
     </table>
+    {% comment %}
+        Attendances is a list of dictionaries containing useful values about attendances in relation to the current user
+        in addition to an attendance object (attendance.o).
+    {% endcomment %}
     {% for attendance in attendances %}
         <h3>{{ attendance.o.name }}</h3>
         <table class="info-table">
@@ -135,7 +139,8 @@
                     {% if attendance.o.grades|length_is:5 %}
                         Alle
                     {% else %}
-                        {% for grade in attendance.o.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
+                        {% for grade in attendance.o.grades %}<span class="comma_seperated">{{ grade }}</span>
+                        {% endfor %}
                     {% endif %}
                 </td>
             </tr>
@@ -165,11 +170,13 @@
                 <td>
                     {% if not user.is_authenticated %}
                         Ikke pålogget
-                    {% elif attendance.signed %}
+                    {% elif attendance.is_signed %}
                         Påmeldt
-                    {% elif attendance.waiting %}
+                    {% elif attendance.is_waiting %}
                         Nummer {{ attendance.waiting_placement }} i kø
-                    {% elif not attendance.can_join %}
+                    {% elif attendance.can_join %}
+                        Invitert
+                    {% else %}
                         Ikke invitert
                     {% endif %}
                 </td>
@@ -193,12 +200,12 @@
                         <form method="post">
                             {% csrf_token %}
                             <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
-                            {% if user in attendance.o.participants.all %}
+                            {% if attendance.is_participant %}
                                 <input name="action" value="leave" type="hidden">
                                 <button type="submit" class=" btn btn-danger btn-block">
-                                    Meld meg av{% if user in attendance.o|waiting_hybrids %} ventelisten{% endif %}
+                                    Meld meg av{% if attendance.is_waiting %} ventelisten{% endif %}
                                 </button>
-                            {% elif attendance.o in joinable %}
+                            {% elif attendance.is_invited %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
                                     {% if attendance.o.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
