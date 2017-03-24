@@ -269,7 +269,7 @@
             <div style="margin:1em">
                 <form action="{% url 'comment_event' event.pk %}" method="POST">
                     {% csrf_token %}
-                    <input name="event_id" value="{{ event.pk }}" hidden>
+                    <input title="event_id" name="event_id" value="{{ event.pk }}" hidden>
                     <label for="comment" class="sr-only">Comment:</label>
                     <input class="form-control" id="comment" name="text" autocomplete="off"
                            maxlength="250" type="text" required>
