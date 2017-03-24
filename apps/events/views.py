@@ -45,10 +45,11 @@ class EventView(generic.DetailView):
         context['attendances'] = [
             {
                 'o': attendance,
-                'invited': attendance.invited(user),
+                'is_invited': attendance.invited(user),
                 'can_join': attendance.can_join(user),
-                'signed': attendance.is_signed(user),
-                'waiting': attendance.is_waiting(user),
+                'is_participant': attendance.is_participant(user),
+                'is_signed': attendance.is_signed(user),
+                'is_waiting': attendance.is_waiting(user),
                 'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
