@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -101,6 +102,11 @@ class Attendance(models.Model):
         if self.is_participant(hybrid):
             return self.get_placement(hybrid) >= self.max_participants
         return False
+
+    def clean(self):
+        super(Attendance, self).clean()
+        if self.signup_end < self.signup_start:
+            raise ValidationError('Påmeldingen kan ikke slutte før den har begynt.')
 
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
