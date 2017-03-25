@@ -117,3 +117,6 @@ class EventComment(models.Model):
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
     text = models.TextField()
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
