@@ -247,33 +247,24 @@
                             </a>
                         </div>
                         <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <strong>
-                                        <a class="hybridLink" id="{{ comment.author }}"
-                                           href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
-                                </div>
-                                <div class="col-xs-1">
-                                    <form action="{% url 'delete_comment_event' event.pk %}" method="post">
-                                        {% csrf_token %}
-                                        <input title="delete" name="delete" value="{{ comment.pk }}" hidden>
-                                        <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    {{ comment.text }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <small>{{ comment.timestamp }}</small>
-                                </div>
-                            </div>
+                            <strong>
+                                <a class="hybridLink" id="{{ comment.author }}"
+                                   href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:
+                            </strong>
+                            <form action="{% url 'delete_comment_event' event.pk %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete" value="{{ comment.pk }}">
+                                <button type="submit" class="btn btn-link"
+                                        style="color: red; padding: 0; position: absolute; top: 0; right: 15px;">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </form>
+                            {{ comment.text }}
+                            <br>
+                            <small>{{ comment.timestamp }}</small>
                         </div>
                     </div>
+                    <hr>
                 {% endfor %}
                 <div style="margin:1em">
                     <form action="{% url 'comment_event' event.pk %}" method="POST">
