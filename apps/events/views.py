@@ -112,6 +112,15 @@ def comment_event(request, pk):
         text = request.POST['text']
         if user.is_authenticated:
             comment = EventComment(author=user, event_id=event_id, text=text)
-            print(comment.full_clean())
             comment.save()
+    return redirect('event', pk)
+
+
+@login_required
+def delete_comment_event(request, pk):
+    user = request.user
+    if request.POST and 'delete' in request.POST:
+        comment = EventComment.objects.get(pk=request.POST['delete'])
+        if user.is_authenticated and comment.author == user:
+            comment.delete()
     return redirect('event', pk)
