@@ -68,7 +68,7 @@
                         Venteliste: {{ attendance|waiting_hybrids|length }} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_waiting">
-                        {% for waiting in attendance|waiting_hybrids|dictsort:'first_name' %}
+                        {% for index, waiting in attendance.get_waiting_placements %}
                             <div style="margin-top: 7px" class="col-sm-6">
                                 <a href="{% url 'profile' waiting.username %}">
                                     <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
@@ -76,7 +76,7 @@
                                              style="vertical-align: middle">
                                         <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
                                     </div>
-                                    {{ waiting.get_full_name }}
+                                    {{ index }}:{{ waiting.get_full_name }}
                                 </a>
                             </div>
                         {% endfor %}
