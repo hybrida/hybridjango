@@ -84,6 +84,12 @@ class Attendance(models.Model):
     def get_placements(self):
         return enumerate(self.participants.order_by('participation__timestamp'))
 
+    def get_waiting_placements(self):
+        return [(index + 1 - self.max_participants, participant)
+                for (index, participant)
+                in self.get_placements()
+                if index >= self.max_participants]
+
     def get_placement(self, hybrid):
         for index, participant in self.get_placements():
             if participant == hybrid:
