@@ -7,17 +7,25 @@
 
 {% block text %}
     <h1 id="title">Resultat</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Navn</th>
-            <th>Antall</th>
-            <th>Prosent</th>
-        </tr>
-        </thead>
-        <tbody id="resultater">
-        </tbody>
-    </table>
+    <button id="hide_button" onclick="$('#results').show();$(this).hide()" style="display: none;"
+            class="btn btn-default">
+        Vis resultater
+    </button>
+    <div id="results">
+        <button onclick="$('#results').hide(); $('#hide_button').show()" class="btn btn-default">Skjul resultater
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Antall</th>
+                <th>Prosent</th>
+            </tr>
+            </thead>
+            <tbody id="resultater">
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block sidebar %}
@@ -36,7 +44,7 @@
         {% csrf_token %}
         <div class="form-group">
             <span>Tittel</span>
-            <input class="form-control" type="text" name="title"/>
+            <input title="title" class="form-control" type="text" name="title"/>
         </div>
         <div id="new-choices">
             <span>Valg</span>
