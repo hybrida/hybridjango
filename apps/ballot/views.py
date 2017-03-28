@@ -45,11 +45,20 @@ def overview(request):
 
 @login_required
 def ballot(request):
+    return render(request, 'ballot/voteview.html',
+                  {'choices': choices_with_blank(), 'title': Ballot.title, 'nr': Ballot.nr})
+
+
+@login_required
+def get_choices(request):
+    return JsonResponse({'nr': Ballot.nr, 'title': Ballot.title, 'choices': choices_with_blank()})
+
+
+def choices_with_blank():
     choices = Ballot.choices.copy()
     if Ballot.empty_votes:
         choices.append(empty_vote)
-    context = {'choices': choices, 'title': Ballot.title, 'nr': Ballot.nr}
-    return render(request, 'ballot/voteview.html', context=context)
+    return choices
 
 
 def vote(request):
@@ -76,10 +85,6 @@ def vote(request):
     return HttpResponse("Du avga ingen stemme")
 
 
-def get_choices(request):
-    return JsonResponse({'nr': Ballot.nr, 'title': Ballot.title, 'choices': Ballot.choices})
-
-
 def get_results(request):
     user = request.user
     if not (user.is_authenticated and user.username == 'simennje'):
@@ -87,8 +92,8 @@ def get_results(request):
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})
     results = [{'name': choice, 'votes': Ballot.votes.count(choice)} for choice in Ballot.choices]
-    total = len(Ballot.votes)
+    total_nonblank = total = len(Ballot.votes)
     if Ballot.empty_votes:
         results.append({'name': empty_vote, 'votes': Ballot.votes.count(empty_vote)})
-        total_nonblank = total - Ballot.votes.count(empty_vote)
+        total_nonblank -= Ballot.votes.count(empty_vote)
     return JsonResponse({'title': Ballot.title, 'results': results, 'total': total, 'total_nonblank': total_nonblank})
