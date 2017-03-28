@@ -87,8 +87,8 @@ def get_results(request):
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})
     results = [{'name': choice, 'votes': Ballot.votes.count(choice)} for choice in Ballot.choices]
-    total_nonblank = total = len(Ballot.votes)
+    total = len(Ballot.votes)
     if Ballot.empty_votes:
         results.append({'name': empty_vote, 'votes': Ballot.votes.count(empty_vote)})
-        total -= Ballot.votes.count(empty_vote)
+        total_nonblank = total - Ballot.votes.count(empty_vote)
     return JsonResponse({'title': Ballot.title, 'results': results, 'total': total, 'total_nonblank': total_nonblank})
