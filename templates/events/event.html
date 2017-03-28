@@ -174,7 +174,7 @@
                         Påmeldt
                     {% elif attendance.is_waiting %}
                         Nummer {{ attendance.waiting_placement }} i kø
-                    {% elif attendance.can_join %}
+                    {% elif attendance.is_invited %}
                         Invitert
                     {% else %}
                         Ikke invitert
