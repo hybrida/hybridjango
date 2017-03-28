@@ -28,17 +28,16 @@ class Company(models.Model):
     contact_person = models.ForeignKey(Contact_person, blank=True, null=True)
 
     CHOICES_STATUS = (
-        ('Booket', 'BOOKET'),
-        ('Opprettet kontakt', 'KONTAKTET'),
-        ('Takket nei', 'NEI'),
-        ('Ikke kontaktet', 'IKKE_KONTAKTET'),
-        ('Sendt mail', 'SENDT_MAIL')
+        ('Booket', 'Booket'),
+        ('Opprettet kontakt', 'Opprettet kontakt'),
+        ('Takket nei', 'Takket nei'),
+        ('Ikke kontaktet', 'Ikke kontaktet'),
     )
 
     CHOICES_PRIORITY = (
-        ('Høy', 'HØY'),
-        ('Middels', 'MIDDELS'),
-        ('Lav', 'LAV')
+        ('Høy', 'Høy'),
+        ('Middels', 'Middels'),
+        ('Lav', 'Lav')
     )
 
     status = models.CharField(choices=CHOICES_STATUS, max_length=20)
