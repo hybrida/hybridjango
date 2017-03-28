@@ -30,41 +30,44 @@
 {% block script %}
     <script>
         var lastNr = {{ nr }};
-        setInterval(function () {
-                    $.ajax({
-                        url: '{% url 'ballot:choices' %}',
-                        type: 'GET',
-                        success: function (response) {
-                            if (response.nr === lastNr) {
-                                return;
-                            }
-                            lastNr = response.nr;
-                            var newChoices = "";
-                            for (choice of response.choices) {
-                                newChoices += '\
+
+        function refresh_ballot() {
+            $.ajax({
+                url: '{% url 'ballot:choices' %}',
+                type: 'GET',
+                success: function (response) {
+                    if (response.nr !== lastNr) {
+                        lastNr = response.nr;
+                        var newChoices = "";
+                        for (choice of response.choices) {
+                            newChoices += '\
             <div class="col-md-6">\
                 <input type="radio" name="choice" id="' + choice + '" class="option" value="' + choice + '">\
                 <label for="' + choice + '">' + choice + '</label>\
             </div>';
-                            }
-                            $('#options').html(newChoices);
-                            $('#submitButton').addClass('btn-primary');
-                            $('#title').html(response.title);
                         }
-                    })
-                },
-                5000);
+                        $('#options').html(newChoices);
+                        $('#title').html(response.title);
+                    }
+                    console.log(response.has_voted);
+                    if (response.has_voted) {
+                        $('#submitButton').removeClass('btn-primary');
+                    } else {
+                        $('#submitButton').addClass('btn-primary');
+                    }
+                }
+            })
+        }
+
+        $(document).ready(refresh_ballot());
+        setInterval(refresh_ballot, 5000);
 
         var submitButton = $('#submitButton');
         var timeoutID;
 
         submitButton.click(function () {
             $.post('{% url 'ballot:vote' %}', $('#vote_form').serialize(), function (response) {
-                if (response.indexOf('Du stemte') == 0 || response.indexOf('Du har') == 0) {
-                    document.getElementById('vote_form').reset();
-                    $('#submitButton').removeClass('btn-primary');
-                }
-
+                refresh_ballot();
                 submitButton.attr('data-content', response);
                 submitButton.attr('data-placement', 'top');
                 submitButton.popover('show');
