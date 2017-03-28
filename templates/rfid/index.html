@@ -1,0 +1,27 @@
+{% extends 'standard_wide.html' %}
+
+{% block text %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Brukernavn</th>
+            <th>Navn</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for user in appearances.users.all %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.full_name }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+    <form id="rfid_form" method="POST" action="{%  url 'rfid:add' appearances.pk %}">
+        {%  csrf_token %}
+        <label for="rfid_key">RFID: </label>
+        <input type="text" name="rfid_key" title="RFID" autofocus>
+        <input type="submit">
+    </form>
+{% endblock text %}
