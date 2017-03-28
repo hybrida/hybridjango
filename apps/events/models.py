@@ -110,8 +110,7 @@ class Attendance(models.Model):
         return False
 
     def clean(self):
-        super(Attendance, self).clean()
-        if self.signup_end < self.signup_start:
+        if self.signup_end and self.signup_start and self.signup_end < self.signup_start:
             raise ValidationError('Påmeldingen kan ikke slutte før den har begynt.')
 
     def __str__(self):
