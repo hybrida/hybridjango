@@ -45,19 +45,19 @@ def overview(request):
 
 @login_required
 def ballot(request):
-    return render(request, 'ballot/voteview.html', get_ballot_dict())
+    return render(request, 'ballot/voteview.html', get_ballot_dict(request.user))
 
 
 @login_required
 def get_choices(request):
-    return JsonResponse(get_ballot_dict())
+    return JsonResponse(get_ballot_dict(request.user))
 
 
-def get_ballot_dict():
+def get_ballot_dict(user):
     choices = Ballot.choices.copy()
     if Ballot.empty_votes:
         choices.append(empty_vote)
-    return {'nr': Ballot.nr, 'title': Ballot.title, 'choices': choices}
+    return {'nr': Ballot.nr, 'title': Ballot.title, 'choices': choices, 'has_voted': user.pk in Ballot.has_voted}
 
 
 def vote(request):
