@@ -96,10 +96,7 @@
                 <button class="btn btn-xs btn-primary">Tilbake</button>
             </a>
             {% if user.is_authenticated %}
-                <a href="{% url 'endre_bedrift' bedpress.company.id %}">
-                    <button class="btn btn-xs btn-primary">Rediger</button>
 
-                </a>
             {% endif %}
         </div>
 
