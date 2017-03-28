@@ -50,6 +50,7 @@ class Hybrid(AbstractUser):
         if first_name == "" and self.last_name == "":
             return self.username
         return first_name + ' ' + self.last_name
+    full_name = property(get_full_name)
 
     def get_grade(self):
         return five_years() - self.graduation_year
