@@ -87,7 +87,7 @@
                 <tbody>
                 {% for company in companies %}
                     <tr>
-                        <td class="text-left" style="font-size: x-large;"><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
+                        <td class="text-left" style="font-size: x-large; "><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
                         <td class="text-left">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
                         <td class="text-left">{{ company.last_comment.text }}</td>
                         <td style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
