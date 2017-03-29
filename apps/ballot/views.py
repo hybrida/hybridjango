@@ -57,7 +57,13 @@ def get_ballot_dict(user):
     choices = Ballot.choices.copy()
     if Ballot.empty_votes:
         choices.append(empty_vote)
-    return {'nr': Ballot.nr, 'title': Ballot.title, 'choices': choices, 'has_voted': user.pk in Ballot.has_voted}
+    return {
+        'nr': Ballot.nr,
+        'title': Ballot.title,
+        'choices': choices,
+        'has_voted': user.pk in Ballot.has_voted,
+        'active': Ballot.active,
+    }
 
 
 def vote(request):
