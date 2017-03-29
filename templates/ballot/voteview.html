@@ -3,6 +3,11 @@
 
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/ballot.css' %}">
+    <style>
+        .inactive label {
+            color: gray !important;
+        }
+    </style>
 {% endblock %}
 
 {% block text %}
@@ -49,10 +54,15 @@
                         $('#options').html(newChoices);
                         $('#title').html(response.title);
                     }
-                    if (response.has_voted) {
+                    if (response.has_voted || !response.active) {
                         $('#submitButton').removeClass('btn-primary');
                     } else {
                         $('#submitButton').addClass('btn-primary');
+                    }
+                    if (response.active) {
+                        $('#options').removeClass('inactive');
+                    } else {
+                        $('#options').addClass('inactive');
                     }
                 }
             })
