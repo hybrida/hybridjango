@@ -7,6 +7,14 @@
         .inactive label {
             color: gray !important;
         }
+
+        .inactive_title {
+            color: gray !important;
+        }
+
+        .inactive_title:after {
+            content: ' (deaktivert)';
+        }
     </style>
 {% endblock %}
 
@@ -61,8 +69,10 @@
                     }
                     if (response.active) {
                         $('#options').removeClass('inactive');
+                        $('#title').removeClass('inactive_title');
                     } else {
                         $('#options').addClass('inactive');
+                        $('#title').addClass('inactive_title');
                     }
                 }
             })
