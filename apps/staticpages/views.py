@@ -7,11 +7,12 @@ from django.urls import resolve
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from apps.registration.models import get_graduation_year
+
 from apps.events.models import Event
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
+from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport
 from hybridjango.settings import STATIC_FOLDER
 
@@ -41,7 +42,7 @@ class FrontPage(EventList):
 
         context = super(EventList, self).get_context_data(**kwargs)
         event_list_chronological = Event.objects.filter(
-            event_start__gte=timezone.now(), bedpress__isnull=True
+            event_start__gte=timezone.now(), bedpress__isnull=True, hidden=False
         )
         bedpress_list_chronological = Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False,
                                                            hidden=False)
