@@ -70,11 +70,14 @@ class Attendance(models.Model):
         return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
             user.specialization)
 
+    def get_sorted_hybrids(self):
+        return self.participants.order_by('participation__timestamp')
+
     def get_signed(self):
-        return self.participation_set.all()[:self.max_participants]
+        return self.get_sorted_hybrids()[:self.max_participants]
 
     def get_waiting(self):
-        return self.participation_set.all()[self.max_participants:]
+        return self.get_sorted_hybrids()[self.max_participants:]
 
     def full(self):
         return self.participants.count() >= self.max_participants
@@ -83,7 +86,7 @@ class Attendance(models.Model):
         return self.signup_open() and self.invited(user)
 
     def get_placements(self):
-        return enumerate(self.participants.order_by('participation__timestamp'))
+        return enumerate(self.get_sorted_hybrids())
 
     def get_waiting_placements(self):
         return [(index + 1 - self.max_participants, participant)

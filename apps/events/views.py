@@ -14,9 +14,10 @@ from .models import Event, EventComment, Attendance, Participation
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
+    ordering = ('-weight', '-timestamp')
 
     def get_queryset(self):
-        queryset = Event.objects.filter(hidden=False, news=True).order_by('-weight', '-timestamp')
+        queryset = super(EventList, self).get_queryset().filter(hidden=False, news=True)
         if not self.request.user.is_authenticated:
             queryset = queryset.filter(public=True)
         return queryset
@@ -92,8 +93,7 @@ def participants_csv(request, pk):
             'Kjønn',
             'Matpreferanser',
         ])
-        for participation in attendance.get_signed():
-            participant = participation.hybrid
+        for participant in attendance.get_signed():
             writer.writerow([
                 participant.get_full_name(),
                 participant.get_grade(),
