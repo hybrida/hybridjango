@@ -41,8 +41,12 @@
                     {% include 'events/event_list.html' %}
                 </div>
                 <div class="white-box space space-below">
-                    <h3><a style="color: black;" href="{% url 'jobs:info' %}">Stillingsutlysninger</a></h3>
+                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede Stillingsutlysninger</a></h3>
                     {% include 'jobannoucements/job_list.html' %}
+                    <hr>
+                    <div style="text-align:center">
+                        <a id="job-button" href="/stillingsutlysninger/" class="btn btn-primary">Se alle</a>
+                    </div>
                 </div>
             </div>
             <!--Hvert event hentes inn her samlet fra event_thumblist.html-->

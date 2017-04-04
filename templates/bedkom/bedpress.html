@@ -96,10 +96,7 @@
                 <button class="btn btn-xs btn-primary">Tilbake</button>
             </a>
             {% if user.is_authenticated %}
-                <a href="{% url 'endre_bedrift' bedpress.company.id %}">
-                    <button class="btn btn-xs btn-primary">Rediger</button>
 
-                </a>
             {% endif %}
         </div>
 
@@ -181,21 +178,25 @@
     <div class="col-md-4 space-above">
         <div class="white-box comment-section" id="comment_box">
             <h6 class="top-text">Kommentarer</h6>
+            <div style="margin:1em">
+                <form action="{% url 'bedpress_company_comment' bedpress.company.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="company_id" value="{{ company.pk }}" hidden>
+                    <label for="comment" class="sr-only">Comment:</label>
+                    <input class="form-control" id="comment" name="text" autocomplete="off"
+                           maxlength="250" type="text" required>
+                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
+                </form>
+            </div>
             {% for comment in bedpress.company.companycomment_set.all %}
                 <div class="row">
-                    <div class="col-xs-2 col-lg-2" style="padding-right:0">
-                        <a class="hybridThumbnailLink" id="{{ comment.author }}"
-                           href="{% url 'profile' comment.author.username %}">
-                            <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
-                                 alt="{{ comment.author_id }}">
-                        </a>
-                    </div>
-                    <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
+
+                    <div class="col-xs-10 col-lg-10" style="padding-left:2.5%; margin-left: 20px; border-bottom:1px solid #CED2D3;">
                         <div class="row">
                             <div class="col-xs-11">
                                 <strong>
                                     <a class="hybridLink" id="{{ comment.author }}"
-                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
+                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a></strong>
                             </div>
                         </div>
                         <div class="row">
@@ -211,16 +212,6 @@
                     </div>
                 </div>
             {% endfor %}
-            <div style="margin:1em">
-                <form action="{% url 'bedpress_company_comment' bedpress.company.pk %}" method="POST">
-                    {% csrf_token %}
-                    <input name="company_id" value="{{ bedpress.company.pk }}" hidden>
-                    <label for="comment" class="sr-only">Comment:</label>
-                    <input class="form-control" id="comment" name="text" autocomplete="off"
-                           maxlength="250" type="text" required>
-                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
-                </form>
-            </div>
         </div>
     </div>
 {% endblock extra %}

@@ -1,5 +1,5 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 
@@ -26,21 +26,6 @@ class Event(models.Model):
             return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
 
-    # def signup_open(self):
-    #     return any([a.signup_open for a in self.attendance_set.all()])
-
-    # def signup_closed(self):
-    #     return any([a.signup_closed for a in self.attendance_set.all()])
-
-    # def invited(self, user):
-    #     return any([a.invited for a in self.attendance_set.all()])
-
-    # def get_first_waiting(self):
-    #    return any([a.get_first_waiting for a in self.attendance_set.all()])
-
-    # def can_join(self, user):
-    #    return any([a.can_join for a in self.attendance_set.all()])
-
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
 
@@ -49,30 +34,18 @@ class Participation(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     hybrid = models.ForeignKey(Hybrid)
     attendance = models.ForeignKey('Attendance')
+    excursion = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('hybrid', 'attendance')
+        ordering = ['timestamp']
 
     def __str__(self):
         return '{timestamp}-{hybrid}-{attendance}'.format(hybrid=self.hybrid, attendance=self.attendance,
                                                           timestamp=self.timestamp)
 
 
-class AttendanceManager(models.Manager):
-    def open(self):
-        return super(AttendanceManager, self).filter(signup_start__lt=timezone.now(),
-                                                     signup_end__gt=timezone.now())
-
-    def joinable(self, user):
-        return user.is_authenticated() and self.open().filter(
-            Q(specializations=None) | Q(specializations=user.specialization),
-            genders__contains=user.gender,
-            grades__contains=str(user.get_grade()),
-        )
-
-
 class Attendance(models.Model):
-    objects = AttendanceManager()
     event = models.ForeignKey(Event)
     name = models.CharField(max_length=50, default='Påmelding')
     participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
@@ -97,20 +70,52 @@ class Attendance(models.Model):
         return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
             user.specialization)
 
+    def get_sorted_hybrids(self):
+        return self.participants.order_by('participation__timestamp')
+
     def get_signed(self):
-        return Participation.objects.filter(attendance_id=self).order_by('-timestamp')[:self.max_participants]
+        return self.get_sorted_hybrids()[:self.max_participants]
 
     def get_waiting(self):
-        return Participation.objects.filter(attendance_id=self).order_by('-timestamp')[self.max_participants:]
-
-    def get_first_waiting(self):
-        return self.get_waiting().first()
+        return self.get_sorted_hybrids()[self.max_participants:]
 
     def full(self):
         return self.participants.count() >= self.max_participants
 
     def can_join(self, user):
         return self.signup_open() and self.invited(user)
+
+    def get_placements(self):
+        return enumerate(self.get_sorted_hybrids())
+
+    def get_waiting_placements(self):
+        return [(index + 1 - self.max_participants, participant)
+                for (index, participant)
+                in self.get_placements()
+                if index >= self.max_participants]
+
+    def get_placement(self, hybrid):
+        for index, participant in self.get_placements():
+            if participant == hybrid:
+                return index
+        raise ValueError('Hybrid is not a participant')
+
+    def is_participant(self, hybrid):
+        return self.participants.filter(pk=hybrid.pk).exists()
+
+    def is_signed(self, hybrid):
+        if self.is_participant(hybrid):
+            return self.get_placement(hybrid) < self.max_participants
+        return False
+
+    def is_waiting(self, hybrid):
+        if self.is_participant(hybrid):
+            return self.get_placement(hybrid) >= self.max_participants
+        return False
+
+    def clean(self):
+        if self.signup_end and self.signup_start and self.signup_end < self.signup_start:
+            raise ValidationError('Påmeldingen kan ikke slutte før den har begynt.')
 
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
@@ -121,3 +126,6 @@ class EventComment(models.Model):
     author = models.ForeignKey(Hybrid)
     timestamp = models.DateTimeField(default=timezone.now)
     text = models.TextField()
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
