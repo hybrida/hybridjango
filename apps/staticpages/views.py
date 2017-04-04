@@ -7,6 +7,7 @@ from django.urls import resolve
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.events.models import Event
 from apps.events.views import EventList
@@ -132,7 +133,7 @@ def members(request):
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
 
-class BoardReportView(AboutView):
+class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
