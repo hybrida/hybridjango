@@ -8,8 +8,8 @@ from apps.registration.models import Hybrid
 class Contact_person(models.Model):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=50, default="99253420")
-    job = models.CharField(max_length=100, default="hei")
+    telephone = models.CharField(max_length=50, default="")
+    job = models.CharField(max_length=100, default="")
 
     def __str__(self):
         return str(self.name)
@@ -28,17 +28,16 @@ class Company(models.Model):
     contact_person = models.ForeignKey(Contact_person, blank=True, null=True)
 
     CHOICES_STATUS = (
-        ('Booket', 'BOOKET'),
-        ('Opprettet kontakt', 'KONTAKTET'),
-        ('Takket nei', 'NEI'),
-        ('Ikke kontaktet', 'IKKE_KONTAKTET'),
-        ('Sendt mail', 'SENDT_MAIL')
+        ('Booket', 'Booket'),
+        ('Opprettet kontakt', 'Opprettet kontakt'),
+        ('Takket nei', 'Takket nei'),
+        ('Ikke kontaktet', 'Ikke kontaktet'),
     )
 
     CHOICES_PRIORITY = (
-        ('Høy', 'HØY'),
-        ('Middels', 'MIDDELS'),
-        ('Lav', 'LAV')
+        ('Høy', 'Høy'),
+        ('Middels', 'Middels'),
+        ('Lav', 'Lav')
     )
 
     status = models.CharField(choices=CHOICES_STATUS, max_length=20)

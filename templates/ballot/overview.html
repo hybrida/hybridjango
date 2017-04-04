@@ -7,26 +7,44 @@
 
 {% block text %}
     <h1 id="title">Resultat</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Navn</th>
-            <th>Antall</th>
-            <th>Prosent</th>
-        </tr>
-        </thead>
-        <tbody id="resultater">
-        </tbody>
-    </table>
+    <button id="hide_button" onclick="$('#results').show();$(this).hide()" style="display: none;"
+            class="btn btn-default">
+        Vis resultater
+    </button>
+    <div id="results">
+        <button onclick="$('#results').hide(); $('#hide_button').show()" class="btn btn-default">Skjul resultater
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Antall</th>
+                <th>Prosent</th>
+            </tr>
+            </thead>
+            <tbody id="resultater">
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block sidebar %}
+    <form method="get" action="#">
+        {% csrf_token %}
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <input type="submit" name="active" value="{% if active %}Deaktiver{% else %}Aktiver{% endif %}"
+                       class="btn btn-default">
+            </div>
+        </div>
+    </form>
+    <hr>
     <h2>Ny avstemning</h2>
     <form method="post" action="{% url 'ballot:overview' %}" id="form">
         {% csrf_token %}
         <div class="form-group">
             <span>Tittel</span>
-            <input class="form-control" type="text" name="title"/>
+            <input title="title" class="form-control" type="text" name="title"/>
         </div>
         <div id="new-choices">
             <span>Valg</span>
@@ -34,6 +52,11 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="membersOnly" checked> Kun for medlemmer
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="empty_votes" checked>Tomme stemmer
             </label>
         </div>
         <div class="btn-group btn-group-justified" role="group">
@@ -65,39 +88,39 @@
         var choices = 0;
         function addInput() {
             $('#new-choices').append(
-                    '<div class="input-group" id="choice-' + choices + '">' +
-                    '<input class="form-control choice" type="text" name="choice-' + choices + '"/>' +
-                    '<span class="input-group-btn">' +
-                    '<button type="button" class="btn btn-danger" onclick="removeChoice(' + choices + ')">' +
-                    '<span class="glyphicon glyphicon-remove">' +
-                    '</span>' +
-                    '</button>' +
-                    '</span>' +
-                    '</div>'
+                '<div class="input-group" id="choice-' + choices + '">' +
+                '<input class="form-control choice" type="text" name="choice-' + choices + '"/>' +
+                '<span class="input-group-btn">' +
+                '<button type="button" class="btn btn-danger" onclick="removeChoice(' + choices + ')">' +
+                '<span class="glyphicon glyphicon-remove">' +
+                '</span>' +
+                '</button>' +
+                '</span>' +
+                '</div>'
             );
             choices++;
         }
 
         setInterval(function () {
-                    $.ajax({
-                        url: '{% url 'ballot:results' %}',
-                        type: 'GET',
-                        success: function (response) {
-                            var newResults = "";
-                            for (candidate of response.results) {
-                                newResults += '<tr><th>' + candidate.name + '</th>';
-                                newResults += '<th>' + candidate.votes + '</th>';
-                                newResults += '<th>' + ((candidate.votes * 100.0) / response.total).toFixed(1) + '%</th></tr>';
-                            }
-                            newResults += '<tr><th>Totalt</th>';
-                            newResults += '<th>' + response.total + '</th>';
-                            newResults += '<th></th></tr>';
-                            $('#resultater').html(newResults);
-                            $('#title').html(response.title);
+                $.ajax({
+                    url: '{% url 'ballot:results' %}',
+                    type: 'GET',
+                    success: function (response) {
+                        var newResults = "";
+                        for (candidate of response.results) {
+                            newResults += '<tr><td>' + candidate.name + '</td>';
+                            newResults += '<td>' + candidate.votes + '</td>';
+                            newResults += '<td>' + ((candidate.votes * 100.0) / response.total_nonblank).toFixed(1) + '%</td></tr>';
                         }
-                    })
-                },
-                500);
+                        newResults += '<tr><td></td><td></td><td></td></tr>';
+                        newResults += '<tr><th></th><th>Med Tomme</th><th>Uten Tomme</th></tr>';
+                        newResults += '<tr><td>Totalt</td><td>' + response.total + '</td><td>' + response.total_nonblank + '</td></tr>';
+                        $('#resultater').html(newResults);
+                        $('#title').html(response.title);
+                    }
+                })
+            },
+            500);
 
         $('#submit').click(function () {
             $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {

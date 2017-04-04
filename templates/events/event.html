@@ -23,8 +23,9 @@
             <a class="pull-right" href="{% url 'admin:events_event_change' event.pk %}">
                 <button class="btn btn-xs btn-primary">Rediger</button>
             </a>
-        {% endif %}
-        {% if perms.events.add_event %}
+            <a class="pull-right" href="{% url 'participants' event.pk %}">
+                <button class="btn btn-xs btn-primary">Deltakere (beta)</button>
+            </a>
             <a class="pull-right" href="{% url 'admin:events_event_delete' event.pk %}">
                 <button class="btn btn-xs btn-danger">Slett</button>
             </a>
@@ -42,10 +43,10 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        {{ grade }}. Klasse: {{ attendance|signed_hybrids|grade_list:grade|length }} påmeldte
+                        {{ grade }}. Klasse: {{ attendance.get_signed|grade_list:grade|length }} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_{{ grade }}">
-                        {% for participant in attendance|signed_hybrids|grade_list:grade|dictsort:'first_name' %}
+                        {% for participant in attendance.get_signed|grade_list:grade|dictsort:'first_name' %}
                             <div style="margin-top: 7px" class="col-sm-6">
                                 <a href="{% url 'profile' participant.username %}">
                                     <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
@@ -64,10 +65,10 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_waiting' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        Venteliste: {{ attendance|waiting_hybrids|length }} påmeldte
+                        Venteliste: {{ attendance.get_waiting|length }} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_waiting">
-                        {% for waiting in attendance|waiting_hybrids|dictsort:'first_name' %}
+                        {% for index, waiting in attendance.get_waiting_placements %}
                             <div style="margin-top: 7px" class="col-sm-6">
                                 <a href="{% url 'profile' waiting.username %}">
                                     <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
@@ -75,7 +76,7 @@
                                              style="vertical-align: middle">
                                         <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
                                     </div>
-                                    {{ waiting.get_full_name }}
+                                    {{ index }}:{{ waiting.get_full_name }}
                                 </a>
                             </div>
                         {% endfor %}
@@ -107,86 +108,107 @@
             </tr>
         {% endif %}
     </table>
-    {% for attendance in event.attendance_set.all %}
-        <h3>{{ attendance.name }}</h3>
+    {% comment %}
+        Attendances is a list of dictionaries containing useful values about attendances in relation to the current user
+        in addition to an attendance object (attendance.o).
+    {% endcomment %}
+    {% for attendance in attendances %}
+        <h3>{{ attendance.o.name }}</h3>
         <table class="info-table">
-            {% if attendance.signup_start %}
+            {% if attendance.o.signup_start %}
                 <tr>
                     <td>Åpnes</td>
-                    <td>{{ attendance.signup_start }}</td>
+                    <td>{{ attendance.o.signup_start }}</td>
                 </tr>
             {% endif %}
-            {% if attendance.signup_end %}
+            {% if attendance.o.signup_end %}
                 <tr>
                     <td>Frist</td>
-                    <td>{{ attendance.signup_end }}</td>
+                    <td>{{ attendance.o.signup_end }}</td>
                 </tr>
             {% endif %}
-            {% if attendance.price %}
+            {% if attendance.o.price %}
                 <tr>
                     <td>Pris</td>
-                    <td>{{ attendance.price }}</td>
+                    <td>{{ attendance.o.price }}</td>
                 </tr>
             {% endif %}
             <tr>
                 <td>Trinn</td>
                 <td>
-                    {% if attendance.grades|length_is:5 %}
+                    {% if attendance.o.grades|length_is:5 %}
                         Alle
                     {% else %}
-                        {% for grade in attendance.grades %}<span class="comma_seperated">{{ grade }}</span>{% endfor %}
+                        {% for grade in attendance.o.grades %}<span class="comma_seperated">{{ grade }}</span>
+                        {% endfor %}
                     {% endif %}
                 </td>
             </tr>
             <tr>
                 <td>Kjønn</td>
                 <td>
-                    {% if attendance.genders|length_is:3 %}
+                    {% if attendance.o.genders|length_is:3 %}
                         Alle
                     {% else %}
-                        {% for gender in attendance.genders %}<span class="comma_seperated"
+                        {% for gender in attendance.o.genders %}<span class="comma_seperated"
                         >{{ gender|readable_gender }}</span>{% endfor %}
                     {% endif %}
                 </td>
             </tr>
-            {% if attendance.specializations.count %}
+            {% if attendance.o.specializations.count %}
                 <tr>
-                    <td>Spesialiseringer</td>
+                    <td>Profiler</td>
                     <td>
-                        {% for specialization in attendance.specializations.all %}
+                        {% for specialization in attendance.o.specializations.all %}
                             {{ specialization }}
                         {% endfor %}
                     </td>
                 </tr>
             {% endif %}
+            <tr>
+                <td>Du er</td>
+                <td>
+                    {% if not user.is_authenticated %}
+                        Ikke pålogget
+                    {% elif attendance.is_signed %}
+                        Påmeldt
+                    {% elif attendance.is_waiting %}
+                        Nummer {{ attendance.waiting_placement }} i kø
+                    {% elif attendance.is_invited %}
+                        Invitert
+                    {% else %}
+                        Ikke invitert
+                    {% endif %}
+                </td>
+            </tr>
         </table>
-        <div class="progress" style="margin-bottom: 0">
+        <div class="progress" style="margin-bottom: 0; margin-top: .5em">
             <div class="progress-bar"
                  style="min-width: 4em;
-                         width: {% widthratio attendance.get_signed|length attendance.max_participants 100 %}%">
-                {{ attendance.get_signed|length }}
-                / {{ attendance.max_participants }}
-                {% if attendance.get_waiting %}
-                    + {{ attendance.get_waiting|length }}
+                         width: {% widthratio attendance.o.get_signed|length attendance.o.max_participants 100 %}%">
+                {{ attendance.o.get_signed|length }}
+                / {{ attendance.o.max_participants }}
+                {% if attendance.o.get_waiting %}
+                    + {{ attendance.o.get_waiting|length }}
                 {% endif %}
             </div>
         </div>
         {% if user.is_authenticated %}
             <div class="row">
                 <div class="col-xs-12">
-                    {% if attendance.signup_open %}
+                    {% if attendance.o.signup_open %}
                         <form method="post">
                             {% csrf_token %}
-                            <input name="attendance" value="{{ attendance.pk }}" type="hidden">
-                            {% if user in attendance.participants.all %}
+                            <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
+                            {% if attendance.is_participant %}
                                 <input name="action" value="leave" type="hidden">
                                 <button type="submit" class=" btn btn-danger btn-block">
-                                    Meld meg av{% if user in attendance|waiting_hybrids %} ventelisten{% endif %}
+                                    Meld meg av{% if attendance.is_waiting %} ventelisten{% endif %}
                                 </button>
-                            {% elif attendance in joinable %}
+                            {% elif attendance.is_invited %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
-                                    {% if attendance.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
+                                    {% if attendance.o.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
                                 </button>
                             {% endif %}
                         </form>
@@ -197,63 +219,66 @@
     {% endfor %}
 {% endblock sidebar %}
 {% block extra %}
-    <script type="text/javascript">
-        textBox = $('#text-box');
-        sidebar = $('#sidebar');
-        adjust_height = function () {
-            if (window.innerWidth >= 992) {
-                // 15px is height of space_above margin
-                $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
-            } else {
-                $('#comment_box').css('max-height', "")
-            }
-        };
-        window.onload = adjust_height;
-        window.onresize = adjust_height;
-    </script>
-    <div class="col-md-4 space-above">
-        <div class="white-box comment-section" id="comment_box">
-            <h6 class="top-text">Kommentarer</h6>
-            {% for comment in event.eventcomment_set.all %}
-                <div class="row">
-                    <div class="col-xs-2 col-lg-2" style="padding-right:0">
-                        <a class="hybridThumbnailLink" id="{{ comment.author }}"
-                           href="{% url 'profile' comment.author.username %}">
-                            <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
-                                 alt="{{ comment.author_id }}">
-                        </a>
+    {% if user.is_authenticated %}
+        <script type="text/javascript">
+            textBox = $('#text-box');
+            sidebar = $('#sidebar');
+            adjust_height = function () {
+                if (window.innerWidth >= 992) {
+                    // 15px is height of space_above margin
+                    $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
+                } else {
+                    $('#comment_box').css('max-height', "")
+                }
+            };
+            window.onload = adjust_height;
+            window.onresize = adjust_height;
+        </script>
+        <div class="col-md-4 space-above">
+            <div class="white-box comment-section" id="comment_box">
+                <h6 class="top-text">Kommentarer</h6>
+                {% for comment in event.eventcomment_set.all %}
+                    <div class="row">
+                        <div class="col-xs-2 col-lg-2" style="padding-right:0">
+                            <a class="hybridThumbnailLink" id="{{ comment.author }}"
+                               href="{% url 'profile' comment.author.username %}">
+                                <img class="hybridThumbnail" src="/uploads/{{ comment.author.image }}"
+                                     alt="{{ comment.author_id }}">
+                            </a>
+                        </div>
+                        <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
+                            <strong>
+                                <a class="hybridLink" id="{{ comment.author }}"
+                                   href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:
+                            </strong>
+                            {% if user == comment.author %}
+                                <form action="{% url 'delete_comment_event' event.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="delete" value="{{ comment.pk }}">
+                                    <button type="submit" class="btn btn-link"
+                                            style="color: red; padding: 0; position: absolute; top: 0; right: 15px;">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+                            {{ comment.text }}
+                            <br>
+                            <small>{{ comment.timestamp }}</small>
+                        </div>
                     </div>
-                    <div class="col-xs-10 col-lg-10" style="padding-left:2.5%">
-                        <div class="row">
-                            <div class="col-xs-11">
-                                <strong>
-                                    <a class="hybridLink" id="{{ comment.author }}"
-                                       href="{% url 'profile' comment.author.username %}">{{ comment.author.get_full_name }}</a>:</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                {{ comment.text }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <small>{{ comment.timestamp }}</small>
-                            </div>
-                        </div>
-                    </div>
+                    <hr>
+                {% endfor %}
+                <div style="margin:1em">
+                    <form action="{% url 'comment_event' event.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input title="event_id" name="event_id" value="{{ event.pk }}" hidden>
+                        <label for="comment" class="sr-only">Comment:</label>
+                        <input class="form-control" id="comment" name="text" autocomplete="off"
+                               maxlength="250" type="text" required>
+                        <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
+                    </form>
                 </div>
-            {% endfor %}
-            <div style="margin:1em">
-                <form action="{% url 'comment_event' event.pk %}" method="POST">
-                    {% csrf_token %}
-                    <input name="event_id" value="{{ event.pk }}" hidden>
-                    <label for="comment" class="sr-only">Comment:</label>
-                    <input class="form-control" id="comment" name="text" autocomplete="off"
-                           maxlength="250" type="text" required>
-                    <button type="submit" class="btn btn-primary" style="width: 100%">Kommenter</button>
-                </form>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock extra %}
