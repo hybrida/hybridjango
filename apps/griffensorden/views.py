@@ -21,8 +21,16 @@ class GriffenView (TemplateResponseMixin, ContextMixin, View):
                 if page[0] == active_page:
                     page_found = True
 
+        # this needs to be fixed/improved upon
+        year = []
+        knight = Ridder.objects.all()
+        for ridder in knight:
+            if ridder.awarded not in year:
+                year.append(ridder.awarded)
+
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+
         context.update({
             'leder': Hybrid.objects.get(username='martiaks'),
             'nestleder': Hybrid.objects.get(username='sigribra'),
