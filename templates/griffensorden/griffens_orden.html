@@ -27,10 +27,9 @@
         </p>
     </article>
 
+    <!-- for loop to generate alle the members of the order of the griff -->
     <div class="container" style="text-align: center; max-width: 40em; margin: auto">
-
     {% for item in Year|dictsortreversed:'awarded' %}
-
         <h1>{{ item.awarded }}</h1>
         {% for ridder in Ridder|dictsortreversed:'awarded'%}
             {% ifequal ridder.awarded item.awarded %}
@@ -43,5 +42,12 @@
         {% endfor %}
     {% endfor %}
     </div>
+
+    <!-- sidebar inlogging for the order of the Griff members -->
+    {% if perms.ridder.add_ridder %}
+        {% block sublinks %}
+                <a href="{% url 'admin:griffensorden_ridder_add'%}">Ridder Admin</a>
+        {% endblock %}
+    {% endif %}
 
 {% endblock text %}
