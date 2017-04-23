@@ -7,6 +7,7 @@
             color: #005675;
             text-align: center;
         }
+
         .buttons {
             position: absolute;
             left: 535px;
@@ -17,7 +18,7 @@
     <div class="container" style="width: 70%">
         <h1>Møtereferat</h1>
         <div class="buttons">
-            {% if perms.staticpages.boardreport %}
+            {% if perms.staticpages.add_boardreport %}
                 <a href="{% url 'admin:staticpages_boardreport_add'%}">
                     <button class="btn btn-xs btn-primary">Ny</button>
                 </a>
