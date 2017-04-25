@@ -23,8 +23,10 @@ from apps.staticpages.views import FrontPage
 urlpatterns = [
                   url(r'^$', FrontPage.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', include(admin.site.urls)),
+
                   url(r'^kilt/', include('apps.kiltshop.urls', namespace='kilt'), name='kiltshop'),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
+                  url(r'^calendar/', include('apps.eventcalendar.urls')),
                   url(r'^hybrid/', include('apps.registration.urls'), name='accounts'),
                   url(r'^quiz/', include('apps.quiz.urls')),
                   url(r'^hendelser/', include('apps.events.urls'), name='events'),
