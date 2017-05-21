@@ -1,6 +1,6 @@
-import os
 from datetime import timedelta
 
+import os
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -33,7 +33,7 @@ class Hybrid(AbstractUser):
     graduation_year = models.IntegerField(default=five_years, verbose_name='Avgangsår')
     image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg', verbose_name='Bilde')
     gender = models.CharField(max_length=1, blank=False, choices=(('M', 'Mann'), ('F', 'Dame'), ('U', 'Ukjent')),
-                              verbose_name='Kjønn')
+                              verbose_name='Kjønn', default='U')
     specialization = models.ForeignKey(Specialization, null=False, default=1, on_delete=models.SET_DEFAULT,
                                        verbose_name='Spesialisering')
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='Fødselsår')
