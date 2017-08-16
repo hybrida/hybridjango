@@ -13,8 +13,8 @@ class Command(BaseCommand):
         parser.add_argument('file')
 
     def handle(self, *args, **options):
-        asdf = options['file']
-        with open(asdf, 'r', encoding='utf-8-sig') as file:
+        file = options['file']
+        with open(file, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             with transaction.atomic():
                 for row in reader:
