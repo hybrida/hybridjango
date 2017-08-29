@@ -226,6 +226,7 @@
             adjust_height = function () {
                 if (window.innerWidth >= 992) {
                     // 15px is height of space_above margin
+                    $('#text-box').css('min-height', sidebar.height() + 215 + 'px');
                     $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
                 } else {
                     $('#comment_box').css('max-height', "")
