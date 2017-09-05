@@ -1,0 +1,30 @@
+{% extends "standard_sidebar.html" %}
+{% load static %}
+{% block link %}
+    <!-- Collecting custom-made css for the search bar -->
+    <link rel="stylesheet" type="text/css" href="{% static "css/search.css" %}">
+{% endblock link %}
+{% block sidebar %}
+    <a href="{% url "evaluation_fall" %}">Høstemner</a><br>
+    <a href="{% url "evaluation_spring" %}">Våremner</a><br>
+    <a href="#">Evaluer fag</a>
+{% endblock sidebar %}
+{% block script %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script type="text/javascript">
+    var options = {
+    valueNames: [ 'name', 'id', 'place']
+                    };
+
+    var userList = new List('users', options);
+
+    jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+
+    });
+});
+</script>
+
+
+{% endblock script %}

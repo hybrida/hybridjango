@@ -32,6 +32,8 @@ class Company(models.Model):
         ('Opprettet kontakt', 'Opprettet kontakt'),
         ('Takket nei', 'Takket nei'),
         ('Ikke kontaktet', 'Ikke kontaktet'),
+        ('Svarer ikke', 'Svarer ikke'),
+
     )
 
     CHOICES_PRIORITY = (
