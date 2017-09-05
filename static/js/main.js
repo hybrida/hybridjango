@@ -101,7 +101,6 @@ function submitFeedback() {
     var authorIcon = "https://slack-files.com/T0CAJ0U4A-F2WLMK087-7d8bf05908";
     var color = "good";
     var sentFromUrl = "Sent from " + url;
-    var issueUrl = "Generate issue: " + urlWithParams(window.location.origin + "/gitlab/ny", {"a": authorName, "t": Math.floor(Date.now() / 1000), "m": slackSafe(content), "u": url});
     var text = slackSafe(content);
 
     // Verify request
@@ -122,7 +121,7 @@ function submitFeedback() {
           "author_link": authorLink,
           "author_icon": authorIcon,
           "color": color,
-          "footer": sentFromUrl + "\n" + issueUrl,
+          "footer": sentFromUrl,
           "text": text
         }
       ]
