@@ -21,8 +21,12 @@ class GriffenView (TemplateResponseMixin, ContextMixin, View):
                 if page[0] == active_page:
                     page_found = True
 
+        # this needs to be fixed/improved upon
+        year = Ridder.objects.order_by().values('awarded').distinct()
+
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+
         context.update({
             'leder': Hybrid.objects.get(username='martiaks'),
             'nestleder': Hybrid.objects.get(username='sigribra'),
@@ -32,7 +36,8 @@ class GriffenView (TemplateResponseMixin, ContextMixin, View):
             'vevsjef': Hybrid.objects.get(username='anstra'),
             'jentekomsjef': Hybrid.objects.get(username='andrsly'),
             'redaktor': Hybrid.objects.get(username='amaliams'),
-            'Ridder': Ridder.objects.all()}
+            'Ridder': Ridder.objects.all(),
+            'Year': year}
         )
 
         return self.render_to_response(context)

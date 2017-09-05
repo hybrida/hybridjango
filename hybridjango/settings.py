@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'apps.griffensorden',
     'apps.gitlab',
     'apps.staticpages',
+    'apps.eventcalendar',
     'apps.rfid',
 ]
 

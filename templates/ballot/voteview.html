@@ -3,6 +3,19 @@
 
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/ballot.css' %}">
+    <style>
+        .inactive label {
+            color: gray !important;
+        }
+
+        .inactive_title {
+            color: gray !important;
+        }
+
+        .inactive_title:after {
+            content: ' (deaktivert)';
+        }
+    </style>
 {% endblock %}
 
 {% block text %}
@@ -49,17 +62,24 @@
                         $('#options').html(newChoices);
                         $('#title').html(response.title);
                     }
-                    if (response.has_voted) {
+                    if (response.has_voted || !response.active) {
                         $('#submitButton').removeClass('btn-primary');
                     } else {
                         $('#submitButton').addClass('btn-primary');
+                    }
+                    if (response.active) {
+                        $('#options').removeClass('inactive');
+                        $('#title').removeClass('inactive_title');
+                    } else {
+                        $('#options').addClass('inactive');
+                        $('#title').addClass('inactive_title');
                     }
                 }
             })
         }
 
         $(document).ready(refresh_ballot(true));
-        setInterval(refresh_ballot, 5000);
+        setInterval(refresh_ballot, 1000);
 
         var submitButton = $('#submitButton');
         var timeoutID;

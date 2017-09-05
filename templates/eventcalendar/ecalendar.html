@@ -1,0 +1,59 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{%  block link %}
+
+<link rel='stylesheet' href="{% static "css/jquery-ui.min.css" %}" />
+<link href="{% static "css/fullcalendar.min.css" %}" rel='stylesheet' />
+<link href="{% static "css/fullcalendar.print.min.css" %}" rel='stylesheet' media='print' />
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/moment.min.js" %}"></script>
+<script src="{% static "js/fullcalendar.min.js" %}"></script>
+<script src="{% static "js/nb.js" %}"></script>
+
+
+<script>
+
+	$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+			theme: true,
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay,listMonth'
+			},
+			navLinks: true, // can click day/week names to navigate views
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			events: [
+
+			]
+		});
+
+	});
+
+</script>
+<style>
+
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+</style>
+{% endblock %}
+
+{% block text %}
+
+<div id='calendar'>
+</div>
+
+{%  endblock %}

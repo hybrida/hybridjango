@@ -13,7 +13,7 @@
                     <th>Kjønn</th>
                     <th>Matpreferanser</th>
                 </tr>
-                {% for participant in attendance|signed_hybrids|dictsort:'get_full_name' %}
+                {% for participant in attendance.get_signed|dictsort:'get_full_name' %}
                     <tr>
                         <td>{{ participant.get_full_name }}</td>
                         <td>{{ participant.get_grade }}</td>

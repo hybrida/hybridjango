@@ -7,11 +7,13 @@ from django.urls import resolve
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from apps.registration.models import get_graduation_year
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from apps.events.models import Event
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
+from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport
 from hybridjango.settings import STATIC_FOLDER
 
@@ -41,7 +43,7 @@ class FrontPage(EventList):
 
         context = super(EventList, self).get_context_data(**kwargs)
         event_list_chronological = Event.objects.filter(
-            event_start__gte=timezone.now(), bedpress__isnull=True
+            event_start__gte=timezone.now(), bedpress__isnull=True, hidden=False
         )
         bedpress_list_chronological = Event.objects.filter(event_start__gte=timezone.now(), bedpress__isnull=False,
                                                            hidden=False)
@@ -98,11 +100,11 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
         context.update({
-            'leder': Hybrid.objects.get(username='martiaks'),
-            'nestleder': Hybrid.objects.get(username='sigribra'),
+            'leder': Hybrid.objects.get(username='ludviglj'),
+            'nestleder': Hybrid.objects.get(username='torasg'),
             'skattmester': Hybrid.objects.get(username='shahiths'),
-            'bksjef': Hybrid.objects.get(username='ludviglj'),
-            'festivalus': Hybrid.objects.get(username='njknudse'),
+            'bksjef': Hybrid.objects.get(username='jonasvja'),
+            'festivalus': Hybrid.objects.get(username='rikkebl'),
             'vevsjef': Hybrid.objects.get(username='anstra'),
             'jentekomsjef': Hybrid.objects.get(username='andrsly'),
             'redaktor': Hybrid.objects.get(username='amaliams'),
@@ -131,7 +133,7 @@ def members(request):
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
 
-class BoardReportView(AboutView):
+class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
