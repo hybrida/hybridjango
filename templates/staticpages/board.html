@@ -49,7 +49,7 @@
         <div class="col-sm-6">
             <div class="white-box space-above">
                 <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/skattmester_2017.jpg' %}" class="center-block img-responsive art-img"
+                    <img src="{% static 'img/about/skattmester.jpg' %}" class="center-block img-responsive art-img"
                          width="100%">
                     <div class="image-info-overlay">
                         <div>
@@ -108,7 +108,7 @@
         <div class="col-sm-6">
             <div class="white-box space-above">
                 <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/vevsjef_2017.jpg' %}" class="center-block img-responsive art-img"
+                    <img src="{% static 'img/about/vevsjef.jpg' %}" class="center-block img-responsive art-img"
                          width="100%">
                     <div class="image-info-overlay">
                         <div>
@@ -127,7 +127,7 @@
         <div class="col-sm-6 col-sm-offset-3">
             <div class="white-box space-above">
                 <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/jentesjef_2017.jpg' %}" class="center-block img-responsive art-img"
+                    <img src="{% static 'img/about/jentesjef.jpg' %}" class="center-block img-responsive art-img"
                          width="100%">
                     <div class="image-info-overlay">
                         <div>
@@ -146,5 +146,7 @@
     </div>
 {% endblock %}
 {% block sublinks %}
-    <a href="referat">Møtereferat</a>
+    {% if user.is_authenticated %}
+        <a href="referat">Møtereferat</a>
+    {% endif %}
 {% endblock %}

@@ -3,7 +3,7 @@ from datetime import datetime
 from django import template
 from django.conf import settings
 
-from apps.registration.models import get_graduation_year, Hybrid
+from apps.registration.models import get_graduation_year
 
 register = template.Library()
 
@@ -17,11 +17,6 @@ def readable_gender(value):
     return 'Andre'
 
 
-@register.filter
-def grade(value, arg):
-    return value.filter(graduation_year=get_graduation_year(arg))
-
-
 # settings value
 @register.simple_tag
 def absolute_uploads_url(relative_url):
@@ -31,20 +26,6 @@ def absolute_uploads_url(relative_url):
 @register.filter
 def grade_list(value, arg):
     return [hybrid for hybrid in value if hybrid.graduation_year == get_graduation_year(arg)]
-
-
-@register.filter
-def signed_hybrids(value):
-    return get_sorted_hybrids(value)[:value.max_participants]
-
-
-@register.filter
-def waiting_hybrids(value):
-    return get_sorted_hybrids(value)[value.max_participants:]
-
-
-def get_sorted_hybrids(value):
-    return Hybrid.objects.filter(participation__attendance=value).order_by('participation__timestamp')
 
 
 TIMEUNTIL_CHUNKS = (

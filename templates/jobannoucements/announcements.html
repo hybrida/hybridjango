@@ -1,41 +1,53 @@
 {% extends 'jobannoucements/job_sidebar.html' %}
 {% block unstyled_text %}
     <style>
-
-    .logo{
-        position: relative;
-        height: auto;
-        width: auto;
-        max-height: 180px;
-        max-width: 200px;
-        padding-left: 20px;
+    .header{
+        text-align: center;
+        font-size: 30px;
     }
+
     .text{
         font-size: 18px;
         line-height: 28px;
-        padding-left: 245px;
+    }
+
+    @media screen and (max-width: 992px) {
+        .text{
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+    }
+
+
+
     }
     .job_list{
         height: auto;
         display: inline-block;
     }
 
+    img {
+        display:block;
+        margin:auto;
+    }
+
     </style>
+
     {% if priorities %}
         <div class="white-box space-above">
-            <h2>Fremhevede Stillingsutlysninger</h2>
+            <h2 class="header">Fremhevede Stillingsutlysninger</h2>
             {% for job in priorities %}
-            <div class="job_list">
+            <div class="container" style="width: auto">
             <hr>
-                <div>
-                    <a  href="{{ job.pk }}">
-                        <img class="logo" src="/uploads/{{ job.company.logo }}" align="left">
-                    </a>
-                    <div class="text">
-                        <b>Tittel: </b>
+                <div class="row">
+                    <div class="col-md-4">
                         <a href="{{ job.pk }}">
-                            {{ job.title }}
+                            <img  width="220" height="220" src="/uploads/{{ job.company.logo }}">
                         </a>
+                    </div>
+                    <div class="col-md-8; text">
+                        <b>Tittel: </b>
+                        <a href="{{ job.pk }}">{{ job.title }}</a>
                         <br><b>Bedrift: </b>{{ job.company.name }}
                         <br><b>Søknadsfrist: </b>{{ job.deadline }}
                     </div>
@@ -47,19 +59,19 @@
     {% endif %}
     {% if jobs %}
         <div class="white-box space-above">
-            <h2>{{ status }} Stillingsutlysninger</h2>
+            <h2 class="header">{{ status }} Stillingsutlysninger</h2>
             {% for job in jobs %}
+            <div class="container" style="width: auto">
             <hr>
-            <div class="job_list" >
-                <div>
-                    <a href="{{ job.pk }}">
-                        <img class="logo" src="/uploads/{{ job.company.logo }}" align="left">
-                    </a>
-                    <div class="text">
-                        <b>Tittel: </b>
+                <div class="row">
+                    <div class="col-md-4">
                         <a href="{{ job.pk }}">
-                            {{ job.title }}
+                            <img  width="220" height="220" src="/uploads/{{ job.company.logo }}">
                         </a>
+                    </div>
+                    <div class="text col-md-8" style="font-size: 18px;">
+                        <b>Tittel: </b>
+                        <a href="{{ job.pk }}">{{ job.title }}</a>
                         <br><b>Bedrift: </b>{{ job.company.name }}
                         <br><b>Søknadsfrist: </b>{{ job.deadline }}
                     </div>

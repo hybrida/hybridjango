@@ -43,10 +43,10 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        {{ grade }}. Klasse: {{ attendance|signed_hybrids|grade_list:grade|length }} påmeldte
+                        {{ grade }}. Klasse: {{ attendance.get_signed|grade_list:grade|length }} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_{{ grade }}">
-                        {% for participant in attendance|signed_hybrids|grade_list:grade|dictsort:'first_name' %}
+                        {% for participant in attendance.get_signed|grade_list:grade|dictsort:'first_name' %}
                             <div style="margin-top: 7px" class="col-sm-6">
                                 <a href="{% url 'profile' participant.username %}">
                                     <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
@@ -65,7 +65,7 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_waiting' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        Venteliste: {{ attendance|waiting_hybrids|length }} påmeldte
+                        Venteliste: {{ attendance.get_waiting|length }} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_waiting">
                         {% for index, waiting in attendance.get_waiting_placements %}
@@ -226,6 +226,7 @@
             adjust_height = function () {
                 if (window.innerWidth >= 992) {
                     // 15px is height of space_above margin
+                    $('#text-box').css('min-height', sidebar.height() + 215 + 'px');
                     $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
                 } else {
                     $('#comment_box').css('max-height', "")

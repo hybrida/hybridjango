@@ -20,11 +20,13 @@
     <div class="white-box space-above">
         <h3>Admin</h3>
         <div align="center  ">
-            <a href="{%  url 'admin:jobannouncements_job_add'%}">Lag ny</a><br>
+            <a href="{% url 'admin:jobannouncements_job_add'%}">Lag ny</a><br>
             <a href="{% url 'jobs:admin' %}">Oversikt</a>
         </div>
     </div>
     {% endif %}
+
+
 
  <!-- Shows company information if user is on specific jobannoucement site, or lists all announcements on other pages -->
     <div class="white-box space-above">
