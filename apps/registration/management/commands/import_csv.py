@@ -1,5 +1,4 @@
 import csv
-
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -13,12 +12,12 @@ class Command(BaseCommand):
         parser.add_argument('file')
 
     def handle(self, *args, **options):
-        asdf = options['file']
-        with open(asdf, 'r', encoding='utf-8-sig') as file:
+        file = options['file']
+        with open(file, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             with transaction.atomic():
                 for row in reader:
                     username = row.pop('username')
-                    user, created = Hybrid.objects.get_or_create(username=username, defaults=row)
+                    user, created = Hybrid.objects.update_or_create(username=username, defaults=row)
                     if not created:
-                        self.stdout.write('{} already exists'.format(user))
+                        self.stdout.write('{} already exists, updating user'.format(user))

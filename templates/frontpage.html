@@ -23,8 +23,8 @@
         </div>
     {% endif %}
 
-    <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
     <div class="container">
+        <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
         <div class="row space-below space-above">
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
                 {% if perms.events.add_event %}
@@ -45,7 +45,7 @@
                     {% include 'jobannoucements/job_list.html' %}
                     <hr>
                     <div style="text-align:center">
-                        <a id="job-button" href="/stillingsutlysninger/" class="btn btn-primary">Se alle</a>
+                        <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
                     </div>
                 </div>
             </div>
