@@ -45,7 +45,7 @@
                     {% include 'jobannoucements/job_list.html' %}
                     <hr>
                     <div style="text-align:center">
-                        <a id="job-button" href="/stillingsutlysninger/" class="btn btn-primary">Se alle</a>
+                        <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
                     </div>
                 </div>
             </div>
