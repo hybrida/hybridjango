@@ -21,9 +21,10 @@ class Contact_person(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Navn')
-    responsible = models.ForeignKey(Hybrid)
+    responsible = models.ForeignKey(Hybrid, null=True, blank=True)
     address = models.CharField(max_length=150, null=True, blank=True)
-    info = models.CharField(max_length=300, null=True, blank=True)
+    info = models.CharField(max_length=300, null=True, blank=True,
+                            help_text='Hvem er bedriften, hva gjør de og hvilke fagområder er de involvert i?')
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
     contact_person = models.ForeignKey(Contact_person, blank=True, null=True)
 

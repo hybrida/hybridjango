@@ -145,11 +145,10 @@
                 </td>
             </tr>
             <tr>
+                    {% if attendance.o.genders|length_is:3 %}
+                    {% else %}
                 <td>Kjønn</td>
                 <td>
-                    {% if attendance.o.genders|length_is:3 %}
-                        Alle
-                    {% else %}
                         {% for gender in attendance.o.genders %}<span class="comma_seperated"
                         >{{ gender|readable_gender }}</span>{% endfor %}
                     {% endif %}
