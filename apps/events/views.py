@@ -89,6 +89,7 @@ def calendar_api(request):
         'title': event.title,
         'start': event.event_start,
         'end': event.event_end,
+        'url': "../hendelser/" + str(event.pk),
         'allDay': False
     } for event in Event.objects.all()], safe=False)
 
