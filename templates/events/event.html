@@ -204,7 +204,9 @@
                                 <button type="submit" class=" btn btn-danger btn-block">
                                     Meld meg av{% if attendance.is_waiting %} ventelisten{% endif %}
                                 </button>
-                                <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
+                                {% if not attendance.is_waiting %}
+                                     <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
+                                {% endif %}
                             {% elif attendance.is_invited %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
