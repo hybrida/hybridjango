@@ -43,3 +43,6 @@
         font-size: xx-large;
         text-align: center
     }
+
+    .center{display:inline-block;width:50%}
+        body{text-align:center}
