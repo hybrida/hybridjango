@@ -1,0 +1,62 @@
+{% extends 'base_clean.html' %}
+{% block title %}Bedkom{% endblock %}
+{% block link %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bedkom.css" %}">
+<style>
+    body {
+        padding-top: 0px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+        <div class="panel panel-default">
+            <div class="test">
+                <a href="/"><img src="../../static/img/logo.svg" style="float: left;" /></a>
+                <p style="display: inline-block;">Hybrida Bedriftsdatabase</p>
+                <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add'%}">
+                    <button class="btn btn-ss btn-primary">Lag ny bedrift</button>
+                </a>
+                <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:bedkom_bedpress_add'%}">
+                    <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
+                </a>
+            </div>
+            <table class="table table-responsive sortable table-hover">
+                <thead>
+                    <tr style="background-color: #428bca; height: 30px; color: white;">
+                        <th class="col-xs-3">Navn</th>
+                        <th class="col-xs-2">Ansvarlig</th>
+                        <th class="col-xs-5">Siste Kommentar</th>
+                        <th class="col-xs-1">Status</th>
+                        <th class="col-xs-1">Prioritet</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                {% for company in companies %}
+                    <tr class="clickable-row">
+                        <td class="text-left" style="font-size: x-large; "><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
+                        <td class="text-left">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+                        <td class="text-left">{{ company.last_comment.text }}</td>
+                        <td style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
+                        {% if company.priority == 'Høy' %}
+                            <td data-value="1" style="background-color: lightgreen" class="text-left">
+                        {% elif company.priority == 'Middels' %}
+                            <td data-value="2" style="background-color: yellow" class="text-left">
+                        {% elif company.priority == 'Lav' %}
+                            <td data-value="3" style="background-color: indianred" class="text-left">
+                        {% endif %}
+                            <p style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ company.priority }}</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{% static "lib/js/bootstrap-sortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/js/moment.min.js" %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+{% endblock %}
