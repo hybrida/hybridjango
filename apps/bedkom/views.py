@@ -8,7 +8,7 @@ def index(request):
     companies = Company.objects.all()
     for company in companies:
         company.last_comment = company.companycomment_set.order_by('timestamp').last()
-    return render(request, "bedkom/bedrifter.html", {"companies": companies})
+    return render(request, "bedkom/bedriftsdatabase2.html", {"companies": companies})
 
 @permission_required(['bedkom.add_company'])
 def bedrift(request, pk):
@@ -53,7 +53,7 @@ def comment(request, pk):
     companies = Company.objects.all()
     for company in companies:
         company.last_comment = company.companycomment_set.order_by('-timestamp').last()
-    return render(request, "bedkom/bedrifter.html", {"companies": companies})
+    return render(request, "bedkom/bedriftsdatabase.html", {"companies": companies})
 
 
 @permission_required(['bedkom.add_company'])
