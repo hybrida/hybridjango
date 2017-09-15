@@ -201,12 +201,37 @@
                             <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
                             {% if attendance.is_participant %}
                                 <input name="action" value="leave" type="hidden">
-                                <button type="submit" class=" btn btn-danger btn-block">
+                                <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#confirm-delete">
+
                                     Meld meg av{% if attendance.is_waiting %} ventelisten{% endif %}
                                 </button>
+                                {# Failsafe on leaving event prompt #}
+                                <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">Bekreft avmeldelse</h4>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <p>Hvis du melder deg av mister du plassen din{% if attendance.is_waiting %} i køen{% endif %} </p>
+                                                <p>Er du sikker?</p>
+                                                <p class="debug-url"></p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <button class=" btn btn-danger">Meld meg av</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {% if not attendance.is_waiting %}
                                      <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
                                 {% endif %}
+
                             {% elif attendance.is_invited %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
@@ -236,6 +261,10 @@
             };
             window.onload = adjust_height;
             window.onresize = adjust_height;
+
+            $('#confirm-delete').on('show.bs.modal', function(e) {
+                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+            });
         </script>
         <div class="col-md-4 space-above">
             <div class="white-box comment-section" id="comment_box">
