@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.urls import reverse
 from apps.events.models import Event
 from apps.registration.models import Hybrid
 
