@@ -92,11 +92,11 @@
                         <td class="text-left">{{ company.last_comment.text }}</td>
                         <td style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
                         {% if company.priority == 'Høy' %}
-                            <td style="background-color: lightgreen" class="text-left">
+                            <td data-value="1" style="background-color: lightgreen" class="text-left">
                         {% elif company.priority == 'Middels' %}
-                            <td style="background-color: yellow" class="text-left">
+                            <td data-value="2" style="background-color: yellow" class="text-left">
                         {% elif company.priority == 'Lav' %}
-                            <td style="background-color: indianred" class="text-left">
+                            <td data-value="3" style="background-color: indianred" class="text-left">
                         {% endif %}
                             <div>
                                 <p style="font-size: large; color: darkslategray; margin: auto; text-align: center">{{ company.priority }}</p>

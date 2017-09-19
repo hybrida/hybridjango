@@ -59,6 +59,8 @@ def admin_orderoverview(request):
 
 
 def order_view(request, pk):
+    user_order = None
+    user_products = None
     current_order = OrderInfo.objects.filter(pk=pk).get()
     all_products = ProductInfo.objects.all()
     ordered_products = []
@@ -66,10 +68,30 @@ def order_view(request, pk):
     for order in orders:
         for product in order.products.all():
             ordered_products.append(product)
-    print(ordered_products)
+
+    if request.method == 'POST':
+        if 'showUser' in request.POST:
+            user_id = request.POST.get('selected_user')
+            print(user_id)
+            if int(user_id) == -1:
+                pass
+            else:
+                user_order = orders.filter(user=user_id).first()
+                user_products = user_order.products.all()
+
+        if 'change_status' in request.POST:
+            put = request.POST.get('order_status')
+            status = put.split(':')
+            order_pk = status[1]
+            status = status[0]
+            user_order = Order.objects.filter(pk=order_pk).first()
+            user_order.status = status
+            user_order.save()
+            return HttpResponseRedirect("/kilt/admin")
+
 
     return render(request, "kiltshop/order_view.html",
-                  {'order':current_order, 'products':ordered_products,'orders':orders  }
+                  {'order':current_order, 'products':ordered_products,'orders':orders,'user_order':user_order,'user_products':user_products, 'user_productinfo': ProductInfo.objects.filter(order=user_order),  }
                   )
 
 

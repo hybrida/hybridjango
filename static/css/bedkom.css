@@ -1,0 +1,48 @@
+    div.big_wrapper {
+        margin-left: 5%;
+        margin-right: 5%;
+        width: 90%;
+        margin-top: 20px;
+    }
+
+    th:first-child {
+        border-top-left-radius: 3px;
+    }
+
+    th:last-child {
+        border-top-right-radius: 3px;
+        border-right: none;
+    }
+
+    tr {
+        border-top: 1px solid #66676e;
+        border-bottom-: 1px solid #66676e;
+        color: #666B85;
+        font-size: 16px;
+        font-weight: normal;
+        text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+        height: 75px;
+    }
+
+    tr:nth-child(odd) td {
+        background: #EBEBEB;
+    }
+
+    td {
+        background: #FFFFFF;
+        padding: 20px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 13px;
+        text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #66676e;
+    }
+
+    .test {
+        padding-top: 15px;
+        font-size: xx-large;
+        text-align: center
+    }
+
+    .center{display:inline-block;width:50%}
+        body{text-align:center}
