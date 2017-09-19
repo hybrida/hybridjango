@@ -12,6 +12,7 @@
                     <th>Spesialisering</th>
                     <th>Kjønn</th>
                     <th>Matpreferanser</th>
+                    <th>Epost</th>
                 </tr>
                 {% for participant in attendance.get_signed|dictsort:'get_full_name' %}
                     <tr>
@@ -20,6 +21,7 @@
                         <td>{{ participant.specialization }}</td>
                         <td>{{ participant.gender }}</td>
                         <td>{{ participant.food_preferences }}</td>
+                        <td>{{ participant.username }}@stud.ntnu.no</td>
                     </tr>
                 {% endfor %}
             </table>

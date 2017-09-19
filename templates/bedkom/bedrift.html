@@ -148,19 +148,19 @@
 
 
 
-        <div class="">
-            <h3>Tidligere bedriftspresentasjoner</h3>
-            {% for bedpress in bedpresses %}
-                <p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.event.location }} | {{ bedpress.event.event_start|date:'d.m.o' }}</a></p>
-            {% endfor %}
+        <!--<div class="">-->
+            <!--<h3>Tidligere bedriftspresentasjoner</h3>-->
+            <!--{% for bedpress in bedpresses %}-->
+                <!--<p><a href="bedpress/{{ bedpress.id }}">{{ bedpress.event.location }} | {{ bedpress.event.event_start|date:'d.m.o' }}</a></p>-->
+            <!--{% endfor %}-->
 
-        </div>
+        <!--</div>-->
 
     </div>
 
 {% endblock text %}
 {% block sidebar %}
-    <p>Hva skal vi ha har er? </p>
+    <p>Her kommer andre ting. </p>
 {%  endblock %}
 {% block extra %}
     <script type="text/javascript">
