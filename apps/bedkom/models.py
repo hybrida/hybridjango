@@ -46,6 +46,9 @@ class Company(models.Model):
     status = models.CharField(choices=CHOICES_STATUS, max_length=20)
     priority = models.CharField(choices=CHOICES_PRIORITY, max_length=20, null=True)
 
+    def get_absolute_url(self):
+        return reverse('bedrift', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.name
 
