@@ -1,0 +1,107 @@
+{% extends 'base_clean.html' %}
+{% block title %}Bedkom{% endblock %}
+{% block link %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bedkom.css" %}">
+<style>
+    body {
+        padding-top: 0px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+        <div class="container-fluid panel panel-default">
+
+            {# Header with logo #}
+            <div class="test">
+                <a href="/"><img src="../../static/img/logo.svg" style="float: left;" /></a>
+                 {# Buttons #}
+                    <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add'%}">
+                        <button class="btn btn-primary">Lag ny bedrift</button>
+                    </a>
+                    <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:bedkom_bedpress_add'%}">
+                        <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
+                    </a>
+                <p style="display: inline-block;">Hybrida Bedriftsdatabase</p>
+                <div></div>
+
+
+            </div>
+
+            {# Initialization div for searching #}
+            <div id="users">
+
+                {# Navigation bar #}
+                <div class="settings">
+
+                    {# Searchbar #}
+                    <div class="center">
+                        <input style="width: 70%" class="search"  placeholder="Søk" />
+                    </div>
+
+                </div>
+
+            {# Table start #}
+            <div style="overflow-x:auto; padding-top: 15px">
+            <table class="table table-responsive sortable table-hover">
+                <thead>
+                    <tr style="background-color: #428bca; height: 30px; color: white;">
+                        <th class="col-xs-3">Navn</th>
+                        <th class="col-xs-2">Ansvarlig</th>
+                        <th class="col-xs-1">Info</th>
+                        <th class="col-xs-5">Siste Kommentar</th>
+                        <th class="col-xs-1">Status</th>
+                        <th class="col-xs-1">Prioritet</th>
+                    </tr>
+                </thead>
+                {# Table body - Important to have class="list" for search to function #}
+                <tbody class="list">
+
+                {% for company in companies %}
+                    <tr>
+                        <td class="text-left; name" style="font-size: x-large; "><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
+                        <td class="text-left; responsible">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+                        <td class="text-left; tag">{{ company.info }}</td>
+                        <td class="text-left">{{ company.last_comment.text }}</td>
+                        <td class="status" style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
+
+                        {% if company.priority == 'Høy' %}
+                            <td data-value="1" style="background-color: lightgreen" class="text-left">
+                        {% elif company.priority == 'Middels' %}
+                            <td data-value="2" style="background-color: yellow" class="text-left">
+                        {% elif company.priority == 'Lav' %}
+                            <td data-value="3" style="background-color: indianred" class="text-left">
+                        {% endif %}
+
+                        <p style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ company.priority }}</p>
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+            </div>
+
+            </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    {# Script for sorting tableheaders #}
+    <script type="text/javascript" src="{% static "lib/js/bootstrap-sortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/js/moment.min.js" %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+    {# Script for searchbar #}
+    <script type="text/javascript">
+    var options = {
+    valueNames: [ 'name', 'responsible', 'status', 'tag']
+                    };
+    var userList = new List('users', options);
+    </script>
+{% endblock %}
