@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.urls import reverse
 from apps.events.models import Event
 from apps.registration.models import Hybrid
 
@@ -21,9 +21,10 @@ class Contact_person(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Navn')
-    responsible = models.ForeignKey(Hybrid)
+    responsible = models.ForeignKey(Hybrid, null=True, blank=True)
     address = models.CharField(max_length=150, null=True, blank=True)
-    info = models.CharField(max_length=300, null=True, blank=True)
+    info = models.CharField(max_length=300, null=True, blank=True,
+                            help_text='Hvem er bedriften, hva gjør de og hvilke fagområder er de involvert i?')
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
     contact_person = models.ForeignKey(Contact_person, blank=True, null=True)
 
@@ -32,6 +33,8 @@ class Company(models.Model):
         ('Opprettet kontakt', 'Opprettet kontakt'),
         ('Takket nei', 'Takket nei'),
         ('Ikke kontaktet', 'Ikke kontaktet'),
+        ('Svarer ikke', 'Svarer ikke'),
+
     )
 
     CHOICES_PRIORITY = (
@@ -42,6 +45,9 @@ class Company(models.Model):
 
     status = models.CharField(choices=CHOICES_STATUS, max_length=20)
     priority = models.CharField(choices=CHOICES_PRIORITY, max_length=20, null=True)
+
+    def get_absolute_url(self):
+        return reverse('bedrift', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

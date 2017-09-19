@@ -23,8 +23,8 @@
         </div>
     {% endif %}
 
-    <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
     <div class="container">
+        <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
         <div class="row space-below space-above">
             <div class="col-xs-12 col-md-4 col-md-push-8 space-above">
                 {% if perms.events.add_event %}
@@ -45,9 +45,23 @@
                     {% include 'jobannoucements/job_list.html' %}
                     <hr>
                     <div style="text-align:center">
-                        <a id="job-button" href="/stillingsutlysninger/" class="btn btn-primary">Se alle</a>
+                        <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
                     </div>
                 </div>
+
+                <!-- Instagram feed (just add <div id="instafeed"></div> to work)
+                <div class="white-box space space-below">
+                    <div>
+                        <a href="https://www.instagram.com/hybridantnu/">
+                        <img style="border-radius: 50%; border-color: #0f0f0f"  src="../static/img/logo_big.png">
+                        </a>
+                        <p>@Hybridantnu</p>
+                    </div>
+
+                    <div id="instafeed"></div>
+                </div>
+                  -->
+
             </div>
             <!--Hvert event hentes inn her samlet fra event_thumblist.html-->
             <div class="col-xs-12 col-md-8 col-md-pull-4">
@@ -59,6 +73,9 @@
     </div>
 {% endblock %}
 {% block script %}
+    <script type="text/javascript" src="../static/lib/js/instafeed.min.js"></script>
+    <script type="text/javascript" src="../static/lib/js/insta.feed.js"></script>
+
     {% if user.is_authenticated %}
         <script>
             window.location.hash = 'hendelser';

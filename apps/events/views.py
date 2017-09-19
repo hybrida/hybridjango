@@ -2,7 +2,7 @@ import csv
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -21,6 +21,11 @@ class EventList(generic.ListView):
         if not self.request.user.is_authenticated:
             queryset = queryset.filter(public=True)
         return queryset
+
+
+class EventThumbList(generic.ListView):
+    model = Event
+    template_name = 'events/event_thumblist.html'
 
 
 class EventView(generic.DetailView):
@@ -78,6 +83,14 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
     model = Event
     success_url = reverse_lazy('event_list')
 
+
+def calendar_api(request):
+    return JsonResponse([{
+        'title': event.title,
+        'start': event.event_start,
+        'end': event.event_end,
+        'allDay': False
+    } for event in Event.objects.all()], safe=False)
 
 @login_required
 def participants_csv(request, pk):
