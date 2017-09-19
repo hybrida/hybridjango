@@ -50,6 +50,7 @@
                     <tr style="background-color: #428bca; height: 30px; color: white;">
                         <th class="col-xs-3">Navn</th>
                         <th class="col-xs-2">Ansvarlig</th>
+                        <th class="col-xs-1">Info</th>
                         <th class="col-xs-5">Siste Kommentar</th>
                         <th class="col-xs-1">Status</th>
                         <th class="col-xs-1">Prioritet</th>
@@ -62,6 +63,7 @@
                     <tr>
                         <td class="text-left; name" style="font-size: x-large; "><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
                         <td class="text-left; responsible">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+                        <td class="text-left; tag">{{ company.info }}</td>
                         <td class="text-left">{{ company.last_comment.text }}</td>
                         <td class="status" style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
 
@@ -98,7 +100,7 @@
     {# Script for searchbar #}
     <script type="text/javascript">
     var options = {
-    valueNames: [ 'name', 'responsible', 'status']
+    valueNames: [ 'name', 'responsible', 'status', 'tag']
                     };
     var userList = new List('users', options);
     </script>
