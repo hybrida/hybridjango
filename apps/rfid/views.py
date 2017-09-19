@@ -19,11 +19,11 @@ def rfid(request, pk):
 
 
 @login_required
-def add(request, pk):
+def add_appearance(request, pk):
     if 'rfid_key' not in request.POST:
         return server_error(request)
     rfid_key = int(request.POST['rfid_key'], 10)
-    card_key = fix_rfid_key(rfid_key)
+    card_key = translate_rfid_key_to_printed_key(rfid_key)
     user = Hybrid.objects.get(card_key=card_key)
     appearances = Appearances.objects.get(pk=pk)
     appearances.add_appearance(user)
@@ -31,7 +31,7 @@ def add(request, pk):
     return redirect('rfid:rfid', pk)
 
 
-def fix_rfid_key(key_int, bits=32):
+def translate_rfid_key_to_printed_key(key_int, bits=32):
     key_bin = bin(key_int).split('b')[1][:bits]
     while len(key_bin) < bits:
         key_bin = '0' + key_bin
