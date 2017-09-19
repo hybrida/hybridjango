@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CompanyForm
 from .models import Company, CompanyComment, Bedpress
 
+
 @permission_required(['bedkom.add_company'])
 def index(request):
     companies = Company.objects.all()
@@ -10,12 +11,14 @@ def index(request):
         company.last_comment = company.companycomment_set.order_by('timestamp').last()
     return render(request, "bedkom/bedriftsdatabase2.html", {"companies": companies})
 
+
 @permission_required(['bedkom.add_company'])
 def bedrift(request, pk):
     company = Company.objects.get(pk=pk)
     comments = company.companycomment_set.order_by('-timestamp')
     bedpresses = Bedpress.objects.filter(company_id=pk)
     return render(request, "bedkom/bedrift.html", {"company": company, "bedpresses": bedpresses, "comments": comments})
+
 
 @permission_required(['bedkom.add_company'])
 def new_company(request):
@@ -30,7 +33,8 @@ def new_company(request):
             return redirect('bedrift', pk=company.pk)
 
     form = CompanyForm(request.POST)
-    return render(request, "bedkom/company_form.html", {'action':action,'form':form, })
+    return render(request, "bedkom/company_form.html", {'action': action, 'form': form, })
+
 
 @permission_required(['bedkom.change_company'])
 def edit_company(request, pk):
@@ -44,8 +48,7 @@ def edit_company(request, pk):
             return redirect('bedrift', pk=company.pk)
     else:
         form = CompanyForm(instance=company)
-    return render(request, "bedkom/company_form.html", {'action':action,'form':form, })
-
+    return render(request, "bedkom/company_form.html", {'action': action, 'form': form, })
 
 
 @permission_required(['bedkom.add_company'])
@@ -92,4 +95,3 @@ def bedpress_company_comment(request, pk):
             print(comment.full_clean())
             comment.save()
     return redirect('bedpress', pk)
-
