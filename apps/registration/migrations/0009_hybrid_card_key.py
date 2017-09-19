@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='hybrid',
             name='card_key',
-            field=models.IntegerField(blank=True, null=True, verbose_name='NTNU-kortkode'),
+            field=models.IntegerField(blank=True, null=True, unique=True, verbose_name='NTNU-kortkode'),
         ),
     ]
