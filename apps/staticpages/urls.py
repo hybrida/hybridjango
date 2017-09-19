@@ -3,8 +3,6 @@ from django.views.generic import TemplateView
 
 from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView
 
-from apps.griffensorden.views import GriffenView
-
 urlpatterns = [
     url(r'^s[oø]k/$', search, name='search'),
     url(r'^strikk/$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
