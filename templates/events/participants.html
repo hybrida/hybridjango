@@ -21,7 +21,7 @@
                         <td>{{ participant.specialization }}</td>
                         <td>{{ participant.gender }}</td>
                         <td>{{ participant.food_preferences }}</td>
-                        <td>{{ participant.username }}@stud.ntnu.no</td>
+                        <td><a href="mailto:{{ participant.username }}@stud.ntnu.no">{{ participant.username }}@stud.ntnu.no</a></td>
                     </tr>
                 {% endfor %}
             </table>
