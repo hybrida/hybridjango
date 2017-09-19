@@ -105,6 +105,7 @@ def participants_csv(request, pk):
             'Spesialisering',
             'Kjønn',
             'Matpreferanser',
+            'Epost',
         ])
         for participant in attendance.get_signed():
             writer.writerow([
@@ -113,6 +114,7 @@ def participants_csv(request, pk):
                 participant.specialization,
                 participant.gender,
                 participant.food_preferences,
+                participant.username + "@stud.ntnu.no",
             ])
     return response
 
