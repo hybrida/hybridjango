@@ -30,5 +30,4 @@ urlpatterns = [
     url(r'^ringen/promotering$', RingenView.as_view(template_name='staticpages/ringen/promotering.html'), name='ringen_promotering'),
     url(r'^ringen/kontakt$', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'), name='ringen_kontakt'),
     url(r'^studenter$', members, name='members'),
-    url(r'^griffensorden$', GriffenView.as_view(template_name='griffensorden/griffens_orden.html'), name='griffensorden')
 ]
