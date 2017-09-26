@@ -23,11 +23,6 @@ class EventList(generic.ListView):
         return queryset
 
 
-class EventThumbList(generic.ListView):
-    model = Event
-    template_name = 'events/events.html'
-
-
 class EventView(generic.DetailView):
     model = Event
     template_name = 'events/event.html'
