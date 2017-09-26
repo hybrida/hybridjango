@@ -15,6 +15,8 @@ class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
     ordering = ('-weight', '-timestamp')
+    paginate_by = 10
+    page_kwarg = 'side'
 
     def get_queryset(self):
         queryset = super(EventList, self).get_queryset().filter(hidden=False, news=True)
