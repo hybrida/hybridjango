@@ -41,7 +41,8 @@
                     {% include 'events/event_list.html' %}
                 </div>
                 <div class="white-box space space-below">
-                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede Stillingsutlysninger</a></h3>
+                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede
+                        Stillingsutlysninger</a></h3>
                     {% include 'jobannoucements/job_list.html' %}
                     <hr>
                     <div style="text-align:center">
@@ -66,7 +67,10 @@
             <!--Hvert event hentes inn her samlet fra event_thumblist.html-->
             <div class="col-xs-12 col-md-8 col-md-pull-4">
                 <div class="unstyled-box">
-                    {% include 'events/events.html' %}
+                    <div id="events" class="remove-whitebox-padding">
+                        {% include 'events/events.html' %}
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
         </div>
