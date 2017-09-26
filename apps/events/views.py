@@ -13,7 +13,7 @@ from .models import Event, EventComment, Attendance, Participation
 
 class EventList(generic.ListView):
     model = Event
-    template_name = 'events/events.html'
+    template_name = 'events/event_thumblist.html'
     ordering = ('-weight', '-timestamp')
 
     def get_queryset(self):
