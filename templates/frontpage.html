@@ -72,6 +72,22 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
+                <button id="events-btn" class="btn btn-primary space-above" style="width: 100%; display: none"
+                        onclick="getNextEvents()">
+                    Hent mer
+                </button>
+                <noscript>
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-default space-above" href="?side={{ page_obj.previous_page_number }}">
+                            Forige side
+                        </a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-default space-above" style="float: right" href="?side={{ page_obj.next_page_number }}">
+                            Neste side
+                        </a>
+                    {% endif %}
+                </noscript>
             </div>
         </div>
     </div>
@@ -85,4 +101,22 @@
             window.location.hash = 'hendelser';
         </script>
     {% endif %}
+    <script>
+        page = 1;
+        last_page = {{ page_obj.end_index }} + 1;
+        $('#events-btn').show();
+
+        function getNextEvents() {
+            $.ajax({
+                url: '{% url 'event_thumblist' %}?side=' + ++page
+            }).done(
+                function (data) {
+                    $('#events').append(data);
+                    if (page >= last_page) {
+                        $('#events-btn').hide()
+                    }
+                }
+            )
+        }
+    </script>
 {% endblock %}
