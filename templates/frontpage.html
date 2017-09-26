@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
-    <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true" id="banner">
+    <img src="{% static "img/hybirda.png" %}" id="banner">
     {% if not user.is_authenticated %}
         <div class="container">
             <div class="row">
@@ -50,21 +50,7 @@
                     </div>
                 </div>
 
-                <!-- Instagram feed (just add <div id="instafeed"></div> to work)
-                <div class="white-box space space-below">
-                    <div>
-                        <a href="https://www.instagram.com/hybridantnu/">
-                        <img style="border-radius: 50%; border-color: #0f0f0f"  src="../static/img/logo_big.png">
-                        </a>
-                        <p>@Hybridantnu</p>
-                    </div>
-
-                    <div id="instafeed"></div>
-                </div>
-                  -->
-
             </div>
-            <!--Hvert event hentes inn her samlet fra event_thumblist.html-->
             <div class="col-xs-12 col-md-8 col-md-pull-4">
                 <div class="unstyled-box">
                     <div id="events" class="remove-whitebox-padding">
@@ -78,12 +64,14 @@
                 </button>
                 <noscript>
                     {% if page_obj.has_previous %}
-                        <a class="btn btn-default space-above" href="?side={{ page_obj.previous_page_number }}">
+                        <a class="btn btn-default space-above"
+                           href="?side={{ page_obj.previous_page_number }}">
                             Forige side
                         </a>
                     {% endif %}
                     {% if page_obj.has_next %}
-                        <a class="btn btn-default space-above" style="float: right" href="?side={{ page_obj.next_page_number }}">
+                        <a class="btn btn-default space-above" style="float: right"
+                           href="?side={{ page_obj.next_page_number }}">
                             Neste side
                         </a>
                     {% endif %}
@@ -93,8 +81,6 @@
     </div>
 {% endblock %}
 {% block script %}
-    <script type="text/javascript" src="../static/lib/js/instafeed.min.js"></script>
-    <script type="text/javascript" src="../static/lib/js/insta.feed.js"></script>
 
     {% if user.is_authenticated %}
         <script>
@@ -102,8 +88,7 @@
         </script>
     {% endif %}
     <script>
-        page = {{ page_obj.number }};
-        last_page = {{ page_obj.end_index }} + 1;
+        var page = {{ page_obj.number }};
         $('#events-btn').show();
 
         function getNextEvents() {
@@ -114,7 +99,9 @@
                     $('#events').append(data);
                 }
             ).fail(
-                $('#events-btn').hide()
+                function () {
+                    $('#events-btn').hide()
+                }
             )
         }
     </script>
