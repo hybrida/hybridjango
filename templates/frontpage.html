@@ -102,7 +102,7 @@
         </script>
     {% endif %}
     <script>
-        page = 1;
+        page = {{ page_obj.number }};
         last_page = {{ page_obj.end_index }} + 1;
         $('#events-btn').show();
 
@@ -112,10 +112,9 @@
             }).done(
                 function (data) {
                     $('#events').append(data);
-                    if (page >= last_page) {
-                        $('#events-btn').hide()
-                    }
                 }
+            ).fail(
+                $('#events-btn').hide()
             )
         }
     </script>
