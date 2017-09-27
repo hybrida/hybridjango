@@ -14,7 +14,7 @@ from .models import Event, EventComment, Attendance, Participation
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    ordering = ('-weight', '-timestamp')
+    ordering = ('-weight', '-event_start')
     paginate_by = 10
     page_kwarg = 'side'
 
