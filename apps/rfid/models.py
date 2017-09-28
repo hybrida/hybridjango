@@ -10,3 +10,6 @@ class Appearances(models.Model):
 
     def add_appearance(self, user):
         self.users.add(user)
+
+    def __str__(self):
+        return "RFID for event #"+str(self.event.pk)+": "+self.event.title
