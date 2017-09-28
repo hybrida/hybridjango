@@ -39,5 +39,4 @@ urlpatterns = [
                   url(r'^search/', include('apps.search.urls'), name='search'),
                   url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
-                  url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
