@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)$', EventView.as_view(), name='event'),
     url(r'^(?P<pk>[0-9]+)/deltakere$', EventView.as_view(template_name='events/participants.html', ),
         name='participants'),
+    url(r'^(?P<pk>[0-9]+)/dashboard$', EventView.as_view(template_name='events/event_dashboard.html'), name='dashboard'),
     url(r'^(?P<pk>[0-9]+)/csv$', participants_csv, name='participants_csv'),
     url(r'^ny$', EventCreate.as_view(), name='new_event'),
     url(r'^(?P<pk>[0-9]+)/kommenter$', comment_event, name='comment_event'),
