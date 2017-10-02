@@ -1,28 +1,67 @@
-{% extends 'standard_wide.html' %}
+{% extends 'base_clean.html' %}
 
-{% block text %}
-    <h1>{{ appearances.event.title }}</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Brukernavn</th>
-            <th>Navn</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for user in appearances.users.all %}
-          <tr>
-            <td>{{ user.username }}</td>
-            <td>{{ user.full_name }}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+{% block content %}
+    <style>
+    .align-middle {
+    width: 50%;
+    height: 100px;
 
-    <form id="rfid_form" method="POST" action="{%  url 'rfid:add' appearances.pk %}">
-        {%  csrf_token %}
-        <label for="rfid_key">RFID: </label>
-        <input type="text" name="rfid_key" title="RFID" autofocus>
-        <input type="submit">
-    </form>
-{% endblock text %}
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+    }
+
+    input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    }
+
+    .alert {
+        height: 30%;
+        font-size: 40px;
+        margin: auto;
+
+    }
+
+    .alert-error{
+        background: red;
+    }
+
+    .alert-success{
+        background: #41cf34;
+        color: white;
+    }
+
+    .alert-warning{
+        background: #43ddff;
+        color: #f9fdff;
+    }
+
+</style>
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                    <p align="center">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                    </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    <div class="align-middle">
+        <div style="text-align: center">
+            <form id="rfid_form" method="POST" action="{%  url 'rfid:add' appearances.pk %}">
+                {%  csrf_token %}
+                <label style="font-size: 20px" for="rfid_key">Scann inn NTNU kort eller skriv inn brukernavn: </label>
+                <input style="font-size: 25px" type="text" name="rfid_key" title="RFID" autofocus>
+                <input class="btn btn-primary" type="submit">
+            </form>
+        </div>
+    </div>
+{% endblock content %}
