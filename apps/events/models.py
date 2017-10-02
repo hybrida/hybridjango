@@ -5,7 +5,6 @@ from django.utils import timezone
 
 from apps.registration.models import Hybrid, Specialization
 
-
 class Event(models.Model):
     title = models.CharField(max_length=150)
     ingress = models.CharField(max_length=350, blank=True, default='')
@@ -25,6 +24,10 @@ class Event(models.Model):
         if (self.pk < 0):  # TODO: replace this
             return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
+
+    def is_bedpress(self):
+        from apps.bedkom.models import Bedpress
+        return Bedpress.objects.filter(event=self).exists()
 
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
