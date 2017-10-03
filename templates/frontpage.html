@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
-    <img src="{% static "img/hybirda.png" %}" data-holder-rendered="true" id="banner">
+    <img src="{% static "img/hybirda.png" %}" id="banner">
     {% if not user.is_authenticated %}
         <div class="container">
             <div class="row">
@@ -41,27 +41,68 @@
                     {% include 'events/event_list.html' %}
                 </div>
                 <div class="white-box space space-below">
-                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede Stillingsutlysninger</a></h3>
+                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede
+                        Stillingsutlysninger</a></h3>
                     {% include 'jobannoucements/job_list.html' %}
                     <hr>
                     <div style="text-align:center">
                         <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
                     </div>
                 </div>
+
             </div>
-            <!--Hvert event hentes inn her samlet fra event_thumblist.html-->
             <div class="col-xs-12 col-md-8 col-md-pull-4">
                 <div class="unstyled-box">
-                    {% include 'events/event_thumblist.html' %}
+                    <div id="events" class="remove-whitebox-padding">
+                        {% include 'events/events.html' %}
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
+                <button id="events-btn" class="btn btn-primary space-above" style="width: 100%; display: none"
+                        onclick="getNextEvents()">
+                    Hent mer
+                </button>
+                <noscript>
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-default space-above"
+                           href="?side={{ page_obj.previous_page_number }}">
+                            Forige side
+                        </a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-default space-above" style="float: right"
+                           href="?side={{ page_obj.next_page_number }}">
+                            Neste side
+                        </a>
+                    {% endif %}
+                </noscript>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block script %}
+
     {% if user.is_authenticated %}
         <script>
             window.location.hash = 'hendelser';
         </script>
     {% endif %}
+    <script>
+        var page = {{ page_obj.number }};
+        $('#events-btn').show();
+
+        function getNextEvents() {
+            $.ajax({
+                url: '{% url 'event_thumblist' %}?side=' + ++page
+            }).done(
+                function (data) {
+                    $('#events').append(data);
+                }
+            ).fail(
+                function () {
+                    $('#events-btn').hide()
+                }
+            )
+        }
+    </script>
 {% endblock %}

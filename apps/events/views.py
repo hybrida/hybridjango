@@ -14,18 +14,15 @@ from .models import Event, EventComment, Attendance, Participation
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    ordering = ('-weight', '-timestamp')
+    ordering = ('-weight', '-event_start')
+    paginate_by = 10
+    page_kwarg = 'side'
 
     def get_queryset(self):
         queryset = super(EventList, self).get_queryset().filter(hidden=False, news=True)
         if not self.request.user.is_authenticated:
             queryset = queryset.filter(public=True)
         return queryset
-
-
-class EventThumbList(generic.ListView):
-    model = Event
-    template_name = 'events/event_thumblist.html'
 
 
 class EventView(generic.DetailView):
@@ -106,6 +103,7 @@ def participants_csv(request, pk):
             'Spesialisering',
             'Kjønn',
             'Matpreferanser',
+            'Epost',
         ])
         for participant in attendance.get_signed():
             writer.writerow([
@@ -114,6 +112,7 @@ def participants_csv(request, pk):
                 participant.specialization,
                 participant.gender,
                 participant.food_preferences,
+                participant.username + "@stud.ntnu.no",
             ])
     return response
 
