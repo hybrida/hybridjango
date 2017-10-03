@@ -1,0 +1,31 @@
+{% extends 'events/event_sidebar.html' %}
+{% load event_extras %}
+{% block unstyled_text %}
+    <div class="white-box">
+        <p>
+            Påmeldte:
+                {{ attendance.o.placement }}
+        </p>
+        {% if event.isbedpress %}
+            <p>Møtt opp:</p>
+            <p>Ikke møtt opp:</p>
+        {% endif %}
+
+
+    </div>
+{% endblock %}
+{% block sidebar %}
+    <div style="text-align: center">
+        <a href="{% url 'event' event.pk %}">
+            <button class="btn btn-xl btn-primary">Event Side</button>
+        </a>
+        <a href="{% url 'participants' event.pk %}">
+            <button class="btn btn-xl btn-primary">Deltakere</button>
+        </a>
+        {% if event.is_bedpress %}
+        <a href="{% url 'rfid:rfid' event.pk %}">
+            <button class="btn btn-xl btn-primary">RFID Scanner</button>
+        </a>
+        {% endif %}
+    </div>
+{% endblock %}
