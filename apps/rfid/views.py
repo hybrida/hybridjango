@@ -7,6 +7,7 @@ from django.contrib import messages
 
 
 from apps.registration.models import Hybrid
+from apps.events.models import Participation
 from apps.rfid.models import Appearances
 
 
@@ -24,40 +25,57 @@ def rfid(request, pk):
 def add_appearance(request, pk):
     if 'rfid_key' not in request.POST:
         return server_error(request)
-    input = request.POST.get('rfid_key')
-    input = input.lower()
-    if input.isdigit():
+    id_input = request.POST.get('rfid_key')
+    id_input = id_input.lower()
+    if id_input.isdigit():
         rfid_key = int(request.POST['rfid_key'], 10)
         card_key = translate_rfid_key_to_printed_key(rfid_key)
         if Hybrid.objects.filter(card_key=card_key).exists():
             user = Hybrid.objects.get(card_key=card_key)
             appearances = Appearances.objects.get(pk=pk)
-            if user in appearances.users.all():
-                messages.warning(request, user.get_full_name()+' er allerede lagt til!')
-                return redirect('rfid:rfid', pk)
+            if get_registered(user, appearances.event):
+                if user in appearances.users.all():
+                    messages.warning(request, user.get_full_name()+' er allerede lagt til!')
+                    return redirect('rfid:rfid', pk)
+                else:
+                    appearances.add_appearance(user)
+                    appearances.save()
+                    messages.success(request, user.get_full_name()+' lagt til')
+                    return redirect('rfid:rfid', pk)
             else:
-                appearances.add_appearance(user)
-                appearances.save()
-                messages.success(request, user.get_full_name()+' lagt til')
+                messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
                 return redirect('rfid:rfid', pk)
         else:
             messages.error(request, 'Ugylig RFID')
             return redirect('rfid:rfid', pk)
     else:
-        if Hybrid.objects.filter(username=input).exists():
-            user = Hybrid.objects.get(username=input)
+        if Hybrid.objects.filter(username=id_input).exists():
+            user = Hybrid.objects.get(username=id_input)
             appearances = Appearances.objects.get(pk=pk)
-            if user in appearances.users.all():
-                messages.warning(request, user.get_full_name()+' er allerede lagt til!')
-                return redirect('rfid:rfid', pk)
+            if get_registered(user, appearances.event):
+                if user in appearances.users.all():
+                    messages.warning(request, user.get_full_name()+' er allerede lagt til!')
+                    return redirect('rfid:rfid', pk)
+                else:
+                    appearances.add_appearance(user)
+                    appearances.save()
+                    messages.success(request, user.get_full_name()+' lagt til')
+                    return redirect('rfid:rfid', pk)
             else:
-                appearances.add_appearance(user)
-                appearances.save()
-                messages.success(request, user.get_full_name()+' lagt til')
+                messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
                 return redirect('rfid:rfid', pk)
         else:
             messages.error(request, 'Ugylig brukernavn')
             return redirect('rfid:rfid', pk)
+
+
+def get_registered(user, event):
+    this_event = Participation.objects.filter(attendance__event=event)
+    registered_users = this_event.values_list('hybrid', flat=True)
+    if user.pk in registered_users:
+        return True
+    else:
+        return False
 
 
 def translate_rfid_key_to_printed_key(key_int, bits=32):
