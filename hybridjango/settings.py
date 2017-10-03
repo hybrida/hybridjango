@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'apps.eventcalendar',
     'apps.rfid',
     'apps.evaluation',
+    'apps.achievements',
 ]
 
 MIDDLEWARE = [
