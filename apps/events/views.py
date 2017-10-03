@@ -14,7 +14,7 @@ from .models import Event, EventComment, Attendance, Participation
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    ordering = ('-weight', '-timestamp')
+    ordering = ('-weight', '-event_start')
     paginate_by = 10
     page_kwarg = 'side'
 
@@ -86,6 +86,7 @@ def calendar_api(request):
         'title': event.title,
         'start': event.event_start,
         'end': event.event_end,
+        'url': "../hendelser/" + str(event.pk),
         'allDay': False
     } for event in Event.objects.all()], safe=False)
 
