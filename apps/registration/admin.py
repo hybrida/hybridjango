@@ -16,6 +16,7 @@ class MyUserAdmin(UserAdmin):
             'specialization',
             'date_of_birth',
             'title',
+            'card_key'
         )}),
     )
 

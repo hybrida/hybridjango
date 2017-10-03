@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.core.validators import RegexValidator
+
 
 
 def get_graduation_year(grade):
@@ -40,6 +42,9 @@ class Hybrid(AbstractUser):
     title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
     food_preferences = models.CharField(max_length=150, blank=True, verbose_name='Allergier og matpreferanser')
 
+    card_regex = RegexValidator(regex=r'^\d{10,10}$', message="card_key number must contain 10 numbers.")
+    card_key = models.CharField(validators=[card_regex], max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
+
     def get_full_name(self):
         if self.middle_name:
             first_name = self.first_name + ' ' + self.middle_name
@@ -48,6 +53,7 @@ class Hybrid(AbstractUser):
         if first_name == "" and self.last_name == "":
             return self.username
         return first_name + ' ' + self.last_name
+    full_name = property(get_full_name)
 
     def get_grade(self):
         return five_years() - self.graduation_year
