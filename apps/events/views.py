@@ -89,7 +89,7 @@ def calendar_api(request):
         'end': event.event_end,
         'url': "../hendelser/" + str(event.pk),
         'allDay': False
-    } for event in Event.objects.all()], safe=False)
+    } for event in Event.objects.all() if event.event_start is not None], safe=False)
 
 @login_required
 def participants_csv(request, pk):
