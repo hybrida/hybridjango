@@ -3,15 +3,18 @@
 {% block unstyled_text %}
     <div class="white-box">
         <table class="table table-responsive sortable table-hover">
-            <tr>
-                <th>Navn</th>
-                <th>Trinn</th>
-                <th>Spesialisering</th>
-                <th>Kjønn</th>
-                <th>Matpreferanser</th>
-                <th>Epost</th>
-            </tr>
-            {% for attendance in event.attendance_set.all %}
+            <thead>
+                <tr style="background-color: #428bca; height: 30px; color: white;">
+                    <th>Navn</th>
+                    <th>Trinn</th>
+                    <th>Spesialisering</th>
+                    <th>Kjønn</th>
+                    <th>Matpreferanser</th>
+                    <th>Epost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance in event.attendance_set.all %}
                 {% for participant in attendance.get_signed|dictsort:'get_full_name' %}
                     {% if participant not in users %}
                     <tr>
@@ -29,6 +32,24 @@
                     {% endif %}
                 {% endfor %}
              {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}
+{% block script %}
+    {# Script for sorting tableheaders #}
+    <script type="text/javascript" src="{% static "lib/js/bootstrap-sortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/js/moment.min.js" %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+    {# Script for searchbar #}
+    <script type="text/javascript">
+    var options = {
+    valueNames: [ 'name', 'responsible', 'status', 'tag']
+                    };
+    var userList = new List('users', options);
+    </script>
+{% endblock %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+{% endblock link %}
