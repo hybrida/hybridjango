@@ -4,6 +4,7 @@ from django.template import Context
 from django.views import generic
 from django.views.defaults import server_error
 from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 from apps.registration.models import Hybrid
@@ -11,14 +12,10 @@ from apps.events.models import Participation
 from apps.rfid.models import Appearances
 
 
-class AppearancesView(generic.DetailView):
+class AppearancesView(PermissionRequiredMixin, generic.DetailView):
+    permission_required = 'rfid.change_appearances'
     model = Appearances
     template_name = 'rfid/index.html'
-
-
-@permission_required(['rfid.change_appearances'])
-def rfid(request, pk):
-    return render(request, 'rfid/index.html', context=Context({'pk': pk}))
 
 
 @permission_required(['rfid.change_appearances'])
