@@ -70,10 +70,14 @@ def add_appearance(request, pk):
 
 
 def get_registered(user, event):
-    this_event = Participation.objects.filter(attendance__event=event)
-    registered_users = this_event.values_list('hybrid', flat=True)
-    if user.pk in registered_users:
-        return True
+    this_event = Participation.objects.filter(attendance__event=event) # Gets the participants from correct event
+    registered_users = this_event.values_list('hybrid', flat=True) # Gets a list of all the users on the event
+    if user.pk in registered_users: # If user is in list
+        signed = False
+        for attendance in event.attendance_set.all(): # For each attendance, check if the user is signed (not waiting)
+            if attendance.is_signed(user):
+                signed = True
+        return signed
     else:
         return False
 
