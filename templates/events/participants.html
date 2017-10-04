@@ -1,4 +1,4 @@
-{% extends 'events/event_sidebar.html' %}
+{% extends 'events/dashboard_sidebar.html' %}
 {% load event_extras %}
 {% block unstyled_text %}
     {% for attendance in event.attendance_set.all %}
@@ -29,28 +29,34 @@
                     </tr>
                 {% endfor %}
             </table>
-            <a class="btn btn-default" href="mailto:
+        <div style="text-align: center; padding-top: 15px">
+            <a class="btn btn-primary" href="mailto:
             {% for participant in attendance.get_signed %}
                 {{ participant.username }}@stud.ntnu.no,
             {% endfor %}
             ">Mail påmeldte</a>
         </div>
+        </div>
     {% endfor %}
 {% endblock %}
-{% block sidebar %}
+{% block sidebar_extra %}
+        <div style="text-align: center">
+
     <h2>Påmeldinger</h2>
     {% for attendance in event.attendance_set.all %}
         <a href="#attendance{{ attendance.id }}">{{ attendance.name }}</a>
     {% endfor %}
     <br>
-    <a class="btn btn-default" href="{% url 'participants_csv' event.pk %}">Eksporter</a>
-    <a class="btn btn-default" href="mailto:
-        {% for attendance in event.attendance_set.all %}
-            {% for participant in attendance.get_signed %}
-                {{ participant.username }}@stud.ntnu.no,
+        <a class="btn btn-primary" href="{% url 'participants_csv' event.pk %}">Eksporter</a>
+        <a class="btn btn-primary" href="mailto:
+            {% for attendance in event.attendance_set.all %}
+                {% for participant in attendance.get_signed %}
+                    {{ participant.username }}@stud.ntnu.no,
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    ">Mail alle påmeldte</a>
+        ">Mail alle påmeldte</a>
+    </div>
+
 {% endblock %}
 {% block link %}
     <style>
