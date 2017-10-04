@@ -92,10 +92,10 @@ def get_waiting(user, event):
     registered_users = this_event.values_list('hybrid', flat=True)  # Gets a list of all the users on the event
     if user.pk in registered_users:  # If user is in list
         waiting = False
-        for attendance in event.attendance_set.all():  # For each attendance, check if the user is signed (not waiting)
+        for attendance in event.attendance_set.all():  # For each attendance, check if the user is on wait list.
             if attendance.is_waiting(user):
-                signed = True
-        return signed
+                waiting = True
+        return waiting
     else:
         return False
 
