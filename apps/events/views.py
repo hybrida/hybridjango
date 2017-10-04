@@ -158,6 +158,5 @@ def unattended(request, pk):
     attendance = Attendance.objects.filter(event=event)
     appearance = Appearances.objects.filter(event=event).first()
     users = appearance.users.all()
-    print(users)
     return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users})
 
