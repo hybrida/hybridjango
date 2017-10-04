@@ -43,8 +43,12 @@ def add_appearance(request, pk):
                     messages.success(request, user.get_full_name()+' lagt til')
                     return redirect('rfid:rfid', pk)
             else:
-                messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
-                return redirect('rfid:rfid', pk)
+                if  get_waiting(user, appearances.event):
+                    messages.error(request, user.get_full_name() + ' er på ventelisten!')
+                    return redirect('rfid:rfid', pk)
+                else:
+                    messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
+                    return redirect('rfid:rfid', pk)
         else:
             messages.error(request, 'Ugylig RFID')
             return redirect('rfid:rfid', pk)
@@ -62,8 +66,12 @@ def add_appearance(request, pk):
                     messages.success(request, user.get_full_name()+' lagt til')
                     return redirect('rfid:rfid', pk)
             else:
-                messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
-                return redirect('rfid:rfid', pk)
+                if get_waiting(user, appearances.event):
+                    messages.error(request, user.get_full_name() + ' er på ventelisten!')
+                    return redirect('rfid:rfid', pk)
+                else:
+                    messages.error(request, user.get_full_name() + ' er ikke påmeldt!')
+                    return redirect('rfid:rfid', pk)
         else:
             messages.error(request, 'Ugylig brukernavn')
             return redirect('rfid:rfid', pk)
@@ -80,6 +88,20 @@ def get_registered(user, event):
         return signed
     else:
         return False
+
+
+def get_waiting(user, event):
+    this_event = Participation.objects.filter(attendance__event=event)  # Gets the participants from correct event
+    registered_users = this_event.values_list('hybrid', flat=True)  # Gets a list of all the users on the event
+    if user.pk in registered_users:  # If user is in list
+        waiting = False
+        for attendance in event.attendance_set.all():  # For each attendance, check if the user is signed (not waiting)
+            if attendance.is_waiting(user):
+                signed = True
+        return signed
+    else:
+        return False
+
 
 
 def translate_rfid_key_to_printed_key(key_int, bits=32):
