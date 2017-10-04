@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row space-below">
+            <div id="content-col" class="col-md-8 space-above">
+                {% block unstyled_text %}
+                {% endblock unstyled_text %}
+            </div>
+            <div id="sidebar-col" class="col-md-4 space-above">
+                    <div class="white-box" id="sidebar">
+                        <div style="text-align: center">
+                            <a href="{% url 'event' event.pk %}">
+                                <button class="btn btn-xl btn-primary">Event Side</button>
+                            </a>
+                            <a href="{% url 'participants' event.pk %}">
+                                <button class="btn btn-xl btn-primary">Deltakere</button>
+                            </a>
+                            <a href="{% url 'rfid:rfid' event.pk %}">
+                                <button class="btn btn-xl btn-primary">RFID Scanner</button>
+                            </a>
+                        </div>
+                        <div style="text-align: center; padding-top: 25px">
+                            <a href="{% url 'signed' event.pk %}">
+                                <button class="btn btn-xl btn-primary">Påmeldte</button>
+                            </a>
+                            <a href="{% url 'attended' event.pk %}">
+                                <button class="btn btn-xl btn-primary">Møtt opp</button>
+                            </a>
+                            <a href="{% url 'unattended' event.pk %}">
+                                <button class="btn btn-xl btn-primary">Ikke møtt opp</button>
+                            </a>
+                        </div>
+
+
+                        {% block sidebar_extra %}
+                        {% endblock sidebar_extra %}
+                    </div>
+            </div>
+            {% block extra %}
+            {% endblock extra %}
+        </div>
+    </div>
+{% endblock content %}
