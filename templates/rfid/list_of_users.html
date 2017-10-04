@@ -1,0 +1,17 @@
+{% extends 'events/event_sidebar.html' %}
+{% load event_extras %}
+{% block unstyled_text %}
+    <div class="white-box">
+        <p>
+            Påmeldte:
+                {{ attendance.o.placement }}
+        </p>
+        {% if event.is_bedpress %}
+            <p>Møtt opp:</p>
+            <p>Ikke møtt opp:</p>
+        {% endif %}
+
+
+    </div>
+{% endblock %}
+{% include "events/dashboard_sidebar.html" %}
