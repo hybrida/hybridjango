@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 from django.template import Context
 from django.views import generic
@@ -15,13 +15,13 @@ class AppearancesView(generic.DetailView):
     model = Appearances
     template_name = 'rfid/index.html'
 
-@login_required
-def rfid(request, pk):
 
+@permission_required(['rfid.change_appearances'])
+def rfid(request, pk):
     return render(request, 'rfid/index.html', context=Context({'pk': pk}))
 
 
-@login_required
+@permission_required(['rfid.change_appearances'])
 def add_appearance(request, pk):
     if 'rfid_key' not in request.POST:
         return server_error(request)
