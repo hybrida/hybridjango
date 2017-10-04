@@ -45,6 +45,8 @@ class EventView(generic.DetailView):
         context = super(EventView, self).get_context_data(**kwargs)
         user = self.request.user
         event = context['event']
+        has_rfid = Appearances.objects.filter(event=event).exists()
+        context['has_rfid'] = has_rfid
         context['attendances'] = [
             {
                 'o': attendance,
@@ -142,21 +144,24 @@ def delete_comment_event(request, pk):
 
 def signed(request, pk):
     event = Event.objects.filter(pk=pk).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
     attendance = Attendance.objects.filter(event=event)
-    return render(request, "rfid/signed_list.html", {'event': event, 'attendance': attendance})
+    return render(request, "rfid/signed_list.html", {'event': event, 'attendance': attendance, 'has_rfid': has_rfid})
 
 
 def attended(request, pk):
     event = Event.objects.filter(pk=pk).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
     appearance = Appearances.objects.filter(event=event).first()
     users = appearance.users.all()
-    return render(request, "rfid/attended_list.html", {'event': event, 'users': users})
+    return render(request, "rfid/attended_list.html", {'event': event, 'users': users, 'has_rfid': has_rfid})
 
 
 def unattended(request, pk):
     event = Event.objects.filter(pk=pk).first()
     attendance = Attendance.objects.filter(event=event)
     appearance = Appearances.objects.filter(event=event).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
     users = appearance.users.all()
-    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users})
+    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
 
