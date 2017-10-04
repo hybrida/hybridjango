@@ -13,6 +13,7 @@
             </tr>
             {% for attendance in event.attendance_set.all %}
                 {% for participant in attendance.get_signed|dictsort:'get_full_name' %}
+                    {% if participant not in users %}
                     <tr>
                         <td>{{ participant.get_full_name }}</td>
                         <td>{{ participant.get_grade }}</td>
@@ -25,6 +26,7 @@
                             </a>
                         </td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
              {% endfor %}
         </table>
