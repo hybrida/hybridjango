@@ -1,0 +1,30 @@
+{% extends 'events/dashboard_sidebar.html' %}
+{% load static %}
+{% block unstyled_text %}
+    <div class="white-box">
+        <table class="table table-responsive sortable table-hover">
+            <tr>
+                <th>Navn</th>
+                <th>Trinn</th>
+                <th>Spesialisering</th>
+                <th>Kjønn</th>
+                <th>Matpreferanser</th>
+                <th>Epost</th>
+            </tr>
+                {% for participant in appearance|dictsort:'get_full_name' %}
+                    <tr>
+                        <td>{{ participant.get_full_name }}</td>
+                        <td>{{ participant.get_grade }}</td>
+                        <td>{{ participant.specialization }}</td>
+                        <td>{{ participant.gender }}</td>
+                        <td>{{ participant.food_preferences }}</td>
+                        <td>
+                            <a href="mailto:{{ participant.username }}@stud.ntnu.no">
+                                {{ participant.username }}@stud.ntnu.no
+                            </a>
+                        </td>
+                    </tr>
+             {% endfor %}
+        </table>
+    </div>
+{% endblock %}
