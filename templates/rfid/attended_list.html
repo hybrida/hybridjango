@@ -11,8 +11,7 @@
                 <th>Matpreferanser</th>
                 <th>Epost</th>
             </tr>
-                {% for participant in appearance|dictsort:'get_full_name' %}
-                    <tr>
+                {% for participant in users|dictsort:'get_full_name' %}
                         <td>{{ participant.get_full_name }}</td>
                         <td>{{ participant.get_grade }}</td>
                         <td>{{ participant.specialization }}</td>

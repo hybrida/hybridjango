@@ -148,8 +148,9 @@ def signed(request, pk):
 
 def attended(request, pk):
     event = Event.objects.filter(pk=pk).first()
-    appearance = Appearances.objects.filter(event=event)
-    return render(request, "rfid/attended_list.html", {'event': event, 'appearance': appearance})
+    appearance = Appearances.objects.filter(event=event).first()
+    users = appearance.users.all()
+    return render(request, "rfid/attended_list.html", {'event': event, 'users': users})
 
 
 def unattended(request, pk):
