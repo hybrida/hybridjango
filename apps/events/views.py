@@ -3,12 +3,13 @@ import csv
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 
 from apps.events.forms import EventForm
 from .models import Event, EventComment, Attendance, Participation
+from apps.rfid.models import Appearances
 
 
 class EventList(generic.ListView):
@@ -137,3 +138,23 @@ def delete_comment_event(request, pk):
         if user.is_authenticated and comment.author == user:
             comment.delete()
     return redirect('event', pk)
+
+
+def signed(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    attendance = Attendance.objects.filter(event=event)
+    return render(request, "rfid/signed_list.html", {'event': event, 'attendance': attendance})
+
+
+def attended(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    appearance = Appearances.objects.filter(event=event)
+    return render(request, "rfid/attended_list.html", {'event': event, 'appearance': appearance})
+
+
+def unattended(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    attendance = Attendance.objects.filter(event=event)
+    appearance = Appearances.objects.filter(event=event)
+    return render(request, "rfid/signed_list.html", {'event': event, 'attendance': attendance, 'appearance': appearance})
+
