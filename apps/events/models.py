@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from apps.registration.models import Hybrid, Specialization
 
+
 class Event(models.Model):
     title = models.CharField(max_length=150)
     ingress = models.CharField(max_length=350, blank=True, default='')
@@ -21,8 +22,6 @@ class Event(models.Model):
     public = models.BooleanField(default=True)
 
     def get_absolute_url(self):
-        if (self.pk < 0):  # TODO: replace this
-            return 'http://teknologiporten.no/nb/arrangement/' + self.text
         return reverse('event', kwargs={'pk': self.pk})
 
     def is_bedpress(self):
@@ -31,6 +30,15 @@ class Event(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.timestamp.date(), self.title)
+
+
+class TPEvent(models.Model):
+    tp_id = models.IntegerField(default=0, unique=True)
+    title = models.CharField(max_length=150)
+    event_start = models.DateTimeField(null=True, blank=True)
+
+    def get_absolute_url(self):
+        return 'http://teknologiporten.no/nb/arrangement/{}'.format(self.tp_id)
 
 
 class Participation(models.Model):
