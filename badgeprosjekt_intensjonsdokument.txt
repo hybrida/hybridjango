@@ -1,0 +1,44 @@
+Oppgaver:
+
+Sindre
+-Display av Badges på profilsiden
+	- View av badges inneholder:
+		-variabler/variabel for å hente badgene
+		-Sortert på "Verdi"
+		-
+	- Div på Profilsiden for å vise dem frem
+	- Løkkefunksjonalitet for å gjøre den utvidbar
+
+Jon
+- Achievment side
+	- oversikt over alle badges man har unlocket, samt de man kan potensielt unlocket
+
+- Lage "verdiskala" for alle medaljer
+
+- Lage alle medaljene
+	- Komitemedalje
+	- Styremedalje
+	- Medlemsdalje
+	- 1,3,og 5 års medalje
+	- 6+ års medalje
+	- Jubiluems medalje
+	- Ridder Medalje
+	- Vago Medalje
+	- SIM SIM MEDALJE(5. klasses hedersmedalje)
+	- 4T L3ASt
+	
+	- Quiz
+	- LAN
+	- etc..
+	- Kakemester
+
+Bendik
+- funksjonalitet for å utdele medaljer til Hybrider
+	- spesifikke utdelingskriterier for spesifikke medlajer
+		
+		Mange unike kriterier som man kombinere, f.eks dropdown kombinasjon
+		//////////////////////////////////////////////////
+		Spesifikke kriterier for hver medalje, dvs skreddersydd
+
+- Livefeed på badges
+	- Resultatliste, HVOR GOD ER DU PÅ HYBRIDA
