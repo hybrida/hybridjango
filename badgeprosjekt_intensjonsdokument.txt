@@ -1,13 +1,13 @@
 Oppgaver:
 
 Sindre
--Display av Badges på profilsiden
+-Display av Badges pï¿½ profilsiden
 	- View av badges inneholder:
-		-variabler/variabel for å hente badgene
-		-Sortert på "Verdi"
+		-variabler/variabel for ï¿½ hente badgene
+		-Sortert pï¿½ "Verdi"
 		-
-	- Div på Profilsiden for å vise dem frem
-	- Løkkefunksjonalitet for å gjøre den utvidbar
+	- Div pï¿½ Profilsiden for ï¿½ vise dem frem
+	- Lï¿½kkefunksjonalitet for ï¿½ gjï¿½re den utvidbar
 
 Jon
 - Achievment side
@@ -19,8 +19,8 @@ Jon
 	- Komitemedalje
 	- Styremedalje
 	- Medlemsdalje
-	- 1,3,og 5 års medalje
-	- 6+ års medalje
+	- 1,3,og 5 ï¿½rs medalje
+	- 6+ ï¿½rs medalje
 	- Jubiluems medalje
 	- Ridder Medalje
 	- Vago Medalje
@@ -33,12 +33,14 @@ Jon
 	- Kakemester
 
 Bendik
-- funksjonalitet for å utdele medaljer til Hybrider
+- funksjonalitet for ï¿½ utdele medaljer til Hybrider
 	- spesifikke utdelingskriterier for spesifikke medlajer
 		
 		Mange unike kriterier som man kombinere, f.eks dropdown kombinasjon
 		//////////////////////////////////////////////////
 		Spesifikke kriterier for hver medalje, dvs skreddersydd
 
-- Livefeed på badges
-	- Resultatliste, HVOR GOD ER DU PÅ HYBRIDA
+- Livefeed pï¿½ badges
+	- Resultatliste, HVOR GOD ER DU Pï¿½ HYBRIDA
+
+- Backend funksjonalitet, for admin siden, type forms
