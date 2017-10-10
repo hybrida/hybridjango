@@ -17,7 +17,7 @@ class Command(BaseCommand):
         relevant_events = [
             {
                 'tp_id': key,
-                'title': '{} - {}'.format(value['company'], value['title']),
+                'title': '{} - {}'.format(value['company'], value['title'])[:150],
                 'event_start': value['time']
             }
             for key, value in json.loads(event_list).items()
