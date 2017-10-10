@@ -13,14 +13,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         event_list = requests.get(
             'https://teknologiporten.no/intern/event_list'
-        )
+        ).content.decode('utf-8')
         relevant_events = [
             {
                 'tp_id': key,
                 'title': '{} - {}'.format(value['company'], value['title']),
                 'event_start': value['time']
             }
-            for key, value in json.loads(event_list.content).items()
+            for key, value in json.loads(event_list).items()
             if '17' in value['invited_programs'].keys()
                or not value['invited_programs']
         ]
