@@ -1,7 +1,8 @@
 from django.conf.urls import url
-from . import views
+
+from .views import *
 
 
 urlpatterns = [
-                  url(r'^$', views.overview ,name='home'),
+                  url(r'^$', BadgeView.as_view(template_name='achievments/achievments_overview.html') ,name='achievements'),
 ]
