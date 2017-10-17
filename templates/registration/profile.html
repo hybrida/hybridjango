@@ -73,7 +73,7 @@
                 <h1>{{ hybrid.first_name }} {{ hybrid.middle_name }} {{ hybrid.last_name }}</h1>
                 <h3>{{ hybrid.title }}</h3>
                 {% for badge in hybrid.badge_set.all %}
-                    <img src="{{ badge.badge_image }}" alt="image">
+                    <img src="/uploads/{{ badge.badge_image }}" alt="image">
                     {{ badge }}
                 {% endfor %}
 
