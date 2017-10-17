@@ -1,11 +1,8 @@
 {% extends 'standard_wide.html' %}
-<!--
 {% block link%}
-    <link rel="stylesheet" href="../../static/css/filnavn.css">
-{% endblock link %}
--->
+{% endblock %}
 {% load static %}
-{% block title %}Vevkom{% endblock %}
+{% block title %}Badges{% endblock %}
 {% block text %}
 
 
@@ -15,31 +12,43 @@
 
         <div class="row remove-whitebox-padding">
 
-            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#104e91; height: 480px; width:49%;margin-left: .5%;margin-bottom: .5%;">
-                <h3 style="color: #e9e9e9;font-size: 30px; text-align: center;"> Unlockede badges<br><br></h3>
+            <div class="col" style="background-color:#e9e9e9; ">
+                <h3 style="font-size: 30px;text-align: center">Tilgjenglige badges<br><br></h3>
+                <div>
+                      {% for badge in Badges %}
+                          <img src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 200px; hight: 200px;">
+                      {% endfor %}
+                </div>
 
-                <div class="col-md-3 col-xs-12 col-sm-6">
-                    <img style="width: 250px; height: 80px" src="https://vignette.wikia.nocookie.net/dragonvale/images/6/6f/IceDragonAdult.png/revision/latest?cb=20160827172518" >
-                </div >
-                <div class="col-md-3 col-xs-12 col-sm-6">
-                    <img style="width: 250px; height: 80px" src="http://vignette4.wikia.nocookie.net/howtotrainyourdragon/images/2/2c/1481530669268.png/revision/latest?cb=20161212081924" >
-                </div >
-                <div class="col-md-3 col-xs-12 col-sm-6">
-                    <img style="width: 80px; height: 80px" src="http://www.mascotdesigngallery.com/wp/wp-content/uploads/2014/06/chookgirl-deviant-art.png" >
-                </div >
+
+            </div>
+        </div>
+
+{%  endblock %}
+
+<!--
+- Achievment side
+	- oversikt over alle badges man har unlocket, samt de man kan potensielt unlocket
+
+Laste inn badgene inn
+
+
+
+
+
+
+            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#104e91; height: 480px; width:49%;margin-left: .5%;margin-bottom: .5%;">
+                <h3 style="color: #e9e9e9;font-size: 30px; text-align: center;"> Dine badges<br><br></h3>
+
 
             </div >
 
-            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#e9e9e9; height: 480px;width:49%;margin-right: .5%;margin-left: .5%;margin-bottom: .5%;">
-                <h3 style="font-size: 30px;text-align: center"> Badges å unlocke <br><br></h3>
-
-                <div class="col-md-3 col-xs-12 col-sm-6">
-                    <img style="width: 80px; height: 80px" src="https://www.spreadshirt.no/image-server/v1/mp/designs/10122472,width=178,height=178/drage-med-ild.png" >
-                </div >
+            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#e9e9e9; height: 480px;width:49.5%;margin-left: .5%;margin-bottom: .5%;">
+                <h3 style="font-size: 30px;text-align: center"> Badges du mangler<br><br></h3>
 
 
             </div>
 
         </div>
 
-{%  endblock %}
+-->
