@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+.badges {
+    width: 100px;
+    height: auto;
+}
+
 .pic {
     display: block;
 

@@ -109,8 +109,8 @@
                     </table>
                 </div>
                 {% for badge in hybrid.badge_set.all %}
-                    <div class >
-                    <img src="/uploads/{{ badge.badge_image }}" alt="image">
+                    <div class = "badges" >
+                    <img class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
                     </div>
                     {{ badge }}
                 {% endfor %}
