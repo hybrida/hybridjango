@@ -64,6 +64,7 @@
         <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
             {% block image %}
                 <div class="picFrame poof">
+
                     <img class="pic super-center" src="/uploads/{{ hybrid.image }}">
                 </div>
             {% endblock %}
@@ -72,11 +73,6 @@
             {% block info %}
                 <h1>{{ hybrid.first_name }} {{ hybrid.middle_name }} {{ hybrid.last_name }}</h1>
                 <h3>{{ hybrid.title }}</h3>
-                {% for badge in hybrid.badge_set.all %}
-                    <img src="/uploads/{{ badge.badge_image }}" alt="image">
-                    {{ badge }}
-                {% endfor %}
-
                 <br>
                 <div style="overflow-x: auto">
                     <table class="info-table">
@@ -112,6 +108,12 @@
                         {% endif %}
                     </table>
                 </div>
+                {% for badge in hybrid.badge_set.all %}
+                    <div class >
+                    <img src="/uploads/{{ badge.badge_image }}" alt="image">
+                    </div>
+                    {{ badge }}
+                {% endfor %}
             {% endblock %}
         </div>
     </div>
