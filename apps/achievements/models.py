@@ -6,18 +6,19 @@ import os
 # Create your models here.
 # model that enables the creation fo multiple different requirements for the badges
 class Prerequisites(models.Model):
-    years = models.IntegerField(default=0)
-    commite_member = models.BooleanField(default=0)
-    hyb_member = models.BooleanField(default=0)
-    jub_medal = models.BooleanField(default=0)
-    ridder = models.BooleanField(default=0)
-    vago = models.BooleanField(default=0)
-    simsim = models.BooleanField(default=0)
-    participation_badge = models.BooleanField(default=0)
-    quiz_winner = models.BooleanField(default=0)
+    years = models.IntegerField(default=False)
+    commite_member = models.BooleanField(default=False)
+    hyb_member = models.BooleanField(default=False)
+    jub_medal = models.BooleanField(default=False)
+    ridder = models.BooleanField(default=False)
+    vago = models.BooleanField(default=False)
+    simsim = models.BooleanField(default=False)
+    participation_badge = models.BooleanField(default=False)
+    quiz_winner = models.BooleanField(default=False)
+    council_medal = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.pk
 
 # model that contains the basic view functionality for the badges, will have 1to1 link to a certain set of requirements for that badge
 class Badge(models.Model):
