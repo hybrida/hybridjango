@@ -18,6 +18,9 @@ class Prerequisites(models.Model):
     quiz_winner = models.BooleanField(default=False)
     council_medal = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 
 # model that contains the basic view functionality for the badges, will have 1to1 link to a certain set of requirements for that badge
 class Badge(models.Model):
