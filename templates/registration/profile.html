@@ -108,9 +108,11 @@
                         {% endif %}
                     </table>
                 </div>
-                {% for badge in hybrid.badge_set.all %}
-                    <div class = "badges" >
+                {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
+
+                    <div>
                     <img class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
+
                     </div>
                     {{ badge }}
                 {% endfor %}
