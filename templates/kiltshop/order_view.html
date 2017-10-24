@@ -32,16 +32,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in products %}
+                    {% for item in ordered_products %}
                         <tr>
+                            <!--  Liste over alle produkt (pluss størrelser) -->
                             <td>
-                                {{ item.name }}
+                                {{ item.0 }}
                             </td>
-                            <td>
-                                {{ item.type }}
+                            <!-- Evt størrelser-->
+                            <td align="Center" style="word-wrap: break-word; max-width: 40em;">
+                                {% if not item.1 %}
+                                    -
+                                {% else %}
+                                    {{ item.1 }}
+                                {% endif %}
                             </td>
-                            <td>
-                                {{ item.number }}
+                            <!-- Antall bestitlt -->
+                            <td align="Center"  style="word-wrap: break-word; max-width: 40em;">
+                                {{ item.2 }}
                             </td>
                         </tr>
                     {% endfor %}
