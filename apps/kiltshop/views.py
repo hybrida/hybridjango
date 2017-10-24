@@ -57,32 +57,31 @@ def admin_orderoverview(request):
                 {'orderinfo':  OrderInfo.objects.all(),}
     )
 
-
+#Viser bestillinger for en bestillingsperiode, totalt antall av hvert produkt med én størrelse og kan også
+#vise én enkelt bestilling for endring av betalingsstatus
+#Renderer order_view.html
 def order_view(request, pk):
     user_order = None
     user_products = None
     current_order = OrderInfo.objects.filter(pk=pk).get()
     all_ordered_products = ProductInfo.objects.all()
-    ordered_products_in_this_period = [] #Alle bestilte produkter i den gjeldende perioden
     orders = current_order.orders.all()
+
     orders_pk = [] #Alle pvrivate keys til order som tilhører den gjeldende perioden
-    for order in orders:
-        print(order.pk)
+    for order in orders: #henter ut alle private keys fra ordre i gjeldende periode
         orders_pk.append(order.pk)
 
-    ordered_products_numbered = []
-    for product in all_ordered_products:
-        print(product.order.pk)
+    ordered_products_numbered = [] #Liste med alle aktuelle produkter lagret på formen [navn, størrelse, antall]
+    for product in all_ordered_products: #finner alle enkeltprodukter som er bestilt i gjeldende periode og legger til listen
         if product.order.pk in orders_pk:
-            print('Lagt til')
-            print(product.product.name)
-            ordered_products_in_this_period.append(product)
             ordered_products_numbered.append([product.product.name, product.size, product.number])
 
 
     unique_ordered = []
+    if len(ordered_products_numbered) > 1:
+        start = True
 
-    start = True
+    #Summerer opp alle bestillinger av et produkt i en gitt størrelse
     for item in ordered_products_numbered:
         found = False
         if start:
@@ -90,11 +89,11 @@ def order_view(request, pk):
             start = False
         else:
             for i in range(0, len(unique_ordered)):
-                if item[0] == unique_ordered[i][0]:
+                if item[0] == unique_ordered[i][0]: #produktnavn er lik et
                     found = True
-                    if item[1] is not None and unique_ordered[i][1] is not None:
-                        if item[1] == unique_ordered[i][1]:
-                            unique_ordered[i][2] += item[2]
+                    if item[1] is not None and unique_ordered[i][1] is not None: #har en størrelse
+                        if item[1] == unique_ordered[i][1]: #størrelse er lik
+                            unique_ordered[i][2] += item[2] #antall legges til
                         else:
                             new = True
                             for j in range(0, len(unique_ordered)):
@@ -108,11 +107,12 @@ def order_view(request, pk):
                         unique_ordered[i][2] += item[2]
             if not found:
                 unique_ordered.append([item[0], item[1], item[2]])
-    unique_ordered.sort()
+    unique_ordered.sort() #Sorterer listen alfabetisk
 
 
 
     if request.method == 'POST':
+        #Viser en enkelt bestilling
         if 'showUser' in request.POST:
             user_id = request.POST.get('selected_user')
             print(user_id)
@@ -122,6 +122,7 @@ def order_view(request, pk):
                 user_order = orders.filter(user=user_id).first()
                 user_products = user_order.products.all()
 
+        #Endrer betalingsstatus for en bestilling
         if 'change_status' in request.POST:
             put = request.POST.get('order_status')
             status = put.split(':')
@@ -135,7 +136,6 @@ def order_view(request, pk):
 
     return render(request, "kiltshop/order_view.html",
                   {'order':current_order,
-                   'products':ordered_products_in_this_period,
                    'ordered_products':unique_ordered,
                    'orders':orders,
                    'user_order':user_order,
