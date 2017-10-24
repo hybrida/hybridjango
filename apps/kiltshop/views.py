@@ -62,12 +62,55 @@ def order_view(request, pk):
     user_order = None
     user_products = None
     current_order = OrderInfo.objects.filter(pk=pk).get()
-    all_products = ProductInfo.objects.all()
-    ordered_products = []
+    all_ordered_products = ProductInfo.objects.all()
+    ordered_products_in_this_period = [] #Alle bestilte produkter i den gjeldende perioden
     orders = current_order.orders.all()
+    orders_pk = [] #Alle pvrivate keys til order som tilhører den gjeldende perioden
     for order in orders:
-        for product in order.products.all():
-            ordered_products.append(product)
+        print(order.pk)
+        orders_pk.append(order.pk)
+
+    ordered_products_numbered = []
+    for product in all_ordered_products:
+        print(product.order.pk)
+        if product.order.pk in orders_pk:
+            print('Lagt til')
+            print(product.product.name)
+            ordered_products_in_this_period.append(product)
+            ordered_products_numbered.append([product.product.name, product.size, product.number])
+
+
+    unique_ordered = []
+
+    start = True
+    for item in ordered_products_numbered:
+        found = False
+        if start:
+            unique_ordered.append([item[0], item[1], item[2]])
+            start = False
+        else:
+            for i in range(0, len(unique_ordered)):
+                if item[0] == unique_ordered[i][0]:
+                    found = True
+                    if item[1] is not None and unique_ordered[i][1] is not None:
+                        if item[1] == unique_ordered[i][1]:
+                            unique_ordered[i][2] += item[2]
+                        else:
+                            new = True
+                            for j in range(0, len(unique_ordered)):
+                                if item[1] == unique_ordered[j][1]:
+                                    new = False
+                                else:
+                                    pass
+                            if new:
+                                unique_ordered.append([item[0], item[1], item[2]])
+                    else:
+                        unique_ordered[i][2] += item[2]
+            if not found:
+                unique_ordered.append([item[0], item[1], item[2]])
+    unique_ordered.sort()
+
+
 
     if request.method == 'POST':
         if 'showUser' in request.POST:
@@ -91,7 +134,13 @@ def order_view(request, pk):
 
 
     return render(request, "kiltshop/order_view.html",
-                  {'order':current_order, 'products':ordered_products,'orders':orders,'user_order':user_order,'user_products':user_products, 'user_productinfo': ProductInfo.objects.filter(order=user_order),  }
+                  {'order':current_order,
+                   'products':ordered_products_in_this_period,
+                   'ordered_products':unique_ordered,
+                   'orders':orders,
+                   'user_order':user_order,
+                   'user_products':user_products,
+                   'user_productinfo': ProductInfo.objects.filter(order=user_order)}
                   )
 
 
@@ -102,7 +151,7 @@ def admin(request):
     orderinfo = OrderInfo.objects.all()
     user_order = None
     user_products = None
-    total_items = ProductInfo.objects.all()
+    total_items = ProductInfo.objects.all() #Alle produkter som har blitt bestilt med tilhørende info, i.e. størrelse
     ordered_products = []
     for item in total_items:
         item_info = [item.product.name, item.size, item.number]
