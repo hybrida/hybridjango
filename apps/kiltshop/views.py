@@ -290,7 +290,7 @@ def order_new(request):
             return redirect('kilt:order_new')
         elif active:
             if endTime>=str(now):
-                messages.warning(request, 'Man kan kun ha et aktivt tidsrom for bestilling')
+                messages.warning(request, 'Man kan kun ha et tidsrom for bestilling frem i tid')
                 return redirect('kilt:order_new')
         if form.is_valid():
             order = form.save(commit=False)
@@ -340,10 +340,21 @@ def shop(request):
     user = request.user
     types = Product.type_choices
     now = datetime.datetime.now()
-    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
-    active=False
+    active_order = OrderInfo.objects.filter(endTime__gte=now).last()
+
+    # Checks if there is an active timeframe
+    active = False
     if active_order:
-        active=True
+        active = True
+
+    last_user_order = Order.objects.filter(user=user).last()
+    last_order_orderinfo = OrderInfo.objects.filter(orders=Order.objects.filter(pk=last_user_order.pk)).last()
+    # checks if the users last order is in the active timeframe.
+    if last_order_orderinfo == active_order:
+        current_user_order = last_user_order
+    else:
+        current_user_order = None
+
     if request.method == 'POST':
         products = request.POST.getlist('product_k', None)
         products += request.POST.getlist('product_s', None)
@@ -424,6 +435,6 @@ def shop(request):
     return render(request, "kiltshop/shop.html",
                   {"products": Product.objects.all(),
                    'types':types,
-                   'order': Order.objects.filter(user=user).first(),
-                   'active':active
+                   'order': current_user_order,
+                   'active': active
                    })
