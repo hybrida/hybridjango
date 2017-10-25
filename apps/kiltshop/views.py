@@ -15,29 +15,36 @@ def index(request):
 
 @login_required
 def order(request):
-    now = datetime.datetime.now()
-    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
-    active=False
-    if active_order:
-        active = True
-    user_order = Order.objects.filter(user=request.user).first()
+    user_orders = Order.objects.filter(user=request.user).order_by('-pk') # gets all orders for specific user.
+    user_order = Order.objects.filter(user=request.user).last() # default order to show is newest
     if request.method == 'POST':
+        # changes the shown order to the one selected on list
+        if 'showOrder' in request.POST:
+            order_id = request.POST.get('selected_order')
+            print(order_id)
+            if int(order_id) == -1:
+                pass
+            else:
+                user_order = Order.objects.filter(pk=order_id).first()
+        # deletes selected product from order
         if 'delete_product' in request.POST:
             delete = request.POST.get('delete_product')
             m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
             m = m_qs.get()
             m.delete()
+        # deletes comment from order
         elif 'delete_comment' in request.POST:
             user_order.comment = ""
         user_order.save()
     if user_order:
         if not user_order.products.first() and not user_order.comment:
             user_order.delete()
+
     return render(request, "kiltshop/bestilling.html",
-        {'products': Product.objects.filter(order=Order.objects.filter(user=request.user)),
-        'productInfo': ProductInfo.objects.filter(order=Order.objects.filter(user=request.user).first()),
-        'order': user_order, 'active': active
-        }
+        {'products': Product.objects.filter(order=user_order),
+        'productInfo': ProductInfo.objects.filter(order=user_order),
+        'order': user_order,
+        'user_orders': user_orders,}
                   )
 
 
