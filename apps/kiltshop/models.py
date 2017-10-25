@@ -35,8 +35,11 @@ class Order(models.Model):
     comment = models.CharField(max_length=200, blank=True)
     status = models.BooleanField(default=False)
 
+    def get_orderinfo(self):
+        return OrderInfo.objects.filter(orders=Order.objects.filter(pk=self.pk)).first()
+
     def __str__(self):
-        return str("Bestilling  : "+self.user.first_name+" "+self.user.middle_name+" "+self.user.last_name)
+        return str("Ordre #"+str(self.pk)+" for "+self.user.first_name+" "+self.user.last_name)
 
 
 class OrderInfo(models.Model):
