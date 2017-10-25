@@ -376,10 +376,9 @@ def shop(request):
                 if Product.objects.get(pk=product).type == 'S':
                     new_sporra = True
             else:
-                if products is not None:
-                    if Order.objects.filter(user=user).exists():
-                        order_list = Order.objects.filter(user=user).first()
-                        for product in order_list.products.all():
+                if products is not None: # if you have selected products
+                    if current_user_order != None: # if a user already has an order in this timeframe
+                        for product in current_user_order.products.all():
                             if product.type == 'K':
                                 has_kilt_id = product.pk
                                 has_kilt = True
@@ -389,33 +388,32 @@ def shop(request):
                             if product.type == 'E':
                                 for item in products:
                                     if str(item) == str(product.pk):
-                                        m_qs = ProductInfo.objects.filter(order=order_list, product=item)
+                                        m_qs = ProductInfo.objects.filter(order=current_user_order, product=item)
                                         m = m_qs.get()
-                                        m.delete()
+                                        m.delete() # if you order the same product twice, we replace it with newest order
 
                         if has_kilt and new_kilt:
-                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_kilt_id)
+                            m_qs = ProductInfo.objects.filter(order=current_user_order, product=has_kilt_id)
                             m = m_qs.get()
-                            m.delete()
+                            m.delete() # removes ordered kilt if you order a new one
 
                         if has_sporra and new_sporra:
-                            m_qs = ProductInfo.objects.filter(order=order_list, product=has_sporra_id)
+                            m_qs = ProductInfo.objects.filter(order=current_user_order, product=has_sporra_id)
                             m = m_qs.get()
-                            m.delete()
+                            m.delete() # removes ordered sporra if you order a new one
 
-                        order_list = Order.objects.filter(user=user).first()
                         if comment:
-                            order_list.comment = comment
+                            current_user_order.comment = comment
 
                         for product in products:
                             number = int(request.POST.get('number-{id}'.format(id=product), 1))
                             if number > 0:
                                 size = request.POST.get('size-{id}'.format(id=product), None)
                                 item = Product.objects.get(pk=product)
-                                productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
+                                productinfo = ProductInfo(order=current_user_order, product=item, size=size, number=number)
                                 productinfo.save()
-                        order_list.save()
-                        active_order.save()
+                            current_user_order.save()
+                        current_user_order.save()
                         return HttpResponseRedirect("/kilt/bestilling")
                     else:
                         order_list = Order.objects.create(user=user)
