@@ -44,11 +44,17 @@ class OrderInfo(models.Model):
     startTime = models.DateTimeField(null=True, blank=True)
     endTime = models.DateTimeField(null=True, blank=True)
 
-    def active_order(self):
-        now = datetime.datetime.now()
-        active_order = OrderInfo.objects.filter(endTime__gte=now).first()
-        current_rorder = OrderInfo.objects.filter(pk=self.pk).first()
-        if active_order==current_rorder:
+    def is_active(self): # Checks if now is between start and end time.
+        if timezone.now() >= self.startTime:
+            if timezone.now() <= self.endTime:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def is_waiting(self):  # Checks if the start time is in the future
+        if timezone.now() < self.startTime:
             return True
         else:
             return False
