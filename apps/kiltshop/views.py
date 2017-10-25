@@ -63,9 +63,9 @@ def admin_orderoverview(request):
 def order_view(request, pk):
     user_order = None
     user_products = None
-    current_order = OrderInfo.objects.filter(pk=pk).get()
-    all_ordered_products = ProductInfo.objects.all()
-    orders = current_order.orders.all()
+    current_order = OrderInfo.objects.filter(pk=pk).get() #Gjeldende bestillingsperiode
+    all_ordered_products = ProductInfo.objects.all() #Alle bestilte produkter lagret i databasen
+    orders = current_order.orders.all() #Alle bestillinger
 
     orders_pk = [] #Alle pvrivate keys til order som tilhører den gjeldende perioden
     for order in orders: #henter ut alle private keys fra ordre i gjeldende periode
