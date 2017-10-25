@@ -216,7 +216,7 @@ def admin(request):
       )
 
 
-@permission_required(['kilt.delete_product'])
+@permission_required(['kiltshop.delete_product'])
 def admin_productoverview(request):
     if request.method == "POST":
         if 'delete_product' in request.POST:
@@ -228,7 +228,7 @@ def admin_productoverview(request):
     return render(request, "kiltshop/admin_productoverview.html",
                   {'products': Product.objects.all()})
 
-@permission_required(['kilt.add_product'])
+@permission_required(['kiltshop.add_product'])
 def product_new(request):
     action = 'Lag nytt'
     if request.method == "POST":
@@ -244,7 +244,7 @@ def product_new(request):
     return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
 
 
-@permission_required(['kilt.change_product'])
+@permission_required(['kiltshop.change_product'])
 def product_edit(request, pk):
     action = "Rediger"
     product = get_object_or_404(Product, pk=pk)
@@ -260,7 +260,7 @@ def product_edit(request, pk):
         form = ProductForm(instance=product)
     return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
 
-@permission_required(['kilt.add_order'])
+@permission_required(['kiltshop.add_order'])
 def order_new(request):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     active_order = OrderInfo.objects.filter(endTime__gte=now).first()
@@ -293,7 +293,7 @@ def order_new(request):
     form = OrderInfoForm(request.POST)
     return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
 
-@permission_required(['kilt.change_order'])
+@permission_required(['kiltshop.change_order'])
 def order_edit(request, pk):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     active_order = OrderInfo.objects.filter(endTime__gte=now).first()
