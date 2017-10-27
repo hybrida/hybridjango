@@ -1,7 +1,7 @@
 {% extends 'base_clean.html' %}
 
 {% block content %}
-    <style>
+<style>
     .align-middle {
     width: 50%;
     height: 100px;
@@ -53,10 +53,10 @@
                 </div>
             {% endfor %}
         {% endif %}
-    <h1>{{ appearances.event.title }}</h1>
+    <h1>{{ generalassembly.event.title }}</h1>
     <div class="align-middle">
         <div style="text-align: center">
-            <form id="rfid_form" method="POST" action="{%  url 'rfid:add' appearances.pk %}">
+            <form id="rfid_form" method="POST" action="{%  url 'rfid:add_gen' generalassembly.pk %}">
                 {%  csrf_token %}
                 <label style="font-size: 20px" for="rfid_key">Scann inn NTNU kort eller skriv inn brukernavn: </label>
                 <input style="font-size: 25px" type="text" name="rfid_key" title="RFID" autofocus>
