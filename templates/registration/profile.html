@@ -108,13 +108,16 @@
                         {% endif %}
                     </table>
                 </div>
+                <br>
                 {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
+                        <div class="col-lg-3">
+                            <div class="row">
 
-                    <div>
-                    <img class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
+                    <img title="Name: {{ badge }} Description: {{ badge.description }} Scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
 
                     </div>
-                    {{ badge }}
+                    </div>
+
                 {% endfor %}
             {% endblock %}
         </div>
