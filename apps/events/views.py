@@ -8,8 +8,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from apps.events.forms import EventForm
-from .models import Event, EventComment, Attendance, Participation
 from apps.rfid.models import Appearances
+from .models import Event, EventComment, Attendance, Participation
 
 
 class EventList(generic.ListView):
@@ -85,13 +85,17 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
 
 
 def calendar_api(request):
+    events = Event.objects.filter(hidden=False)
+    if not request.user.is_authenticated():
+        events = events.filter(public=True)
+    events.filter()
     return JsonResponse([{
         'title': event.title,
         'start': event.event_start,
         'end': event.event_end,
         'url': "../hendelser/" + str(event.pk),
         'allDay': False
-    } for event in Event.objects.all() if event.event_start is not None], safe=False)
+    } for event in events if event.event_start is not None], safe=False)
 
 @login_required
 def participants_csv(request, pk):
