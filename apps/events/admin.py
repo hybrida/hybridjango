@@ -32,6 +32,8 @@ class EventAdmin(admin.ModelAdmin):
         AttendanceInline,
         BedpressInline,
     ]
+    exclude = ('timestamp',)
+
 
 
 admin.site.register(Event, EventAdmin)

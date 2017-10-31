@@ -35,5 +35,7 @@
     </div>
 {% endblock %}
 {% block sublinks %}
-    <a href="møtereferat">Møtereferat</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'board_report' %}">Møtereferat</a>
+    {% endif %}
 {% endblock %}
