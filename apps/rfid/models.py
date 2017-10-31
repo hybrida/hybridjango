@@ -13,3 +13,17 @@ class Appearances(models.Model):
 
     def __str__(self):
         return "RFID for event #"+str(self.event.pk)+": "+self.event.title
+
+
+class GeneralAssembly(models.Model):
+    users = models.ManyToManyField(Hybrid, blank=True)
+    event = models.OneToOneField(Event, blank=True, on_delete=models.DO_NOTHING, primary_key=True)
+
+    def add_genfors_appearance(self, user):
+        self.users.add(user)
+
+    def remove_genfors_appearance(self, user):
+        self.users.remove(user)
+
+    def __str__(self):
+        return "RFID for generalforsamling: " + str(self.event.pk) + ": " + self.event.title

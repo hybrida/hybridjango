@@ -3,12 +3,144 @@
 {% block info %}
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <!-- Itererer over alle fields i user form. Kommentert ut her.
         {% for field in form %}
             <div class="form-group">
                 {{ field.label_tag }}
                 {{ field|add_class:"form-control" }}
             </div>
-        {% endfor %}
+        {% endfor %} -->
+
+        <!-- Går manuelt gjennom alle fields i form og viser dem -->
+        <div class="form-group">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.middle_name.label_tag }}
+            {{ form.middle_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.title.label_tag }}
+            {{ form.title|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.image.label_tag }}
+            {{ form.image|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.graduation_year.label_tag }}
+            {{ form.graduation_year|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.specialization.label_tag }}
+            {{ form.spezialization|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.gender.label_tag }}
+            {{ form.gender|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.food_preferences.label_tag }}
+            {{ form.food_preferences|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            {{ form.card_key.label_tag }}
+            <div class="infobutton">
+                <span id="Overly" class="glyphicon glyphicon-info-sign" />
+            </div>
+            {{ form.card_key|add_class:"form-control" }}
+        </div>
         <button type="submit">Lagre</button>
     </form>
+
+
+
+    <div class="modalbox" >
+        <div class="dialog">
+            <span  title="Close" class="glyphicon glyphicon-remove-sign closebutton" id="close"></span>
+            <!-- Div med info som blir vist som en overlay -->
+            <div>
+                <p>Legg inn info her Andreas</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+                <p>vm</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("Overly").addEventListener("click", function(){
+         var e =document.getElementsByClassName("modalbox");
+
+                e[0].style.display = 'block';
+
+        })	;
+        document.getElementById("close").addEventListener("click", function(){
+           var e =document.getElementsByClassName("modalbox");
+         e[0].style.display= 'none';
+        });
+    </script>
+    <style>
+        .modalbox {
+            min-width: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(81, 51, 51, 0.5);
+            z-index: 99999;
+            pointer-events: auto;
+            display:none;
+            overflow-y:auto;
+            -webkit-overflow-scrolling: touch;
+            text-align: center;
+        }
+        .modalbox >.dialog {
+            max-width: 100%;
+            position: relative;
+            top: 10px;
+            margin: 5% 10%;
+            padding: 5px 20px 13px 20px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 0 10px #000000;
+            -moz-box-shadow: 0 0 10px #000000;
+            -webkit-box-shadow: 0 0 10px #000000;
+            display: block;
+            pointer-events: auto;
+        }
+
+        .closebutton {
+            float: right;
+            font-size: 21px;
+            font-weight: 700;
+            line-height: 1;
+            filter: alpha(opacity=20);
+            z-index: 9999;
+            cursor:pointer
+        }
+
+        .infobutton {
+            float: right;
+            font-size: 21px;
+        }
+    </style>
 {% endblock %}
+
