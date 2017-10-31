@@ -52,15 +52,15 @@ $(document).ready(function() {
     $(window).resize(calculateSuperCenter);
 });
 
+var feedbackVisible = false;
 function toggleFeedbackBox() {
     var $sb = $('#feedbackBox');
-    if ($sb.css('right') == '16px') {
-        $sb.css('right', '-8px'); // Account for shadow on box
-        $sb.css('transform', 'translateX(100%)');
+    if (feedbackVisible) {
+        $sb.css('right', '-100%');
     } else {
-        $sb.css('right','16px');
-        $sb.css('transform', 'translateX(0)');
+        $sb.css('right','0');
     }
+    feedbackVisible = !feedbackVisible;
 }
 
 function submitFeedback() {

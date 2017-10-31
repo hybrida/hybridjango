@@ -57,19 +57,21 @@ article {
 }
 
 #feedbackBox {
-    right: -8px; /* Account for shadow on box */
-    bottom: 75px;
+    right: -100%;
+    bottom: 62px;
     width: 500px;
     height: 400px;
-    padding: 0 30px 20px;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 16px;
     z-index: 50000;
-    transform: translateX(100%);
-    transition: right 0.2s ease,
-    transform 0.2s ease;
+    transition: right 0.2s ease;
+}
+
+#feedbackBox .feedbackContainer {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0 30px 20px;
 }
 
 #feedbackBox h2 {
@@ -79,25 +81,18 @@ article {
 #feedbackBox #feedbackContent {
     resize: none;
     width: 100%;
-    height: auto;
-    flex-grow: 1;
+    height: 50%;
     margin-bottom: 5px;
-}
-
-#feedbackBox #feedbackButton {
-    margin-top: 15px;
-}
-
-@media (max-width: 992px) {
-    #feedbackBox {
-        bottom: 55px;
-    }
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    -webkit-box-sizing: border-box; /* For Safari                           */
 }
 
 @media (max-width: 767px) {
     #feedbackBox {
-        width: calc(100% - 32px);
-        height: calc(100% - 71px);
+        width: 100%;
+        height: 100%;
+        padding-top: 78px;
     }
 }
 
