@@ -2,14 +2,13 @@ import os
 from itertools import chain
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import resolve
 from django.utils import timezone
-from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.events.models import Event
+from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
@@ -23,23 +22,7 @@ class FrontPage(EventList):
     queryset = EventList.queryset
 
     def get_context_data(self, **kwargs):
-        tz = timezone.get_current_timezone()
-        temporary_quickfix_for_tp_events = [
-            Event(pk=-1, title='Bedriftspresentasjon med DNV GL',
-                  event_start=tz.localize(datetime(2017, 1, 25, 17, 30, 0)), text='431'),
-            Event(pk=-1, title='Karrieremesse med Framtidsfylket', event_start=tz.localize(datetime(2017, 1, 26, 17)),
-                  text='407'),
-            Event(pk=-1, title='Prospective', event_start=tz.localize(datetime(2017, 2, 9)), text='440'),
-            Event(pk=-1, title='DNB Digital Challenge', event_start=tz.localize(datetime(2017, 2, 10)), text='430'),
-            Event(pk=-1, title='Karrieremesse med Haugesundsregionen',
-                  event_start=tz.localize(datetime(2017, 2, 16, 18)), text='406'),
-            Event(pk=-1, title='DNV GL Opportunity Day', event_start=tz.localize(datetime(2017, 3, 2, 10, 15)),
-                  text='432'),
-            Event(pk=-1, title='Teknologiporten FOKUS: InnoVention', event_start=tz.localize(datetime(2017, 3, 16, 17)),
-                  text='422'),
-            Event(pk=-1, title='AF Gruppen', event_start=tz.localize(datetime(2017, 2, 1, 17, 15)), text='428'),
-            Event(pk=-1, title='Multiconsult', event_start=tz.localize(datetime(2017, 2, 8, 17)), text='391'),
-        ]
+        tp_events = TPEvent.objects.filter(event_start__gte=timezone.now())
 
         context = super(EventList, self).get_context_data(**kwargs)
         event_list_chronological = Event.objects.filter(
@@ -53,7 +36,7 @@ class FrontPage(EventList):
 
         context['event_list_chronological'] = event_list_chronological.order_by('event_start')[:7]
         context['bedpress_list_chronological'] = sorted(chain(bedpress_list_chronological.order_by('event_start')[:7],
-                                                              [tp_event for tp_event in temporary_quickfix_for_tp_events
+                                                              [tp_event for tp_event in tp_events
                                                                if tp_event.event_start > timezone.now()]
                                                               ), key=lambda event: event.event_start)[:7]
 
