@@ -41,9 +41,7 @@ class Hybrid(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='Fødselsår')
     title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
     food_preferences = models.CharField(max_length=150, blank=True, verbose_name='Allergier og matpreferanser')
-
-    card_regex = RegexValidator(regex=r'^\d{10,10}$', message="card_key number must contain 10 numbers.")
-    card_key = models.CharField(validators=[card_regex], max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
+    card_key = models.CharField(max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
 
     def get_full_name(self):
         if self.middle_name:
