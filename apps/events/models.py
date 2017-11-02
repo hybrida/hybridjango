@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
 
@@ -9,7 +10,7 @@ from apps.registration.models import Hybrid, Specialization
 class Event(models.Model):
     title = models.CharField(max_length=150)
     ingress = models.CharField(max_length=350, blank=True, default='')
-    text = models.TextField(blank=True)
+    text = HTMLField(blank=True)
     author = models.ForeignKey(Hybrid, related_name='authored')
     timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='events', blank=True)
