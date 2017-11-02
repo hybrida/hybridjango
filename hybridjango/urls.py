@@ -40,4 +40,5 @@ urlpatterns = [
                   url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
                   url(r'^api/', include('apps.api.urls'), name='api'),
+                  url(r'^tinymce/', include('tinymce.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
