@@ -2,6 +2,7 @@ from apps.achievements.models import Prerequisites, Badge
 from apps.registration.models import Hybrid
 from apps.griffensorden.models import Ridder
 from apps.achievements.utils import *
+from itertools import compress
 
 #A function that checks all the rquirements trough the utils.py file, and then awards all the achievements that should be awarded.
 #It has too cycle trough all the different awards, and check their requirements, and check if any Hybrid have completed these.(Positives: simple, Drawbacks, Datasize, and how to regurarly proc the procedures)
@@ -11,6 +12,8 @@ from apps.achievements.utils import *
 
 def criteriachecker(PreReq, hybrid, badge):
     method_list = 0
+    prereq_list = 0
+    fin_list = list(compress(method_list, prereq_list))
     something = False
     for method in method_list:
         #Todo something that executes each method, and tracks the result, have to be able too track more than one return statment, and return true or false

@@ -31,6 +31,7 @@ Jon
 	- LAN
 	- etc..
 	- Kakemester
+	- hybridgenserdalje
 
 Bendik
 - funksjonalitet for � utdele medaljer til Hybrider
@@ -44,3 +45,7 @@ Bendik
 	- Resultatliste, HVOR GOD ER DU P� HYBRIDA
 
 - Backend funksjonalitet, for admin siden, type forms
+
+
+Ting som må huskes på(VIKTIG VIKTIG VIKTIG!!!1)
+- har endret på griffens orden siden, så man må legge til alle riddere på nytt på hovedsiden!!!!!
