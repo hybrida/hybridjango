@@ -6,7 +6,7 @@
 {% block text %}
 
 <div class="responsive">
-{% if not products and not order.comment %}
+{% if not products and not order.comment or user_order == None  %}
     <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
 {% else %}
      <form action="" method="post">
