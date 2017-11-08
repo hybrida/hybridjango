@@ -35,7 +35,7 @@ class Order(models.Model):
     comment = models.CharField(max_length=200, blank=True)
     status = models.BooleanField(default=False)
 
-    def get_orderinfo(self):
+    def get_orderinfo(self): #fetches the orderinfo an order lies in
         return OrderInfo.objects.filter(orders=Order.objects.filter(pk=self.pk)).first()
 
     def __str__(self):
