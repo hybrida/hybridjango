@@ -348,8 +348,12 @@ def shop(request):
         active = True
 
     last_user_order = Order.objects.filter(user=user).last()
-    last_order_orderinfo = OrderInfo.objects.filter(orders=Order.objects.filter(pk=last_user_order.pk)).last()
+    if last_user_order:
+        last_order_orderinfo = OrderInfo.objects.filter(orders=Order.objects.filter(pk=last_user_order.pk)).last()
+    else:
+        last_order_orderinfo = None
     # checks if the users last order is in the active timeframe.
+
     if last_order_orderinfo == active_order:
         current_user_order = last_user_order
     else:
