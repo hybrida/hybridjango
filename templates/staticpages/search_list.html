@@ -95,7 +95,7 @@
     {% endif %}
     {% if event|get_class == 'Job' %}
         <div class="white-box space-above">
-            <a href="{{ event.pk }}">
+            <a href="{% url 'jobs:job_detail' event.pk %}">
                 <img  width="220" height="220" src="/uploads/{{ event.company.logo }}">
             </a>
             <div class="col-md-8; text">
@@ -106,4 +106,18 @@
             </div>
         </div>
     {% endif %}
+    {% if event|get_class == 'Hybrid' %}
+         <div class="white-box space-above">
+            <a href="{% url 'profile' event.username %}">
+                <img  width="220" height="220" src="/uploads/{{ event.image }}">
+            </a>
+            <div class="col-md-8; text">
+                <b>Navn: </b> <a href="{% url 'profile' event.username %}">{{ event.get_full_name}}</a>
+                <br><b>Epost: </b>{{ event.email }}
+                <br><b>Spesialisering: </b>{{ event.specialization }}
+                <br><b>Avgangsår: </b>{{ event.graduation_year }}
+            </div>
+        </div>
+    {% endif %}
+
 {% endfor %}
