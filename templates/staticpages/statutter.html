@@ -20,3 +20,8 @@
     </div>
 
 {% endblock text %}
+{% block sublinks %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'protocols' %}">Protokoll</a>
+    {% endif %}
+{% endblock %}
