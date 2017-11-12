@@ -173,7 +173,9 @@ def search(request):
     event_object = Event.objects.filter(title__icontains=query)
     job_object_title = Job.objects.filter(title__icontains=query)
     job_object_company = Job.objects.filter(company__name__icontains=query)
-    complete_list = list(chain(event_object, job_object_title, job_object_company))
+    user_object_username = Hybrid.objects.filter(username__icontains=query)
+
+    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username,))
     print(complete_list)
 
     context = {
