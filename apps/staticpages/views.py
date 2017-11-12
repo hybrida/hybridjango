@@ -169,7 +169,14 @@ def updatek(request):
 @login_required
 def search(request):
     query = request.GET['tekst']
+    from itertools import chain
+    event_object = Event.objects.filter(title__icontains=query)
+    job_object = Job.objects.filter(title__icontains=query)
+    complete_list = list(chain(event_object, job_object))
+    print(complete_list)
+
     context = {
-        'object_list': Event.objects.filter(title__icontains=query),
+        'object_list': complete_list,
+
     }
     return render(request, 'staticpages/search.html', context)

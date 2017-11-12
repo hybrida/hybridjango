@@ -1,0 +1,109 @@
+{% load event_extras %}
+{% load class_tag %}
+
+<style>
+
+     .header{
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .text{
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    @media screen and (max-width: 992px) {
+        .text{
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+    }
+
+
+
+    }
+    .job_list{
+        height: auto;
+        display: inline-block;
+    }
+
+    img {
+        display:block;
+        margin:auto;
+    }
+</style>
+
+{% for event in object_list %}
+    {% if event|get_class == 'Event' %}
+        <div class="white-box space-above">
+            <a href="{% url 'event' event.pk %}" style="color: black">
+                <div class="remove-whitebox-padding" style="margin-bottom: 0">
+                    {% if event.image %}
+                        <div class="event_thumb_image" style="max-height: 320px; overflow: hidden">
+                            <img src="/uploads/{{ event.image }}"
+                                 alt="No image available"
+                                 width="100%">
+                        </div>
+                        <div class="image-info-overlay">
+                            <div>
+                            <span style="float: left">
+                            {% if event.event_start and event.event_end %}
+                                {{ event.event_start }}
+                            {% endif %}
+                            </span>
+                                <span style="float: right">
+                                        {{ event.location }}
+                                    </span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div style="height: 20px"></div>
+                    {% endif %}
+                    <div style="clear: both">
+                        {% for attendance in event.attendance_set.all %}
+                            <div style="float: right; padding: 0 .5em;">
+                                {% if attendance.signup_open %}
+                                    Åpen i {{ attendance.signup_end|timeuntil2 }}
+                                {% elif attendance.signup_closed %}
+                                    Påmelding er stengt
+                                {% else %}
+                                    Åpner om {{ attendance.signup_start|timeuntil2 }}
+                                {% endif %}
+                            </div>
+                            <div style="padding: 0 .5em;">
+                                {{ attendance.name }}:
+                            </div>
+                            <div class="progress" style="margin-bottom: 0">
+                                <div class="progress-bar"
+                                     style="min-width: 4em;
+                                             width: {% widthratio attendance.get_signed|length attendance.max_participants 100 %}%">
+                                    {{ attendance.get_signed|length }}
+                                    / {{ attendance.max_participants }}
+                                    {% if attendance.get_waiting %}
+                                        + {{ attendance.get_waiting|length }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <h3>{{ event.title }}</h3>
+            </a>
+            <p>{{ event.ingress }}</p>
+        </div>
+    {% endif %}
+    {% if event|get_class == 'Job' %}
+        <div class="white-box space-above">
+            <a href="{{ event.pk }}">
+                <img  width="220" height="220" src="/uploads/{{ event.company.logo }}">
+            </a>
+            <div class="col-md-8; text">
+                <b>Tittel: </b>
+                <a href="{{ job.pk }}">{{ event.title }}</a>
+                <br><b>Bedrift: </b>{{ event.company.name }}
+                <br><b>Søknadsfrist: </b>{{ event.deadline }}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
