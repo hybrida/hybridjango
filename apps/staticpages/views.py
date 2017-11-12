@@ -13,7 +13,7 @@ from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport
+from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
 
 
@@ -115,6 +115,13 @@ def members(request):
     return render(request, "staticpages/students.html",
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
+
+class ProtocolView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolView, self).get_context_data(**kwargs)
+        context['protocols'] = Protocol.objects.all().order_by('date').reverse()
+        context['active_page'] = 'statutter'
+        return context
 
 class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
