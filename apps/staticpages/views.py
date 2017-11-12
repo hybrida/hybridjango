@@ -171,8 +171,9 @@ def search(request):
     query = request.GET['tekst']
     from itertools import chain
     event_object = Event.objects.filter(title__icontains=query)
-    job_object = Job.objects.filter(title__icontains=query)
-    complete_list = list(chain(event_object, job_object))
+    job_object_title = Job.objects.filter(title__icontains=query)
+    job_object_company = Job.objects.filter(company__name__icontains=query)
+    complete_list = list(chain(event_object, job_object_title, job_object_company))
     print(complete_list)
 
     context = {
