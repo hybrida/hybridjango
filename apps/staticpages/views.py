@@ -100,7 +100,6 @@ ringenpages = [
     ('ringen_IIKT', 'Studiet I&IKT'),
     ('ringen_visjon', 'Visjon'),
     ('ringen_styret', 'Styret'),
-    ('ringen_bidrag', 'Bedriftens Bidrag'),
     ('ringen_medlemmer', 'Medlemmer'),
     ('ringen_promotering', 'Promotering'),
     ('ringen_kontakt', 'Kontaktinformasjon'),
