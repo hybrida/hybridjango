@@ -168,7 +168,17 @@ def updatek(request):
 @login_required
 def search(request):
     query = request.GET['tekst']
+    from itertools import chain
+    event_object = Event.objects.filter(title__icontains=query)
+    job_object_title = Job.objects.filter(title__icontains=query)
+    job_object_company = Job.objects.filter(company__name__icontains=query)
+    user_object_username = Hybrid.objects.filter(username__icontains=query)
+
+    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username,))
+    print(complete_list)
+
     context = {
-        'object_list': Event.objects.filter(title__icontains=query),
+        'object_list': complete_list,
+
     }
     return render(request, 'staticpages/search.html', context)
