@@ -28,8 +28,6 @@ urlpatterns = [
     url(r'^ringen/styret$', RingenView.as_view(template_name='staticpages/ringen/styret.html'), name='ringen_styret'),
     url(r'^ringen/medlemmer$', RingenView.as_view(template_name='staticpages/ringen/medlemmer.html'),
         name='ringen_medlemmer'),
-    url(r'^ringen/bedriftens_bidrag$', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'),
-        name='ringen_bidrag'),
     url(r'^ringen/promotering$', RingenView.as_view(template_name='staticpages/ringen/promotering.html'),
         name='ringen_promotering'),
     url(r'^ringen/kontakt$', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'),
