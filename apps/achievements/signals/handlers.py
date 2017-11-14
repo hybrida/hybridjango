@@ -16,11 +16,12 @@ griff_badge = django.dispatch.Signal()
 def my_callback(sender, **kwargs):
     print("Request finished!")
 
-@receiver(pre_save, sender=Ridder)
+@receiver(post_save, sender=Ridder)
 def GriffBadge(sender=Ridder, **kwargs):
+    inst_obj = kwargs['instance']
     badge= Badge.objects.get(name="Griffens Orden")
-    print(sender.objects.get().hybrid) #kaller flere objekter!!!!!
-    badge.user.add(sender.objects.get().hybrid)
+    print(inst_obj.hybrid) #kaller flere objekter!!!!!
+    badge.user.add(inst_obj.hybrid)
     badge.save()
 
 
