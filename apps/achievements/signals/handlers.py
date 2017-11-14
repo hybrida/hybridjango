@@ -16,11 +16,11 @@ griff_badge = django.dispatch.Signal()
 def my_callback(sender, **kwargs):
     print("Request finished!")
 
+#function that awards a griffens orden badge to everyone that gets added as a Ridder to the site
 @receiver(post_save, sender=Ridder)
 def GriffBadge(sender=Ridder, **kwargs):
     inst_obj = kwargs['instance']
     badge= Badge.objects.get(name="Griffens Orden")
-    print(inst_obj.hybrid) #kaller flere objekter!!!!!
     badge.user.add(inst_obj.hybrid)
     badge.save()
 
