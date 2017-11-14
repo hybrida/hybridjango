@@ -19,7 +19,8 @@ def my_callback(sender, **kwargs):
 @receiver(pre_save, sender=Ridder)
 def GriffBadge(sender=Ridder, **kwargs):
     badge= Badge.objects.get(name="Griffens Orden")
-    badge.user.add(sender.hybrid)
+    print(sender.objects.get().hybrid) #kaller flere objekter!!!!!
+    badge.user.add(sender.objects.get().hybrid)
     badge.save()
 
 
