@@ -24,6 +24,7 @@ class Profile(LoginRequiredMixin, generic.DetailView):
     slug_field = 'username'
     template_name = 'registration/profile.html'
     achievements = Badge.objects.order_by().values('user__username').distinct()
+
     def post(self, request, *args, **kwargs):
         if request.POST.get('Oppdater Prestasjoner!'):
             year_status_change.send(sender=Hybrid, instance=self.model)

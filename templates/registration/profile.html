@@ -110,13 +110,12 @@
                 </div>
                 <br>
                 <div>
-                    <form class="flex-container"  method="post">
+                    <form class="flex-container" action="" method="post">
                         {% csrf_token %}
                         <div class="input-group">
                             <input type="hidden" name="Hybrid" value="{{ hybrid }}">
-                        <button type="button">Oppdater Prestasjoner!</button>
+                            <button type="button">Oppdater Prestasjoner!</button>
                         </div>
-
                     </form>
                 </div>
                 {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
