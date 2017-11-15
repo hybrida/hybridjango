@@ -5,11 +5,8 @@ from django.dispatch import receiver
 from apps.achievements.models import *
 from apps.griffensorden.models import *
 from apps.registration.models import *
-
-#signals
-griff_badge = django.dispatch.Signal()
-
-
+from django.utils import timezone
+from .signals import *
 
 #Recievers
 @receiver(request_finished)
@@ -31,15 +28,21 @@ def GriffBadge(sender=Ridder, **kwargs):
 def MemberBadge(sender=Hybrid, **kwargs):
     inst_obj = kwargs['instance']
     badge = Badge.objects.get(name="Medlemskaps Medalje")
-    if inst_obj.member == True:
+    if inst_obj.member == True: #if not awarded already, award the medal
         badge.user.add(inst_obj)
         badge.save()
 
-#function that awards 1,3,5 year medals based on the amount of time they have been in Hybrida, not necessarily which year they are in
-
+#function that awards 1,3,5 and 6+ year medals based on the amount of time they have been in Hybrida, not necessarily which year they are in. Also, atm, this function will award these at new years eve, so that you will have the medals for the second semester each year.
+@receiver(year_status_change)
+def YearBadge(sender, **kwargs):
+    inst_obj = kwargs['instance'] #Getting the User
+    grad_year = inst_obj.graduation_year #getting the users planned graduation date
+    current_year = timezone.now() #Getting the current datetime
+    medals = [["1års Medalje", 4], ["3års Medalje", 2], ["5års medalje", 0], ["6+års Medalje", -1]] # list that contains all the year medals we have, consist of elements with the variables name, and what year requirement they need too be achieved
+    for medal in medals: #iteration trough every single year Medal, which unfortunatley is hardcoded
+        badge = Badge.objects.get(medal[0]) #getting each medal for each iteration of the loop
+        if grad_year - current_year <= medal[1]:
+            badge.user.add(inst_obj)
+            badge.save()
 
 #===========================================================================================================================#
-
-#Senders
-def Send_GriffBadge():
-    griff_badge.send(sender=Ridder)
