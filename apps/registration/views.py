@@ -12,6 +12,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
 from apps.achievements.models import Badge
 from apps.achievements.signals.signals import *
+from django.http import HttpResponseRedirect
 
 from .models import Hybrid, RecoveryMail
 from .forms import HybridForm
@@ -26,8 +27,10 @@ class Profile(LoginRequiredMixin, generic.DetailView):
     achievements = Badge.objects.order_by().values('user__username').distinct()
 
     def post(self, request, *args, **kwargs):
-        if request.POST.get('Oppdater Prestasjoner!'):
-            year_status_change.send(sender=Hybrid, instance=self.model)
+        if 'update' in self.request.POST:
+            hybrid = self.request.POST.get('update')
+            year_status_change.send(sender=Hybrid, instance=hybrid)
+            return redirect('profile', hybrid)
 
 
 

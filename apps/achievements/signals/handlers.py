@@ -37,16 +37,16 @@ def MemberBadge(sender=Hybrid, **kwargs):
 @receiver(year_status_change)
 def YearBadge(sender, **kwargs):
     inst_obj = kwargs['instance'] #Getting the User
-    grad_year = Hybrid.objects.get(inst_obj) #getting the users planned graduation date
+    user = Hybrid.objects.get(username=inst_obj) #getting the users planned graduation date
+    grad_year = user.graduation_year
     current_year = int(datetime.now().year) #Getting the current datetime
-    medals = [["1års Medalje", 4], ["3års Medalje", 2], ["5års medalje", 0], ["6+års Medalje", -1]] # list that contains all the year medals we have, consist of elements with the variables name, and what year requirement they need too be achieved
+    medals = [["1års Medalje", 4], ["3års Medalje", 2], ["5års Medalje", 0], ["6+års Medalje", -1]] # list that contains all the year medals we have, consist of elements with the variables name, and what year requirement they need too be achieved
     for medal in medals: #iteration trough every single year Medal, which unfortunatley is hardcoded
         badge = Badge.objects.get(name=medal[0]) #getting each medal for each iteration of the loop
-        print(medal[1])
-        print(current_year)
-        print(grad_year.graduation_year)
         if grad_year - current_year <= medal[1]:
-            badge.user.add(inst_obj)
+            badge.user.add(user)
             badge.save()
+
+
 
 #===========================================================================================================================#
