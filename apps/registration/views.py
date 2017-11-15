@@ -11,6 +11,7 @@ from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
 from apps.achievements.models import Badge
+from apps.achievements.signals.signals import *
 
 from .models import Hybrid, RecoveryMail
 from .forms import HybridForm

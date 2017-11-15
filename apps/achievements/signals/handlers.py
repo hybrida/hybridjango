@@ -5,8 +5,9 @@ from django.dispatch import receiver
 from apps.achievements.models import *
 from apps.griffensorden.models import *
 from apps.registration.models import *
-from django.utils import timezone
 from .signals import *
+from datetime import datetime
+
 
 #Recievers
 @receiver(request_finished)
@@ -36,11 +37,14 @@ def MemberBadge(sender=Hybrid, **kwargs):
 @receiver(year_status_change)
 def YearBadge(sender, **kwargs):
     inst_obj = kwargs['instance'] #Getting the User
-    grad_year = inst_obj.graduation_year #getting the users planned graduation date
-    current_year = timezone.now() #Getting the current datetime
+    grad_year = Hybrid.objects.get(inst_obj) #getting the users planned graduation date
+    current_year = int(datetime.now().year) #Getting the current datetime
     medals = [["1års Medalje", 4], ["3års Medalje", 2], ["5års medalje", 0], ["6+års Medalje", -1]] # list that contains all the year medals we have, consist of elements with the variables name, and what year requirement they need too be achieved
     for medal in medals: #iteration trough every single year Medal, which unfortunatley is hardcoded
-        badge = Badge.objects.get(medal[0]) #getting each medal for each iteration of the loop
+        badge = Badge.objects.get(name=medal[0]) #getting each medal for each iteration of the loop
+        print(medal[1])
+        print(current_year)
+        print(grad_year.graduation_year)
         if grad_year - current_year <= medal[1]:
             badge.user.add(inst_obj)
             badge.save()
