@@ -3,11 +3,14 @@ from .models import Badge
 from django.urls import resolve
 from apps.registration.models import Hybrid
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from apps.achievements.signals.signals import *
+from apps.achievements.forms import *
 
 
 
 def overview(request):
     return render(request, '../templates/achievments/achievments_overview.html',)
+
 
 class  BadgeView (TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
@@ -34,6 +37,7 @@ class  BadgeView (TemplateResponseMixin, ContextMixin, View):
         })
 
         return self.render_to_response(context)
+
 
 aboutpages = [
     ('about', "Om Hybrida"),
