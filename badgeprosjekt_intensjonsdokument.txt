@@ -19,11 +19,11 @@ Jon
 	- Komitemedalje #mangler bilde, legges til Manuelt for øyeblikket
 	- Styremedalje #mangle bilder, legges til Manulet for øyeblikket
 	- Medlemsdalje #gjort, mangler bilde
-	- 1,3,og 5 �rs medalje
-	- 6+ �rs medalje
-	- Jubiluems medalje
+	- 1,3,og 5 �rs medalje gjort, mangler bilde
+	- 6+ �rs medalje gjort, mangler bilde
+	- Jubiluems medalje #TODO
 	- Ridder Medalje #gjort, mangler bilde
-	- Vago Medalje
+	- Vago Medalje # mangler bilde, legges til manuelt
 	- SIM SIM MEDALJE(5. klasses hedersmedalje)
 	- 4T L3ASt
 	

@@ -110,11 +110,10 @@
                 </div>
                 <br>
                 <div>
-                    <form class="flex-container" action="" method="post">
+                    <form  class="flex-container" action="#" method="post">
                         {% csrf_token %}
                         <div class="input-group">
-                            <input type="hidden" name="Hybrid" value="{{ hybrid }}">
-                            <button type="button">Oppdater Prestasjoner!</button>
+                            <button type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
                         </div>
                     </form>
                 </div>
