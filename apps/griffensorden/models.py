@@ -9,6 +9,9 @@ class Ridder(models.Model):
     awarded = models.CharField(max_length=4)
     description = models.TextField()
 
+    def __str__(self):
+        return self.hybrid.get_full_name
+
 
 class Honary_member(models.Model):
     name = models.CharField(max_length=200)
