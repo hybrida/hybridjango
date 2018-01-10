@@ -11,7 +11,7 @@ class Badge(models.Model):
     description = models.TextField()
     badge_image = models.FileField(upload_to='badges/')
     scorepoints = models.PositiveIntegerField()
-    user = models.ManyToManyField(Hybrid, default=None)
+    user = models.ManyToManyField(Hybrid, blank=True, related_name='hybrider')
 
     def __str__(self):
         return self.name
