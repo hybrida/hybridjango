@@ -10,7 +10,7 @@ class Ridder(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.hybrid.get_full_name
+        return self.hybrid.full_name
 
 
 class Honary_member(models.Model):
