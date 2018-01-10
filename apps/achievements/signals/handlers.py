@@ -28,10 +28,11 @@ def GriffBadge(sender=Ridder, **kwargs):
 @receiver(post_save, sender=Hybrid)
 def MemberBadge(sender=Hybrid, **kwargs):
     inst_obj = kwargs['instance']
-    badge = Badge.objects.get(name="Medlemskaps Medalje")
-    if inst_obj.member == True: #if not awarded already, award the medal
-        badge.user.add(inst_obj)
-        badge.save()
+    if Badge.objects.filter(name="Medlemskaps Medalje").exists():
+        badge = Badge.objects.get(name="Medlemskaps Medalje")
+        if inst_obj.member == True: #if not awarded already, award the medal
+            badge.user.add(inst_obj)
+            badge.save()
 
 #function that awards 1,3,5 and 6+ year medals based on the amount of time they have been in Hybrida, not necessarily which year they are in. Also, atm, this function will award these at new years eve, so that you will have the medals for the second semester each year.
 @receiver(year_status_change)
@@ -50,3 +51,29 @@ def YearBadge(sender, **kwargs):
 
 
 #===========================================================================================================================#
+#functions that provide different utility to the application other than medals
+#=============================================================================
+
+#functions that clean up after changed pictures on badges
+@receiver(post_init, sender=Badge)
+def backup_image_path(sender, instance, **kwargs):
+    instance._current_image_file = instance.badge_image
+
+@receiver(post_save, sender=Badge)
+def delete_old_image(sender, instance, **kwargs):
+    if hasattr(instance, '_current_image_file'):
+        if instance._current_image_file != instance.badge_image.path:
+            instance._current_image_file.delete(save=False)
+
+#functions that removes pictures after their model has been deleted
+def _delete_file(path):
+   """ Deletes file from filesystem. """
+   if os.path.isfile(path):
+       os.remove(path)
+
+@receiver(models.signals.post_delete, sender=Badge)
+def delete_file(sender, instance, *args, **kwargs):
+    """ Deletes image files on `post_delete` """
+    if instance.badge_image:
+        _delete_file(instance.badge_image.path)
+
