@@ -5,7 +5,6 @@ from .models import Ridder, Honary_member
 # classes for customization on the admin pages
 class RidderAdmin(admin.ModelAdmin):
 
-
     fields = ['hybrid','finished','awarded','description']
     list_display = ('hybrid', 'awarded')
         #need a full name viewing function
