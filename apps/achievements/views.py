@@ -58,10 +58,10 @@ class ScoreboardView(TemplateResponseMixin, ContextMixin, View):
         for hybrid in Hybrid.objects.all():
             score = 0
             name = hybrid.username
-            #for badge in Badge.objects.all():
-            #    for user in badge.user.all():
-            #        if name in user:
-            #            score += badge.scorepoints
+            for badge in Badge.objects.all():
+                for user in badge.user.all():
+                    if name in user.username:
+                        score += badge.scorepoints
             dict = {
                 'Name': name,
                 'Score':score,
