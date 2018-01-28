@@ -15,40 +15,12 @@
             <div class="col" style="background-color:#e9e9e9; ">
                 <h3 style="font-size: 30px;text-align: center">Tilgjenglige badges<br><br></h3>
                 <div>
-                      {% for badge in Badges %}
-                          <img src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 200px; hight: 200px;">
+                      {% for badge in Badges|dictsortreversed:"scorepoints"%}
+                          <img title="Name: {{ badge }}
+Description: {{ badge.description }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 9.5%;height: auto;">
                       {% endfor %}
                 </div>
-
-
             </div>
         </div>
 
 {%  endblock %}
-
-<!--
-- Achievment side
-	- oversikt over alle badges man har unlocket, samt de man kan potensielt unlocket
-
-Laste inn badgene inn
-
-
-
-
-
-
-            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#104e91; height: 480px; width:49%;margin-left: .5%;margin-bottom: .5%;">
-                <h3 style="color: #e9e9e9;font-size: 30px; text-align: center;"> Dine badges<br><br></h3>
-
-
-            </div >
-
-            <div class="col-md-3 col-xs-12 col-sm-6" style="background-color:#e9e9e9; height: 480px;width:49.5%;margin-left: .5%;margin-bottom: .5%;">
-                <h3 style="font-size: 30px;text-align: center"> Badges du mangler<br><br></h3>
-
-
-            </div>
-
-        </div>
-
--->
