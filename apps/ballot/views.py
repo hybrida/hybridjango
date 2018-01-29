@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from apps.rfid.models import GeneralAssembly
 
 
 class Ballot:
@@ -17,6 +18,7 @@ class Ballot:
     ]
     only_members = True
     empty_votes = True
+    is_attending = True
     has_voted = []
     votes = []
     active = True
@@ -28,12 +30,13 @@ empty_vote = 'Tomt'
 @login_required
 def overview(request):
     user = request.user
-    if not user.username == 'simennje':
+    if not user.username == 'anstra':
         return redirect('login')
     if request.method == 'POST':
         Ballot.title = request.POST.get('title', 'Avstemning')
         Ballot.only_members = True if request.POST.get('membersOnly') else False
         Ballot.empty_votes = True if request.POST.get('empty_votes') else False
+        Ballot.is_attending = True if request.POST.get('is_attending') else False
         Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
         Ballot.votes = []
         Ballot.has_voted = []
@@ -69,6 +72,7 @@ def get_ballot_dict(user):
 def vote(request):
     if request.method == 'POST':
         user = request.user
+        generalassembly = GeneralAssembly.objects.all().last() #fetches the newest made generalassembly object
 
         if not user.is_authenticated:
             return HttpResponse("Du må være innlogget for å stemme")
@@ -78,6 +82,8 @@ def vote(request):
             return HttpResponse("Linjeforeningen Hybrida kan ikke stemme selv")
         if Ballot.only_members and not user.member:
             return HttpResponse("Kun medlemmer kan stemme")
+        if Ballot.is_attending and user not in generalassembly.users.all():
+            return HttpResponse("Du må registrere oppmøte for å kunne stemme")
         if user.pk in Ballot.has_voted:
             return HttpResponse("Du har allerede stemt")
 
@@ -92,7 +98,7 @@ def vote(request):
 
 def get_results(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'simennje'):
+    if not (user.is_authenticated and user.username == 'anstra'):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})

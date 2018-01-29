@@ -1,53 +1,29 @@
 {% extends 'kiltshop/sidebar.html' %}
+{% load static %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/kiltshop.css" %}">
+{% endblock link %}
 {% block text %}
 
-<style>
-
-    #table1 tr th{
-    width:25%;}
-
-    .table-items{
-        font-size: 20px;
-    }
-
-    .table-header{
-        font-size: 1.5em;
-        font-style: italic;
-    }
-
-    .button{
-        background-color: Transparent;
-        background-repeat: no-repeat;
-        border: none;
-        cursor:pointer;
-        overflow: hidden;++
-        outline:none;
-    }
-
-    @media only screen and (max-width: 700px) {
-        .responsive {
-            width: 49.99999%;
-            margin: 6px 0;
-        }
-    }
-
-    @media only screen and (max-width: 500px) {
-        .responsive {
-            width: 100%;
-        }
-}
-
-
-</style>
-
 <div class="responsive">
-{% if not products and not order.comment %}
+{% if not products and not order.comment or user_order == None  %}
     <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
 {% else %}
+     <form action="" method="post">
+        {% csrf_token %}
+        <h2>Dine bestillinger:</h2>
+        <div class="styled-select slate center-block">
+            <select title="Velg ordre for å se bestilling" name="selected_order" id="{{ user.id }}">
+                {% for order in user_orders %}
+                    <option value="{{ order.pk }}">bestilling {{ order.get_orderinfo.endTime.year }} - ordre #{{ order.pk }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+        <input class="btn button btn-primary center-block" name="showOrder" type="submit" value="Vis bestilling">
     <form action="" method="post">
     {% csrf_token %}
     {% if products %}
-        <h2>Din bestilling:</h2>
+        <h2>Bestilling {{order.get_orderinfo.endTime.year }} - {{ order }}</h2>
         <div class="table-responsive">
             <table class="table table-bordereds" >
                 <thead class="table-header">
@@ -84,7 +60,7 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        {% if active %}
+                        {% if order.get_orderinfo.is_active %}
                             <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                         {% endif %}
                     </tr>
@@ -103,8 +79,8 @@
                 </thead>
                 <tr class="table-items">
                     <td>{{ order.comment }}</td>
-                    {% if active %}
-                    <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
+                    {% if order.get_orderinfo.is_active %}
+                        <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
                     {% endif %}
                 </tr>
             </table>
