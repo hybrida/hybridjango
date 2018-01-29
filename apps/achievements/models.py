@@ -9,4 +9,4 @@ class Badge(models.Model):
     badge_image = models.FileField(upload_to='uploads/badges/')
     badge_placeholder = models.FileField(upload_to='uploads/badges')
     scorepoints = models.IntegerField()
-    user = models.ManyToManyField(Hybrid)
+    user = models.ManyToManyField(Hybrid, default=None)

@@ -32,7 +32,7 @@
         {% endif %}
     </h6>
     <p class="text-center"></p>
-    <p>{{ event.text|linebreaksbr }}</p>
+    <p>{{ event.text|safe }}</p>
     <p></p>
 
     {% if user.is_authenticated %}
