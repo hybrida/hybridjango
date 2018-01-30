@@ -23,10 +23,12 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay,listMonth'
 			},
+            weekNumbers: true,
+			weekNumberCalculation: 'ISO',
 			navLinks: true, // can click day/week names to navigate views
-			editable: true,
 			eventLimit: true, // allow "more" link when too many events
-			events: '/hendelser/kalenderinfo'
+			events: '../hendelser/kalenderinfo',
+            timezone: 'local'
 		});
 
 	});

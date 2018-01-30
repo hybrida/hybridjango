@@ -4,3 +4,4 @@ pytz
 django-widget-tweaks
 psycopg2
 requests
+django-tinymce4-lite

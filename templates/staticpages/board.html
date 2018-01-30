@@ -147,6 +147,6 @@
 {% endblock %}
 {% block sublinks %}
     {% if user.is_authenticated %}
-        <a href="referat">Møtereferat</a>
+        <a href="{% url 'board_report' %}">Møtereferat</a>
     {% endif %}
 {% endblock %}

@@ -60,7 +60,10 @@ INSTALLED_APPS = [
     'apps.gitlab',
     'apps.staticpages',
     'apps.eventcalendar',
+    'apps.rfid',
     'apps.evaluation',
+    'apps.achievements',
+    'tinymce',
 ]
 
 MIDDLEWARE = [

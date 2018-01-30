@@ -3,29 +3,27 @@ import csv
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 
 from apps.events.forms import EventForm
+from apps.rfid.models import Appearances
 from .models import Event, EventComment, Attendance, Participation
 
 
 class EventList(generic.ListView):
     model = Event
     template_name = 'events/events.html'
-    ordering = ('-weight', '-timestamp')
+    ordering = ('-weight', '-event_start')
+    paginate_by = 10
+    page_kwarg = 'side'
 
     def get_queryset(self):
         queryset = super(EventList, self).get_queryset().filter(hidden=False, news=True)
         if not self.request.user.is_authenticated:
             queryset = queryset.filter(public=True)
         return queryset
-
-
-class EventThumbList(generic.ListView):
-    model = Event
-    template_name = 'events/event_thumblist.html'
 
 
 class EventView(generic.DetailView):
@@ -47,6 +45,8 @@ class EventView(generic.DetailView):
         context = super(EventView, self).get_context_data(**kwargs)
         user = self.request.user
         event = context['event']
+        has_rfid = Appearances.objects.filter(event=event).exists()
+        context['has_rfid'] = has_rfid
         context['attendances'] = [
             {
                 'o': attendance,
@@ -85,12 +85,17 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
 
 
 def calendar_api(request):
+    events = Event.objects.filter(hidden=False)
+    if not request.user.is_authenticated():
+        events = events.filter(public=True)
+    events.filter()
     return JsonResponse([{
         'title': event.title,
         'start': event.event_start,
         'end': event.event_end,
+        'url': "../hendelser/" + str(event.pk),
         'allDay': False
-    } for event in Event.objects.all()], safe=False)
+    } for event in events if event.event_start is not None], safe=False)
 
 @login_required
 def participants_csv(request, pk):
@@ -105,6 +110,7 @@ def participants_csv(request, pk):
             'Spesialisering',
             'Kjønn',
             'Matpreferanser',
+            'Epost',
         ])
         for participant in attendance.get_signed():
             writer.writerow([
@@ -113,6 +119,7 @@ def participants_csv(request, pk):
                 participant.specialization,
                 participant.gender,
                 participant.food_preferences,
+                participant.username + "@stud.ntnu.no",
             ])
     return response
 
@@ -137,3 +144,28 @@ def delete_comment_event(request, pk):
         if user.is_authenticated and comment.author == user:
             comment.delete()
     return redirect('event', pk)
+
+
+def signed(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
+    attendance = Attendance.objects.filter(event=event)
+    return render(request, "rfid/signed_list.html", {'event': event, 'attendance': attendance, 'has_rfid': has_rfid})
+
+
+def attended(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
+    appearance = Appearances.objects.filter(event=event).first()
+    users = appearance.users.all()
+    return render(request, "rfid/attended_list.html", {'event': event, 'users': users, 'has_rfid': has_rfid})
+
+
+def unattended(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+    attendance = Attendance.objects.filter(event=event)
+    appearance = Appearances.objects.filter(event=event).first()
+    has_rfid = Appearances.objects.filter(event=event).exists()
+    users = appearance.users.all()
+    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
+
