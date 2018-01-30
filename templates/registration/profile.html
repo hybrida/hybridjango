@@ -110,6 +110,7 @@
                 </div>
                 <br>
                 <div>
+                {% if badge %} <!-- checks if there is any database items to query, if not, it will not be shown -->
                     <form  class="flex-container" action="#" method="post">
                         {% csrf_token %}
                         <div class="input-group">
@@ -117,6 +118,7 @@
                         </div>
                     </form>
                 </div>
+                {% endif %}
                 {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
                         <div class="col-lg-3">
                             <div class="row">
