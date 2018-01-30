@@ -1,6 +1,41 @@
 {% load event_extras %}
-<div class="remove-whitebox-padding">
-    {% for event in object_list %}
+{% load class_tag %}
+
+<style>
+
+     .header{
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .text{
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    @media screen and (max-width: 992px) {
+        .text{
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+    }
+
+
+
+    }
+    .job_list{
+        height: auto;
+        display: inline-block;
+    }
+
+    img {
+        display:block;
+        margin:auto;
+    }
+</style>
+
+{% for event in object_list %}
+    {% if event|get_class == 'Event' %}
         <div class="white-box space-above">
             <a href="{% url 'event' event.pk %}" style="color: black">
                 <div class="remove-whitebox-padding" style="margin-bottom: 0">
@@ -57,6 +92,32 @@
             </a>
             <p>{{ event.ingress }}</p>
         </div>
-    {% endfor %}
-    <div class="clearfix"></div>
-</div>
+    {% endif %}
+    {% if event|get_class == 'Job' %}
+        <div class="white-box space-above">
+            <a href="{% url 'jobs:job_detail' event.pk %}">
+                <img  width="220" height="220" src="/uploads/{{ event.company.logo }}">
+            </a>
+            <div class="col-md-8; text">
+                <b>Tittel: </b>
+                <a href="{{ job.pk }}">{{ event.title }}</a>
+                <br><b>Bedrift: </b>{{ event.company.name }}
+                <br><b>Søknadsfrist: </b>{{ event.deadline }}
+            </div>
+        </div>
+    {% endif %}
+    {% if event|get_class == 'Hybrid' %}
+         <div class="white-box space-above">
+            <a href="{% url 'profile' event.username %}">
+                <img  width="220" height="220" src="/uploads/{{ event.image }}">
+            </a>
+            <div class="col-md-8; text">
+                <b>Navn: </b> <a href="{% url 'profile' event.username %}">{{ event.get_full_name}}</a>
+                <br><b>Epost: </b>{{ event.email }}
+                <br><b>Spesialisering: </b>{{ event.specialization }}
+                <br><b>Avgangsår: </b>{{ event.graduation_year }}
+            </div>
+        </div>
+    {% endif %}
+
+{% endfor %}

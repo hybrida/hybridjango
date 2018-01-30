@@ -37,5 +37,8 @@ urlpatterns = [
                   url(r'', include('apps.staticpages.urls')),
                   url(r'^griffensorden/', include('apps.griffensorden.urls'), name='griffensorden'),
                   url(r'^search/', include('apps.search.urls'), name='search'),
+                  url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
+                  url(r'^api/', include('apps.api.urls'), name='api'),
+                  url(r'^tinymce/', include('tinymce.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

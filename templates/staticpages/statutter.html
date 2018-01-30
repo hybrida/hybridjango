@@ -11,7 +11,7 @@
     <h1>Statutter</h1>
     <div class="container" style="width: 70%">
          <div class="list-group">
-            <h4><a id="statuette" href="{% static 'pdf/statutter/Statutter2017.03.29.pdf' %}" class="list-group-item" target="_blank">Hybridas Statutter <br> (sist oppdatert 29. Mars 2017)</a></h4>
+            <h4><a id="statuette" href="{% static 'pdf/statutter/Statutter 2017.11.01.pdf' %}" class="list-group-item" target="_blank">Hybridas Statutter <br> (sist oppdatert 1. November 2017)</a></h4>
 
             <h4><a id="statuette" href="{% static 'pdf/VAGOStautter.pdf' %}" class="list-group-item" target="_blank">Statutter og retningslinjer for Griffens Orden</a></h4>
 
@@ -20,3 +20,8 @@
     </div>
 
 {% endblock text %}
+{% block sublinks %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'protocols' %}">Protokoll</a>
+    {% endif %}
+{% endblock %}

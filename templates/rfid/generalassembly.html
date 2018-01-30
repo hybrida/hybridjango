@@ -1,0 +1,67 @@
+{% extends 'base_clean.html' %}
+
+{% block content %}
+<style>
+    .align-middle {
+    width: 50%;
+    height: 100px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+    }
+
+    input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    }
+
+    .alert {
+        height: 30%;
+        font-size: 40px;
+        margin: auto;
+
+    }
+
+    .alert-error{
+        background: red;
+    }
+
+    .alert-success{
+        background: #41cf34;
+        color: white;
+    }
+
+    .alert-warning{
+        background: #43ddff;
+        color: #f9fdff;
+    }
+
+</style>
+        {% if messages %}
+            {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                    <p align="center">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> &nbsp{{ message }}
+                    </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    <h1>{{ generalassembly.event.title }}</h1>
+    <div class="align-middle">
+        <div style="text-align: center">
+            <form id="rfid_form" method="POST" action="{%  url 'rfid:add_gen' generalassembly.pk %}">
+                {%  csrf_token %}
+                <label style="font-size: 20px" for="rfid_key">Scann inn NTNU kort eller skriv inn brukernavn: </label>
+                <input style="font-size: 25px" type="text" name="rfid_key" title="RFID" autofocus>
+                <input class="btn btn-primary" type="submit">
+            </form>
+        </div>
+    </div>
+{% endblock content %}

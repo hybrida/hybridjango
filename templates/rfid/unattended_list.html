@@ -1,0 +1,55 @@
+{% extends 'events/dashboard_sidebar.html' %}
+{% load static %}
+{% block unstyled_text %}
+    <div class="white-box">
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+                <tr style="background-color: #428bca; height: 30px; color: white;">
+                    <th>Navn</th>
+                    <th>Trinn</th>
+                    <th>Spesialisering</th>
+                    <th>Kjønn</th>
+                    <th>Matpreferanser</th>
+                    <th>Epost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance in event.attendance_set.all %}
+                {% for participant in attendance.get_signed|dictsort:'get_full_name' %}
+                    {% if participant not in users %}
+                    <tr>
+                        <td>{{ participant.get_full_name }}</td>
+                        <td>{{ participant.get_grade }}</td>
+                        <td>{{ participant.specialization }}</td>
+                        <td>{{ participant.gender }}</td>
+                        <td>{{ participant.food_preferences }}</td>
+                        <td>
+                            <a href="mailto:{{ participant.username }}@stud.ntnu.no">
+                                {{ participant.username }}@stud.ntnu.no
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block script %}
+    {# Script for sorting tableheaders #}
+    <script type="text/javascript" src="{% static "lib/js/bootstrap-sortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/js/moment.min.js" %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+    {# Script for searchbar #}
+    <script type="text/javascript">
+    var options = {
+    valueNames: [ 'name', 'responsible', 'status', 'tag']
+                    };
+    var userList = new List('users', options);
+    </script>
+{% endblock %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+{% endblock link %}

@@ -17,4 +17,5 @@ class HybridForm(forms.ModelForm):
             'specialization',
             'gender',
             'food_preferences',
+            'card_key',
         )

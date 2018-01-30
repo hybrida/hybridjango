@@ -3,12 +3,72 @@
 {% block info %}
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+         <!-- Itererer over alle fields i user form -->
         {% for field in form %}
             <div class="form-group">
                 {{ field.label_tag }}
                 {{ field|add_class:"form-control" }}
             </div>
         {% endfor %}
+        <div class="infobutton" data-toggle="modal" data-target="#confirm-delete">
+            <span id="Overly" class="glyphicon glyphicon-info-sign" />
+        </div>
         <button type="submit">Lagre</button>
     </form>
+
+
+
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">NTNU-kortkode</h4>
+                </div>
+                <div class="modal-body">
+                    <img class="card" src="../../static/img/korttype_gammelt.png">
+                    <img class="card" src="../../static/img/korttype_nytt.png">
+                    <p class="debug-url"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        textBox = $('#text-box');
+        sidebar = $('#sidebar');
+        adjust_height = function () {
+            if (window.innerWidth >= 992) {
+                // 15px is height of space_above margin
+                $('#text-box').css('min-height', sidebar.height() + 215 + 'px');
+                $('#comment_box').css('max-height', textBox.height() - sidebar.height() - 15 + 'px');
+            } else {
+                $('#comment_box').css('max-height', "")
+            }
+        };
+        window.onload = adjust_height;
+        window.onresize = adjust_height;
+
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+    <style>
+        .card {
+            margin: 5px;
+            max-width: 250px;
+            min-width: 250px;
+            display: inline;
+        }
+
+        .infobutton {
+            float: right;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}
+
