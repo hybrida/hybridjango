@@ -11,7 +11,7 @@ class Event(models.Model):
     title = models.CharField(max_length=150)
     ingress = models.CharField(max_length=350, blank=True, default='')
     text = HTMLField(blank=True)
-    author = models.ForeignKey(Hybrid, related_name='authored')
+    author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='events', blank=True)
     event_start = models.DateTimeField(null=True, blank=True)
@@ -44,8 +44,8 @@ class TPEvent(models.Model):
 
 class Participation(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    hybrid = models.ForeignKey(Hybrid)
-    attendance = models.ForeignKey('Attendance')
+    hybrid = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE)
     excursion = models.BooleanField(default=False)
 
     class Meta:
@@ -58,7 +58,7 @@ class Participation(models.Model):
 
 
 class Attendance(models.Model):
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default='Påmelding')
     participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
     max_participants = models.PositiveIntegerField(default=0)
@@ -134,8 +134,8 @@ class Attendance(models.Model):
 
 
 class EventComment(models.Model):
-    event = models.ForeignKey(Event)
-    author = models.ForeignKey(Hybrid)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     text = models.TextField()
 
