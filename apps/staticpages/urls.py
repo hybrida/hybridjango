@@ -1,12 +1,14 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
     url(r'^strikk$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
     url(r'^statutter$', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
+    url(r'^statutter/protokoller/$', ProtocolView.as_view(template_name='staticpages/protocols.html'),
+        name='protocols'),
     url(r'^om_hybrida$', AboutView.as_view(template_name='staticpages/about.html'), name='about'),
     url(r'^for_bedrifter$', AboutView.as_view(template_name='staticpages/for_companies.html'), name='for_companies'),
     url(r'^updatek$', updatek, name='updatek'),
@@ -26,8 +28,6 @@ urlpatterns = [
     url(r'^ringen/styret$', RingenView.as_view(template_name='staticpages/ringen/styret.html'), name='ringen_styret'),
     url(r'^ringen/medlemmer$', RingenView.as_view(template_name='staticpages/ringen/medlemmer.html'),
         name='ringen_medlemmer'),
-    url(r'^ringen/bedriftens_bidrag$', RingenView.as_view(template_name='staticpages/ringen/bidrag.html'),
-        name='ringen_bidrag'),
     url(r'^ringen/promotering$', RingenView.as_view(template_name='staticpages/ringen/promotering.html'),
         name='ringen_promotering'),
     url(r'^ringen/kontakt$', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'),

@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'apps.rfid',
     'apps.evaluation',
     'apps.achievements',
+    'tinymce',
 ]
 
 MIDDLEWARE = [

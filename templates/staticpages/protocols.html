@@ -1,0 +1,44 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block text %}
+    <style>
+        #rapport {
+            font-size: 18px;
+            color: #005675;
+            text-align: center;
+        }
+
+        .buttons {
+            position: absolute;
+            left: 535px;
+            top: 80px;
+        }
+    </style>
+
+
+    <div class="container" style="width: 70%">
+     {% if perms.staticpages.add_protocol %}
+                <a href="{% url 'admin:staticpages_protocol_add'%}">
+                    <button class="btn btn-xs btn-primary">Ny</button>
+                </a>
+                <a href="{% url 'admin:staticpages_protocol_changelist'%}">
+                    <button class="btn btn-xs btn-primary">Oversikt</button>
+                </a>
+            {% endif %}
+
+    <div class="buttons">
+        </div>
+        <h1>Protokoll fra generalforsamlinger:</h1>
+
+        <div class="list-group">
+            {% for protocol in protocols %}
+                <a id="rapport" href="/uploads/{{ protocol.protocol }}" class="list-group-item" target="_blank">{{ protocol.description }} <br> {{ protocol.date }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block sublinks %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'protocols' %}">Protokoll</a>
+    {% endif %}
+{% endblock %}

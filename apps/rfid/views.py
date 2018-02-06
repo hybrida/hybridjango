@@ -9,13 +9,19 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from apps.registration.models import Hybrid
 from apps.events.models import Participation
-from apps.rfid.models import Appearances
+from apps.rfid.models import Appearances, GeneralAssembly
 
 
 class AppearancesView(PermissionRequiredMixin, generic.DetailView):
     permission_required = 'rfid.change_appearances'
     model = Appearances
     template_name = 'rfid/index.html'
+
+
+class GeneralAssemblyView(PermissionRequiredMixin, generic.DetailView):
+    permission_required = 'rfid.change_generalassembly'
+    model = GeneralAssembly
+    template_name = 'rfid/generalassembly.html'
 
 
 @permission_required(['rfid.change_appearances'])
@@ -120,3 +126,48 @@ def translate_rfid_key_to_printed_key(key_int, bits=32):
         for j in range(8):
             key_bin_fixed += key_bin[8 * i + 7 - j]
     return int(key_bin_fixed, 2)
+
+
+def add_appearance_gen(request, pk):
+    if 'rfid_key' not in request.POST:
+        return server_error(request)
+    id_input = request.POST.get('rfid_key')
+    id_input = id_input.lower()
+    if id_input.isdigit():
+        rfid_key = int(request.POST['rfid_key'], 10)
+        card_key = translate_rfid_key_to_printed_key(rfid_key)
+        if Hybrid.objects.filter(card_key=card_key).exists():
+            user = Hybrid.objects.get(card_key=card_key)
+            genfors = GeneralAssembly.objects.get(pk=pk)
+            if user in genfors.users.all():
+                genfors.remove_genfors_appearance(user)
+                genfors.save()
+                messages.warning(request, user.get_full_name() + ' ute av generalforsamling')
+                return redirect('rfid:genfors', pk)
+            else:
+                print("jeg kommer helt hit!")
+                genfors.add_genfors_appearance(user)
+                genfors.save()
+                messages.success(request, user.get_full_name() + ' inne på generalforsamling')
+                return redirect('rfid:genfors', pk)
+        else:
+            messages.error(request, 'Ugylig RFID')
+            return redirect('rfid:genfors', pk)
+    else:
+        if Hybrid.objects.filter(username=id_input).exists():
+            user = Hybrid.objects.get(username=id_input)
+            genfors = GeneralAssembly.objects.get(pk=pk)
+            if user in genfors.users.all():
+                genfors.remove_genfors_appearance(user)
+                genfors.save()
+                messages.warning(request, user.get_full_name()+' ute av generalforsamling')
+                return redirect('rfid:genfors', pk)
+            else:
+                print("jeg kommer helt hit!")
+                genfors.add_genfors_appearance(user)
+                genfors.save()
+                messages.success(request, user.get_full_name()+' inne på generalforsamling')
+                return redirect('rfid:genfors', pk)
+        else:
+            messages.error(request, 'Ugylig brukernavn')
+            return redirect('rfid:genfors', pk)

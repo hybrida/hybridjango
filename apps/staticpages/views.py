@@ -2,19 +2,18 @@ import os
 from itertools import chain
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import resolve
 from django.utils import timezone
-from django.utils.datetime_safe import datetime
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.events.models import Event
+from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport
+from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
 
 
@@ -23,23 +22,7 @@ class FrontPage(EventList):
     queryset = EventList.queryset
 
     def get_context_data(self, **kwargs):
-        tz = timezone.get_current_timezone()
-        temporary_quickfix_for_tp_events = [
-            Event(pk=-1, title='Bedriftspresentasjon med DNV GL',
-                  event_start=tz.localize(datetime(2017, 1, 25, 17, 30, 0)), text='431'),
-            Event(pk=-1, title='Karrieremesse med Framtidsfylket', event_start=tz.localize(datetime(2017, 1, 26, 17)),
-                  text='407'),
-            Event(pk=-1, title='Prospective', event_start=tz.localize(datetime(2017, 2, 9)), text='440'),
-            Event(pk=-1, title='DNB Digital Challenge', event_start=tz.localize(datetime(2017, 2, 10)), text='430'),
-            Event(pk=-1, title='Karrieremesse med Haugesundsregionen',
-                  event_start=tz.localize(datetime(2017, 2, 16, 18)), text='406'),
-            Event(pk=-1, title='DNV GL Opportunity Day', event_start=tz.localize(datetime(2017, 3, 2, 10, 15)),
-                  text='432'),
-            Event(pk=-1, title='Teknologiporten FOKUS: InnoVention', event_start=tz.localize(datetime(2017, 3, 16, 17)),
-                  text='422'),
-            Event(pk=-1, title='AF Gruppen', event_start=tz.localize(datetime(2017, 2, 1, 17, 15)), text='428'),
-            Event(pk=-1, title='Multiconsult', event_start=tz.localize(datetime(2017, 2, 8, 17)), text='391'),
-        ]
+        tp_events = TPEvent.objects.filter(event_start__gte=timezone.now())
 
         context = super(EventList, self).get_context_data(**kwargs)
         event_list_chronological = Event.objects.filter(
@@ -53,7 +36,7 @@ class FrontPage(EventList):
 
         context['event_list_chronological'] = event_list_chronological.order_by('event_start')[:7]
         context['bedpress_list_chronological'] = sorted(chain(bedpress_list_chronological.order_by('event_start')[:7],
-                                                              [tp_event for tp_event in temporary_quickfix_for_tp_events
+                                                              [tp_event for tp_event in tp_events
                                                                if tp_event.event_start > timezone.now()]
                                                               ), key=lambda event: event.event_start)[:7]
 
@@ -117,7 +100,6 @@ ringenpages = [
     ('ringen_IIKT', 'Studiet I&IKT'),
     ('ringen_visjon', 'Visjon'),
     ('ringen_styret', 'Styret'),
-    ('ringen_bidrag', 'Bedriftens Bidrag'),
     ('ringen_medlemmer', 'Medlemmer'),
     ('ringen_promotering', 'Promotering'),
     ('ringen_kontakt', 'Kontaktinformasjon'),
@@ -132,6 +114,13 @@ def members(request):
     return render(request, "staticpages/students.html",
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
+
+class ProtocolView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolView, self).get_context_data(**kwargs)
+        context['protocols'] = Protocol.objects.all().order_by('date').reverse()
+        context['active_page'] = 'statutter'
+        return context
 
 class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
@@ -179,7 +168,17 @@ def updatek(request):
 @login_required
 def search(request):
     query = request.GET['tekst']
+    from itertools import chain
+    event_object = Event.objects.filter(title__icontains=query)
+    job_object_title = Job.objects.filter(title__icontains=query)
+    job_object_company = Job.objects.filter(company__name__icontains=query)
+    user_object_username = Hybrid.objects.filter(username__icontains=query)
+
+    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username,))
+    print(complete_list)
+
     context = {
-        'object_list': Event.objects.filter(title__icontains=query),
+        'object_list': complete_list,
+
     }
     return render(request, 'staticpages/search.html', context)

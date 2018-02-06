@@ -21,8 +21,7 @@
             </a>
         {% endif %}
         </h6>
-        <p id="job_title">{{ job.description|linebreaksbr }}</p>
-    </h6>
+        {{ job.description|safe }}
         {% if job.link != "" %}
             <p><b>Link: </b><a href={{ job.link }}>{{ job.title }}</a></p>
         {% endif %}
