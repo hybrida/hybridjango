@@ -22,7 +22,7 @@ from apps.staticpages.views import FrontPage
 
 urlpatterns = [
                   url(r'^$', FrontPage.as_view(template_name='frontpage.html'), name='home'),
-                  url(r'^admin/', include(admin.site.urls)),
+                  url(r'^admin/', admin.site.urls),
 
                   url(r'^evaluation/', include('apps.evaluation.urls')),
                   url(r'^kilt/', include('apps.kiltshop.urls', namespace='kilt'), name='kiltshop'),

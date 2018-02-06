@@ -11,8 +11,8 @@
     <div class="white-box space-above">
     <h3>Stillingsutlysninger</h3>
         <div align="center  ">
-            <a href="{% url 'jobs:info' %}">Vis Aktive</a><br>
-            <a href="{% url 'jobs:job_previous' %}">Vis Tidligere</a>
+            <a href="{% url 'jobs:info' %}">Vis aktive</a><br>
+            <a href="{% url 'jobs:job_previous' %}">Vis tidligere</a>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
                 <br>
                 <p><b>Bedrift:</b> {{ job.company.name }} </p>
         {% else %}
-            <h3>Alle Stillingsutlysninger</h3>
+            <h3>Alle stillingsutlysninger</h3>
             <div class="list">
             {% for job in job_list %}
                 <div>

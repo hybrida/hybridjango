@@ -6,7 +6,7 @@ from tinymce import HTMLField
 
 class Job(models.Model):
     title = models.CharField(max_length=150)
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     deadline = models.DateTimeField(null=True)
     description = HTMLField(blank=True, null=True, default="")
     ingress = models.CharField(max_length=250, default="", blank=True)

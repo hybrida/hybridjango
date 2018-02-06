@@ -24,8 +24,8 @@ class Evaluation(models.Model):
     grade = models.IntegerField(default=3)
     year = models.IntegerField(default=2017)
     anonymous = models.BooleanField(default=False)
-    specializaion = models.ForeignKey(Specialization)
-    user = models.ForeignKey(Hybrid)
+    specializaion = models.ForeignKey(Specialization, on_delete=models.CASCADE)
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.course.name + ": " + str(self.pk)
