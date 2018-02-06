@@ -18,7 +18,7 @@ class Product(models.Model):
     type = models.CharField(max_length=1, choices=type_choices, default=kilt)
     sizes = models.CharField(max_length=100, blank=True)
     link = models.CharField(max_length=1000, blank=True)
-    author = models.ForeignKey(Hybrid)
+    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def sizes_as_list(self):
@@ -30,7 +30,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(Hybrid)
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='ProductInfo')
     comment = models.CharField(max_length=200, blank=True)
     status = models.BooleanField(default=False)
@@ -67,7 +67,7 @@ class OrderInfo(models.Model):
 
 
 class ProductInfo(models.Model):
-    product = models.ForeignKey(Product)
-    order = models.ForeignKey(Order)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     number = models.IntegerField(default=1)
     size = models.CharField(max_length=64, null=True)
