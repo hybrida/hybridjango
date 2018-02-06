@@ -53,7 +53,7 @@
                 </div>
             {% endfor %}
         {% endif %}
-
+    <h1>{{ appearances.event.title }}</h1>
     <div class="align-middle">
         <div style="text-align: center">
             <form id="rfid_form" method="POST" action="{%  url 'rfid:add' appearances.pk %}">

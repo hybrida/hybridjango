@@ -1,12 +1,10 @@
+import os
 from datetime import timedelta
 
-import os
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.core.validators import RegexValidator
-
 
 
 def get_graduation_year(grade):
@@ -29,6 +27,12 @@ class Specialization(models.Model):
         return self.name
 
 
+class CaseInsensitiveUserManager(UserManager):
+    def get_by_natural_key(self, username):
+        case_insensitive_username_field = '{}__iexact'.format(self.model.USERNAME_FIELD)
+        return self.get(**{case_insensitive_username_field: username})
+
+
 class Hybrid(AbstractUser):
     middle_name = models.CharField(max_length=50, blank=True, verbose_name='Mellomnavn')
     member = models.BooleanField(default=False, verbose_name='Medlem')
@@ -41,9 +45,9 @@ class Hybrid(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='Fødselsår')
     title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
     food_preferences = models.CharField(max_length=150, blank=True, verbose_name='Allergier og matpreferanser')
+    card_key = models.CharField(max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
 
-    card_regex = RegexValidator(regex=r'^\d{10,10}$', message="card_key number must contain 10 numbers.")
-    card_key = models.CharField(validators=[card_regex], max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
+    objects = CaseInsensitiveUserManager()
 
     def get_full_name(self):
         if self.middle_name:
@@ -53,6 +57,7 @@ class Hybrid(AbstractUser):
         if first_name == "" and self.last_name == "":
             return self.username
         return first_name + ' ' + self.last_name
+
     full_name = property(get_full_name)
 
     def get_grade(self):

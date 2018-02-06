@@ -2,7 +2,7 @@
     {% for event in bedpress_list_chronological %}
         <div>
             <a href="{{ event.get_absolute_url }}">
-                {% if event.pk < 0 %}
+                {% if event.tp_id %}
                     <i style="color: #082437; font-size: 12px; font-style: normal; line-height: 20px; margin-right: 6px" aria-hidden="true">TP</i>
                 {% else %}
                     <i class="fa fa-square"
