@@ -71,7 +71,7 @@ class Hybrid(AbstractUser):
 
 
 class RecoveryMail(models.Model):
-    hybrid = models.ForeignKey(Hybrid)
+    hybrid = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
 
     class Meta:

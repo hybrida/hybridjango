@@ -72,7 +72,7 @@ def register(request):
                     s='s' if request.is_secure() else '',
                     host=request.get_host(),
                     generated=reverse('complete_registration', kwargs={
-                        'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'uidb64': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                         'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
                 'robot@hybrida.no',
                 mails,
