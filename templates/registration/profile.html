@@ -109,16 +109,6 @@
                     </table>
                 </div>
                 <br>
-                <div>
-                {% if badge %} <!-- checks if there is any database items to query, if not, it will not be shown -->
-                    <form  class="flex-container" action="#" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <button type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
-                        </div>
-                    </form>
-                </div>
-                {% endif %}
                 {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
                         <div class="col-lg-3">
                             <div class="row">
@@ -131,6 +121,18 @@ Scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/{{ badge.badg
                     </div>
 
                 {% endfor %}
+                <br>
+                <div>
+                {% if badge %}
+                    <form  class="flex-container" action="#" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <!--<h5 class="top-text" style="text-decoration: none"> <a href=".">oppdater badges</a> </h5>-->
+                            <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
             {% endblock %}
         </div>
     </div>
