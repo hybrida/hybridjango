@@ -110,29 +110,23 @@
                 </div>
                 <br>
                 {% for badge in hybrid.badge_set.all|dictsortreversed:"scorepoints"  %}
-                        <div class="col-lg-3">
-                            <div class="row">
-
-                    <img title="Name: {{ badge }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
-
-                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <img title="Name: {{ badge }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
+                        </div>
                     </div>
 
                 {% endfor %}
                 <br>
-                <div>
-                {% if badge %}
-                    <form  class="flex-container" action="#" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <!--<h5 class="top-text" style="text-decoration: none"> <a href=".">oppdater badges</a> </h5>-->
-                            <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
-                        </div>
-                    </form>
-                </div>
-                {% endif %}
+                    <div>
+                        <form  class="flex-container" action="#" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <!--<h5 class="top-text" style="text-decoration: none"> <a href=".">oppdater badges</a> </h5>-->
+                                <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
+                            </div>
+                        </form>
+                    </div>
             {% endblock %}
         </div>
     </div>
