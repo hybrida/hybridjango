@@ -57,6 +57,7 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
 
         # lager en liste med hybrider og scorepoints
         scorelist = []
+        current = True;
 
         for hybrid in Hybrid.objects.all():
 
@@ -115,6 +116,7 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
         context.update({
             'Badges': Badge.objects.all(),
             'Scorelist': scorelist,
+            'Current': current,
         })
 
         return self.render_to_response(context)
@@ -136,10 +138,10 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
 
         # lager en liste med hybrider og scorepoints
         scorelist = []
-        x = 0
+        current = False;
+
         for hybrid in Hybrid.objects.all():
             score = 0
-            x += 1
             name = hybrid.username
             full_name = hybrid.full_name
             for badge in Badge.objects.all():
@@ -150,7 +152,7 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
                 'Name': name,
                 'Score': score,
                 'Full_Name': full_name,
-                'X':x,
+                'Number':0,
             }
             scorelist.append(dict)
 
@@ -183,6 +185,7 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
         context.update({
             'Badges': Badge.objects.all(),
             'Scorelist': scorelist,
+            'Current': current,
         })
 
         return self.render_to_response(context)
