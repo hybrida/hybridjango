@@ -24,8 +24,6 @@ class Profile(LoginRequiredMixin, generic.DetailView):
     model = Hybrid
     slug_field = 'username'
     template_name = 'registration/profile.html'
-    achievements = Badge.objects.order_by().values('user__username').distinct()
-    print(achievements)
 
     def post(self, request, *args, **kwargs):
         if 'update' in self.request.POST:
