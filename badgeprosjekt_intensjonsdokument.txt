@@ -1,0 +1,52 @@
+Oppgaver:
+
+Sindre
+-Display av Badges p� profilsiden
+	- View av badges inneholder:
+		-variabler/variabel for � hente badgene
+		-Sortert p� "Verdi"
+		-
+	- Div p� Profilsiden for � vise dem frem
+	- L�kkefunksjonalitet for � gj�re den utvidbar
+
+Jon
+- Achievment side
+	- oversikt over alle badges man har unlocket, samt de man kan potensielt unlocket
+
+- Lage "verdiskala" for alle medaljer
+
+- Lage alle medaljene
+	- Komitemedalje #mangler bilde, legges til Manuelt for øyeblikket
+	- Styremedalje #mangle bilder, legges til Manulet for øyeblikket
+	- Medlemsdalje #gjort, mangler bilde
+	- 1,3,og 5 �rs medalje gjort, mangler bilde
+	- 6+ �rs medalje gjort, mangler bilde
+	- Jubiluems medalje #TODO
+	- Ridder Medalje #gjort, mangler bilde
+	- Vago Medalje # mangler bilde, legges til manuelt
+	- SIM SIM MEDALJE(5. klasses hedersmedalje)
+	- 4T L3ASt
+	
+	- Quiz
+	- LAN
+	- etc..
+	- Kakemester
+	- hybridgenserdalje
+
+Bendik
+- funksjonalitet for � utdele medaljer til Hybrider
+	bruker django signals, hvis man skal lage flere, må man bare se på griff_badge, som er et bra eksempel
+
+- Livefeed p� badges
+	- Resultatliste, HVOR GOD ER DU P� HYBRIDA
+
+- Backend funksjonalitet, for admin siden, type forms
+
+
+Ting som må huskes på før vi lanserer(VIKTIG VIKTIG VIKTIG!!!1)
+- Alle medaljer vil bli referert med SPESIFIKKE Navn, så de må legges til på Serveren når vi pusher over, må fort ta nedetid på siden når dette gjøres.
+- har endret på griffens orden siden, så man må legge til alle riddere på nytt på hovedsiden!!!!!
+    - ikke alle riddere som har blitt utnevnt er brukere på siden, spør simen om hjelp her
+
+-Årsmedaljer må utdeles på et spesifikt tidspunkt. Når på året skaql dette være, og hvordan kan man finne ut hvilken måned spesifikt i et år som dette skal bestemmes av.
+

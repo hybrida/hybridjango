@@ -6,4 +6,4 @@ class RidderForm(forms.ModelForm):
 
     class Meta:
         model = Ridder
-        fields = ('name','finished','awarded','description')
+        fields = ('hybrid','finished','awarded','description')
