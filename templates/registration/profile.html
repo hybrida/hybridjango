@@ -64,6 +64,7 @@
         <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
             {% block image %}
                 <div class="picFrame poof">
+
                     <img class="pic super-center" src="/uploads/{{ hybrid.image }}">
                 </div>
             {% endblock %}
@@ -107,8 +108,31 @@
                         {% endif %}
                     </table>
                 </div>
+                <br>
+                {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <img title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/{{ badge.badge_image }}" alt="image">
+                        </div>
+                    </div>
+
+                {% endfor %}
+                <br>
+                    <div>
+                        <form  class="flex-container" action="#" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <!--<h5 class="top-text" style="text-decoration: none"> <a href=".">oppdater badges</a> </h5>-->
+                                <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
+                            </div>
+                        </form>
+                    </div>
             {% endblock %}
+        </div>
+        <div class="col-md-6 col-xs-12 pull-left space-above">
+            <a class="updateUMFer"  href="../achievements/current/">Scoreboard</a>
         </div>
     </div>
     </div>
 {% endblock %}
+##grid layout bootstrap
