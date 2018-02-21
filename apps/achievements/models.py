@@ -9,11 +9,9 @@ import os
 class Badge(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    badge_image = models.ImageField(upload_to='badges/')
+    badge_image = models.ImageField(upload_to='badges')
     scorepoints = models.PositiveIntegerField()
     user = models.ManyToManyField(Hybrid, blank=True, related_name='hybridbadges')
 
     def __str__(self):
         return self.name
-
-

@@ -4,6 +4,7 @@
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
 {% endblock link %}
+
 {% comment %}
     <script type="text/javascript">
 
@@ -112,11 +113,11 @@
                 {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
                     <div class="col-lg-3">
                         <div class="row">
-                            <img title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges" src="/uploads/badges/{{ badge.badge_image }}" alt="image">
+                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
                         </div>
                     </div>
-
                 {% endfor %}
+                
                 <br>
                     <div>
                         <form  class="flex-container" action="#" method="post">

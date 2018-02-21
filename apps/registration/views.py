@@ -25,6 +25,12 @@ class Profile(LoginRequiredMixin, generic.DetailView):
     slug_field = 'username'
     template_name = 'registration/profile.html'
 
+    def get_badge_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs)
+        badges = Badge.objects.all()
+        context['badges'] = badges
+        return context
+
     def post(self, request, *args, **kwargs):
         if 'update' in self.request.POST:
             hybrid = self.request.POST.get('update')
