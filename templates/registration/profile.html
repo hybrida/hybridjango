@@ -122,16 +122,19 @@
                     <div>
                         <form  class="flex-container" action="#" method="post">
                             {% csrf_token %}
-                            <div class="input-group">
+                            <div class="col-md-6 col-xs-12 pull-left space-above">
                                 <!--<h5 class="top-text" style="text-decoration: none"> <a href=".">oppdater badges</a> </h5>-->
                                 <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
                             </div>
                         </form>
                     </div>
+                <div class="col-md-6 col-xs-12 pull-left space-above">
+                    <a class="updateUMFer"  href="../achievements/badges/">Tilgjengelige badges</a>
+                </div>
+                <div class="col-md-6 col-xs-12 pull-left space-above">
+                    <a class="updateUMFer"  href="../achievements/current/">Scoreboardet</a>
+                </div>
             {% endblock %}
-        </div>
-        <div class="col-md-6 col-xs-12 pull-left space-above">
-            <a class="updateUMFer"  href="../achievements/current/">Scoreboard</a>
         </div>
     </div>
     </div>
