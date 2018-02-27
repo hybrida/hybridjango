@@ -31,11 +31,11 @@ class Profile(LoginRequiredMixin, generic.DetailView):
         context['badges'] = badges
         return context
 
-    def post(self, request, *args, **kwargs):
-        if 'update' in self.request.POST:
-            hybrid = self.request.POST.get('update')
-            year_status_change.send(sender=Hybrid, instance=hybrid)
-            return redirect('profile', hybrid)
+   # def post(self, request, *args, **kwargs): midlertidig fjernet
+    #    if 'update' in self.request.POST:
+     #       hybrid = self.request.POST.get('update')
+      #      year_status_change.send(sender=Hybrid, instance=hybrid)
+       #     return redirect('profile', hybrid)
 
 
 
