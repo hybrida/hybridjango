@@ -43,7 +43,7 @@
                         {% for item in Scorelist%}
                             <tr>
                                 <th>{{ item.Number }}</th>
-                                <th>{{ item.Full_Name}}</th>
+                                <th> <a href="../../hybrid/{{ item.Username }}" style="color: black">{{ item.Full_Name}} </a></th>
                                 <th>{{ item.Score }} </th>
                             </tr>
                         {% endfor %}

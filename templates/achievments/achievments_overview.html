@@ -6,19 +6,20 @@
 {% block text %}
 
 
-    <h1 style="text-align: center; font-size: 60px;color: darkblue; margin-bottom: 10px;"> Badge page</h1>
+    <h1 style="text-align: center; font-size: 60px;color: darkblue; margin-bottom: 10px;"> Tilgjenglige badges </h1>
     <p style="text-align: center; font-size: 35px;margin-bottom: 60px">  </p>
 
 
         <div class="row remove-whitebox-padding">
 
             <div class="col" style="background-color:#e9e9e9;margin-top: -2%;">
-                <h3 style="font-size: 30px;text-align: center;margin-bottom: 1%;">Tilgjenglige badges<br></h3>
                 <div style="margin-left: 1%; margin-right: 1%;">
+                    <br>
                       {% for badge in Badges|dictsortreversed:"scorepoints"%}
                           <img title="Name: {{ badge }}
-Description: {{ badge.description }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 9.5%;height: auto; margin-bottom: 1%;">
+Description: {{ badge.description }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 18.9%;height: auto; margin-bottom: 1%;margin-left: 1%">
                       {% endfor %}
+                    <br>
                 </div>
             </div>
         </div>
