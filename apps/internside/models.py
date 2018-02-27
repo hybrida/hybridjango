@@ -17,5 +17,7 @@ class referat(models.Model):
     people = models.CharField(max_length=200)
     text = models.CharField(max_length=3000)
 
+
+
     def __str__self(self):
-        return str(self.name)
+        return "Referat: "+str(self.date)

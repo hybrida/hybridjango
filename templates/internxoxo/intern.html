@@ -43,8 +43,11 @@
 <div style="border-style: solid;position: absolute; top: 250px; left: 28%; width: 20%; height: 300px">
     <h3  style="text-align: center">Referater</h3>
     <div style="overflow:hidden; ">
-        <h4>
-        </h4>
+        <div style = "border-style: solid;position: absolute;">
+            {% for referat in referats %}
+                {{ referat.date }}
+            {% endfor %}
+        </div>
     </div>
 </div>
 

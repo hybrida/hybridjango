@@ -6,11 +6,11 @@ def index(request):
     referats = referat.objects.all().order_by('date').reverse()
 
 
-    return render(request,internside.html, {"commite_members": commite_members, "referats": referats })
+
+    return render(request,"internxoxo/intern.html", {"commite_members": commite_members, "referats": referats })
 
 
 def cake_list(request):
 
     list = commite_member.objects.all().order_by('number_on_list')
-
 
