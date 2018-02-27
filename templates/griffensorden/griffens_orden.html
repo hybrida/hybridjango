@@ -33,7 +33,7 @@
         <h1>{{ item.awarded }}</h1>
         {% for ridder in Ridder|dictsortreversed:'awarded'%}
             {% ifequal ridder.awarded item.awarded %}
-                <a data-toggle="collapse" href="#ridder{{ ridder.id }}"><h2>{{ ridder.name }}</h2></a>
+                <a data-toggle="collapse" href="#ridder{{ ridder.id }}"><h2>{{ ridder.hybrid.full_name }}</h2></a>
                 <div id="ridder{{ ridder.id }}" class="collapse">
                     <i>Avgangsår: {{ ridder.finished }}</i> <br>
                     <p> {{ ridder.description }}</p>
