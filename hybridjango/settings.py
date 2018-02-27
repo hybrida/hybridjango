@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'apps.evaluation',
     'apps.achievements',
     'tinymce',
+    'apps.internside',
 ]
 
 MIDDLEWARE = [

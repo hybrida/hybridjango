@@ -41,4 +41,5 @@ urlpatterns = [
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),
+                  url(r'^vevkom/', include('apps.internside.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
