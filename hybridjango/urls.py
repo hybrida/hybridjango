@@ -18,6 +18,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
+
 from apps.staticpages.views import FrontPage
 
 urlpatterns = [
@@ -41,5 +42,5 @@ urlpatterns = [
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),
-                  url(r'^vevkom/', include('apps.internside.urls')),
+                  url(r'^vevkom/', include('apps.internside.urls'), name='internside'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

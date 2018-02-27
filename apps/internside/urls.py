@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^list/$', list, name='list')
 
 
+
 ]
