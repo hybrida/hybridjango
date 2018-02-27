@@ -78,7 +78,7 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
                             score += badge.scorepoints
 
                 hybrid_dict= {
-                    'Name': username,
+                    'Username': username,
                     'Score': score,
                     'Full_Name': full_name,
                     'Number': 0,
