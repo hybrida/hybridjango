@@ -63,6 +63,8 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
 
             grad_year = hybrid.graduation_year
             current_year = int(datetime.now().year)  # Getting the current datetime
+            badgeliste =[]
+
 
             if grad_year - current_year >= 0:
 
@@ -75,12 +77,14 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
                     for user in badge.user.all():
                         if username in user.username:
 
+                            badgeliste.append(badge)
                             score += badge.scorepoints
 
                 hybrid_dict= {
                     'Username': username,
                     'Score': score,
                     'Full_Name': full_name,
+                    'Badger': badgeliste,
                     'Number': 0,
                 }
 
