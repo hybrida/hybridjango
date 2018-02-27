@@ -38,19 +38,19 @@
                           <tr>
                               <th>#</th>
                               <th>Navn</th>
-                              <th>Badger</th>
+                              <!-- <th>Badger</th> -->
                               <th>Poeng</th>
                           </tr>
                         {% for item in Scorelist%}
                             <tr>
                                 <th>{{ item.Number }}</th>
                                 <th> <a href="../../hybrid/{{ item.Username }}" style="color: black">{{ item.Full_Name}} </a></th>
-                                <th>
+                                <!--<th> til scoreboardet blir mer optimalisert forblir denne delen i kommentar
                                     {% for badge in item.Badger%}
                                         <img title="Name: {{ badge }}
                                         Description: {{ badge.description }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 5%;height: auto; margin-bottom: 1%;margin-left: 1%">
                                     {% endfor %}
-                                </th>
+                                </th> -->
                                 <th>{{ item.Score }} </th>
                             </tr>
                         {% endfor %}
