@@ -4,6 +4,7 @@
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
 {% endblock link %}
+
 {% comment %}
     <script type="text/javascript">
 
@@ -64,6 +65,7 @@
         <div class="col-md-6 col-xs-12 pull-right col-centered space-above">
             {% block image %}
                 <div class="picFrame poof">
+
                     <img class="pic super-center" src="/uploads/{{ hybrid.image }}">
                 </div>
             {% endblock %}
@@ -107,8 +109,36 @@
                         {% endif %}
                     </table>
                 </div>
+                <br>
+                {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- har kommentert ut denne til vi får en tidskjekk på årsmedaljene, da kan denne evt fjernes.
+                <br>
+                    <div>
+                        <form  class="flex-container" action="#" method="post">
+                            {% csrf_token %}
+                            <div class="col-md-6 col-xs-12 pull-left space-above">
+                                <button class="updateUMFer"  type="submit" value="{{ hybrid }}" name="update">Oppdater Prestasjoner!</button>
+                            </div>
+                        </form>
+                    </div>
+                -->
+
+                <div class="col-md-6 col-xs-12 pull-left space-above">
+                    <a class="updateUMFer"  href="../achievements/badges/">Tilgjengelige badges</a>
+                </div>
+                <div class="col-md-6 col-xs-12 pull-left space-above">
+                    <a class="updateUMFer"  href="../achievements/current/">Scoreboardet</a>
+                </div>
+
             {% endblock %}
         </div>
     </div>
     </div>
 {% endblock %}
+##grid layout bootstrap

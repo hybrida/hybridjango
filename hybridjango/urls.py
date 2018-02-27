@@ -40,6 +40,8 @@ urlpatterns = [
                   url(r'^search/', include('apps.search.urls'), name='search'),
                   url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
+                  url(r'^achievements/', include('apps.achievements.urls'), name='achievements'),
+
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),
                   url(r'^vevkom/', include('apps.internside.urls'), name='internside'),
