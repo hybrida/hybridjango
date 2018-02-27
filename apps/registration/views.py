@@ -10,15 +10,33 @@ from django.utils import timezone
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
+from apps.achievements.models import Badge
+from apps.achievements.signals.signals import *
+from django.http import HttpResponseRedirect
 
 from .models import Hybrid, RecoveryMail
 from .forms import HybridForm
+
+
 
 
 class Profile(LoginRequiredMixin, generic.DetailView):
     model = Hybrid
     slug_field = 'username'
     template_name = 'registration/profile.html'
+
+    def get_badge_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs)
+        badges = Badge.objects.all()
+        context['badges'] = badges
+        return context
+
+   # def post(self, request, *args, **kwargs): midlertidig fjernet
+    #    if 'update' in self.request.POST:
+     #       hybrid = self.request.POST.get('update')
+      #      year_status_change.send(sender=Hybrid, instance=hybrid)
+       #     return redirect('profile', hybrid)
+
 
 
 class EditProfile(generic.UpdateView):
@@ -102,3 +120,6 @@ def complete_registration(request, uidb64, token):
     else:
         form = None
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
+
+
+
