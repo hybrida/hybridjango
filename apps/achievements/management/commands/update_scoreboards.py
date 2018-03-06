@@ -1,9 +1,13 @@
 import json
+from datetime import datetime
+from os import path
+
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from ...models import Badge
 from apps.registration.models import Hybrid
-from datetime import datetime
+from ...models import Badge
+
 
 class Command(BaseCommand):
     help = ''
@@ -99,7 +103,7 @@ class Command(BaseCommand):
             x += 1
             item['Number'] = x
 
-        with open("ScoreboardAllTime.json", "w") as file:
+        with open(path.join(settings.MEDIA_ROOT, "ScoreboardAllTime.json"), "w") as file:
             json.dump(scoreboardAllTime, file)
-        with open("ScoreboardCurrent.json", "w") as file:
+        with open(path.join(settings.MEDIA_ROOT, "ScoreboardCurrent.json"), "w") as file:
             json.dump(scoreboardCurrent, file)

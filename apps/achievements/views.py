@@ -1,12 +1,12 @@
+import json
+from os import path
+
+from django.conf import settings
 from django.shortcuts import render
 from django.urls import resolve
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from apps.achievements.signals.signals import *
-from apps.achievements.forms import *
-from .models import Badge
-from apps.registration.models import Hybrid
 
-import json
+from .models import Badge
 
 
 def overview(request):
@@ -55,9 +55,9 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
                 if page[0] == active_page:
                     page_found = True
 
-        current = True;
+        current = True
 
-        with open('ScoreboardCurrent.json', encoding='utf-8') as data_file:
+        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
             scorelist = json.loads(data_file.read())
 
         context['before_pages'] = before_pages
@@ -87,9 +87,9 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
                     page_found = True
 
         # lager en liste med hybrider og scorepoints
-        current = False;
+        current = False
 
-        with open('ScoreboardAllTime.json', encoding='utf-8') as data_file:
+        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardAllTime.json'), encoding='utf-8') as data_file:
             scorelist = json.loads(data_file.read())
 
         context['before_pages'] = before_pages
