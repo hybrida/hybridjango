@@ -4,40 +4,7 @@
 {% block content %}
     <img src="{% static "img/griff.jpg" %}" id="banner">
     {% if not user.is_authenticated %}
-        <!--
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 space-above">
-                    <div class="col-xs-12 drop-shadow">
-                        <div class="row inverted">
-                            <div class="col-sm-6 unstyled-box inverted" style="background:#005675;">
-                                Velkommen til linjeforeningen Hybrida sin nettside
-                            </div>
-                            <div class="col-sm-6 unstyled-box inverted">
-                                <a href="{% url 'register' %}">Klikk her for å registrere deg</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div> -->
     {% endif %}
-
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 space-above">
-                    <div class="col-xs-12 drop-shadow">
-                        <div class="row inverted">
-                            <div class="col-sm-12 unstyled-box inverted" style="background:#005675;">
-                                <p class="countdown" countdown data-date="Feb 19 2018" data-text="%s dager %s timer %s min %s sek til jubileumsuken!"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
 
     <div class="container">
         <a name="hendelser" style="margin-top: -50px; position: absolute"></a>
