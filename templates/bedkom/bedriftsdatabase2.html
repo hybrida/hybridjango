@@ -1,52 +1,87 @@
 {% extends 'base_clean.html' %}
+{% load widget_tweaks %}
 {% block title %}Bedkom{% endblock %}
 {% block link %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/bedkom.css" %}">
-<style>
-    body {
-        padding-top: 0px;
-    }
-</style>
+    <style>
+        body {
+            padding-top: 0px;
+        }
+    </style>
 {% endblock %}
 {% block content %}
+    <script>
 
-        <div class="container-fluid panel panel-default">
 
-            {# Header with logo #}
-            <div class="test">
-                <a href="/"><img src="../../static/img/logo.svg" style="float: left;" /></a>
-                 {# Buttons #}
-                    <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add'%}">
-                        <button class="btn btn-primary">Lag ny bedrift</button>
-                    </a>
-                    <a style="float: right; padding-right: 10px; padding-bottom: 15px" href="{% url 'admin:bedkom_bedpress_add'%}">
-                        <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
-                    </a>
-                <p style="display: inline-block;">Hybrida Bedriftsdatabase</p>
-                <div></div>
+        function showHide(variable) {
+            var x = variable.querySelector("#commentshidden");
+            var y = variable.querySelector("#commentshidden2");
+            var z = variable.querySelector("#hideButton");
+            var a = variable.querySelector("#editButton");
+            var b = variable.querySelector("#statusText");
+            var c = variable.querySelector("#statusField");
+            var d = variable.querySelector("#priorityText");
+            var e = variable.querySelector("#priorityField");
+            if (x.style.display === "none" && y.style.display === "block") {
+                y.style.display = "none";
+                x.style.display = "block";
+                z.style.display = "none";
+                a.innerHTML = "Rediger";
+                b.style.display = "block";
+                c.style.display = "none";
+                d.style.display = "block";
+                e.style.display = "none";
+            } else {
+                z.style.display = "block";
+                x.style.display = "none";
+                y.style.display = "block";
+                a.innerHTML = "Tilbake";
+                b.style.display = "none";
+                c.style.display = "block";
+                d.style.display = "none";
+                e.style.display = "block";
+            }
+        }
 
+    </script>
+    <div class="container-fluid panel panel-default">
+
+        {# Header with logo #}
+        <div class="test">
+            <a href="/"><img src="../../static/img/logo.svg" style="float: left;"/></a>
+            {# Buttons #}
+            <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add' %}">
+                <button class="btn btn-primary">Lag ny bedrift</button>
+            </a>
+            <a style="float: right; padding-right: 10px; padding-bottom: 15px"
+               href="{% url 'admin:bedkom_bedpress_add' %}">
+                <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
+            </a>
+            <p style="display: inline-block;">Hybrida Bedriftsdatabase</p>
+            <div></div>
+
+
+        </div>
+
+        {# Initialization div for searching #}
+        <div id="users">
+
+            {# Navigation bar #}
+            <div class="settings">
+
+                {# Searchbar #}
+                <div class="center">
+                    <input style="width: 70%" class="search" placeholder="Søk"/>
+                </div>
 
             </div>
 
-            {# Initialization div for searching #}
-            <div id="users">
-
-                {# Navigation bar #}
-                <div class="settings">
-
-                    {# Searchbar #}
-                    <div class="center">
-                        <input style="width: 70%" class="search"  placeholder="Søk" />
-                    </div>
-
-                </div>
-
             {# Table start #}
             <div style="overflow-x:auto; padding-top: 15px">
-            <table class="table table-responsive sortable table-hover">
-                <thead>
+                <table class="table table-responsive sortable table-hover">
+                    <thead>
                     <tr style="background-color: #428bca; height: 30px; color: white;">
                         <th class="col-xs-2">Navn</th>
                         <th class="col-xs-2">Ansvarlig</th>
@@ -55,39 +90,83 @@
                         <th class="col-xs-1">Status</th>
                         <th class="col-xs-1">Prioritet</th>
                     </tr>
-                </thead>
-                {# Table body - Important to have class="list" for search to function #}
-                <tbody class="list">
+                    </thead>
+                    {# Table body - Important to have class="list" for search to function #}
+                    <tbody class="list">
 
-                {% for company in companies %}
-                    <tr>
-                        <td class="text-left; name" style="font-size: x-large; "><a href="bedrift/{{ company.id }}" style="color: #005675; font-size:16px">{{ company.name }}</a></td>
-                        <td class="text-left; responsible">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
-                        <td class="text-left; tag">{{ company.info }}</td>
-                        <td class="text-left">{{ company.last_comment.text }}</td>
-                        <td class="status" style="font-size: medium; margin: auto; text-align: center">{{ company.status }} </td>
+                    {% for company in companies %}
+                        <form action="{% url 'edit_status_priority' company.pk %}" method="POST" id="{{ company.id }}">
+                        </form>
+                            <tr id="row{{ company.id }}" >
+                                <td class="text-left; name" style="font-size: x-large; "><a
+                                        href="bedrift/{{ company.id }}"
+                                        style="color: #005675; font-size:16px">{{ company.name }}</a>
+                                    <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden" form="{{ company.id }}">
+                                </td>
+                                <td class="text-left; responsible">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+                                <td class="text-left; tag" >{{ company.info }}</td>
+                                <div >
 
-                        {% if company.priority == 'Høy' %}
-                            <td data-value="1" style="background-color: lightgreen" class="text-left">
-                        {% elif company.priority == 'Middels' %}
-                            <td data-value="2" style="background-color: yellow" class="text-left">
-                        {% elif company.priority == 'Lav' %}
-                            <td data-value="3" style="background-color: indianred" class="text-left">
-                        {% endif %}
+                                    <td class="text-left">
+                                        <div id="commentshidden" style="display: block;" >{{ company.last_comment.text }}</div>
 
-                        <p style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ company.priority }}</p>
+                                        <div style="display: none " id="commentshidden2">
+                                            <div style="">
+                                                <input name="company_id" value="{{ company.pk }}" form="{{ company.id }}" hidden>
+                                                <label for="comment" class="sr-only">Comment:</label>
+                                                <textarea class="" id="comment" name="text" style="width: 100%; height: 100%; margin-top: -18px; margin-bottom: -30px; margin-right: -19px"
+                                                          autocomplete="off"
+                                                           form="{{ company.id }}">{{ company.last_comment.text }}</textarea>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </div>
+                                <td class="status" style="font-size: medium; margin: auto; text-align: center">
+                                   <div id="statusText"> <p>{{ company.status }}</p></div>
+                                    <div style="display: none" id="statusField">
+                                    <select class="form-control" id="status_form" name="statusForm" autocomplete="off"
+                                            form="{{ company.id }}" required>
+                                        <option value="{{ company.status }}">{{ company.status }}</option>
+                                        <option value="Booket">Booket</option>
+                                        <option value="Opprettet kontakt">Opprettet kontakt</option>
+                                        <option value="Ikke kontaktet">Ikke kontaktet</option>
+                                        <option value="Svarer ikke">Svarer ikke</option>
+                                    </select></div>
+                                </td>
+                                {% if company.priority == 'Høy' %}
+                                    <td data-value="1" style="background-color: lightgreen" class="text-left">
+                                {% elif company.priority == 'Middels' %}
+                                    <td data-value="2" style="background-color: yellow" class="text-left">
+                                {% elif company.priority == 'Lav' %}
+                                    <td data-value="3" style="background-color: indianred" class="text-left">
+                                {% else %}
+                                    <td>
+                                {% endif %}
 
-                        </td>
-                    </tr>
+                                <div id="priorityText"><p id="" style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ company.priority }}</p></div>
+                                <div id="priorityField" style="display: none">
+                                    <input name="company_id" value="{{ company.pk }}" hidden>
+                                    <select class="form-control" id="priorityForm" name="priorityForm" autocomplete="off" form="{{ company.id }}" required>
+                                        <option value="{{ company.priority }}">{{ company.priority }}</option>
+                                        <option value="Høy">Høy</option>
+                                        <option value="Middels">Middels</option>
+                                        <option value="Lav">Lav</option>
+                                    </select>
+                                </div>
+                                </td>
+                                <td>
+                                     <button id="editButton"  class="btn btn-primary" onclick="showHide(row{{company.id}})">Rediger</button>
+                                    <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%" form="{{ company.id }}">Lagre</button>
+                                </td>
+                            </tr>
+                    {% endfor %}
 
-                {% endfor %}
+                    </tbody>
 
-                </tbody>
-
-            </table>
+                </table>
             </div>
 
-            </div>
+        </div>
     </div>
 
 {% endblock %}
@@ -99,9 +178,9 @@
 
     {# Script for searchbar #}
     <script type="text/javascript">
-    var options = {
-    valueNames: [ 'name', 'responsible', 'status', 'tag']
-                    };
-    var userList = new List('users', options);
+        var options = {
+            valueNames: ['name', 'responsible', 'status', 'tag']
+        };
+        var userList = new List('users', options);
     </script>
 {% endblock %}
