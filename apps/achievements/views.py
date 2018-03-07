@@ -1,12 +1,12 @@
+import json
+from os import path
+
+from django.conf import settings
 from django.shortcuts import render
 from django.urls import resolve
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
-from apps.achievements.signals.signals import *
-from apps.achievements.forms import *
-from .models import Badge
-from apps.registration.models import Hybrid
-from datetime import datetime
 
+from .models import Badge
 
 
 def overview(request):
@@ -55,64 +55,10 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
                 if page[0] == active_page:
                     page_found = True
 
-        # lager en liste med hybrider og scorepoints
-        scorelist = []
-        current = True;
+        current = True
 
-        for hybrid in Hybrid.objects.all():
-
-            grad_year = hybrid.graduation_year
-            current_year = int(datetime.now().year)  # Getting the current datetime
-            badgeliste =[]
-
-
-            if grad_year - current_year >= 0:
-
-                score = 0
-
-                username = hybrid.username
-                full_name = hybrid.full_name
-
-                for badge in Badge.objects.all():
-                    for user in badge.user.all():
-                        if username in user.username:
-
-                            badgeliste.append(badge)
-                            score += badge.scorepoints
-
-                hybrid_dict= {
-                    'Username': username,
-                    'Score': score,
-                    'Full_Name': full_name,
-                    'Badger': badgeliste,
-                    'Number': 0,
-                }
-
-                scorelist.append(hybrid_dict)
-
-        switch = True
-
-        while(switch):
-
-            switch = False
-            for i in range(len(scorelist) - 1 ):
-
-                hybrid1 = scorelist[i]
-                hybrid2 = scorelist[i+1]
-
-                if hybrid1['Score'] < hybrid2['Score']:
-
-                    scorelist[i] = hybrid2
-                    scorelist[i+1] = hybrid1
-
-                    switch = True
-
-        x = 0
-
-        for item in scorelist:
-            x += 1
-            item['Number'] = x
-
+        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
+            scorelist = json.loads(data_file.read())
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
@@ -141,47 +87,10 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
                     page_found = True
 
         # lager en liste med hybrider og scorepoints
-        scorelist = []
-        current = False;
+        current = False
 
-        for hybrid in Hybrid.objects.all():
-            score = 0
-            name = hybrid.username
-            full_name = hybrid.full_name
-            for badge in Badge.objects.all():
-                for user in badge.user.all():
-                    if name in user.username:
-                        score += badge.scorepoints
-            dict = {
-                'Name': name,
-                'Score': score,
-                'Full_Name': full_name,
-                'Number':0,
-            }
-            scorelist.append(dict)
-
-        switch = True
-
-        while (switch):
-
-            switch = False
-            for i in range(len(scorelist) - 1):
-
-                hybrid1 = scorelist[i]
-                hybrid2 = scorelist[i + 1]
-
-                if hybrid1['Score'] < hybrid2['Score']:
-                    scorelist[i] = hybrid2
-                    scorelist[i + 1] = hybrid1
-
-                    switch = True
-
-        x = 0
-
-        for item in scorelist:
-            x += 1
-            item['Number'] = x
-
+        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardAllTime.json'), encoding='utf-8') as data_file:
+            scorelist = json.loads(data_file.read())
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
