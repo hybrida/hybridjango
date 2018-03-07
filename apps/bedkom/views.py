@@ -95,3 +95,37 @@ def bedpress_company_comment(request, pk):
             print(comment.full_clean())
             comment.save()
     return redirect('bedpress', pk)
+
+@login_required
+def comment_company2(request, pk):
+    companies = Company.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST)
+        company_id = request.POST['company_id']
+        text = request.POST['text']
+        if user.is_authenticated:
+            comment = CompanyComment(author=user, company=companies.get(pk=company_id), text=text)
+            print(comment.full_clean())
+            comment.save()
+    return redirect('bedkom')
+
+@login_required
+def edit_status_priority(request, pk):
+    companies = Company.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST.get('statusForm'))
+
+        text = request.POST['text']
+        company_id = request.POST['company_id']
+        status = request.POST.get('statusForm', False)
+        priority = request.POST.get('priorityForm', False)
+        if user.is_authenticated:
+            company = companies.get(pk=company_id)
+            comment = CompanyComment(author=user, company=companies.get(pk=company_id), text=text)
+            company.status = status
+            company.priority = priority
+            comment.save()
+            company.save()
+    return redirect('bedkom')

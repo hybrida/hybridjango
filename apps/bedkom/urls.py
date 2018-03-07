@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^bedpress/(?P<pk>[0-9]+)/comment$', bedpress_company_comment, name='bedpress_company_comment'),
     url(r'^bedrift/ny', new_company, name='new_company'),
     url(r'^bedrift/(?P<pk>[0-9]+)/endre$', edit_company, name='edit_company'),
-
+    url(r'^(?P<pk>[0-9]+)/comment2$', comment_company2, name='comment_company2'),
+    url(r'^(?P<pk>[0-9]+)/endre/statusprority', edit_status_priority, name='edit_status_priority')
 ]
