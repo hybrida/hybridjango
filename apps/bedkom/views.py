@@ -121,11 +121,18 @@ def edit_status_priority(request, pk):
         company_id = request.POST['company_id']
         status = request.POST.get('statusForm', False)
         priority = request.POST.get('priorityForm', False)
+        lastcomment = request.POST['lastComment']
         if user.is_authenticated:
-            company = companies.get(pk=company_id)
-            comment = CompanyComment(author=user, company=companies.get(pk=company_id), text=text)
-            company.status = status
-            company.priority = priority
-            comment.save()
-            company.save()
+            if lastcomment == text:
+                company = companies.get(pk=company_id)
+                company.status = status
+                company.priority = priority
+                company.save()
+            else:
+                company = companies.get(pk=company_id)
+                comment = CompanyComment(author=user, company=companies.get(pk=company_id), text=text)
+                company.status = status
+                company.priority = priority
+                comment.save()
+                company.save()
     return redirect('bedkom')
