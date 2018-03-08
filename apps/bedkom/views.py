@@ -111,7 +111,7 @@ def comment_company2(request, pk):
     return redirect('bedkom')
 
 @login_required
-def edit_status_priority(request, pk):
+def edit_status_priority_comment(request, pk):
     companies = Company.objects.all()
     user = request.user
     if request.POST:
