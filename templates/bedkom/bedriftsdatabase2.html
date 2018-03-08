@@ -95,7 +95,7 @@
                     <tbody class="list">
 
                     {% for company in companies %}
-                        <form action="{% url 'edit_status_priority' company.pk %}" method="POST" id="{{ company.id }}">
+                        <form action="{% url 'edit_status_priority_comment' company.pk %}" method="POST" id="{{ company.id }}">
                         </form>
                             <tr id="row{{ company.id }}" >
                                 <td class="text-left; name" style="font-size: x-large; "><a
