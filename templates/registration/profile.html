@@ -110,13 +110,14 @@
                     </table>
                 </div>
                 <br>
-                {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
-                    <div class="col-lg-3">
-                        <div class="row">
-                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
+                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }} Description: {{ badge.description }} scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image"}
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
+                <br>
                 <!-- har kommentert ut denne til vi får en tidskjekk på årsmedaljene, da kan denne evt fjernes.
                 <br>
                     <div>
