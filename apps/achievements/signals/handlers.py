@@ -59,21 +59,21 @@ def YearBadge(sender, **kwargs):
 def backup_image_path(sender, instance, **kwargs):
     instance._current_image_file = instance.badge_image
 
-@receiver(post_save, sender=Badge)
-def delete_old_image(sender, instance, **kwargs):
-    if hasattr(instance, '_current_image_file'):
-        if instance._current_image_file != instance.badge_image.path:
-            instance._current_image_file.delete(save=False)
+#@receiver(post_save, sender=Badge)
+#def delete_old_image(sender, instance, **kwargs):
+#    if hasattr(instance, '_current_image_file'):
+#        if instance._current_image_file != instance.badge_image.path:
+#            instance._current_image_file.delete(save=False)
 
 #functions that removes pictures after their model has been deleted
-def _delete_file(path):
-   """ Deletes file from filesystem. """
-   if os.path.isfile(path):
-       os.remove(path)
+#def _delete_file(path):
+  # """ Deletes file from filesystem. """
+   #if os.path.isfile(path):
+   #    os.remove(path)
 
-@receiver(models.signals.post_delete, sender=Badge)
-def delete_file(sender, instance, *args, **kwargs):
-    """ Deletes image files on `post_delete` """
-    if instance.badge_image:
-        _delete_file(instance.badge_image.path)
+#@receiver(models.signals.post_delete, sender=Badge)
+#def delete_file(sender, instance, *args, **kwargs):
+#    """ Deletes image files on `post_delete` """
+#    if instance.badge_image:
+#        _delete_file(instance.badge_image.path)
 
