@@ -1,6 +1,9 @@
 import os
+from os import path
 from itertools import chain
+import json
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
@@ -15,6 +18,9 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
+
+
+
 
 
 class FrontPage(EventList):
@@ -43,6 +49,11 @@ class FrontPage(EventList):
         context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight', 'deadline').filter(
             priority=True)
         context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
+
+        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
+            scorelist = json.loads(data_file.read())
+        context['Scorelist'] = scorelist
+
         return context
 
 

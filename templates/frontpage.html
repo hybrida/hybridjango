@@ -23,6 +23,12 @@
                     <h3>Arrangementer</h3>
                     {% include 'events/event_list.html' %}
                 </div>
+                {% if user.is_authenticated %}
+                    <div class="white-box space space-below">
+                        <h3 style="margin-top: -2%" href="/achievements/current"> Scoreboard </h3>
+                        {% include 'achievments/mini_scoreboard.html' %}
+                    </div>
+                {% endif %}
                 <div class="white-box space space-below">
                     <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede
                         Stillingsutlysninger</a></h3>
