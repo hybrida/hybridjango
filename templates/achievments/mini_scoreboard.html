@@ -1,0 +1,14 @@
+<table id="Scoreboard" class="table table-striped table-bordered" cellspacing="0" style="width:100%; margin-bottom: -1%;">
+    <tr>
+        <th>#</th>
+        <th>Navn</th>
+        <th>Poeng</th>
+    </tr>
+    {% for item in Scorelist|slice:"5" %}
+        <tr>
+            <th>{{ item.Number }}</th>
+            <th> <a style="color: black">{{ item.Full_Name}} </a></th>
+            <th>{{ item.Score }} </th>
+        </tr>
+    {% endfor %}
+</table>
