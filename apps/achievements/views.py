@@ -1,16 +1,32 @@
 import json
 from os import path
-
+from .models import BadgeForm
 from django.conf import settings
 from django.shortcuts import render
-from django.urls import resolve
+from django.urls import resolve, reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.edit import CreateView, DeleteView
 
 from .models import Badge
 
 
+class SendBadge(CreateView):
+    model = BadgeForm
+    fields = ['name', 'description', 'badge_image', 'scorepoints']
+
+
+class DeleteBadge(DeleteView):
+    model = BadgeForm
+    success_url = reverse_lazy('scoreboard')
+
+
+def BadgeTable(request):
+    badge_forms = BadgeForm.objects.all()
+    return render(request, '../templates/achievements/badeform_table.html', {"badge_forms": badge_forms})
+
+
 def overview(request):
-    return render(request, '../templates/achievments/achievments_overview.html', )
+    return render(request, '../templates/achievements/achievments_overview.html', )
 
 
 class BadgeView(TemplateResponseMixin, ContextMixin, View):

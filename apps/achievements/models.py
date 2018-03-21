@@ -1,6 +1,7 @@
 from django.db import models
 from apps.registration.models import Hybrid
 from apps.griffensorden.models import Ridder
+from django.urls import reverse
 import os
 
 # Create your models here.
@@ -15,3 +16,13 @@ class Badge(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BadgeForm(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    badge_image = models.ImageField(upload_to='badges')
+    scorepoints = models.PositiveIntegerField()
+
+    def get_absolute_url(self):
+        return reverse('scoreboard')

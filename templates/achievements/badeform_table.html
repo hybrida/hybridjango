@@ -1,0 +1,46 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+
+    <div>
+<table class="table table-responsive sortable table-hover">
+    <thead>
+        <tr style="background-color: #428bca; height: 30px; color: white;">
+            <th class="col-xs-2">Navn</th>
+            <th class="col-xs-2">Beskrivlse</th>
+            <th class="col-xs-3">Bilde</th>
+            <th class="col-xs-4">Scorepoints</th>
+
+
+        </tr>
+    </thead>
+
+    <tbody class="list">
+    {% for BadgeForm in badge_forms %}
+    <tr>
+        <td>{{ BadgeForm.name }}</td>
+        <td>{{ BadgeForm.description }}</td>
+        <td><img style="width: 40%" src="{{ BadgeForm.badge_image.url }}"><td>
+        <td>{{ BadgeForm.scorepoints }}</td>
+        <td>
+            <form action="#" method="post" >
+                {% csrf_token %}
+                <input type="hidden" value="{{ BadgeForm.id }}" name="badgeform_id">
+                <button type="submit" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-trash"></span></button>
+            </form>
+        </td>
+    </tr>
+
+
+    {% endfor %}
+
+    </tbody>
+</table></div>
+{% endblock text %}
+{% block sidebar %}
+<p>Hjelp oss å forbedre badgesystemet ved å sende inn egne forslag til badges. Legg ved i beskrivelsen hvem du synes forjener badgen din</p>
+
+
+{% endblock sidebar %}
