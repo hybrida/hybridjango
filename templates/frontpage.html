@@ -24,8 +24,11 @@
                     {% include 'events/event_list.html' %}
                 </div>
                 {% if user.is_authenticated %}
-                    <div class="white-box space space-below">
-                        <h3 style="margin-top: -2%" href="/achievements/current"> Scoreboard </h3>
+                    <div class="white-box space space-below" style="width: 100%; clear: left">
+                        <div style="margin-bottom: 2%; text-align: center">
+                            <h3 style="margin-top: -1%; margin-bottom: -1%;" href="/achievements/current">Scoreboard</h3>
+                            <a style="font-size: 16px" href="/achievements/current">Se hele scoreboardet</a>
+                        </div>
                         {% include 'achievments/mini_scoreboard.html' %}
                     </div>
                 {% endif %}
