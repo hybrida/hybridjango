@@ -1,0 +1,126 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block content %}
+
+    <script>
+      function showHide3(variable) {
+            var x = variable.querySelector("#commentshidden");
+            var y = variable.querySelector("#commentshidden2");
+            var z = variable.querySelector("#hideButton");
+            var a = variable.querySelector("#editButton");
+            var b = variable.querySelector("#statusText");
+            var c = variable.querySelector("#statusField");
+            var d = variable.querySelector("#priorityText");
+            var e = variable.querySelector("#priorityField");
+            if (x.style.display === "none" && y.style.display === "block") {
+                y.style.display = "none";
+                x.style.display = "block";
+                z.style.display = "none";
+                a.innerHTML = "Rediger";
+                b.style.display = "block";
+                c.style.display = "none";
+                d.style.display = "block";
+                e.style.display = "none";
+            } else {
+                z.style.display = "block";
+                x.style.display = "none";
+                y.style.display = "block";
+                a.innerHTML = "Tilbake";
+                b.style.display = "none";
+                c.style.display = "block";
+                d.style.display = "none";
+                e.style.display = "block";
+            }
+        }
+
+        function showhide(variable) {
+            var x = variable.querySelector("#integer");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        function showhide2(variable) {
+            var y = variable.querySelector("#buttons");
+            if (y.style.display === "none") {
+                y.style.display = "block";
+            } else {
+                y.style.display = "none";
+             }
+        }
+    </script>
+    <div style="background-color: black; width: 100%;height: 700px; position: relative" >
+        <div style="margin-top: px; position: ; margin-top: px" >
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@personal-pc</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large">$ ssh hybrida.no</a>
+        </div>
+        <img style="width: 40%" src="{% static 'img/vevkom_console.png'%}">
+        <div style="margin-top: px">
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large">$ cd kakeliste</a>
+        </div>
+        <div style="margin-top: px">
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large">$ cd referater</a>
+        </div>
+        <div style="margin-top: px">
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large">$ cd guides</a>
+        </div>
+        <div style="margin-top: px">
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large">$ cd to-do liste</a>
+        </div>
+        <div style="margin-top: px">
+            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
+            <a style="color: white; font-size: x-large">:</a>
+            <a style="color: blue; font-size: x-large">~</a>
+            <a style="color: white; font-size: x-large" href="{% url 'badgetable' %}">$ cd innsendte badges</a>
+        </div>
+    </div>
+        <div class="container" style="margin-top: px;  ">
+        <div class="row space-below">
+            <div id="content-col" class="col-md-8 space-above">
+
+                    <div class="white-box" id="text-box">
+
+                    </div>
+            </div>
+            <div id="sidebar-col" class="col-md-4 space-above">
+                    <div class="white-box" id="sidebar" style="height: 400px">
+                    <table>
+                        {% for CakeMaker in cake_makers %}
+                            <tr>
+                                <td>
+                                    <div onclick="showhide2(this)" style="border-style: solid; width: 320px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
+                                    <a style="font-size: medium; "> {{ CakeMaker.name }}</a>
+                                    <div id="buttons" style="display: none">
+                                        <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
+                                        <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
+                                        <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
+                                    </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
