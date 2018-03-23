@@ -44,5 +44,5 @@ urlpatterns = [
 
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),
-                  url(r'^vevkom/', include('apps.internside.urls'), name='internside'),
+                  url(r'^vevkom/', include('apps.vevkom.urls'), name='vevkom'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
