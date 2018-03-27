@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.db import models
 
 from ...models import Badge
 from apps.registration.models import Hybrid
@@ -22,6 +21,7 @@ class Command(BaseCommand):
             badge = Badge.objects.get(name=medal[0])  # getting each medal for each iteration of the loop
             badge.user.clear
 
+        #Going through all users to award the member badge and year badges
         for hybrid in Hybrid.objects.all():
             grad_year = hybrid.graduation_year
 

@@ -3,7 +3,7 @@ from os import path
 from .models import BadgeForm
 from django.conf import settings
 from django.shortcuts import render
-from django.urls import resolve, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
 
@@ -32,23 +32,7 @@ def overview(request):
 class BadgeView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        active_page = resolve(request.path_info).url_name
-        before_pages = []
-        after_pages = []
-        page_found = False
-        for page in aboutpages:
-            if page_found:
-                after_pages.append(page)
-            else:
-                before_pages.append(page)
-                if page[0] == active_page:
-                    page_found = True
-
-        # this needs to be fixed/improved upon
-
-        context['before_pages'] = before_pages
-        context['after_pages'] = after_pages
-
+        #Adding the badges to the context to find them in the html file
         context.update({
             'Badges': Badge.objects.all(),
         })
@@ -59,26 +43,12 @@ class BadgeView(TemplateResponseMixin, ContextMixin, View):
 class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        active_page = resolve(request.path_info).url_name
-        before_pages = []
-        after_pages = []
-        page_found = False
-        for page in aboutpages:
-            if page_found:
-                after_pages.append(page)
-            else:
-                before_pages.append(page)
-                if page[0] == active_page:
-                    page_found = True
+        current = True #Used in the html file to know that it's the current scoreboard
 
-        current = True
-
+        #Reading the current scoreboard .json file in /uploads
         with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
             scorelist = json.loads(data_file.read())
-
-        context['before_pages'] = before_pages
-        context['after_pages'] = after_pages
-
+        #Adding the badges, current status and the scoreboard to the context to find them in the html file
         context.update({
             'Badges': Badge.objects.all(),
             'Scorelist': scorelist,
@@ -90,27 +60,12 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
 class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        active_page = resolve(request.path_info).url_name
-        before_pages = []
-        after_pages = []
-        page_found = False
-        for page in aboutpages:
-            if page_found:
-                after_pages.append(page)
-            else:
-                before_pages.append(page)
-                if page[0] == active_page:
-                    page_found = True
+        current = False#Used in the html file to know that it's the all time scoreboard
 
-        # lager en liste med hybrider og scorepoints
-        current = False
-
+        # Reading the all time scoreboard .json file in /uploads
         with open(path.join(settings.MEDIA_ROOT, 'ScoreboardAllTime.json'), encoding='utf-8') as data_file:
             scorelist = json.loads(data_file.read())
-
-        context['before_pages'] = before_pages
-        context['after_pages'] = after_pages
-
+        # Adding the badges, current status and the scoreboard to the context to find them in the html file
         context.update({
             'Badges': Badge.objects.all(),
             'Scorelist': scorelist,
@@ -118,19 +73,3 @@ class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
         })
 
         return self.render_to_response(context)
-
-
-aboutpages = [
-    ('about', "Om Hybrida"),
-    ('history', "Hybridas historie"),
-    ('board', "Styret"),
-    ('committees', "Komiteer"),
-    ('griffensorden', "Griffens Orden"),
-    ('statutter', "Statutter"),
-    ('tillitsvalgte', 'Tillitsvalgte'),
-    ('studiet', "Studiet I&IKT"),
-    ('holte', "Holte Consulting"),
-    ('lyrics', "Sangtekster"),
-    ('for_companies', "For bedrifter"),
-    ('contact_us', "Kontakt oss"),
-]
