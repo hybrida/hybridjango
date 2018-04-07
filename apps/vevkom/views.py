@@ -76,5 +76,4 @@ def edit_todo(request, pk):
                 project.priority = priority
                 project.description = text
                 project.save()
-
     return redirect('internside:index')

@@ -4,10 +4,10 @@ from itertools import chain
 import json
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.urls import resolve
+from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 
@@ -18,6 +18,9 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
+from django.views.generic.edit import CreateView, DeleteView
+from .models import Application
+
 
 
 
@@ -193,3 +196,19 @@ def search(request):
 
     }
     return render(request, 'staticpages/search.html', context)
+
+@permission_required(['staticpages.add_application'])
+def application_table(request):
+    applications = Application.objects.all()
+    return render(request, 'staticpages/application_table.html', {"applications": applications})
+
+
+class application(CreateView):
+    model = Application
+    fields = ['navn', 'beskrivelse']
+
+
+class DeleteApplication(DeleteView):
+    model = Application
+    success_url =  reverse_lazy('application_table')
+

@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView
+from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView, \
+    application, application_table, DeleteApplication
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
@@ -22,6 +23,9 @@ urlpatterns = [
     url(r'^tillitsvalgte$', AboutView.as_view(template_name='staticpages/tillitsvalgte.html'), name='tillitsvalgte'),
     url(r'^holte$', AboutView.as_view(template_name='staticpages/holte.html'), name='holte'),
     url(r'^studiet$', AboutView.as_view(template_name='staticpages/ringen/studiet.html'), name='studiet'),
+    url(r'^soknad/form$', application.as_view(), name='application-add'),
+    url(r'^soknad/table$', application_table, name='application_table'),
+    url(r'^application/(?P<pk>[0-9]+)/delete$', DeleteApplication.as_view(), name='application-delete'),
     url(r'^ringen$', RingenView.as_view(template_name='staticpages/ringen.html'), name='ringen'),
     url(r'^ringen/studiet$', RingenView.as_view(template_name='staticpages/ringen/studiet.html'), name='ringen_IIKT'),
     url(r'^ringen/visjon$', RingenView.as_view(template_name='staticpages/ringen/visjon.html'), name='ringen_visjon'),

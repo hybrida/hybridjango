@@ -148,5 +148,6 @@
 {% block sublinks %}
     {% if user.is_authenticated %}
         <a href="{% url 'board_report' %}">Møtereferat</a>
+        <a href="{% url 'application-add' %}">Søknad om støtte</a>
     {% endif %}
 {% endblock %}
