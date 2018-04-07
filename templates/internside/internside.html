@@ -95,32 +95,146 @@
         <div class="row space-below">
             <div id="content-col" class="col-md-8 space-above">
 
-                    <div class="white-box" id="text-box">
+                    <div class="white-box" id="text-box" style="height: 400px">
+                    <h2 style="color: #002a80; text-align: center">Referater</h2>
+                        <table>
+                            {% for MeetingReport in referats %}
+                                <tr>
+                                    <td>
+                                        <div onclick="showhide(this)" style="border-style: solid; width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                            <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
+                                            <div id="integer" style="display: none; text-align: left;">
+                                                <p><a style="color: black">Tilstede:{{ MeetingReport.people }}</a></p>
+                                                <p><a style="color: black">{{ MeetingReport.text }}</a></p>
 
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     </div>
             </div>
-            <div id="sidebar-col" class="col-md-4 space-above">
+                <div id="sidebar-col" class="col-md-4 space-above">
                     <div class="white-box" id="sidebar" style="height: 400px">
-                    <table>
-                        {% for CakeMaker in cake_makers %}
-                            <tr>
-                                <td>
-                                    <div onclick="showhide2(this)" style="border-style: solid; width: 320px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
-                                    <a style="font-size: medium; "> {{ CakeMaker.name }}</a>
-                                    <div id="buttons" style="display: none">
-                                        <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
-                                        <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
-                                        <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
-                                    </div>
+                        <h2 style="color: #002a80; text-align: center">Bakeliste</h2>
+                            <table>
+                                {% for CakeMaker in cake_makers %}
+                                    <tr>
+                                        <td>
+                                            <div onclick="showhide2(this)" style="border-style: solid; width: 320px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
+                                            <a style="font-size: medium; color: black "> {{ CakeMaker.name }}</a>
+                                            <div id="buttons" style="display: none">
+                                                <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
+                                                <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
+                                                <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
+                                            </div>
 
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
                     </div>
-            </div>
+                 </div>
 
         </div>
     </div>
+     <div class="container">
+        <div class="row space-below">
+            <div class="col-xs-12 space-above">
+                <div class="white-box" id="text-box">
+                            <div style="overflow-x:auto; padding-top: 15px">
+                        <table class="table table-responsive sortable table-hover">
+                            <thead>
+                            <tr style="background-color: #428bca; height: 30px; color: white;">
+                                <th class="col-xs-2">Navn</th>
+                                <th class="col-xs-2">Ansvarlig</th>
+                                <th class="col-xs-3">Info</th>
+                                <th class="col-xs-1">Status</th>
+                                <th class="col-xs-1">Prioritet</th>
+                                <th class="col-xs-1">Rediger</th>
+                            </tr>
+                            </thead>
+                            {# Table body - Important to have class="list" for search to function #}
+                            <tbody class="list">
+
+                            {% for Project in Projects %}
+                                <form action="{% url 'internside:edit_todo' Project.id %}" method="POST" id="{{ Project.id }}">
+                                </form>
+                                    <tr id="row{{ Project.id }}" >
+                                        <td class="text-left; name" style="font-size: x-large; "><a
+
+                                                style="color: #005675; font-size:16px">{{ Project.name }}</a>
+                                            <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden" form="{{ Project.id }}">
+                                        </td>
+                                        <td class="text-left; responsible">{{ Project.responsible }} </td>
+                                        <div >
+
+                                            <td class="text-left">
+                                                <div id="commentshidden" style="display: block;" >{{ Project.description }}</div>
+
+                                                <div style="display: none " id="commentshidden2">
+                                                    <div style="">
+                                                        <input name="Project_id" value="{{ Project.pk }}" form="{{ Project.id }}" hidden>
+                                                        <label for="comment" class="sr-only"></label>
+                                                        <textarea class="" id="description" name="text" style="width: 100%; height: 100%; margin-top: -18px; margin-bottom: -30px; margin-right: -19px"
+                                                                  autocomplete="off"
+                                                                   form="{{ Project.id }}">{{ Project.description }}
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </div>
+                                        <td class="status" style="font-size: medium; margin: auto; text-align: center">
+                                           <div id="statusText"> <p>{{ Project.status }}</p></div>
+                                            <div style="display: none" id="statusField">
+                                            <select class="form-control" id="status_form" name="statusForm" autocomplete="off"
+                                                    form="{{ Project.id }}" required>
+                                                <option value="{{ Project.status }}">{{ Project.status }}</option>
+                                                <option value="Påbegynt">Påbegynt</option>
+                                                <option value="Ikke påbegynt">Ikke påbegynt</option>
+                                                <option value="Ferdig">Ferdig</option>
+
+                                            </select></div>
+                                        </td>
+                                        {% if Project.priority == 'Høy' %}
+                                            <td data-value="1" style="background-color: lightgreen" class="text-left">
+                                        {% elif Project.priority == 'Middels' %}
+                                            <td data-value="2" style="background-color: yellow" class="text-left">
+                                        {% elif Project.priority == 'Lav' %}
+                                            <td data-value="3" style="background-color: indianred" class="text-left">
+                                        {% else %}
+                                            <td>
+                                        {% endif %}
+
+                                        <div id="priorityText"><p id="" style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ Project.priority }}</p></div>
+                                        <div id="priorityField" style="display: none">
+                                            <select class="form-control" id="priorityForm" name="priorityForm" autocomplete="off" form="{{ Project.id }}" required>
+                                                <option value="{{ Project.priority }}">{{ Project.priority }}</option>
+                                                <option value="Høy">Høy</option>
+                                                <option value="Middels">Middels</option>
+                                                <option value="Lav">Lav</option>
+                                            </select>
+                                        </div>
+                                        </td>
+                                        <td>
+                                             <button id="editButton"  class="btn btn-primary" onclick="showHide3(row{{Project.id}})">Rediger</button>
+                                            <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%" form="{{ Project.id }}">Lagre</button>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}
