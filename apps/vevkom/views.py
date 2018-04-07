@@ -2,7 +2,10 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.db.models import Max, Min
 from .models import CakeMaker, MeetingReport, Project
+from django.contrib.auth.decorators import permission_required
 
+
+@permission_required(['vevkom.add_project'])
 def index(request):
     cake_makers = CakeMaker.objects.all()
     referats = MeetingReport.objects.all().order_by('date').reverse()
@@ -11,6 +14,7 @@ def index(request):
     return render(request, "internside/internside.html", {"cake_makers": cake_makers, "referats": referats, "Projects": Projects })
 
 
+@permission_required(['vevkom.add_project'])
 def upList(request, pk):
     cake_maker = CakeMaker.objects.get(pk=pk)
     cake_maker_number = cake_maker.number_on_list
@@ -26,6 +30,7 @@ def upList(request, pk):
     return redirect('internside:index')
 
 
+@permission_required(['vevkom.add_project'])
 def downList(request, pk):
     cake_maker = CakeMaker.objects.get(pk=pk)
     cake_maker_number = cake_maker.number_on_list
@@ -42,6 +47,7 @@ def downList(request, pk):
     return redirect('internside:index')
 
 
+@permission_required(['vevkom.add_project'])
 def bottom(request, pk):
     from .models import CakeMaker
     cake_maker = CakeMaker.objects.get(pk=pk)
@@ -59,6 +65,8 @@ def bottom(request, pk):
 
     return redirect('internside:index')
 
+
+@permission_required(['vevkom.add_project'])
 def edit_todo(request, pk):
     projects = Project.objects.all()
     user = request.user
