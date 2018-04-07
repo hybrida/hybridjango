@@ -49,6 +49,16 @@
                                 <a href="{% url 'bedkom' %}">Bedriftsiden</a>
                             </li>
                             {% endif %}
+                            {% if perms.vevkom.add_project %}
+                                <li>
+                                    <a href="{% url 'internside:index' %}">Vevkom</a>
+                                </li>
+                            {% endif %}
+                            {% if perms.staticpages.add_application %}
+                                <li>
+                                    <a href="{% url 'application_table' %}">Oversikt over søknader</a>
+                                </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'jobs:info' %}">Stillingsutlysninger</a>
                             </li>
