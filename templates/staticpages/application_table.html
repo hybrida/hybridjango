@@ -1,0 +1,38 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+
+    <div>
+<table class="table table-responsive sortable table-hover">
+    <thead>
+        <tr style="background-color: #428bca; height: 30px; color: white;">
+            <th class="col-xs-2">Navn</th>
+            <th class="col-lg-3">Beskrivlse</th>
+           <th class="col-xs-1">Slett</th>
+
+
+        </tr>
+    </thead>
+
+    <tbody class="list">
+    {% for Application in applications %}
+    <tr>
+        <td>{{ Application.navn }}</td>
+        <td>{{ Application.beskrivelse }}</td>
+        <td>
+            <form action="{% url 'application-delete' Application.id %}" method="post" >
+                {% csrf_token %}
+                <input type="hidden" value="{{ Application.id }}" name="application_id">
+                <button type="submit" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-trash"></span></button>
+            </form>
+        </td>
+    </tr>
+
+
+    {% endfor %}
+
+    </tbody>
+</table></div>
+{% endblock text %}

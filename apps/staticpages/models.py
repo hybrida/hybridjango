@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
+
 
 class BoardReport(models.Model):
     report = models.FileField(upload_to='pdf/referat')
@@ -17,3 +19,12 @@ class Protocol(models.Model):
 
     def __str__(self):
         return "Protokoll Genfors: "+str(self.date)
+
+
+class Application(models.Model):
+    navn = models.CharField(max_length=500)
+    beskrivelse = models.TextField(max_length=5000)
+
+
+    def get_absolute_url(self):
+        return reverse('about')

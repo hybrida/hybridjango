@@ -10,5 +10,6 @@ urlpatterns = [
         url(r'^all_time/$', ScoreboardViewAllTime.as_view(template_name='achievements/scoreboard.html'), name='scoreboard/AllTime'),
         url(r'^badgeform/add/$', SendBadge.as_view(), name='badgeform-add'),
         url(r'^badgeform/table/$', BadgeTable, name='badgetable'),
+        url(r'^badgeform/(?P<pk>[0-9]+)/delete', DeleteBadge.as_view(), name='badgeform-delete'),
 
 ]
