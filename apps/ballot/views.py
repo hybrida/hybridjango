@@ -98,7 +98,7 @@ def vote(request):
 
 def get_results(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'anstra'):
+    if not (user.is_authenticated and user.username == 'sindreeo'):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})
