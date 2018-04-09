@@ -30,7 +30,7 @@ empty_vote = 'Tomt'
 @login_required
 def overview(request):
     user = request.user
-    if not user.username == 'anstra':
+    if not user.username == 'sindreeo':
         return redirect('login')
     if request.method == 'POST':
         Ballot.title = request.POST.get('title', 'Avstemning')
