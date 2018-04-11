@@ -113,7 +113,7 @@
                             {% for MeetingReport in referats %}
                                 <tr>
                                     <td>
-                                        <div onclick="showhide(this)" style="border-style: solid; width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                        <div onclick="showhide(this)" class="white-box" style=" width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
                                             <div id="integer" style="display: none; text-align: left;">
                                                 <p><a style="color: black">Tilstede:{{ MeetingReport.people }}</a></p>
@@ -135,7 +135,7 @@
                                 {% for CakeMaker in cake_makers %}
                                     <tr>
                                         <td>
-                                            <div onclick="showhide2(this)" style="border-style: solid; width: 320px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
+                                            <div onclick="showhide2(this)" class="white-box" style=" width: 310px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
                                             <a style="font-size: medium; color: black "> {{ CakeMaker.name }}</a>
                                                 <div id="buttons" style="display: none">
                                                     <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
@@ -163,7 +163,7 @@
                         {% for Guide in guides %}
                         <tr>
                                     <td>
-                                        <div onclick="showhide4(this)" style="border-style: solid; width: 1100px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                        <div onclick="showhide4(this)" class="white-box" style=" width: 1090px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
                                             <div id="guidetext" style="display: none; text-align: left;">
                                                 <p><a style="color: black">{{ Guide.text }}</a></p>
@@ -186,6 +186,7 @@
         <div class="row space-below">
             <div class="col-xs-12 space-above">
                 <div class="white-box" id="text-box">
+                    <h2 style="color: #002a80; text-align: center">To-do liste</h2>
                     <div style="overflow-x:auto; padding-top: 15px">
                         <table class="table table-responsive sortable table-hover">
                             <thead>
