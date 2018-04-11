@@ -45,3 +45,11 @@ class Project(models.Model):
 
     def __str__self(self):
         return str(self.name)
+
+
+class Guide(models.Model):
+    name = models.CharField(max_length=100)
+    text = models.TextField(max_length=50000)
+
+    def __str__(self):
+        return str(self.name)
