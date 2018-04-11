@@ -25,5 +25,8 @@ class GeneralAssembly(models.Model):
     def remove_genfors_appearance(self, user):
         self.users.remove(user)
 
+    def number_of_attendees(self):
+        return self.users
+
     def __str__(self):
         return "RFID for generalforsamling: " + str(self.event.pk) + ": " + self.event.title

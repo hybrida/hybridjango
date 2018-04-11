@@ -54,6 +54,7 @@
             {% endfor %}
         {% endif %}
     <h1>{{ generalassembly.event.title }}</h1>
+    <h3>Antall personer inne: {{ generalassembly.number_of_attendees.count }}</h3>
     <div class="align-middle">
         <div style="text-align: center">
             <form id="rfid_form" method="POST" action="{%  url 'rfid:add_gen' generalassembly.pk %}">
