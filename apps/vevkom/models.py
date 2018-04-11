@@ -18,7 +18,7 @@ class CakeMaker(models.Model):
 class MeetingReport(models.Model):
     date = models.DateField(default=timezone.now)
     people = models.CharField(max_length=200)
-    text = models.CharField(max_length=3000)
+    text = models.TextField(max_length=3000)
 
     def __str__self(self):
         return "Referat: " + str(self.date)
