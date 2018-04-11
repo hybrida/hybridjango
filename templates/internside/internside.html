@@ -22,7 +22,8 @@
                 c.style.display = "none";
                 d.style.display = "block";
                 e.style.display = "none";
-            } else {
+                }
+            else {
                 z.style.display = "block";
                 x.style.display = "none";
                 y.style.display = "block";
@@ -51,8 +52,19 @@
                 y.style.display = "none";
              }
         }
+      function showhide4(variable) {
+            var x = variable.querySelector("#guidetext");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+      }
     </script>
-    <div style="background-color: black; width: 100%;height: 700px; position: relative" >
+
+    <div style="background-color: black; width: 100%;height: 700px; position: static" >
+        <br>
+        <br>
         <div style="margin-top: px; position: ; margin-top: px" >
             <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@personal-pc</a>
             <a style="color: white; font-size: x-large">:</a>
@@ -64,7 +76,7 @@
             <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
             <a style="color: white; font-size: x-large">:</a>
             <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large">$ cd kakeliste</a>
+            <a style="color: white; font-size: x-large">$ cd bakeliste</a>
         </div>
         <div style="margin-top: px">
             <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
@@ -125,11 +137,11 @@
                                         <td>
                                             <div onclick="showhide2(this)" style="border-style: solid; width: 320px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
                                             <a style="font-size: medium; color: black "> {{ CakeMaker.name }}</a>
-                                            <div id="buttons" style="display: none">
-                                                <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
-                                                <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
-                                                <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
-                                            </div>
+                                                <div id="buttons" style="display: none">
+                                                    <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
+                                                    <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
+                                                    <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
+                                                </div>
 
                                             </div>
                                         </td>
@@ -141,11 +153,40 @@
 
         </div>
     </div>
+
+    <div class="container">
+        <div class="row space-below">
+            <div class="col-xs-12 space-above">
+                <div class="white-box" id="text-box" style="height: 400px">
+                    <h2 style="color: #002a80; text-align: center">Guides</h2>
+                    <table>
+                        {% for Guide in guides %}
+                        <tr>
+                                    <td>
+                                        <div onclick="showhide4(this)" style="border-style: solid; width: 1100px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                            <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
+                                            <div id="guidetext" style="display: none; text-align: left;">
+                                                <p><a style="color: black">{{ Guide.text }}</a></p>
+
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
      <div class="container">
         <div class="row space-below">
             <div class="col-xs-12 space-above">
                 <div class="white-box" id="text-box">
-                            <div style="overflow-x:auto; padding-top: 15px">
+                    <div style="overflow-x:auto; padding-top: 15px">
                         <table class="table table-responsive sortable table-hover">
                             <thead>
                             <tr style="background-color: #428bca; height: 30px; color: white;">

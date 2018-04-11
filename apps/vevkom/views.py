@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.db.models import Max, Min
-from .models import CakeMaker, MeetingReport, Project
+from .models import CakeMaker, MeetingReport, Project, Guide
 from django.contrib.auth.decorators import permission_required
 
 
@@ -10,8 +10,9 @@ def index(request):
     cake_makers = CakeMaker.objects.all()
     referats = MeetingReport.objects.all().order_by('date').reverse()
     Projects = Project.objects.all()
+    guides = Guide.objects.all()
 
-    return render(request, "internside/internside.html", {"cake_makers": cake_makers, "referats": referats, "Projects": Projects })
+    return render(request, "internside/internside.html", {"cake_makers": cake_makers, "referats": referats, "Projects": Projects,"guides": guides })
 
 
 @permission_required(['vevkom.add_project'])
