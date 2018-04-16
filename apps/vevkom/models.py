@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 
 # Create your models here.
@@ -46,6 +47,9 @@ class Project(models.Model):
     def __str__self(self):
         return str(self.name)
 
+    def get_absolute_url(self):
+        return reverse('internside:index')
+
 
 class Guide(models.Model):
     name = models.CharField(max_length=100)
@@ -53,3 +57,5 @@ class Guide(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
