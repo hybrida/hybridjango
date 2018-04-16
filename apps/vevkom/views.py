@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Max, Min
 from .models import CakeMaker, MeetingReport, Project, Guide
 from django.contrib.auth.decorators import permission_required
+from django.views.generic.edit import CreateView
 
 
 @permission_required(['vevkom.add_project'])
@@ -86,3 +87,7 @@ def edit_todo(request, pk):
                 project.description = text
                 project.save()
     return redirect('internside:index')
+
+class AddProject(CreateView):
+    model = Project
+    fields = ['name', 'responsible', 'description', 'status', 'priority']
