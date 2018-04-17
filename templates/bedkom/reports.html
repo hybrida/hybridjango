@@ -1,0 +1,39 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+        <style>
+        #rapport {
+            font-size: 18px;
+            color: #005675;
+            text-align: center;
+        }
+
+        .buttons {
+            position: absolute;
+            left: 535px;
+            top: 80px;
+        }
+    </style>
+
+    <div class="container" style="width: 70%">
+        <h1>Møtereferat</h1>
+        <div class="buttons">
+            {% if perms.staticpages.add_boardreport %}
+                <br>
+                <a href="{% url 'admin:bedkom_meetingreport_add'%}">
+                    <button class="btn btn-xs btn-primary">Ny</button>
+                </a>
+            {% endif %}
+        </div>
+    <br>
+        <div class="list-group">
+            {% for MeetingReport in meetingreports %}
+                <a id="rapport" href="/uploads/{{ MeetingReport.report }}" class="list-group-item" target="_blank">Referat {{ MeetingReport.date }} <br> {{ MeetingReport.description }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock text %}

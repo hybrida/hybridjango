@@ -52,6 +52,10 @@
         <div class="test">
             <a href="/"><img src="../../static/img/logo.svg" style="float: left;"/></a>
             {# Buttons #}
+            <a style="float: right; padding-right: 10px" href="{% url 'bkreports' %}">
+                <button class="btn btn-primary">Referater</button>
+            </a>
+
             <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add' %}">
                 <button class="btn btn-primary">Lag ny bedrift</button>
             </a>
