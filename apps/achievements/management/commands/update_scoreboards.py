@@ -92,9 +92,21 @@ class Command(BaseCommand):
 
         #Adding what place a user has on the scoreboard
         x = 0
-        for item in scoreboardCurrent:
+        y = 0
+        for i in range(len(scoreboardCurrent) - 1):
             x += 1
-            item['Number'] = x
+
+            hybrid1 = scoreboardCurrent[i]
+            hybrid2 = scoreboardCurrent[i + 1]
+
+            if hybrid1['Score'] == hybrid2['Score']:
+                hybrid1['Number'] = x-y
+                y += 1
+            elif y != 0:
+                hybrid1['Number'] = x - y
+                y = 0
+            else:
+                hybrid1['Number'] = x
 
         #Sorting the All Time scoreboard
         switch = True
@@ -112,9 +124,21 @@ class Command(BaseCommand):
 
         # Adding what place a user has on the scoreboard
         x = 0
-        for item in scoreboardAllTime:
+        y = 0
+        for i in range(len(scoreboardAllTime) - 1):
             x += 1
-            item['Number'] = x
+
+            hybrid1 = scoreboardAllTime[i]
+            hybrid2 = scoreboardAllTime[i + 1]
+
+            if hybrid1['Score'] == hybrid2['Score']:
+                hybrid1['Number'] = x - y
+                y += 1
+            elif y != 0:
+                hybrid1['Number'] = x - y
+                y = 0
+            else:
+                hybrid1['Number'] = x
 
         #Wrighting the two scoreboards to seperate .json files in /uploads
         with open(path.join(settings.MEDIA_ROOT, "ScoreboardAllTime.json"), "w") as file:
