@@ -89,3 +89,7 @@ class MeetingReport(models.Model):
 
     def __str__(self):
         return "Referat: "+str(self.date)
+
+    def get_absolute_url(self):
+        return reverse('bkreports')
+

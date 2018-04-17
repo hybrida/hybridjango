@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CompanyForm
 from .models import Company, CompanyComment, Bedpress, MeetingReport
+from django.views.generic.edit import CreateView
 
 
 @permission_required(['bedkom.add_company'])
@@ -141,3 +142,9 @@ def reports(request):
     meetingreports = MeetingReport.objects.all().order_by('date')
 
     return render(request, "bedkom/reports.html", {"meetingreports": meetingreports})
+
+class AddReport(CreateView):
+    model = MeetingReport
+    fields = ['report', 'date', 'description']
+
+
