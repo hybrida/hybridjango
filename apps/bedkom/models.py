@@ -80,3 +80,12 @@ class CompanyComment(models.Model):
         return str(
             str(self.author.first_name) + " " + str(self.author.last_name) + " in " + str(self.company) + ": " + str(
                 self.text))
+
+
+class MeetingReport(models.Model):
+    report = models.FileField(upload_to='pdf/referat')
+    date = models.DateField(default=timezone.now)
+    description = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return "Referat: "+str(self.date)
