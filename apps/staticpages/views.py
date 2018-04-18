@@ -19,7 +19,7 @@ from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
 from django.views.generic.edit import CreateView, DeleteView
-from .models import Application
+from .models import Application, ComApplication
 
 
 
@@ -211,4 +211,8 @@ class application(CreateView):
 class DeleteApplication(DeleteView):
     model = Application
     success_url =  reverse_lazy('application_table')
+
+class AddComApplication(CreateView):
+    model = ComApplication
+    fields = ['navn', 'komite']
 
