@@ -1,4 +1,4 @@
-{% extends 'standard_wide.html' %}
+{% extends 'standard_sidebar.html' %}
 {% load widget_tweaks %}
 {% load static %}
 {% block text %}
@@ -29,3 +29,8 @@
         <button type="submit" value="Save" class="btn btn-primary">Søk</button>
     </form>
 {% endblock text %}
+
+{% block sidebar %}
+    <a style="color: black">Det vil bare være mulig å søke opptak til komité i visse angitte perioder perioder</a>
+
+{% endblock sidebar %}
