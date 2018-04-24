@@ -21,8 +21,11 @@
         <div class="buttons">
             {% if perms.staticpages.add_boardreport %}
                 <br>
-                <a href="{% url 'admin:bedkom_meetingreport_add'%}">
+                <a href="{% url 'bkreport-add'%}">
                     <button class="btn btn-xs btn-primary">Ny</button>
+                </a>
+                <a href="{% url 'bedkom'%}">
+                    <button class="btn btn-xs btn-primary">Tilbake</button>
                 </a>
             {% endif %}
         </div>
