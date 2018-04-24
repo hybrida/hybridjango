@@ -1,7 +1,7 @@
-import os
-from os import path
-from itertools import chain
 import json
+import os
+from itertools import chain
+from os import path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.edit import CreateView, DeleteView
 
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
@@ -18,12 +19,7 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from django.views.generic.edit import CreateView, DeleteView
 from .models import Application, ComApplication
-
-
-
-
 
 
 class FrontPage(EventList):
@@ -53,9 +49,13 @@ class FrontPage(EventList):
             priority=True)
         context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
 
-        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
-            scorelist = json.loads(data_file.read())
-        context['Scorelist'] = scorelist
+        try:
+            with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
+                scorelist = json.loads(data_file.read())
+            context['Scorelist'] = scorelist
+        except FileNotFoundError:
+            context['Scorelist'] = []
+
 
         return context
 
