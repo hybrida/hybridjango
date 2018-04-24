@@ -1,29 +1,28 @@
 {% extends 'standard_wide.html' %}
 {% load static %}
 {% block text %}
-    <h1>Komiteer</h1>
-    <table>
-        <tr>
-            <td>
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large">Vevkom</div>
-            </td>
-            <td style="padding-left: 100px">
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large;">Bedkom</div>
-            </td>
-            <td style="padding-left: 100px">
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large;">Arrkom</div>
-            </td>
+    <h1>Komitèsøknader</h1>
+
+    <table  class="table table-responsive sortable table-hover">
+    <thead>
+        <tr style="background-color: #428bca; height: 30px; color: white;">
+            <th class="col-xs-2">Navn</th>
+            <th class="col-xs-2">1.Prioritet</th>
+            <th class="col-xs-2">2.Prioritet</th>
+            <th class="col-xs-2">3.Prioritet</th>
+            <th class="col-xs-2">4.Prioritet</th>
+            <th class="col-xs-2">Kommentar</th>
         </tr>
+    </thead>
+        {% for ComApplication in comapplications %}
         <tr>
-            <td style="padding-top: 30px">
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large">Jentekom</div>
-            </td>
-            <td style="padding-left: 100px; padding-top: 30px">
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large;">Redaksjonen</div>
-            </td>
-            <td style="padding-left: 100px; padding-top: 30px">
-                <div class="white-box" style="width: 300px; text-align: center;font-size: x-large;">Kjellerkom</div>
-            </td>
+            <td class="text-left; responsible">{{ ComApplication.navn.first_name }} {{ ComApplication.navn.middle_name }} {{ ComApplication.navn.last_name }}</td>
+            <td>{{ ComApplication.prioritet_1 }}</td>
+            <td>{{ ComApplication.prioritet_2 }}</td>
+            <td>{{ ComApplication.prioritet_3 }}</td>
+            <td>{{ ComApplication.prioritet_4 }}</td>
+            <td>{{ ComApplication.kommentar }}</td>
         </tr>
+    {% endfor %}
     </table>
 {% endblock %}
