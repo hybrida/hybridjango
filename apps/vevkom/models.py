@@ -47,8 +47,6 @@ class Project(models.Model):
     def __str__self(self):
         return str(self.name)
 
-    def get_absolute_url(self):
-        return reverse('internside:index')
 
 
 class Guide(models.Model):

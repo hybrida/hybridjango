@@ -1,21 +1,17 @@
 from django import forms
+from .models import Project
 
 
-class TodoForm(forms.Form):
-    project_name = forms.CharField(label="project_name",max_length=150)
-    description = forms.CharField(label="description", max_length=1000)
-    priority = forms.CharField(choices="Choices", max_length=20)
-    status = forms.CharField(choices="Choices_status", max_length=20)
-    project_members = forms.CharField(max_length=500, blank=True)
+class ProjectForm(forms.ModelForm):
 
-    Choices = (
-        ('høy', 'høy'),
-        ('middels', 'middels'),
-        ('lav', 'lav'),
-    )
+    class Meta:
+        model = Project
+        fields = ['name', 'responsible', 'description', 'status', 'priority']
 
-    Choices_status = (
-        ('ferdig', 'ferdig'),
-        ('påbegynt','påbegynt'),
-        ('ikke påbegynt', 'ikke påbegynt'),
-    )
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['responsible'].widget.attrs.update({'class': 'form-control'})
+        self.fields['description'].widget.attrs.update({'class': 'form-control'})
+        self.fields['status'].widget.attrs.update({'class': 'form-control'})
+        self.fields['priority'].widget.attrs.update({'class': 'form-control'})
