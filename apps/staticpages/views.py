@@ -20,7 +20,8 @@ from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
 from .models import Application, ComApplication
-
+from .forms import CommiteApplicationForm
+from django.shortcuts import redirect
 
 class FrontPage(EventList):
     model = EventList.model
@@ -202,6 +203,11 @@ def application_table(request):
     applications = Application.objects.all()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
+def commiteapplications(request):
+    comapplications = ComApplication.objects.all()
+
+    return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
+
 
 class application(CreateView):
     model = Application
@@ -212,7 +218,17 @@ class DeleteApplication(DeleteView):
     model = Application
     success_url =  reverse_lazy('application_table')
 
-class AddComApplication(CreateView):
-    model = ComApplication
-    fields = ['navn', 'komite']
 
+def AddComApplication(request):
+        form = CommiteApplicationForm(request.POST)
+        if request.method == 'POST':
+            form = CommiteApplicationForm(request.POST)
+            if form.is_valid():
+                ComApplication = form.save(commit=False)
+                ComApplication.navn = request.user
+                ComApplication.save()
+                return redirect('about')
+
+        return render(request, 'staticpages/comapplication_form.html', {
+            'form': form,
+        })

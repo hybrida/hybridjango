@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView, \
-    application, application_table, DeleteApplication, AddComApplication
+    application, application_table, DeleteApplication, AddComApplication, commiteapplications
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^ringen/kontakt$', RingenView.as_view(template_name='staticpages/ringen/kontakt.html'),
         name='ringen_kontakt'),
     url(r'^studenter$', members, name='members'),
-    url(r'^sokkomite', AddComApplication.as_view(), name='comApp-add')
+    url(r'^sokkomite', AddComApplication, name='comApp-add'),
+    url(r'^komiteersok', commiteapplications, name='comapps'),
 ]
