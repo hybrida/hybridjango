@@ -86,7 +86,7 @@ class EventDelete(PermissionRequiredMixin, generic.DeleteView):
 
 def calendar_api(request):
     events = Event.objects.filter(hidden=False)
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         events = events.filter(public=True)
     events.filter()
     return JsonResponse([{
