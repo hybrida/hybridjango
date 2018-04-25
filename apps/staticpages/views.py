@@ -203,6 +203,7 @@ def application_table(request):
     applications = Application.objects.all()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
+@permission_required(['staticpages.add_commiteapplication'])
 def commiteapplications(request):
     comapplications = CommiteApplication.objects.all()
 
