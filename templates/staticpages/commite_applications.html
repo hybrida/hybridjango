@@ -14,14 +14,14 @@
             <th class="col-xs-2">Kommentar</th>
         </tr>
     </thead>
-        {% for ComApplication in comapplications %}
+        {% for CommiteApplication in comapplications %}
         <tr>
-            <td class="text-left; responsible">{{ ComApplication.navn.first_name }} {{ ComApplication.navn.middle_name }} {{ ComApplication.navn.last_name }}</td>
-            <td>{{ ComApplication.prioritet_1 }}</td>
-            <td>{{ ComApplication.prioritet_2 }}</td>
-            <td>{{ ComApplication.prioritet_3 }}</td>
-            <td>{{ ComApplication.prioritet_4 }}</td>
-            <td>{{ ComApplication.kommentar }}</td>
+            <td class="text-left; responsible">{{ CommiteApplication.navn.first_name }} {{ CommiteApplication.navn.middle_name }} {{ CommiteApplication.navn.last_name }}</td>
+            <td>{{ CommiteApplication.prioritet_1 }}</td>
+            <td>{{ CommiteApplication.prioritet_2 }}</td>
+            <td>{{ CommiteApplication.prioritet_3 }}</td>
+            <td>{{ CommiteApplication.prioritet_4 }}</td>
+            <td>{{ CommiteApplication.kommentar }}</td>
         </tr>
     {% endfor %}
     </table>

@@ -30,7 +30,7 @@ class Application(models.Model):
         return reverse('about')
 
 
-class ComApplication(models.Model):
+class CommiteApplication(models.Model):
     navn = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
 
     Choices = (
