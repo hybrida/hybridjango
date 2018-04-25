@@ -1,11 +1,11 @@
 from django import forms
-from .models import ComApplication
+from .models import CommiteApplication
 
 
 class CommiteApplicationForm(forms.ModelForm):
 
     class Meta:
-        model = ComApplication
+        model = CommiteApplication
         exclude = ['navn']
         fields = ['prioritet_1', 'prioritet_2', 'prioritet_3', 'prioritet_4', 'kommentar']
 

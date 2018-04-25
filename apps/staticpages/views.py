@@ -19,7 +19,7 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from .models import Application, ComApplication
+from .models import Application, CommiteApplication
 from .forms import CommiteApplicationForm
 from django.shortcuts import redirect
 
@@ -204,7 +204,7 @@ def application_table(request):
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
 def commiteapplications(request):
-    comapplications = ComApplication.objects.all()
+    comapplications = CommiteApplication.objects.all()
 
     return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
 
