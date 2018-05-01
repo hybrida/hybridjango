@@ -1,4 +1,4 @@
-{% extends 'staticpages/about.html' %}
+{% extends 'standard_sidebar.html' %}
 {% load widget_tweaks %}
 {% load static %}
 {% block text %}
@@ -30,5 +30,29 @@
     </form>
 {% endblock text %}
 
+{% block sidebar %}
+    Støtte fra Hybrida: kriterier
+    <br>
+    Godkjente formål:
+    <br>
+    Faglig:
+    <br>
+    -Et visst nivå av profesjonalitet
+    <br>
+    -Helst åpent for så mange som mulig
+    <br>
+    Sosialt:
+    <br>
+    -Ikke alkohol
+    <br>
+    -Inkluderende
+    <br>
+    Materielt:
+    <br>
+-Ting som promoterer linjeforening eller studieprogrammet.
+<br>
+    <br>
+Komitéstøtten er ment til sosiale ting, derfor skal det mye til for at komitéer skal få støtte utover dette. Komitéer kan feks få innvilget støtte dersom de har faglig arrangement.
 
 
+{% endblock %}
