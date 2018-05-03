@@ -10,6 +10,7 @@
             <th class="col-xs-2">Navn</th>
             <th class="col-xs-2">Beskrivlse</th>
             <th class="col-xs-3">Bilde</th>
+            <th class="col-xs-3">Tildeles</th>
             <th class="col-xs-4">Scorepoints</th>
 
 
@@ -17,14 +18,15 @@
     </thead>
 
     <tbody class="list">
-    {% for BadgeForm in badge_forms %}
+    {% for BadgeForslag in badge_forms %}
     <tr>
-        <td>{{ BadgeForm.name }}</td>
-        <td>{{ BadgeForm.description }}</td>
-        <td><img style="width: 40%" src="{{ BadgeForm.badge_image.url }}"><td>
-        <td>{{ BadgeForm.scorepoints }}</td>
+        <td>{{ BadgeForslag.navn }}</td>
+        <td>{{ BadgeForslag.beskrivelse }}</td>
+        <td><img style="width: 40%" src="{{ BadgeForslag.badge_bilde.url }}"><td>
+        <td>{{ BadgeForslag.tildeles }}</td>
+        <td>{{ BadgeForslag.scorepoints }}</td>
         <td>
-            <form action="{% url 'badgeform-delete' BadgeForm.id %}" method="post" >
+            <form action="{% url 'badgeform-delete' BadgeForslag.id %}" method="post" >
                 {% csrf_token %}
                 <input type="hidden" value="{{ BadgeForm.id }}" name="badgeform_id">
                 <button type="submit" class="btn btn-sm btn-default">
