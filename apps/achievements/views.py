@@ -1,27 +1,27 @@
 import json
 from os import path
-from .models import BadgeForm
+from .models import BadgeForslag
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
-
+from .forms import BadgeForslagForm
 from .models import Badge
+from django.shortcuts import redirect
 
 
 class SendBadge(CreateView):
-    model = BadgeForm
-    fields = ['name', 'description', 'badge_image', 'scorepoints']
-
+    model = BadgeForslag
+    fields = ['navn', 'beskrivelse', 'tildeles', 'badge_bilde', 'scorepoints']
 
 class DeleteBadge(DeleteView):
-    model = BadgeForm
+    model = BadgeForslag
     success_url = reverse_lazy('scoreboard')
 
 
 def BadgeTable(request):
-    badge_forms = BadgeForm.objects.all()
+    badge_forms = BadgeForslag.objects.all()
     return render(request, '../templates/achievements/badeform_table.html', {"badge_forms": badge_forms})
 
 
