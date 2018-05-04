@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from tinymce import HTMLField
 
 
 # Create your models here.
@@ -18,7 +19,7 @@ class CakeMaker(models.Model):
 
 class MeetingReport(models.Model):
     date = models.DateField(default=timezone.now)
-    people = models.CharField(max_length=200)
+    tilstede = models.CharField(max_length=200)
     text = models.TextField(max_length=3000)
 
     def __str__self(self):

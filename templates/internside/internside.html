@@ -111,6 +111,9 @@
 
                     <div class="white-box" id="text-box" style="height: 400px">
                     <h2 style="color: #002a80; text-align: center">Referater</h2>
+                        <a href="{% url 'internside:meetingreport-add' %}">
+                            <button class="btn btn-primary" >Legg til nytt referat</button>
+                        </a>
                         <table>
                             {% for MeetingReport in referats %}
                                 <tr>
@@ -118,7 +121,7 @@
                                         <div onclick="showhide(this)" class="white-box" style=" width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
                                             <div id="integer" style="display: none; text-align: left;">
-                                                <p><a style="color: black">Tilstede:{{ MeetingReport.people }}</a></p>
+                                                <p><a style="color: black">Tilstede:{{ MeetingReport.tilstede }}</a></p>
                                                 <p><a style="color: black">{{ MeetingReport.text }}</a></p>
 
                                             </div>
