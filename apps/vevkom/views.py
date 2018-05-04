@@ -115,6 +115,6 @@ def AddMeetingReport(request):
                 application.save()
                 return redirect('internside:index')
 
-        return render(request, 'vevkom/project_form.html', {
+        return render(request, 'internside/meetingreport_form.html', {
             'form': form,
         })

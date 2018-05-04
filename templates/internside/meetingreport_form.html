@@ -1,0 +1,31 @@
+{% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <style>
+    .header {
+        text-align: center;
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    </style>
+
+    <div class="header">
+        <h3 style="display: inline-block; font-size: xx-large; margin: auto; margin-left: -12%">Legg til nytt referat</h3>
+        <a href="{% url 'internside:index'  %}">
+            <button style="float: left" class="btn btn-primary">Tilbake</button>
+        </a>
+    </div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+            <label>{{ field.label_tag }}</label>
+            <div>{{ field }}</div>
+            </div>
+
+        {% endfor %}
+        <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+    </form>
+{% endblock text %}
