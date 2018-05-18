@@ -20,7 +20,7 @@ class CakeMaker(models.Model):
 class MeetingReport(models.Model):
     date = models.DateField(default=timezone.now)
     tilstede = models.CharField(max_length=200)
-    text = models.TextField(max_length=3000)
+    text = HTMLField(max_length=3000)
 
     def __str__self(self):
         return "Referat: " + str(self.date)
@@ -52,7 +52,7 @@ class Project(models.Model):
 
 class Guide(models.Model):
     name = models.CharField(max_length=100)
-    text = models.TextField(max_length=50000)
+    text = HTMLField(max_length=50000)
 
     def __str__(self):
         return str(self.name)
