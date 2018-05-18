@@ -122,7 +122,7 @@
                                             <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
                                             <div id="integer" style="display: none; text-align: left;">
                                                 <p><a style="color: black">Tilstede:{{ MeetingReport.tilstede }}</a></p>
-                                                <p><a style="color: black">{{ MeetingReport.text }}</a></p>
+                                                <p><a style="color: black">{{ MeetingReport.text|safe }}</a></p>
 
                                             </div>
 
@@ -172,7 +172,7 @@
                                         <div onclick="showhide4(this)" class="white-box" style=" width: 1090px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
                                             <div id="guidetext" style="display: none; text-align: left;">
-                                                <p><a style="color: black">{{ Guide.text }}</a></p>
+                                                <p><a style="color: black">{{ Guide.text|safe }}</a></p>
 
                                             </div>
 
