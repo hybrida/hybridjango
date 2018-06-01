@@ -6,6 +6,7 @@ from os import path
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
 from django.utils import timezone
@@ -19,9 +20,9 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from .models import Application, CommiteApplication
 from .forms import CommiteApplicationForm
-from django.shortcuts import redirect
+from .models import Application, CommiteApplication
+
 
 class FrontPage(EventList):
     model = EventList.model
@@ -46,9 +47,12 @@ class FrontPage(EventList):
                                                                if tp_event.event_start > timezone.now()]
                                                               ), key=lambda event: event.event_start)[:7]
 
-        context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight', 'deadline').filter(
-            priority=True)
-        context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
+        prioritized_jobs = Job.objects.filter(deadline__gte=timezone.now(), priority=True)
+        context['job_list_priority'] = prioritized_jobs.order_by('-weight', 'deadline')
+        job_rows_left = max(0, 7 - prioritized_jobs.count())
+        context['job_list_others'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight',
+                                                                                               'deadline').filter(
+            priority=False)[:job_rows_left]
 
         try:
             with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
