@@ -22,7 +22,6 @@ h4 {
 </style>
 
 
-    {% if job_list %}
         {% for job in job_list %}
             <hr>
             <a style="color: black;" href="{% url 'jobs:job_detail' job.pk %}">
@@ -33,7 +32,3 @@ h4 {
             </div>
             </a>
         {% endfor %}
-    {% else %}
-        <hr>
-        <p>Det finnes ingen fremhevede stillingsutlysninger.</p>
-    {% endif %}
