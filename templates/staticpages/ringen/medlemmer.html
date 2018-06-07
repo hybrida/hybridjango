@@ -1,21 +1,233 @@
 {% extends 'staticpages/about.html' %}
 {% load static %}
-{% block text %}
-    <article>
-        <div class="remove-whitebox-padding">
-            <img src="{% static ringen %}" class="center-block img-responsive art-img" width="100%">
-        </div>
+{% block unstyled_text %}
+
+    <article class="white-box">
+        {% if ringen %}
+            <div class="remove-whitebox-padding">
+                <img src="{% static ringen %}" class="center-block img-responsive art-img" width="100%">
+            </div>
+        {% endif %}
         <h1>Medlemmer</h1>
         <p>
-            Følgende bedrifter er medlem av I&IKT-ringen:
+            <b>Følgende bedrifter er medlem av I&IKT-ringen:</b>
         </p>
         <ul>
-            <li>Aker Solutions KBe Design. Hjemmeside: http://www.kbedesign.com/</li>
-            <li>Focus Software AS. Hjemmeside: http://www.focus.no/</li>
-            <li>Norkart AS. Hjemmeside: http://www.nkgs.no/</li>
-            <li>Anko AS.  Hjemmeside: http://anko.no/</li>
-            <li>Geodata AS.  Hjemmeside: http://geodata.no/</li>
-            <li>Holte Consulting Hjemmeside: http://holteconsulting.no/</li>
+            <li>Aker Solutions KBe Design</li>
+            <li>Focus Software AS</li>
+            <li>Norkart AS</li>
+            <li>Anko AS</li>
+            <li>Geodata AS</li>
+            <li>Holte Consulting</li>
+            <li>Genus AS</li>
+        </ul>
+        Les mer om bedriftene nedenfor.
+    </article>
+
+    <a name="aker1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.kbedesign.com/"><img src="{% static 'img/ringen/AkerSolutions.jpg' %}" class="center-block"
+                                                 width="60%"></a><br>
+        <p>We got our start as a small mechanical workshop on Oslo’s Aker River. Now we are a global provider of
+            engineering, design, production systems and services to the oil and gas industry. Our expertise brings
+            discoveries into production and maximizes recovery with a focus on sustainability and limiting the
+            environmental impact.<br><br>
+
+            Aker Solutions has 14,000 employees in about 20 countries around the world that embrace innovation and
+            collaboration in a drive to create a sustainable future. We put safety and operational excellence first. We
+            strive for honesty and integrity in all that we do.<br><br>
+            We provide subsea production equipment and offshore field design, ranging from concept studies and front-end
+            engineering to subsea production systems. We carry out maintenance and modifications work and provide
+            services during operations as well as deliver solutions to extend the lifetime of oil and gas fields.
+            <br><br>
+            Aker Solutions helps unlock resources in the deepest waters and harshest climates imaginable around the
+            world as we also work with producers to minimize the environmental impact. Wherever we are in world, we make
+            sure to instill our high standards of safety and integrity in staff and suppliers.
+            <br><br>
+            Aker Solutions ASA is listed on the Oslo Stock Exchange as the parent company for a number of separate legal
+            entities, most operating under the Aker Solutions name. The company generated 25.6 billion kroner in revenue
+            in 2016.
+        </p>
+    </article>
+
+    <a name="fokus1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.focus.no/"><img src="{% static 'img/ringen/Focus.jpg' %}"></a>
+        <p><b>Forretningsidé</b><br/> Ledende kompetansesenter innen IT-løsninger for BA-markedet</p>
+        <p></p>
+        <p><b>Produkter</b><br/> Selskapets produktspekter spenner over de ulike fasene av et
+            byggeprosjekt, og dekker områdene:</p>
+        <ul>
+            <li>Tekniske beregninger (statikk, stål, tre og betong)</li>
+            <li>Anbudsbeskrivelser, NS3420 og prosesskoder</li>
+            <li>Kalkyler</li>
+            <li>Planlegging</li>
+            <li>Oppfølging</li>
+            <li>BIM, Revit Arkitekt/Installasjon/byggeteknikk, AutoCAD Civil 3D</li>
+            <li>CAD AutoCAD Architecture</li>
+            <li>Areal- og reguleringsplaner med SOSI</li>
+            <li>Opplæring</li>
+            <li>Konsulentbistand - prosjektbistand - BIM konsulent</li>
+            <li>Programutvikling</li>
+            <li>Drift av servere/datanettverk</li>
+        </ul>
+        <p> All programvare fra Focus Software er laget for og på Windows-plattform. Alle programmene
+            kan leveres som enbrukerlisenser, eller som flytende nettverkslisenser der antall samtidige brukere er
+            bestemt.</p>
+        <p></p>
+        <p><b>Historikk</b><br/> Selskapet ble stiftet i 1996 med det formål å tilby bygg- og
+            anleggsmarkedet ledende IT-løsninger innen tekniske beregninger, prosjektadministrative programmer og DAK.
+        </p>
+        <p> Frem til i dag har mer enn 1000 firmaer installert ulike løsninger fra oss. For oss er dette en bekreftelse
+            på at samspillet mellom fagkompetansen og dyktige programutviklere gir de beste resultatene.</p>
+        <p> Vi er i dag 40 ansatte med hovedkontor på Billingstad ved Oslo og avdelingskontorer i Fredrikstad, Kokelv
+            (Finnmark) og utenfor Leeds i England. Våre kunder er hovedsakelig i Norge og Sverige, men vi har også en
+            rekke kunder i hele Norden, Polen og Estland.</p>
+    </article>
+
+    <a name="norkart1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.norkart.no/"><img src="{% static 'img/ringen/Norkart.jpg' %}" class="center-block"
+                                              width="70%"></a>
+        <p><span>Programmereren jobber i utviklingsavdelingen med utvikling av GISLINE, KOMTEK og WEBATLAS ved hjelp av moderne utviklingsverktøy. Web teknologi er et høyaktuelt fagområde, og Norkart arbeider for å tilpasse seg internasjonale standarder innenfor fagfeltet. </span>
+        </p>
+        <p><span>Testingeniøren jobber også i utviklingsavdelingen med kvalitetssikring av programvaren. Det utføres omfattende og systematiske tester som enten ender i godkjenning eller tilbakemelding til programmereren. </span>
+        </p>
+        <p><span>Prosjektlederen en fagperson med utdannelse og lang erfaring innenfor GIT fagfeltet. Han spesifiserer og leder utviklingsprosjekt med utgangspunkt i kunnskaper om kundens behov. </span>
+        </p>
+        <p><span>Konsulenten/Tjenesteleverandøren jobber med kunderelaterte prosjekter enten hjemme på kontoret eller ute hos kunden. Typiske konsulentjobber er oppstart og vedlikehold av kundens GIS system og tilrettelegging av data for systemene. </span>
+        </p>
+        <p><span>Selgeren har en omfattende reisevirksomhet og besøker og skriver tilbud til eksisterende eller nye kunder. Også selgeren må ha omfattende kunnskaper om programvaren og tjenestene han/hun selger. Selgeren har gjerne ansvaret for salget i et nærmere definert område. </span>
+        </p>
+        <p><span>Norkart har hovedkontor i Sandvika og avdelingskontorer i Bergen, Lillehammer og Trondheim.</span>
+        </p>
+    </article>
+
+    <a name="geodata1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.geodata.no/"><img src="{% static 'img/ringen/GeoData.jpg' %}" class="center-block"
+                                              width="60%"></a><br>
+        <p>Geodata er et teknologiselskap som hjelper bedrifter å visualisere egne fag- og forretningsdata i kart, eller
+            berike dem ved hjelp av geografiske analyser og data.<br>
+        <ul>
+            <li>Vi er 120 ansatte</li>
+            <li>Vi har jobbet med GIS siden vi startet opp i 1988</li>
+            <li>Vi er hoveddistributør for Esris programvare ArcGIS i Norge.</li>
+            <li>Våre løsninger finnes i alle bransjer, i offentlig og privat sektor.</li>
+        </ul>
+        <br><b>Muligheter med geografi, teknologi og data</b>
+        Kartet er en effektiv plattform for å koble og visualisere informasjon og se nye sammenhenger. Du kan for
+        eksempel kombinere dine egne forretningsdata med befolkningsdata, risikodata og eiendomsdata. Metodikken vi
+        bruker heter GIS – Geografiske informasjonssystemer.
+        <br><br>
+        Ved hjelp av analyseverktøy kan du analysere og benytte store datamengder som krever flere maskiner og
+        sanntidsdata. Du kan finne trender og få ny kunnskap. Geodata leverer programvaren som må til (ArcGIS fra Esri)
+        for å selv visualisere og analysere data i kart og vi har eksperter som kan rådgi og lage løsninger skreddersydd
+        til dine behov. I tillegg sitter vi på enorme mengder data du kan kjøpe og benytte til egne kart og
+        analyser.
+    </article>
+
+    <a name="anko1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.anko.no/"><img src="{% static 'img/ringen/ANKO.jpg' %}" class="center-block"
+                                           width="13%"></a>
+
+        <br>
+        <p>ANKO AS ble i 1975 grunnlagt av personell fra tidligere Bloms Oppmåling i Stavanger. Navnet var da en
+            forkortelse for Anlegg og Kommunalservice.<br><br>
+
+            I 2005 etablerte selskapet egen avdeling for inspektørtjenester innen NDT og sveiseinspeksjon.<br><br>
+
+            Høsten 2008 slår selskapene ANKO AS (Stavanger) og ARC Oppmåling AS (Bergen) seg sammen og blir Vestlandets
+            største frittstående konsulentselskap innen land- og industrimåling. Mars 2015 åpnet vi kontor i Harstad og
+            i 2018 åpnet vi nytt kontor i Trondheim, som nå er under utvikling.<br><br>
+
+            Selskapet har siden oppstarten levert Oppmålings/ingeniørtjenester innen land- og industrimåling
+            til kunder og prosjekteri inn- og utland.<br><br>
+            I dag består selskapet av omtrent 50 ansatte som besitter bred erfaring og kompetanse.</p>
+    </article>
+
+    <a name="holte1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="http://www.holteconsulting.no/"><img src="{% static 'img/ringen/holte.jpg' %}" class="center-block"
+                                                      width="65%"></a><br>
+        <p>Holte Consulting er et norsk konsulenthusetablert i 1977 som er fagspesialister innen prosjektledelse. Vi
+            bemanner ulike roller i prosjektorganisasjoner og tilbyr rådgivnings- og analysetjenester. Vi er omtrent 50
+            ansatte og holder til sentralt på Skøyen i Oslo. Prosjektfaget er vår kjernekompetanse, og vi har oppdrag
+            innen flere bransjer – både IT, telekom, energi, samt bygg, anlegg og eiendom. Vi hjelper våre kunder med:
+            <br>
+            <br>
+            <b>Rådgivning</b>
+        <ul>
+            <li>Bistår med å analysere muligheter og velge riktig konsept eller strategi</li>
+            <li>Gir råd om hvordan prosjekter bør styres for å nå sine mål</li>
+            <li>Analyserer risiko og usikkerhet</li>
+            <li>Kvalitetssikrer prosjektdokumentasjon og kostnadskalkyler</li>
+            <li>Hjelper kundene med å utvikle og etablere prosjektmetodikk</li>
+        </ul>
+        <br>
+        <b>Prosjektledelse og prosjektbemanning</b>
+        <ul>
+            <li>Bemanner prosjekter med ulike prosjektfaglige roller</li>
+            <li>Bistår med metodikk, verktøy og utførelse av porteføljestyring</li>
+        </ul>
+        <br>
+        <b>Våre yngste medarbeidere har blant annet vært med på å...</b>
+        <ul>
+            <li>utvikle ny mobilapp</li>
+            <li>innføre nytt IT system for kjent restaurantkjede</li>
+            <li>lede teknisk prosjekt for større mediebedrift</li>
+            <li>utvikle prosjektmodell for bedrifter i ulike bransjer</li>
         </ul>
     </article>
+
+    <a name="genus1" class="anchor"></a>
+    <article class="white-box space-above">
+        <a href="https://www.genus.no/?MenuCommand=HomePage"><img src="{% static 'img/ringen/genus.png' %}"
+                                                                  class="center-block"></a>
+        <p>
+            Genus AS er et norsk selskap og programvarehus lokalisert i på Lysaker utenfor Oslo. Selskapet ble stiftet i
+            1996 basert på idéen om at det bør være mulig å bygge applikasjoner ved bruk av beskrivelser tett opp mot
+            sluttbrukernes begrepsverden, og deretter kjøre programvaren direkte fra slike beskrivelser. Selskapet er i
+            vekst og har i dag ca. 60 ansatte.<br><br>
+
+            Selskapets formål er å hjelpe selskaper og myndigheter med å lykkes i sin forretningsdrift ved å tilby
+            bærekraftig programvare. I en verden med stadige endringer og skifter innenfor både teknologi og
+            forretningsmodeller ønsker vi å tilby en plattform for store og små forretningssystemer som skal møte dagens
+            behov og samtidig tilpasse seg forventede og uforventede fremtidige behov.<br><br>
+
+            Digitalisering av forretningsprosesser og modernisering av IT-porteføljen står høyt på agendaen i de fleste
+            selskaper. Samtidig opplever vi at de tradisjonelle leveransemodellene (hyllevare og
+            skreddersøm-programmering) i liten grad ivaretar kombinasjonen av innovasjon, endringsdyktighet og
+            langsiktighet som kreves for at investeringer i IT-prosjekter skal gi lønnsomme og bærekraftige resultater.
+            Vi er en motvekt til slike tradisjonelle leveransemodeller, hvor vår plattform henter ut fordelene og
+            minimerer ulempene til alternativene.
+            <br><br>
+            Genus Apps® er en programvareplattform for å bygge, endre, distribuere og eksekvere forretningsapplikasjoner
+            uten behov for programmering, hvor beskrivelsen av systemet tolkes ved kjøretid. Plattformen håndterer
+            endringer i den omkringliggende teknologien, og hver kundes unike løsning tilpasses og endres ved å
+            kombinere «byggeklosser» og «moduler». Dette gir en unik fleksibilitet samtidig som det hindrer opphoping av
+            teknisk gjeld, og derav sikres applikasjoner som til enhver tid er tilpasset sin samtid både teknologisk og
+            forretningsmessig. Plattformen kategoriseres av IT-eksperter inn under kategoriene «high productivity
+            platform as a service» (hpaPaaS) og «no-code/low-code development platform».
+            <br><br>
+            Genus Apps er skalerbar, og håndterer store datamengder og et høyt antall brukere med høy tilgjengelighet
+            (high availability). Plattformen har innebygget støtte for analytisk håndtering av informasjon (business
+            intelligence), rike integrasjonsmuligheter og støtter en tjenesteorientert arkitektur. Plattformen kjører på
+            alle store nettlesere og på Windows desktop.
+            <br><br>
+            Selskapet er organisert i avdelingene Business Development, Professional Services og Research & Development.
+            Vi jobber både direkte med kunder av plattformen og gjennom partnere.</p>
+    </article>
+
+
+{% endblock %}
+{% block sublinks %}
+    <li><a href="#aker1">Aker Solutions KBe Design</a></li>
+    <li><a href="#fokus1">Focus Software AS</a></li>
+    <li><a href="#norkart1">Norkart AS</a></li>
+    <li><a href="#anko1">Anko AS</a></li>
+    <li><a href="#geodata1">Geodata AS</a></li>
+    <li><a href="#holte1">Holte Consulting</a></li>
+    <li><a href="#genus1">Genus AS</a></li>
 {% endblock %}
