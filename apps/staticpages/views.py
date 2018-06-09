@@ -237,3 +237,7 @@ def AddComApplication(request):
         return render(request, 'staticpages/comapplication_form.html', {
             'form': form,
         })
+
+def NewStudent(request):
+
+    return render(request, 'staticpages/ny_student.html')
