@@ -102,11 +102,11 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
         context.update({
-            'leder': Hybrid.objects.get(username='ludviglj'),
-            'nestleder': Hybrid.objects.get(username='torasg'),
+            'leder': Hybrid.objects.get(username='andrsly'),
+            'nestleder': Hybrid.objects.get(username='martahal'),
             'skattmester': Hybrid.objects.get(username='torstsol'),
-            'bksjef': Hybrid.objects.get(username='jonasvja'),
-            'festivalus': Hybrid.objects.get(username='rikkebl'),
+            'bksjef': Hybrid.objects.get(username='helenesm'),
+            'festivalus': Hybrid.objects.get(username='jakobdr'),
             'vevsjef': Hybrid.objects.get(username='sindreeo'),
             'jentekomsjef': Hybrid.objects.get(username='renatebf'),
             'redaktor': Hybrid.objects.get(username='kriraae'),
