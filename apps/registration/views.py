@@ -89,7 +89,7 @@ def register(request):
                         'uidb64': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                         'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
                 'robot@hybrida.no',
-                mail,
+                mails,
             )
     print(successful)
     if successful: RecoveryMail.objects.create(hybrid=user)

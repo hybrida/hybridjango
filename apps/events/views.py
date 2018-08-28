@@ -35,11 +35,14 @@ class EventView(generic.DetailView):
         attendance = Attendance.objects.get(pk=request.POST['attendance'])
         user = request.user
         if request.POST['action'] == 'leave' and attendance.signup_open():
+            #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
+                #førstemann på venteliste blir plukket ut og sendt en mail.
                 first_waiter = attendance.get_waiting()[0]
                 SendAdmittedMail(first_waiter, attendance)
-                print("\n\n\n " + first_waiter.first_name +" \n\n\n ")
             Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+            #Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
+            # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
         elif request.POST['action'] == 'join' and attendance.can_join(user):
             Participation.objects.get_or_create(hybrid=user, attendance=attendance)
 
@@ -67,26 +70,17 @@ class EventView(generic.DetailView):
         return context
 
 def SendAdmittedMail(hybrid, attendance):
-    print("\n\n HEI HEI \n\n")
     mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
     if hybrid.email: mail = hybrid.email
-    print("\n\n Klarte dette også gitt \n\n")
-    mail = hybrid.email
-    print("\n\n")
-    print(mail)
-    print("\n\n")
     successful = send_mail(
             'Du har fått plass på {title}',
             'Hei {name},\n\nDet er en glede å meddele at du har fått plass på {title}\n'
-            '{url}'.format(            url="https://hybrida.no/hendelser/" + str(attendance.event.pk),
+            '{url}'.format(url="https://hybrida.no/hendelser/" + str(attendance.event.pk),
             title = attendance.event.title,
             name = hybrid.get_full_name()),
             'robot@hybrida.no',
             mail,
         )
-    print("\n\n")
-    print(successful)
-    print("\n\n")
 
 class EventCreate(PermissionRequiredMixin, generic.CreateView):
     permission_required = 'events.add_event'
