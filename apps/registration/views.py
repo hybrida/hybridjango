@@ -91,7 +91,6 @@ def register(request):
                 'robot@hybrida.no',
                 mails,
             )
-    print(successful)
     if successful: RecoveryMail.objects.create(hybrid=user)
     context['successful'] = successful
     return render(request=request, template_name='registration/register.html', context=context)
