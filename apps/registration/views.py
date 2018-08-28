@@ -93,8 +93,9 @@ def register(request):
                         'uidb64': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                         'token': token_generator.make_token(Hybrid.objects.get(username=username))})),
                 'robot@hybrida.no',
-                mails,
+                mail,
             )
+    print(successful)
     if successful: RecoveryMail.objects.create(hybrid=user)
     context['successful'] = successful
     return render(request=request, template_name='registration/register.html', context=context)
