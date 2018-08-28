@@ -70,8 +70,7 @@ class EventView(generic.DetailView):
         return context
 
 def SendAdmittedMail(hybrid, attendance):
-    mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
-    if hybrid.email: mail = hybrid.email
+    mail = [hybrid.email if hybrid.email else '{}@stud.ntnu.no'.format(hybrid.username)]
     successful = send_mail(
             'Du har fått plass på {title}',
             'Hei {name},\n\nDet er en glede å meddele at du har fått plass på {title}\n'
