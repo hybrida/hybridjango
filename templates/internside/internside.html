@@ -111,15 +111,18 @@
 
                     <div class="white-box" id="text-box" style="height: 400px">
                     <h2 style="color: #002a80; text-align: center">Referater</h2>
+                        <a href="{% url 'admin:vevkom_meetingreport_add' %}">
+                            <button class="btn btn-primary" >Legg til nytt referat</button>
+                        </a>
                         <table>
                             {% for MeetingReport in referats %}
                                 <tr>
-                                    <td>
-                                        <div onclick="showhide(this)" class="white-box" style=" width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                    <td style="width: 1300px">
+                                        <div onclick="showhide(this)" class="white-box" style="  text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
                                             <div id="integer" style="display: none; text-align: left;">
-                                                <p><a style="color: black">Tilstede:{{ MeetingReport.people }}</a></p>
-                                                <p><a style="color: black">{{ MeetingReport.text }}</a></p>
+                                                <p><a style="color: black">Tilstede:{{ MeetingReport.tilstede }}</a></p>
+                                                <p><a style="color: black">{{ MeetingReport.text|safe }}</a></p>
 
                                             </div>
 
@@ -137,7 +140,7 @@
                             <table>
                                 {% for CakeMaker in cake_makers %}
                                     <tr>
-                                        <td>
+                                        <td style="width: 310px">
                                             <div onclick="showhide2(this)" class="white-box" style=" width: 310px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
                                             <a style="font-size: medium; color: black "> {{ CakeMaker.name }}</a>
                                                 <div id="buttons" style="display: none">
@@ -160,16 +163,16 @@
     <div class="container">
         <div class="row space-below">
             <div class="col-xs-12 space-above">
-                <div class="white-box" id="text-box" style="height: 400px">
+                <div class="white-box" id="text-box" style="height: 400px;">
                     <h2 style="color: #002a80; text-align: center">Guides</h2>
                     <table>
                         {% for Guide in guides %}
                         <tr>
-                                    <td>
-                                        <div onclick="showhide4(this)" class="white-box" style=" width: 1090px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
+                                    <td style="width: 1300px">
+                                        <div onclick="showhide4(this)" class="white-box" style=" padding-left: 10px; padding-right: 10px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
                                             <div id="guidetext" style="display: none; text-align: left;">
-                                                <p><a style="color: black">{{ Guide.text }}</a></p>
+                                                <p><a style="color: black">{{ Guide.text|safe }}</a></p>
 
                                             </div>
 

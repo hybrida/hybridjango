@@ -1,0 +1,42 @@
+{% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <style>
+    .header {
+        text-align: center;
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    </style>
+
+    <div class="header">
+        <h3 style="display: inline-block; font-size: xx-large; margin: auto; margin-left: -12%">Søk opptak til komité</h3>
+        <a href="{% url 'about'  %}">
+            <button style="float: left" class="btn btn-primary">Tilbake</button>
+        </a>
+    </div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+            <label>{{ field.label_tag }}</label>
+            <div>{{ field }}</div>
+            </div>
+
+        {% endfor %}
+        <button type="submit" value="Save" class="btn btn-primary">Søk</button>
+    </form>
+{% endblock text %}
+
+{% block sidebar %}
+    <a style="color: black">Det vil bare være mulig å søke opptak til komité i visse angitte perioder perioder</a>
+    <br>
+    <br>
+    <a style="color: black">Bare det øverste feltet må å fylles ut.</a>
+    <br>
+    <br>
+    <a style="color: black"> Kommentarfeltet er der hvis du ønsker å ytdype ytterligere hvordan valgene dine skal vektlegges</a>
+
+{% endblock sidebar %}

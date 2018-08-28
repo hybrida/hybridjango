@@ -10,14 +10,10 @@ from django.utils import timezone
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
+
 from apps.achievements.models import Badge
-from apps.achievements.signals.signals import *
-from django.http import HttpResponseRedirect
-
-from .models import Hybrid, RecoveryMail
 from .forms import HybridForm
-
-
+from .models import Hybrid, RecoveryMail
 
 
 class Profile(LoginRequiredMixin, generic.DetailView):
@@ -46,7 +42,7 @@ class EditProfile(generic.UpdateView):
     form_class = HybridForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not (request.user.is_authenticated() and self.get_object() == request.user):
+        if not (request.user.is_authenticated and self.get_object() == request.user):
             return redirect_to_login(request.get_full_path())
         return super(EditProfile, self).dispatch(
             request, *args, **kwargs)

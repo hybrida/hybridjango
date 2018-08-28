@@ -1,15 +1,17 @@
-import os
-from os import path
-from itertools import chain
 import json
+import os
+from itertools import chain
+from os import path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.edit import CreateView, DeleteView
 
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
@@ -18,12 +20,8 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from django.views.generic.edit import CreateView, DeleteView
-from .models import Application
-
-
-
-
+from .forms import CommiteApplicationForm
+from .models import Application, CommiteApplication
 
 
 class FrontPage(EventList):
@@ -49,13 +47,20 @@ class FrontPage(EventList):
                                                                if tp_event.event_start > timezone.now()]
                                                               ), key=lambda event: event.event_start)[:7]
 
-        context['job_list'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight', 'deadline').filter(
-            priority=True)
-        context['job_sidebar'] = Job.objects.filter(deadline__gte=timezone.now())
+        prioritized_jobs = Job.objects.filter(deadline__gte=timezone.now(), priority=True)
+        context['job_list_priority'] = prioritized_jobs.order_by('-weight', 'deadline')
+        job_rows_left = max(0, 7 - prioritized_jobs.count())
+        context['job_list_others'] = Job.objects.filter(deadline__gte=timezone.now()).order_by('-weight',
+                                                                                               'deadline').filter(
+            priority=False)[:job_rows_left]
 
-        with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
-            scorelist = json.loads(data_file.read())
-        context['Scorelist'] = scorelist
+        try:
+            with open(path.join(settings.MEDIA_ROOT, 'ScoreboardCurrent.json'), encoding='utf-8') as data_file:
+                scorelist = json.loads(data_file.read())
+            context['Scorelist'] = scorelist
+        except FileNotFoundError:
+            context['Scorelist'] = []
+
 
         return context
 
@@ -97,11 +102,11 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
         context.update({
-            'leder': Hybrid.objects.get(username='ludviglj'),
-            'nestleder': Hybrid.objects.get(username='torasg'),
+            'leder': Hybrid.objects.get(username='andrsly'),
+            'nestleder': Hybrid.objects.get(username='martahal'),
             'skattmester': Hybrid.objects.get(username='torstsol'),
-            'bksjef': Hybrid.objects.get(username='jonasvja'),
-            'festivalus': Hybrid.objects.get(username='rikkebl'),
+            'bksjef': Hybrid.objects.get(username='helenesm'),
+            'festivalus': Hybrid.objects.get(username='jakobdr'),
             'vevsjef': Hybrid.objects.get(username='sindreeo'),
             'jentekomsjef': Hybrid.objects.get(username='renatebf'),
             'redaktor': Hybrid.objects.get(username='kriraae'),
@@ -202,6 +207,12 @@ def application_table(request):
     applications = Application.objects.all()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
+@permission_required(['staticpages.add_commiteapplication'])
+def commiteapplications(request):
+    comapplications = CommiteApplication.objects.all()
+
+    return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
+
 
 class application(CreateView):
     model = Application
@@ -212,3 +223,21 @@ class DeleteApplication(DeleteView):
     model = Application
     success_url =  reverse_lazy('application_table')
 
+@login_required
+def AddComApplication(request):
+        form = CommiteApplicationForm(request.POST)
+        if request.method == 'POST':
+            form = CommiteApplicationForm(request.POST)
+            if form.is_valid():
+                ComApplication = form.save(commit=False)
+                ComApplication.navn = request.user
+                ComApplication.save()
+                return redirect('about')
+
+        return render(request, 'staticpages/comapplication_form.html', {
+            'form': form,
+        })
+
+def NewStudent(request):
+
+    return render(request, 'staticpages/ny_student.html')

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from tinymce import HTMLField
 
 
 # Create your models here.
@@ -18,8 +19,8 @@ class CakeMaker(models.Model):
 
 class MeetingReport(models.Model):
     date = models.DateField(default=timezone.now)
-    people = models.CharField(max_length=200)
-    text = models.TextField(max_length=3000)
+    tilstede = models.CharField(max_length=200)
+    text = HTMLField(max_length=3000)
 
     def __str__self(self):
         return "Referat: " + str(self.date)
@@ -47,13 +48,11 @@ class Project(models.Model):
     def __str__self(self):
         return str(self.name)
 
-    def get_absolute_url(self):
-        return reverse('internside:index')
 
 
 class Guide(models.Model):
     name = models.CharField(max_length=100)
-    text = models.TextField(max_length=50000)
+    text = HTMLField(max_length=50000)
 
     def __str__(self):
         return str(self.name)

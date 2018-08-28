@@ -23,6 +23,19 @@
                     <h3>Arrangementer</h3>
                     {% include 'events/event_list.html' %}
                 </div>
+                <div class="white-box space space-below">
+                    <h3>
+                        <a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">
+                            Stillingsutlysninger
+                        </a>
+                    </h3>
+                    {% include 'jobannoucements/job_list.html' with job_list=job_list_priority %}
+                    {% include 'jobannoucements/job_list.html' with job_list=job_list_others %}
+                    <hr>
+                    <div style="text-align:center">
+                        <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
+                    </div>
+                </div>
                 {% if user.is_authenticated %}
                     <div class="white-box space space-below" style="width: 100%; clear: left">
                         <div style="margin-bottom: 2%; text-align: center">
@@ -32,15 +45,6 @@
                         {% include 'achievements/mini_scoreboard.html' %}
                     </div>
                 {% endif %}
-                <div class="white-box space space-below">
-                    <h3><a style="color: black; font-size: 22px" href="{% url 'jobs:info' %}">Fremhevede
-                        Stillingsutlysninger</a></h3>
-                    {% include 'jobannoucements/job_list.html' %}
-                    <hr>
-                    <div style="text-align:center">
-                        <a id="job-button" href="{% url 'jobs:info' %}" class="btn btn-primary">Se alle</a>
-                    </div>
-                </div>
 
             </div>
             <div class="col-xs-12 col-md-8 col-md-pull-4">

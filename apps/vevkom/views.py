@@ -2,6 +2,7 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.db.models import Max, Min
 from .models import CakeMaker, MeetingReport, Project, Guide
+from .forms import ProjectForm, MeetingReportForm
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import CreateView
 
@@ -88,6 +89,32 @@ def edit_todo(request, pk):
                 project.save()
     return redirect('internside:index')
 
-class AddProject(CreateView):
-    model = Project
-    fields = ['name', 'responsible', 'description', 'status', 'priority']
+
+def AddProject(request):
+    form = ProjectForm(request.POST)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            return redirect('internside:index')
+
+    return render(request, 'vevkom/project_form.html', {
+        'form':form,
+    })
+
+
+def AddMeetingReport(request):
+        form = MeetingReportForm(request.POST)
+        if request.method == 'POST':
+            form = MeetingReportForm(request.POST)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.user = request.user
+                application.save()
+                return redirect('internside:index')
+
+        return render(request, 'internside/meetingreport_form.html', {
+            'form': form,
+        })
