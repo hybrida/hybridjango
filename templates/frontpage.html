@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
-    <img src="{% static "img/griff.jpg" %}" id="banner">
     {% if not user.is_authenticated %}
     {% endif %}
 
