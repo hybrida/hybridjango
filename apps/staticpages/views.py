@@ -232,7 +232,7 @@ def application(request):
 
             return redirect('about')
 
-    return render(request, 'staticpages/comapplication_form.html', {
+    return render(request, 'staticpages/application_form.html', {
         'form': form,
     })
 
