@@ -12,6 +12,7 @@ from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
+from django.core.mail import send_mail
 
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
@@ -20,7 +21,7 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from .forms import CommiteApplicationForm
+from .forms import CommiteApplicationForm, ApplicationForm
 from .models import Application, CommiteApplication
 
 
@@ -214,9 +215,26 @@ def commiteapplications(request):
     return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
 
 
-class application(CreateView):
-    model = Application
-    fields = ['navn', 'beskrivelse']
+def application(request):
+    form = ApplicationForm(request.POST)
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            pplication = form.save(commit=False)
+            pplication.save()
+            mail = ['skattmester@hybrida.no']
+            sucsessful = send_mail('Søknad om støtte fra styret',
+                                   'Navn: {navn}\n{beskrivelse}'
+                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   'robot@hybrida.no',
+                                   mail,
+                                   )
+
+            return redirect('about')
+
+    return render(request, 'staticpages/comapplication_form.html', {
+        'form': form,
+    })
 
 
 class DeleteApplication(DeleteView):

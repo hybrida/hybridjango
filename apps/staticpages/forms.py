@@ -1,5 +1,5 @@
 from django import forms
-from .models import CommiteApplication
+from .models import CommiteApplication, Application
 
 
 class CommiteApplicationForm(forms.ModelForm):
@@ -17,3 +17,13 @@ class CommiteApplicationForm(forms.ModelForm):
         self.fields['prioritet_4'].widget.attrs.update({'class': 'form-control'})
         self.fields['kommentar'].widget.attrs.update({'class': 'form-control'})
 
+class ApplicationForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['navn', 'beskrivelse']
+
+    def __init__(self, *args, **kwargs):
+        super(ApplicationForm, self).__init__(*args, **kwargs)
+        self.fields['navn'].widget.attrs.update({'class': 'form-control'})
+        self.fields['beskrivelse'].widget.attrs.update({'class': 'form-control'})
