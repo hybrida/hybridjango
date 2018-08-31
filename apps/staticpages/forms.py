@@ -21,6 +21,7 @@ class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
+        exclude = ['granted', 'comment']
         fields = ['navn', 'beskrivelse']
 
     def __init__(self, *args, **kwargs):

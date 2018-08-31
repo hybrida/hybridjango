@@ -236,6 +236,22 @@ def application(request):
         'form': form,
     })
 
+def edit_application(request, pk):
+    applications = Application.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST.get('applicationForm'))
+
+        comment = request.POST['text']
+        application_id = request.POST['Application_id']
+        granted = request.POST.get('grantForm', False)
+
+        if user.is_authenticated:
+                application = applications.get(pk=application_id)
+                application.granted = granted
+                application.comment = comment
+                application.save()
+    return redirect('application_table')
 
 class DeleteApplication(DeleteView):
     model = Application
