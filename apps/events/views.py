@@ -38,8 +38,10 @@ class EventView(generic.DetailView):
             #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
                 #førstemann på venteliste blir plukket ut og sendt en mail.
+
                 first_waiter = attendance.get_waiting()[0]
-                SendAdmittedMail(first_waiter, attendance)
+                if first_waiter is None:
+                    SendAdmittedMail(first_waiter, attendance)
             Participation.objects.filter(hybrid=user, attendance=attendance).delete()
             #Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
             # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
