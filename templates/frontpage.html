@@ -2,7 +2,22 @@
 {% load static %}
 {% block title %}Forside{% endblock %}
 {% block content %}
+    <script>
+    function showhide() {
+        var x = document.getElementById("conditionbox")
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    </script>
     <!--<img src="{% static "img/griff.jpg" %}" id="banner"> -->
+        <div id="conditionbox" style="font-size: small; position: fixed; box-sizing: content-box; bottom: 0px; padding-left: 20px; padding-top: 16px; border-style: solid; border-width: thin; background-color: white; border-color: #0f0f0f; z-index: 9999;">
+                Ved å å bruke denne siden godkjenner du disse  <a href="{% static 'pdf/Brukervilkår for Hybrida.pdf' %}">brukervilkårene</a>
+            <break></break>
+            <a class="btn btn-primary" onclick="showhide()"> OK</a>
+        </div>
     {% if not user.is_authenticated %}
     {% endif %}
 
