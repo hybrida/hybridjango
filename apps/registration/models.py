@@ -46,6 +46,7 @@ class Hybrid(AbstractUser):
     title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
     food_preferences = models.CharField(max_length=150, blank=True, verbose_name='Allergier og matpreferanser')
     card_key = models.CharField(max_length=10, null=True, blank=True, unique=True, verbose_name='NTNU-kortkode')
+    accepted_conditions = models.BooleanField(default=False)
 
     objects = CaseInsensitiveUserManager()
 

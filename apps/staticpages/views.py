@@ -275,3 +275,8 @@ def AddComApplication(request):
 def NewStudent(request):
 
     return render(request, 'staticpages/ny_student.html')
+
+def ChangeAcceptedStatus(request):
+    request.user.accepted_conditions = True
+    request.user.save()
+    return  redirect('/')

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView, \
-    application, application_table, DeleteApplication, AddComApplication, commiteapplications, NewStudent, edit_application
+    application, application_table, DeleteApplication, AddComApplication, commiteapplications, NewStudent, edit_application, ChangeAcceptedStatus
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^sokkomite', AddComApplication, name='comApp-add'),
     url(r'^komiteersok', commiteapplications, name='comapps'),
     url(r'(?P<pk>[0-9]+)/applications/edit', edit_application, name='edit_application'),
+    url(r'^change_accepted_status', ChangeAcceptedStatus, name='change_accepted_status')
 ]
