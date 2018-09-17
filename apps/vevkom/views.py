@@ -61,6 +61,17 @@ def bottom(request, pk):
 
     return redirect('internside:index')
 
+@permission_required(['vevkom.add_project'])
+def top(request, pk):
+    from .models import CakeMaker
+    cake_maker = CakeMaker.objects.get(pk=pk)
+    cake_makers = CakeMaker.objects.all().order_by('number_on_list')
+    cake_maker_number = cake_maker.number_on_list
+    for i in range(cake_maker_number, cake_makers.__sizeof__()):
+        upList(request, pk)
+
+    return redirect('internside:index')
+
 
 @permission_required(['vevkom.add_project'])
 def edit_todo(request, pk):
