@@ -67,7 +67,7 @@ def top(request, pk):
     cake_maker = CakeMaker.objects.get(pk=pk)
     cake_makers = CakeMaker.objects.all().order_by('number_on_list')
     cake_maker_number = cake_maker.number_on_list
-    for i in range(cake_maker_number, cake_makers.__sizeof__()):
+    for i in range(0, cake_makers.__sizeof__()):
         upList(request, pk)
 
     return redirect('internside:index')

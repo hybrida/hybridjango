@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import index, upList, downList, bottom, edit_todo, AddProject, AddMeetingReport
+from .views import index, upList, downList, bottom, edit_todo, AddProject, AddMeetingReport,top
 
 app_name = 'internside'
 urlpatterns = [
@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/endre/edit', edit_todo, name='edit_todo'),
     url(r'^endre/prosjekt', AddProject, name='project-add'),
     url(r'êndre/referat, ', AddMeetingReport, name='meetingreport-add'),
-    url(r'^(?P<pk>[0-9]+)/endre/top', bottom, name='top'),
+    url(r'^(?P<pk>[0-9]+)/endre/top', top, name='top'),
 ]
