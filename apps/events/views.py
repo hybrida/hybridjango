@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
 from django.views import generic
 
 from apps.events.forms import EventForm
@@ -34,7 +35,15 @@ class EventView(generic.DetailView):
         attendance = Attendance.objects.get(pk=request.POST['attendance'])
         user = request.user
         if request.POST['action'] == 'leave' and attendance.signup_open():
-            Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+            #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
+            if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
+                #førstemann på venteliste blir plukket ut og sendt en mail.
+                if attendance.get_waiting().exists():
+                    first_waiter = attendance.get_waiting()[0]
+                    SendAdmittedMail(first_waiter, attendance)
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+            #Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
+            # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
         elif request.POST['action'] == 'join' and attendance.can_join(user):
             Participation.objects.get_or_create(hybrid=user, attendance=attendance)
 
@@ -61,6 +70,19 @@ class EventView(generic.DetailView):
             } for attendance in list(event.attendance_set.all())]
         return context
 
+def SendAdmittedMail(hybrid, attendance):
+    mail = [hybrid.email if hybrid.email else '{}@stud.ntnu.no'.format(hybrid.username)]
+    successful = send_mail(
+            'Du har fått plass på {title}'
+                .format(title=attendance.event.title),
+            'Hei {name},\n\nDet er en glede å meddele at du har fått plass på {title}\n{url}'
+                .format(url="https://hybrida.no/hendelser/" + str(attendance.event.pk),
+                    title = attendance.event.title,
+                    name = hybrid.get_full_name()
+                ),
+            'robot@hybrida.no',
+            mail,
+        )
 
 class EventCreate(PermissionRequiredMixin, generic.CreateView):
     permission_required = 'events.add_event'

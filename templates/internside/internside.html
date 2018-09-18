@@ -62,48 +62,8 @@
       }
     </script>
 
-    <div style="background-color: black; width: 100%;height: 700px; position: static" >
-        <br>
-        <br>
-        <div style="margin-top: px; position: ; margin-top: px" >
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@personal-pc</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large">$ ssh hybrida.no</a>
-        </div>
-        <img style="width: 40%" src="{% static 'img/vevkom_console.png'%}">
-        <div style="margin-top: px">
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large" href="#bakeliste">$ cd bakeliste</a>
-        </div>
-        <div style="margin-top: px">
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large" href="#referater">$ cd referater</a>
-        </div>
-        <div style="margin-top: px">
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large" href="#guides">$ cd guides</a>
-        </div>
-        <div style="margin-top: px">
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large" href="#to-do">$ cd to-do liste</a>
-        </div>
-        <div style="margin-top: px">
-            <a style="color: #00ff00; top: 100px; font-size: x-large">vevkom@jenny</a>
-            <a style="color: white; font-size: x-large">:</a>
-            <a style="color: blue; font-size: x-large">~</a>
-            <a style="color: white; font-size: x-large" href="{% url 'badgetable' %}">$ cd innsendte badges</a>
-        </div>
-    </div>
 
+            <a class="btn btn-primary" href="{% url 'badgetable' %}">innsendte badges</a>
     <a name="referater" class="anchor"></a>
         <div class="container" style="margin-top: px;  ">
         <div class="row space-below">
@@ -111,14 +71,14 @@
 
                     <div class="white-box" id="text-box" style="height: 400px">
                     <h2 style="color: #002a80; text-align: center">Referater</h2>
-                        <a href="{% url 'internside:meetingreport-add' %}">
+                        <a href="{% url 'admin:vevkom_meetingreport_add' %}">
                             <button class="btn btn-primary" >Legg til nytt referat</button>
                         </a>
                         <table>
                             {% for MeetingReport in referats %}
                                 <tr>
-                                    <td>
-                                        <div onclick="showhide(this)" class="white-box" style=" width: 700px; text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
+                                    <td style="width: 1300px">
+                                        <div onclick="showhide(this)" class="white-box" style="  text-align: center; overflow:hidden; padding-top: 3%; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ MeetingReport.date }}</a>
                                             <div id="integer" style="display: none; text-align: left;">
                                                 <p><a style="color: black">Tilstede:{{ MeetingReport.tilstede }}</a></p>
@@ -140,13 +100,14 @@
                             <table>
                                 {% for CakeMaker in cake_makers %}
                                     <tr>
-                                        <td>
+                                        <td style="width: 310px">
                                             <div onclick="showhide2(this)" class="white-box" style=" width: 310px; text-align: center; overflow:hidden; padding-top: 5%; padding-bottom: 5%">
                                             <a style="font-size: medium; color: black "> {{ CakeMaker.name }}</a>
                                                 <div id="buttons" style="display: none">
                                                     <a href="{% url 'internside:upList' CakeMaker.pk %}">up</a>
                                                     <a href="{% url 'internside:downList' CakeMaker.pk %}">down</a>
                                                     <a href="{% url 'internside:bottom' CakeMaker.pk %}">bottom</a>
+                                                    <a href="{% url 'internside:top' CakeMaker.pk %}">top</a>
                                                 </div>
 
                                             </div>
@@ -163,13 +124,13 @@
     <div class="container">
         <div class="row space-below">
             <div class="col-xs-12 space-above">
-                <div class="white-box" id="text-box" style="height: 400px">
+                <div class="white-box" id="text-box" style="height: 400px;">
                     <h2 style="color: #002a80; text-align: center">Guides</h2>
                     <table>
                         {% for Guide in guides %}
                         <tr>
-                                    <td>
-                                        <div onclick="showhide4(this)" class="white-box" style=" width: 1090px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
+                                    <td style="width: 1300px">
+                                        <div onclick="showhide4(this)" class="white-box" style=" padding-left: 10px; padding-right: 10px; text-align: center; overflow:hidden; padding-top: 10 px; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
                                             <div id="guidetext" style="display: none; text-align: left;">
                                                 <p><a style="color: black">{{ Guide.text|safe }}</a></p>

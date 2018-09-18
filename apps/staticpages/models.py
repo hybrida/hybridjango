@@ -26,6 +26,14 @@ class Application(models.Model):
     beskrivelse = models.TextField(max_length=5000)
 
 
+    Grants = (
+        ('Støttet', 'Støttet'),
+        ('Delvis støttet', 'Delvis støttet'),
+        ('Ikke støttet', 'Ikke støttet')
+    )
+    granted = models.CharField(choices=Grants, blank=True, max_length=500)
+    comment = models.TextField(max_length=5000, blank=True)
+
     def get_absolute_url(self):
         return reverse('about')
 

@@ -2,10 +2,11 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView, \
-    application, application_table, DeleteApplication, AddComApplication, commiteapplications
+    application, application_table, DeleteApplication, AddComApplication, commiteapplications, NewStudent, edit_application, ChangeAcceptedStatus
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
+    url(r'^nystudent$', NewStudent, name='newstudent'),
     url(r'^strikk$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
     url(r'^statutter$', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
     url(r'^statutter/protokoller/$', ProtocolView.as_view(template_name='staticpages/protocols.html'),
@@ -23,7 +24,7 @@ urlpatterns = [
     url(r'^tillitsvalgte$', AboutView.as_view(template_name='staticpages/tillitsvalgte.html'), name='tillitsvalgte'),
     url(r'^holte$', AboutView.as_view(template_name='staticpages/holte.html'), name='holte'),
     url(r'^studiet$', AboutView.as_view(template_name='staticpages/ringen/studiet.html'), name='studiet'),
-    url(r'^soknad/form$', application.as_view(), name='application-add'),
+    url(r'^soknad/form$', application, name='application-add'),
     url(r'^soknad/table$', application_table, name='application_table'),
     url(r'^application/(?P<pk>[0-9]+)/delete$', DeleteApplication.as_view(), name='application-delete'),
     url(r'^ringen$', RingenView.as_view(template_name='staticpages/ringen.html'), name='ringen'),
@@ -39,4 +40,6 @@ urlpatterns = [
     url(r'^studenter$', members, name='members'),
     url(r'^sokkomite', AddComApplication, name='comApp-add'),
     url(r'^komiteersok', commiteapplications, name='comapps'),
+    url(r'(?P<pk>[0-9]+)/applications/edit', edit_application, name='edit_application'),
+    url(r'^change_accepted_status', ChangeAcceptedStatus, name='change_accepted_status')
 ]

@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/endre/bottom', bottom, name='bottom'),
     url(r'^(?P<pk>[0-9]+)/endre/edit', edit_todo, name='edit_todo'),
     url(r'^endre/prosjekt', AddProject, name='project-add'),
-    url(r'êndre/referat, ', AddMeetingReport, name='meetingreport-add')
+    url(r'êndre/referat, ', AddMeetingReport, name='meetingreport-add'),
+    url(r'^(?P<pk>[0-9]+)/endre/top', bottom, name='top'),
 ]

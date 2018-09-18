@@ -56,15 +56,19 @@ def bottom(request, pk):
     cake_maker = CakeMaker.objects.get(pk=pk)
     cake_makers = CakeMaker.objects.all().order_by('number_on_list')
     cake_maker_number = cake_maker.number_on_list
-    for CakeMaker in cake_makers:
-        with transaction.atomic():
-            if cake_maker_number > CakeMaker.number_on_list:
-                cake_maker.number_on_list = -1
-                cake_maker.save()
-                cake_maker.number_on_list = CakeMaker.number_on_list
-                CakeMaker.number_on_list = cake_maker_number
-                CakeMaker.save()
-                cake_maker.save()
+    for i in range(cake_maker_number, cake_makers.__sizeof__()):
+        downList(request, pk)
+
+    return redirect('internside:index')
+
+@permission_required(['vevkom.add_project'])
+def top(request, pk):
+    from .models import CakeMaker
+    cake_maker = CakeMaker.objects.get(pk=pk)
+    cake_makers = CakeMaker.objects.all().order_by('number_on_list')
+    cake_maker_number = cake_maker.number_on_list
+    for i in range(cake_maker_number, cake_makers.__sizeof__()):
+        upList(request, pk)
 
     return redirect('internside:index')
 

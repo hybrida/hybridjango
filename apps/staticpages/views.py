@@ -12,6 +12,7 @@ from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
+from django.core.mail import send_mail
 
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
@@ -20,7 +21,7 @@ from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol
 from hybridjango.settings import STATIC_FOLDER
-from .forms import CommiteApplicationForm
+from .forms import CommiteApplicationForm, ApplicationForm
 from .models import Application, CommiteApplication
 
 
@@ -102,11 +103,11 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
         context.update({
-            'leder': Hybrid.objects.get(username='ludviglj'),
-            'nestleder': Hybrid.objects.get(username='torasg'),
+            'leder': Hybrid.objects.get(username='andrsly'),
+            'nestleder': Hybrid.objects.get(username='martahal'),
             'skattmester': Hybrid.objects.get(username='torstsol'),
-            'bksjef': Hybrid.objects.get(username='jonasvja'),
-            'festivalus': Hybrid.objects.get(username='rikkebl'),
+            'bksjef': Hybrid.objects.get(username='helenesm'),
+            'festivalus': Hybrid.objects.get(username='jakobdr'),
             'vevsjef': Hybrid.objects.get(username='sindreeo'),
             'jentekomsjef': Hybrid.objects.get(username='renatebf'),
             'redaktor': Hybrid.objects.get(username='kriraae'),
@@ -214,10 +215,43 @@ def commiteapplications(request):
     return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
 
 
-class application(CreateView):
-    model = Application
-    fields = ['navn', 'beskrivelse']
+def application(request):
+    form = ApplicationForm(request.POST)
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            pplication = form.save(commit=False)
+            pplication.save()
+            mail = ['skattmester@hybrida.no']
+            sucsessful = send_mail('Søknad om støtte fra styret',
+                                   'Navn: {navn}\n{beskrivelse}'
+                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   'robot@hybrida.no',
+                                   mail,
+                                   )
 
+            return redirect('about')
+
+    return render(request, 'staticpages/application_form.html', {
+        'form': form,
+    })
+
+def edit_application(request, pk):
+    applications = Application.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST.get('applicationForm'))
+
+        comment = request.POST['text']
+        application_id = request.POST['Application_id']
+        granted = request.POST.get('grantForm', False)
+
+        if user.is_authenticated:
+                application = applications.get(pk=application_id)
+                application.granted = granted
+                application.comment = comment
+                application.save()
+    return redirect('application_table')
 
 class DeleteApplication(DeleteView):
     model = Application
@@ -237,3 +271,12 @@ def AddComApplication(request):
         return render(request, 'staticpages/comapplication_form.html', {
             'form': form,
         })
+
+def NewStudent(request):
+
+    return render(request, 'staticpages/ny_student.html')
+
+def ChangeAcceptedStatus(request):
+    request.user.accepted_conditions = True
+    request.user.save()
+    return  redirect('/')
