@@ -6,6 +6,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    atomic = False
     replaces = [('kiltshop', '0001_initial'), ('kiltshop', '0002_order_user'), ('kiltshop', '0003_auto_20161102_1629'),
                 ('kiltshop', '0004_auto_20161102_1640'), ('kiltshop', '0005_auto_20161102_1643'),
                 ('kiltshop', '0006_auto_20161102_2134'), ('kiltshop', '0007_auto_20161103_1518'),
