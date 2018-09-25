@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+import datetime
 from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
@@ -141,3 +142,22 @@ class EventComment(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
+
+class Mark(models.Model):
+    recipent = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    value = models.IntegerField(default=timezone.now)
+    start = models.DateTimeField(blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    reason = models.TextField()
+
+    def __str__(self):
+        return '{}, {} - {}'.format(self.recipent, self.start, self.end)
+
+    def invalid_end(self):
+        if self.end >= self.start:
+            raise ValidationError('Sluttdato må være etter startdato')
+
+    def onDelete(self):
+        time = self.start + datetime.timedelta(days=30)
+        if datetime.now == time:
+            self.delete(self)
