@@ -145,17 +145,13 @@ class EventComment(models.Model):
 
 class Mark(models.Model):
     recipent = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
-    value = models.IntegerField(default=timezone.now)
-    start = models.DateTimeField(blank=True)
+    value = models.IntegerField()
+    start = models.DateTimeField(default=timezone.now)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):
-        return '{}, {} - {}'.format(self.recipent, self.start, self.end)
-
-    def invalid_end(self):
-        if self.end >= self.start:
-            raise ValidationError('Sluttdato må være etter startdato')
+        return '{}, {} - 30 dager'.format(self.recipent, self.start)
 
     def onDelete(self):
         time = self.start + datetime.timedelta(days=30)
