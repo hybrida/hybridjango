@@ -66,14 +66,18 @@
               z.style.display = "block";
               a.style.display = "none";
           }
-          else {
+      }
+
+            function showhide5(variable) {
+          var x = variable.querySelector("#guidetext");
+          var y = document.getElementById("guide-box");
+          var z = variable.querySelector("#pilopp1");
+          var a = variable.querySelector("#pilned1");
               x.style.display = "none";
               z.style.display = "none";
               a.style.display = "block";
               y.style.height = "400px";
-          }
       }
-
       //function show(variable) {
       //    var b = document.getElementById("showhidebox" + variable);
       //    var x = b.querySelector("#guidetext");
@@ -156,7 +160,7 @@
                         {% for Guide in guides %}
                         <tr>
                                     <td style="width: 1300px">
-                                        <div ondblclick="showhide4(this)" id="showhidebox{{ Guide.id }}" class="white-box" style=" padding-left: 10px; padding-right: 10px; text-align: center; overflow:hidden; padding-top: 10px; padding-bottom: 3%">
+                                        <div ondblclick="showhide5(this)" onclick="showhide4(this)" id="showhidebox{{ Guide.id }}" class="white-box" style=" padding-left: 10px; padding-right: 10px; text-align: center; overflow:hidden; padding-top: 10px; padding-bottom: 3%">
                                             <a style="font-size: medium; color: black "> {{ Guide.name }}</a>
                                             <div id="guidetext" style="display: none; text-align: left;">
                                                 <p><a style="color: black">{{ Guide.text|safe }}</a></p>
