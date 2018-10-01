@@ -4,6 +4,7 @@
 {% block content %}
 
     <script>
+    var number = 0;
       function showHide3(variable) {
             var x = variable.querySelector("#commentshidden");
             var y = variable.querySelector("#commentshidden2");
@@ -65,6 +66,7 @@
               y.style.height = "100%";
               z.style.display = "block";
               a.style.display = "none";
+              number += 1;
           }
       }
 
@@ -76,7 +78,10 @@
               x.style.display = "none";
               z.style.display = "none";
               a.style.display = "block";
-              y.style.height = "400px";
+              number -=1;
+              if (number === 0) {
+                  y.style.height = "400px";
+              }
       }
       //function show(variable) {
       //    var b = document.getElementById("showhidebox" + variable);
