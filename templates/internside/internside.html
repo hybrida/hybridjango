@@ -5,6 +5,7 @@
 
     <script>
     var number = 0;
+    var number2 = 0;
       function showHide3(variable) {
             var x = variable.querySelector("#commentshidden");
             var y = variable.querySelector("#commentshidden2");
@@ -38,13 +39,17 @@
 
         function showhide(variable) {
             var x = variable.querySelector("#integer");
-            var y = document.getElementById("referatbox")
+            var y = document.getElementById("referatbox");
             if (x.style.display === "none") {
                 x.style.display = "block";
-                y.style.height = "100%"
+                y.style.height = "100%";
+                number2 += 1;
             } else {
                 x.style.display = "none";
-                y.style.height = "400px"
+                number2 -= 1;
+                if (number2 === 0) {
+                    y.style.height = "400px";
+                }
             }
         }
 
