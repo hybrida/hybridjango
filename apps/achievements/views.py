@@ -17,7 +17,7 @@ class SendBadge(CreateView):
 
 class DeleteBadge(DeleteView):
     model = BadgeForslag
-    success_url = reverse_lazy('scoreboard')
+    success_url = reverse_lazy('badgetable')
 
 
 def BadgeTable(request):
