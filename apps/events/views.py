@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
 
-from apps.events.forms import EventForm, MarkForm
+from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
 from .models import Event, EventComment, Attendance, Participation, Mark
 from apps.registration.models import Hybrid
