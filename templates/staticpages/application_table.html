@@ -45,7 +45,6 @@
             <th class="col-xs-1">Støttet</th>
             <th class="col-lg-3">Kommentar</th>
             <th class="col-xs-1">Rediger</th>
-           <th class="col-xs-1">Slett</th>
 
 
         </tr>
@@ -99,13 +98,6 @@
                     <button id="editButton"  class="btn btn-primary" onclick="showHide3(row{{Application.id}})">Rediger</button>
                     <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%" form="{{ Application.id }}">Lagre</button>
                 </td>
-        <td>
-            <form action="{% url 'application-delete' Application.id %}" method="post" >
-                             {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-default">
-                <span class="glyphicon glyphicon-trash"></span></button>
-            </form>
-        </td>
     </tr>
 
 
