@@ -8,9 +8,10 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
 
-from apps.events.forms import EventForm
+from apps.events.forms import EventForm, MarkForm
 from apps.rfid.models import Appearances
 from .models import Event, EventComment, Attendance, Participation, Mark
+from apps.registration.models import Hybrid
 
 
 class EventList(generic.ListView):
@@ -187,17 +188,15 @@ def unattended(request, pk):
     appearance = Appearances.objects.filter(event=event).first()
     has_rfid = Appearances.objects.filter(event=event).exists()
     users = appearance.users.all()
-    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
 
-def givemark(request, pk, selected):
-    event = Event.objects.filter(pk=pk).first()
-    attendance = Attendance.objects.filter(event=event)
-    appearence = Appearances.objects.filter(event=event).first()
-    has_rfid = Appearances.objects.filter(event=event).exists()
-    users = appearence.users.all()
-    selectedUsers = selected.users.all()
-    for user in selectedUsers:
-        Mark.objects.create(event=event, recipent=user, value = 1)
+    if request.method == 'POST':
+        if 'givemark' in request.POST:
+            print('\n' * 5)
+            pk = request.POST.get('givemark')
+            participant = Hybrid.objects.get(pk=pk)
+            Mark.objects.create(event=event, recipent=participant, value=1)
+
+
 
     return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
 

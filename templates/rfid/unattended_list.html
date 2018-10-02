@@ -29,20 +29,20 @@
                                 {{ participant.username }}@stud.ntnu.no
                             </a>
                         </td>
-                        <td><select>
-                            <option value = "1"></option>
-                        </select></td>
+                        <td>
+                            <form method="post">
+                                    {% csrf_token %}
+                                    <button class="button" onclick="return confirm('Er du sikker på at du vil gi mark til denne brukeren?')" name="givemark" type="submit" value="{{ participant.pk }}">
+                                        <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                                    </button>
+                            </form>
+                        </td>
                     </tr>
                     {% endif %}
                 {% endfor %}
              {% endfor %}
             </tbody>
         </table>
-        <div>
-            <a href="{% url 'givemark' event.pk %}">
-                <button class="btn btn-xl btn-primary"> Del ut prikker!</button>
-            </a>
-        </div>
     </div>
 
 {% endblock %}
