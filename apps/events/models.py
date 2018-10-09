@@ -153,7 +153,7 @@ class Mark(models.Model):
     def __str__(self):
         return '{}, {} - 30 dager'.format(self.recipent, self.start)
 
-    #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken
+    #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken, ingles por favor
     def checkMark(self):
         time = self.start + datetime.timedelta(days=30)
         if datetime.now >= time:
