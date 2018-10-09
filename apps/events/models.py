@@ -153,7 +153,8 @@ class Mark(models.Model):
     def __str__(self):
         return '{}, {} - 30 dager'.format(self.recipent, self.start)
 
-    def onDelete(self):
+    #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken
+    def checkMark(self):
         time = self.start + datetime.timedelta(days=30)
-        if datetime.now == time:
+        if datetime.now >= time:
             self.delete(self)
