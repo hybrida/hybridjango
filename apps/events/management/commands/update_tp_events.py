@@ -24,7 +24,7 @@ class Command(BaseCommand):
             for key, value in json.loads(event_list).items()
             if '17' in value['invited_programs'].keys()
                or not value['invited_programs']
-            if '704' not in value['event_type'].keys()
+            if 704 not in value['event_type']
         ]
         with transaction.atomic():
             for event in relevant_events:
