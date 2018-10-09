@@ -26,6 +26,7 @@ class Command(BaseCommand):
         ]
         with transaction.atomic():
             for event in relevant_events:
-                TPEvent.objects.update_or_create(
-                    tp_id=event['tp_id'], defaults=event
-                )
+                if event['event_type'] != 704:
+                    TPEvent.objects.update_or_create(
+                        tp_id=event['tp_id'], defaults=event
+                    )
