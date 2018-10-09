@@ -19,14 +19,15 @@ class Command(BaseCommand):
                 'tp_id': key,
                 'title': '{} - {}'.format(value['company'], value['title'])[:150],
                 'event_start': value['time']
+
             }
             for key, value in json.loads(event_list).items()
             if '17' in value['invited_programs'].keys()
                or not value['invited_programs']
+            if '704' in value['event_type']
         ]
         with transaction.atomic():
             for event in relevant_events:
-                if event['event_type'] != 704:
                     TPEvent.objects.update_or_create(
                         tp_id=event['tp_id'], defaults=event
                     )
