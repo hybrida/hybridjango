@@ -19,10 +19,12 @@ class Command(BaseCommand):
                 'tp_id': key,
                 'title': '{} - {}'.format(value['company'], value['title'])[:150],
                 'event_start': value['time']
+
             }
             for key, value in json.loads(event_list).items()
-            if '17' in value['invited_programs'].keys()
-               or not value['invited_programs']
+            if ('17' in value['invited_programs'].keys()
+                or not value['invited_programs']
+                ) and value['event_type'] is not '704'
         ]
         with transaction.atomic():
             for event in relevant_events:
