@@ -1,4 +1,6 @@
-from django.apps import AppConfig
+from django.contrib import admin
 
-class kok4lifeConfig(AppConfig):
-    name = 'apps.kok4life'
+from .models import Subjects, Files
+
+admin.site.register(Subjects)
+admin.site.register(Files)
