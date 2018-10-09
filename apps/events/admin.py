@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.bedkom.models import Bedpress
-from .models import Event, Attendance, Participation
+from .models import Event, Attendance, Participation, TPEvent
 
 
 class ParticipationInline(admin.TabularInline):
@@ -38,3 +38,4 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
+admin.site.register(TPEvent)
