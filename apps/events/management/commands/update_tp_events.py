@@ -22,12 +22,12 @@ class Command(BaseCommand):
 
             }
             for key, value in json.loads(event_list).items()
-            if '17' in value['invited_programs'].keys()
-               or not value['invited_programs']
-            if 704 not in value['event_type']
+            if ('17' in value['invited_programs'].keys()
+                or not value['invited_programs']
+                ) and value['event_type'] is not '704'
         ]
         with transaction.atomic():
             for event in relevant_events:
-                    TPEvent.objects.update_or_create(
-                        tp_id=event['tp_id'], defaults=event
-                    )
+                TPEvent.objects.update_or_create(
+                    tp_id=event['tp_id'], defaults=event
+                )
