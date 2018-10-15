@@ -67,6 +67,10 @@ class EventView(generic.DetailView):
                 'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
+                'number_of_marks': attendance.get_number_of_marks(user),
+                'too_many_marks': attendance.too_many_marks(user),
+                'goes_on_secondary': attendance.goes_on_secondary(user),
+                'signup_delay': attendance.signup_delay(user),
             } for attendance in list(event.attendance_set.all())]
         return context
 

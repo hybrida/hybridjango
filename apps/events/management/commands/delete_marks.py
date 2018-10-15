@@ -9,4 +9,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for mark in Mark.objects.all():
-            mark.checkMark()
+            mark.check_mark()

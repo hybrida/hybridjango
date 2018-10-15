@@ -232,11 +232,16 @@
                                      <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
                                 {% endif %}
 
-                            {% elif attendance.is_invited %}
+                            {% elif attendance.is_invited and not attendance.too_many_marks %}
                                 <input name="action" value="join" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
-                                    {% if attendance.o.full %}Meld meg på ventelisten{% else %}Meld meg på{% endif %}
+                                    {% if attendance.o.full %}Meld meg på ventelisten
+                                        {% elif  attendance.goes_on_secondary %}Meld meg på sekundærventelisten <br> Du har {{ attendance.number_of_marks }} prikker
+                                        {% else %} Meld meg på{% endif %}
+
                                 </button>
+                            {% elif attendance.too_many_marks %}
+                                <p> Sorry, not sorry, du har for mange prikker til å melde deg på arrangementer med Hybrida </p>
                             {% endif %}
                         </form>
                     {% endif %}

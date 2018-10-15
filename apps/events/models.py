@@ -133,6 +133,36 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
+    def get_number_of_marks(self, user):
+        marks = Mark.objects.all().filter(recipent=user)
+        totalMarks = 0
+        for mark in marks:
+            totalMarks += mark.value
+        return totalMarks
+
+    def too_many_marks(self, user):
+        maxMarks = 3 #maks antall prikker man kan ha før man ikke kan melde seg på
+        if maxMarks <= self.get_number_of_marks(user):
+            return True
+        return False
+
+    def goes_on_secondary(self, user):
+        maxMarks = 2 # maks antall prikker man kan ha før man havner på sekundærventelista
+        if maxMarks <= self.get_number_of_marks(user):
+            return True
+        return False
+
+    def signup_delay(self, user):
+        marks = self.get_number_of_marks(user)
+        delay = 0
+        if marks == 3: #Antall timer man må vente med å melde seg på et arrangement med 3 prikker
+            delay = 48
+        elif marks == 2: #Antall timer man må vente med å melde seg på et arrangement med 2 prikker
+            delay = 24
+        elif marks == 1: #Antall timer man må vente med å melde seg på et arrangement med 1 prikk
+            delay = 4
+        return delay
+
 
 class EventComment(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -154,7 +184,7 @@ class Mark(models.Model):
         return '{}, {} - 30 dager'.format(self.recipent, self.start)
 
     #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken
-    def checkMark(self):
+    def check_mark(self):
         time = self.start + datetime.timedelta(days=30)
         if datetime.now >= time:
             self.delete(self)
