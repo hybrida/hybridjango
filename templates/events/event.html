@@ -195,7 +195,7 @@
         {% if user.is_authenticated %}
             <div class="row">
                 <div class="col-xs-12">
-                    {% if attendance.o.signup_open %}
+                    {% if attendance.o.signup_open and attendance.delay_over %}
                         <form method="post">
                             {% csrf_token %}
                             <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
@@ -241,8 +241,16 @@
 
                                 </button>
                             {% elif attendance.too_many_marks %}
+                                <br>
                                 <p> Sorry, not sorry, du har for mange prikker til å melde deg på arrangementer med Hybrida </p>
                             {% endif %}
+                        </form>
+                    {% elif not attendance.delay_over%}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">
+                            <br>
+                            <p>Du kan ikke melde deg på før {{ attendance.new_signup_time }} <br> Du har {{ attendance.number_of_marks }} prikker </p>
                         </form>
                     {% endif %}
                 </div>

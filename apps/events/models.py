@@ -155,13 +155,22 @@ class Attendance(models.Model):
     def signup_delay(self, user):
         marks = self.get_number_of_marks(user)
         delay = 0
-        if marks == 3: #Antall timer man må vente med å melde seg på et arrangement med 3 prikker
-            delay = 48
+        #Kan bruke f.eks 0.5 for en halvtime
+        if marks == 1: #Antall timer man må vente med å melde seg på et arrangement med 3 prikker
+            delay = 1
         elif marks == 2: #Antall timer man må vente med å melde seg på et arrangement med 2 prikker
-            delay = 24
-        elif marks == 1: #Antall timer man må vente med å melde seg på et arrangement med 1 prikk
+            delay = 2
+        elif marks == 3: #Antall timer man må vente med å melde seg på et arrangement med 1 prikk
             delay = 4
         return delay
+
+    def delay_over(self, user): #Sjekker om ventetiden er over
+        if self.new_signup_time(user) < timezone.now():
+            return True
+        return False
+
+    def new_signup_time(self, user):
+        return self.signup_start + datetime.timedelta(hours=self.signup_delay(user))
 
 
 class EventComment(models.Model):

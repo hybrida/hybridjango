@@ -71,6 +71,8 @@ class EventView(generic.DetailView):
                 'too_many_marks': attendance.too_many_marks(user),
                 'goes_on_secondary': attendance.goes_on_secondary(user),
                 'signup_delay': attendance.signup_delay(user),
+                'delay_over': attendance.delay_over(user),
+                'new_signup_time': attendance.new_signup_time(user),
             } for attendance in list(event.attendance_set.all())]
         return context
 
