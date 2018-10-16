@@ -182,7 +182,15 @@ class EventComment(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
+
 class Mark(models.Model):
+    @staticmethod
+    def num_marks(user):
+        num = 0
+        for mark in Mark.objects.all().filter(recipent=user):
+            num += mark.value
+        return num
+
     recipent = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
