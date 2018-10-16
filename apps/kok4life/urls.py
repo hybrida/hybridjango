@@ -3,6 +3,6 @@ from .views import *
 
 app_name = 'kok'
 urlpatterns = [
-    url(r'^$', firstPage, name='firstPage')
-
+    url(r'^firstpage$', firstPage, name='firstPage'),
+    url(r'^fag/(?P<pk>[0-9]+)$', filePage, name='filePage')
     ]
