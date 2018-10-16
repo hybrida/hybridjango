@@ -1,8 +1,32 @@
 {% extends 'standard_sidebar.html' %}
-{% block title %}{{ bedpress.company }}{% endblock %}
+
 {% block text %}
 
 
+<div>
+    <h2>kok site</h2>
+
+        <ul>
+
+            {% for Subject in subjects %}
+                <li>
+
+                    <a href="fag/{{ Subject.pk }}" >{{ Subject.name }}</a>
+
+                </li>
 
 
-{% endblock extra %}
+            {% endfor %}
+
+
+        </ul>
+
+
+
+
+
+</div>
+
+
+
+{% endblock text %}
