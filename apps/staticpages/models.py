@@ -59,3 +59,12 @@ class CommiteApplication(models.Model):
 
     def get_absolute_url(self):
         return reverse('about')
+
+
+class Itv_report(models.Model):
+    report = models.FileField(upload_to='pdf/ITVreferat')
+    date = models.DateField(default=timezone.now)
+    description = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return "Referat: "+str(self.date)
