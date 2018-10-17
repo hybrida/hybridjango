@@ -1,12 +1,12 @@
 {% extends 'standard_sidebar.html' %}
-
+{% load static %}
 {% block text %}
 
 <div>
     <ul>
         {% for File in files %}
             <li>
-                <a href="">{{ File.name }}</a>
+                <a href="/uploads/{{ File.file }} ">{{ File.name }}</a>
             </li>
         {% endfor %}
 

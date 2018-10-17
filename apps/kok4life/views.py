@@ -10,5 +10,5 @@ def firstPage(request):
 @login_required
 def filePage(request, pk):
     subject = Subject.objects.filter(pk=pk)
-    files = File.objects.filter(subject=subject)
+    files = File.objects.filter(subject__in=subject)
     return render(request, "kok4life/filePage.html", {"subject":subject,"files":files})
