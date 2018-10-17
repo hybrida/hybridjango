@@ -19,7 +19,7 @@ from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport, Protocol
+from apps.staticpages.models import BoardReport, Protocol, Itv_report
 from hybridjango.settings import STATIC_FOLDER
 from .forms import CommiteApplicationForm, ApplicationForm
 from .models import Application, CommiteApplication
@@ -279,4 +279,11 @@ def NewStudent(request):
 def ChangeAcceptedStatus(request):
     request.user.accepted_conditions = True
     request.user.save()
-    return  redirect('/')
+    return redirect('/')
+
+class ITVReportView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(ITVReportView, self).get_context_data(**kwargs)
+        context['reports'] = Itv_report.objects.all().order_by('date').reverse()
+        context['active_page'] = 'tillitsvalgte'
+        return context
