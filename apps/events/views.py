@@ -44,6 +44,8 @@ class EventView(generic.DetailView):
                 Participation.objects.filter(hybrid=user, attendance=attendance).delete()
             #Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
             # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
+            elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() and not attendance.is_signed(user):
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
         elif request.POST['action'] == 'join' and attendance.can_join(user):
             Participation.objects.get_or_create(hybrid=user, attendance=attendance)
 
