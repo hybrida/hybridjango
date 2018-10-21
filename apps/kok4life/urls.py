@@ -4,5 +4,6 @@ from .views import *
 app_name = 'kok'
 urlpatterns = [
     url(r'^firstpage$', firstPage, name='firstPage'),
-    url(r'^fag/(?P<pk>[0-9]+)$', filePage, name='filePage')
+    url(r'^fag/(?P<pk>[0-9]+)$', filePage, name='filePage'),
+    url(r'^fileform$', fileForm, name='fileForm'),
     ]

@@ -1,32 +1,49 @@
 {% extends 'standard_sidebar.html' %}
 
 {% block text %}
-
+<style>
+    button:hover{
+        text-color: black;
+        background-color: green;
+    }
+    button{
+        display: block;
+    }
+</style>
 
 <div>
     <h2>kok site</h2>
 
-        <ul>
-
-            {% for Subject in subjects %}
-                <li>
-
-                    <a href="fag/{{ Subject.pk }}" >{{ Subject.name }}</a>
-
-                </li>
 
 
-            {% endfor %}
+    <ul>
+
+        {% for Subject in subjects %}
+            <li>
+
+                <a href="fag/{{ Subject.pk }}" >{{ Subject.name }}</a>
+
+            </li>
 
 
-        </ul>
+        {% endfor %}
 
 
-
-
+    </ul>
 
 </div>
 
 
 
 {% endblock text %}
+
+{% block unstyled_sidebar %}
+
+     <div id="sid" style="position: relative; left: 90%;" >
+
+         <button>new file</button>
+         <button>new subject</button>
+
+    </div>
+
+{% endblock unstyled_sidebar %}
