@@ -76,7 +76,29 @@
                                              style="vertical-align: middle">
                                         <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
                                     </div>
-                                    {{ index }}:{{ waiting.get_full_name }}
+                                    {{ index }}: {{ waiting.get_full_name }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if attendance.get_sorted_secondary %}
+                <div style="margin-top: 10px">
+                    <strong onclick="$ ( '#showhide{{ attendance.id }}_secondary' ).toggle ( ) ; adjust_height()"
+                            style="cursor: pointer;">
+                        Sekundærventeliste: {{ attendance.get_sorted_secondary|length }} påmeldte
+                    </strong>
+                    <div style="display: none" class="row" id="showhide{{ attendance.id }}_secondary">
+                        {% for index, waiting in attendance.get_waiting_placementsSecondary %}
+                            <div style="margin-top: 7px" class="col-sm-6">
+                                <a href="{% url 'profile' waiting.username %}">
+                                    <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
+                                        <img src="/uploads/{{ waiting.image }}" width="45px"
+                                             style="vertical-align: middle">
+                                        <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
+                                    </div>
+                                    {{ index }}: {{ waiting.get_full_name }}
                                 </a>
                             </div>
                         {% endfor %}
@@ -118,7 +140,7 @@
             {% if attendance.o.signup_start %}
                 <tr>
                     <td>Åpnes</td>
-                    <td>{{ attendance.o.signup_start }}</td>
+                    <td>{% if not user.is_authenticated %} {{ attendance.o.signup_start }} {% else %} {{ attendance.new_signup_time }} {% endif %}</td>
                 </tr>
             {% endif %}
             {% if attendance.o.signup_end %}
@@ -173,6 +195,8 @@
                         Påmeldt
                     {% elif attendance.is_waiting %}
                         Nummer {{ attendance.waiting_placement }} i kø
+                    {% elif attendance.is_participantSecondary%}
+                        Nummer {{ attendance.placementSecondary }} på sekundærventelista
                     {% elif attendance.is_invited %}
                         Invitert
                     {% else %}
@@ -189,6 +213,9 @@
                 / {{ attendance.o.max_participants }}
                 {% if attendance.o.get_waiting %}
                     + {{ attendance.o.get_waiting|length }}
+                {% endif %}
+                {% if attendance.o.get_sorted_secondary %}
+                    + {{ attendance.o.get_sorted_secondary|length }}
                 {% endif %}
             </div>
         </div>
@@ -228,24 +255,58 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
+
+
+                            {% elif attendance.is_participantSecondary %}
+                                <input name="action" value="leaveSecondary" type="hidden">
+                                <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#confirm-delete">
+                                    Meld meg av sekundærventelisten
+                                </button>
+                                {# Failsafe on leaving event prompt #}
+                                <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">Bekreft avmeldelse</h4>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <p>Hvis du melder deg av mister du plassen din i køen </p>
+                                                <p>Er du sikker?</p>
+                                                <p class="debug-url"></p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <button class=" btn btn-danger">Meld meg av</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {% if not attendance.is_waiting %}
                                      <i style="color: red; font-size: 12px">Avmeldingsfrist {{ attendance.o.signup_end }}</i>
                                 {% endif %}
 
-                            {% elif attendance.is_invited and not attendance.too_many_marks %}
+                            {% elif attendance.is_invited and not attendance.goes_on_secondary and not attendance.too_many_marks %}
                                 <input name="action" value="join" type="hidden">
-                                <button type="submit" class=" btn btn-primary btn-block">
-                                    {% if attendance.o.full %}Meld meg på ventelisten
-                                        {% elif  attendance.goes_on_secondary %}Meld meg på sekundærventelisten <br> Du har {{ attendance.number_of_marks }} prikker
-                                        {% else %} Meld meg på{% endif %}
+                                <button type="submit" class=" btn btn-primary btn-block"> Meld meg på {% if attendance.o.full %} ventelisten {% endif %}</button>
 
+                            {% elif attendance.is_invited and attendance.goes_on_secondary %}
+                                <input name="action" value="joinSecondary" type="hidden">
+                                <button type="submit" class=" btn btn-primary btn-block">
+                                    Meld meg på sekundærventelisten <br> Du har {{ attendance.number_of_marks }} prikker
                                 </button>
-                            {% elif attendance.too_many_marks %}
+
+                            {% elif attendance.is_invited and attendance.too_many_marks %}
                                 <br>
                                 <p> Sorry, not sorry, du har for mange prikker til å melde deg på arrangementer med Hybrida </p>
                             {% endif %}
                         </form>
-                    {% elif not attendance.delay_over%}
+                    {% elif attendance.o.signup_open and not attendance.delay_over%}
                         <form method="post">
                             {% csrf_token %}
                             <input name="attendance" value="{{ attendance.o.pk }}" type="hidden">

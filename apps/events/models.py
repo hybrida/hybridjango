@@ -58,10 +58,25 @@ class Participation(models.Model):
                                                           timestamp=self.timestamp)
 
 
+class ParticipationSecondary(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    hybrid = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    attendance = models.ForeignKey('Attendance', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('hybrid', 'attendance')
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return '{timestamp}-{hybrid}-{attendance}'.format(hybrid=self.hybrid, attendance=self.attendance,
+                                                          timestamp=self.timestamp)
+
+
 class Attendance(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default='Påmelding')
-    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation)
+    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation, related_name='+')
+    participantsSecondary = models.ManyToManyField(Hybrid, blank=True, through=ParticipationSecondary, related_name='+')
     max_participants = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     signup_start = models.DateTimeField()
@@ -133,27 +148,29 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def get_number_of_marks(self, user):
-        marks = Mark.objects.all().filter(recipent=user)
+    def get_number_of_marks(self, hybrid):
+        marks = Mark.objects.all().filter(recipent=hybrid)
         totalMarks = 0
         for mark in marks:
             totalMarks += mark.value
         return totalMarks
 
-    def too_many_marks(self, user):
-        maxMarks = 3 #maks antall prikker man kan ha før man ikke kan melde seg på
-        if maxMarks <= self.get_number_of_marks(user):
+    def too_many_marks(self, hybrid):
+        maxMarks = 5 #maks antall prikker man kan ha før man ikke kan melde seg på
+        if maxMarks <= self.get_number_of_marks(hybrid):
             return True
         return False
 
-    def goes_on_secondary(self, user):
+    def goes_on_secondary(self, hybrid):
         maxMarks = 2 # maks antall prikker man kan ha før man havner på sekundærventelista
-        if maxMarks <= self.get_number_of_marks(user):
-            return True
-        return False
+        if self.too_many_marks(hybrid):
+            return False
+        if maxMarks > self.get_number_of_marks(hybrid):
+            return False
+        return True
 
-    def signup_delay(self, user):
-        marks = self.get_number_of_marks(user)
+    def signup_delay(self, hybrid):
+        marks = self.get_number_of_marks(hybrid)
         delay = 0
         #Kan bruke f.eks 0.5 for en halvtime
         if marks == 1: #Antall timer man må vente med å melde seg på et arrangement med 3 prikker
@@ -164,13 +181,33 @@ class Attendance(models.Model):
             delay = 4
         return delay
 
-    def delay_over(self, user): #Sjekker om ventetiden er over
-        if self.new_signup_time(user) < timezone.now():
+    def delay_over(self, hybrid): #Sjekker om ventetiden er over
+        if self.new_signup_time(hybrid) < timezone.now():
             return True
         return False
 
-    def new_signup_time(self, user):
-        return self.signup_start + datetime.timedelta(hours=self.signup_delay(user))
+    def new_signup_time(self, hybrid):
+        return self.signup_start + datetime.timedelta(hours=self.signup_delay(hybrid))
+
+    def get_sorted_secondary(self):
+        return self.participantsSecondary.order_by('participationsecondary__timestamp')
+
+    def is_participantSecondary(self, hybrid):
+        return self.participantsSecondary.filter(pk=hybrid.pk).exists()
+
+    def get_placementsSecondary(self):
+        return enumerate(self.get_sorted_secondary())
+
+    def get_placementSecondary(self, hybrid):
+        for index, participantsSecondary in self.get_placementsSecondary():
+            if participantsSecondary == hybrid:
+                return index + 1
+        raise ValueError('Hybrid is not a participant')
+
+    def get_waiting_placementsSecondary(self):
+        return [(index + 1, participant)
+                for (index, participant)
+                in self.get_placementsSecondary()]
 
 
 class EventComment(models.Model):

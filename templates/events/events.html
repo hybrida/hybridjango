@@ -47,6 +47,9 @@
                                 {% if attendance.get_waiting %}
                                     + {{ attendance.get_waiting|length }}
                                 {% endif %}
+                                {% if attendance.get_sorted_secondary %}
+                                    + {{ attendance.get_sorted_secondary|length }}
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
