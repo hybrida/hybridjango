@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'apps.staticpages',
     'apps.eventcalendar',
     'apps.rfid',
-    'apps.evaluation',
     'apps.achievements',
     'tinymce',
     'apps.vevkom',
