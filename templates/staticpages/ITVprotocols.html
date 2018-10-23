@@ -18,24 +18,25 @@
 
     <div class="container" style="width: 70%">
      {% if perms.staticpages.add_protocol %}
-                <a href="{% url 'admin:staticpages_itv_report_add'%}">
+                <a href="{% url 'admin:staticpages_ktv_report_add'%}">
                     <button class="btn btn-xs btn-primary">Ny</button>
                 </a>
             {% endif %}
 
     <div class="buttons">
         </div>
-        <h1>ITV referater</h1>
+        <h1>KTV referater</h1>
 
         <div class="list-group">
-            {% for ITVreport in reports %}
-                <a id="rapport" href="/uploads/{{ ITVreport.report }}" class="list-group-item" target="_blank">{{ ITVreport.description }} <br> {{ ITVreport.date }}</a>
+            {% for KTVreport in reports %}
+                <a id="rapport" href="/uploads/{{ KTVreport.report }}" class="list-group-item" target="_blank">{{ KTVreport.description }} <br> {{ KTVreport.date }}</a>
             {% endfor %}
         </div>
     </div>
 {% endblock %}
 {% block sublinks %}
     {% if user.is_authenticated %}
-        <a href="{% url 'ITVreport' %}">ITVreferater</a>
+        <a href="{% url 'KTVreport' %}">KTVreferater</a>
     {% endif %}
 {% endblock %}
+

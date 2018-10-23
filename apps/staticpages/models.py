@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from apps.registration.models import Hybrid
 
+
 class BoardReport(models.Model):
     report = models.FileField(upload_to='pdf/referat')
     date = models.DateField(default=timezone.now)
@@ -61,7 +62,7 @@ class CommiteApplication(models.Model):
         return reverse('about')
 
 
-class Itv_report(models.Model):
+class Ktv_report(models.Model):
     report = models.FileField(upload_to='pdf/ITVreferat')
     date = models.DateField(default=timezone.now)
     description = models.CharField(max_length=50, blank=True)
