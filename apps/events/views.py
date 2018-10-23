@@ -10,7 +10,7 @@ from django.views import generic
 
 from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
-from .models import Event, EventComment, Attendance, Participation, Mark
+from .models import Event, EventComment, Attendance, Participation, Mark, ParticipationSecondary
 from apps.registration.models import Hybrid
 
 
@@ -39,13 +39,23 @@ class EventView(generic.DetailView):
             #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
                 #førstemann på venteliste blir plukket ut og sendt en mail.
-                first_waiter = attendance.get_waiting()[0]
-                SendAdmittedMail(first_waiter, attendance)
-            Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+                if attendance.get_waiting().exists():
+                    first_waiter = attendance.get_waiting()[0]
+                    SendAdmittedMail(first_waiter, attendance)
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
             #Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
             # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
+            elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() and not attendance.is_signed(user):
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
         elif request.POST['action'] == 'join' and attendance.can_join(user):
             Participation.objects.get_or_create(hybrid=user, attendance=attendance)
+
+        elif request.POST['action'] == 'leaveSecondary' and attendance.signup_open():
+            #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
+            if ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).exists():
+                ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).delete()
+        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user):
+            ParticipationSecondary.objects.get_or_create(hybrid=user, attendance=attendance)
 
         self.object = self.get_object()
         return self.render_to_response(context=self.get_context_data(**kwargs))
@@ -67,12 +77,16 @@ class EventView(generic.DetailView):
                 'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
-                'number_of_marks': attendance.get_number_of_marks(user),
-                'too_many_marks': attendance.too_many_marks(user),
-                'goes_on_secondary': attendance.goes_on_secondary(user),
-                'signup_delay': attendance.signup_delay(user),
-                'delay_over': attendance.delay_over(user),
-                'new_signup_time': attendance.new_signup_time(user),
+                'number_of_marks': attendance.get_number_of_marks(user) if user.is_authenticated else 0,
+                'too_many_marks': attendance.too_many_marks(user) if user.is_authenticated else False,
+                'goes_on_secondary': attendance.goes_on_secondary(user) if user.is_authenticated else False,
+                'signup_delay': attendance.signup_delay(user) if user.is_authenticated else 0,
+                'delay_over': attendance.delay_over(user) if user.is_authenticated else True,
+                'new_signup_time': attendance.new_signup_time(user) if user.is_authenticated else attendance.signup_start,
+                'get_sorted_secondary': attendance.get_sorted_secondary() if user.is_authenticated else False,
+                'is_participantSecondary': attendance.is_participantSecondary(user) if user.is_authenticated else False,
+                'placementSecondary': attendance.get_placementSecondary(user) if attendance.is_participantSecondary(user) else None,
+                'waiting_placementSecondary': attendance.get_waiting_placementsSecondary(),
             } for attendance in list(event.attendance_set.all())]
         return context
 
