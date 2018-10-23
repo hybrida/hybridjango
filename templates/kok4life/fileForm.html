@@ -4,25 +4,17 @@
 
 
     <h3>{{ action }} Ny fil</h3>
-<form method="POST" >{% csrf_token %}
-    <table>
-        <thead>
-            <tr>
-                <th style="padding: 5px">Filnavn</th>
+<form method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="padding: 5px">
-                    filen
-                </td>
+     {{ form.as_p }}
 
-            </tr>
-        </tbody>
-    </table>
-    <p>Brukere av nettsiden vil kunne legge inn bestillinger helt til slutt-tiden går ut. Ønsker man å utvide den kan man redigere tiden her. Dersom man ønsker å slette en bestillingsrekke ber jeg deg kontakte vevsjef.</p>
-    <button type="submit"    value="Save" class="btn btn-primary">Lagre</button>
+    {#  <input type="file" name="myfile"> #}
+
+    <button type="submit">Lagre</button>
 </form>
+
+    <p><a href="firstPage.html">return to home</a></p>
+
+
 
 {% endblock text %}

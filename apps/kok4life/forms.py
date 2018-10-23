@@ -1,5 +1,4 @@
 from django import forms
-
 from .models import Subject, File
 
 class KokfForm(forms.ModelForm):
@@ -10,6 +9,8 @@ class KokfForm(forms.ModelForm):
             'navn'
             'file'
         ]
+
+
 
 class KoksForm(forms.ModelForm):
 
