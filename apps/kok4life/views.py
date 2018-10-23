@@ -9,12 +9,23 @@ def fileForm(request):
         form = KokfForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('kok4life/firstPage.html')
+            return redirect('kok:firstPage')
     else:
         form = KokfForm()
     return render(request, 'kok4life/fileForm.html', {
         'form': form
     })
+
+def subjectForm(request):
+    if request.method == 'Post':
+        form = KoksForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('kok:firstPage')
+    else:
+        form = KoksForm()
+        return  render(request, 'kok4life/subjectForm.html', {'form':form})
+
 
 @login_required
 def firstPage(request):
@@ -27,17 +38,6 @@ def filePage(request, pk):
     files = File.objects.filter(subject__in=subject)
     return render(request, "kok4life/filePage.html", {"subject":subject,"files":files})
 
-# def fileForm(request):
-   # action =1    #  når knappen trykkes
-#
- #   if request.method == 'POST':
-  #      form = KokfForm(request.POST, request.FILES)
-   #     if form.is_valid() & action:
-#
- #           return render(request, 'kok4life/fileForm.html', {'form': form, 'action':action})
-  #  else:
-   #     form = KokfForm()
-   # return render(request, 'kok4life/fileForm.html', {'form': form, 'action':action}) #}
 
 
 

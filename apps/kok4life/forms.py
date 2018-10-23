@@ -1,21 +1,20 @@
 from django import forms
 from .models import Subject, File
 
-class KokfForm(forms.ModelForm):
 
-    class meta:
+class KokfForm(forms.ModelForm):
+    class Meta:
         model = File
         fields = [
-            'navn'
-            'file'
+            'name',
+            'file',
+            'subject'
         ]
 
 
-
 class KoksForm(forms.ModelForm):
-
-    class meta:
+    class Meta:
         model = Subject
-        fields = ['navn']
+        fields = ['name']
 
 
