@@ -223,6 +223,7 @@ class DeleteApplication(DeleteView):
     model = Application
     success_url =  reverse_lazy('application_table')
 
+
 @login_required
 def AddComApplication(request):
         form = CommiteApplicationForm(request.POST)
@@ -237,6 +238,7 @@ def AddComApplication(request):
         return render(request, 'staticpages/comapplication_form.html', {
             'form': form,
         })
+
 
 def NewStudent(request):
 

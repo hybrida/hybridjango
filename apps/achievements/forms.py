@@ -1,5 +1,5 @@
 from django import forms
-from .models import BadgeForslag
+from .models import BadgeForslag, BadgeRequest
 
 
 class BadgeForslagForm(forms.ModelForm):
@@ -16,3 +16,20 @@ class BadgeForslagForm(forms.ModelForm):
         self.fields['tildeles'].widget.attrs.update({'class': 'form-control'})
         self.fields['badge_bilde'].widget.attrs.update({'class': 'form-control'})
         self.fields['scorepoints'].widget.attrs.update({'class': 'form-control'})
+
+
+class BadgeRequestForm(forms.ModelForm):
+
+    class Meta:
+        model = BadgeRequest
+        exclude = ['user']
+        fields = ['badge', 'reason']
+        labels = {
+            'badge': 'Badge',
+            'reason': 'Begrunnelse'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BadgeRequestForm, self).__init__(*args, **kwargs)
+        self.fields['badge'].widget.attrs.update({'class': 'form-control'})
+        self.fields['reason'].widget.attrs.update({'class': 'form-control'})

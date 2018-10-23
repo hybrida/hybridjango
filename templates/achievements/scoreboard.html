@@ -1,4 +1,4 @@
-{% extends 'standard_wide.html' %}
+{% extends 'standard_sidebar_small.html' %}
 {% load static %}
 {% block title %}Scoreboard{% endblock %}
 {% block link%}
@@ -23,7 +23,6 @@
 {% block text %}
 
     <h1 style="text-align: center; font-size: 60px;color: darkblue;"> {% if Current %} Current Scoreboard {% else %} All Time Scoreboard {% endif %}</h1>
-    <a type="button" class="btn btn-primary" href="{% url 'badgeform-add' %}">Send inn badge</a>
     <div style="margin-bottom: 2%; margin-left: 2%; margin-top: -1%; text-align: center; font-size: 20px;color:gray;">
         {% if Current %}
             <a class="updateUMFer" href="/achievements/all_time/">Se All Time Scoreboardet</a>
@@ -63,5 +62,10 @@ Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt
                 </div>
             </div>
         </div>
-
 {%  endblock %}
+<!--Adding a smaller sidebar for the buttons-->
+{% block sidebar %}
+    <a style="width: 100%" type="button" class="btn btn-primary" href="{% url 'badgeform-add' %}">Send inn badge</a>
+    <br>
+    <a style="width: 100%" type="button" class="btn btn-primary" href="{% url 'badgerequest-add' %}">Krev badge</a>
+{% endblock %}

@@ -28,3 +28,10 @@ class BadgeForslag(models.Model):
 
     def get_absolute_url(self):
         return reverse('scoreboard')
+
+
+class BadgeRequest(models.Model):
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    reason = models.TextField()
+

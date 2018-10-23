@@ -11,5 +11,7 @@ urlpatterns = [
         url(r'^badgeform/add/$', SendBadge.as_view(), name='badgeform-add'),
         url(r'^badgeform/table/$', BadgeTable, name='badgetable'),
         url(r'^badgeform/(?P<pk>[0-9]+)/delete', DeleteBadge.as_view(), name='badgeform-delete'),
-
+        url(r'^badgeRequest/add/', add_badge_request, name='badgerequest-add'),
+        url(r'^badgeRequest/table/', badge_request_table, name='badgerequest-table'),
+        url(r'^badgerequest/(?P<pk>[0-9]+)/delete', BadgeRequestDelete.as_view(), name='badgerequest-delete'),
 ]
