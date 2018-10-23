@@ -17,14 +17,14 @@ def fileForm(request):
     })
 
 def subjectForm(request):
-    if request.method == 'Post':
+    if request.method == 'POST':
         form = KoksForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('kok:firstPage')
     else:
         form = KoksForm()
-        return  render(request, 'kok4life/subjectForm.html', {'form':form})
+        return render(request, 'kok4life/subjectForm.html', {'form':form})
 
 
 @login_required
