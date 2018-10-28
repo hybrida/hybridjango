@@ -22,7 +22,7 @@ from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol, Ktv_report
 from hybridjango.settings import STATIC_FOLDER
 from .forms import CommiteApplicationForm, ApplicationForm
-from .models import Application, CommiteApplication
+from .models import Application, CommiteApplication, BoardReportSemester
 
 
 class FrontPage(EventList):
@@ -142,11 +142,13 @@ class ProtocolView(LoginRequiredMixin, AboutView):
         context['active_page'] = 'statutter'
         return context
 
+
 class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
         context['active_page'] = 'board'
+        context['reportsemseters'] = BoardReportSemester.objects.all().order_by('year').reverse()
         return context
 
 

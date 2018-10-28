@@ -8,10 +8,17 @@ class BoardReport(models.Model):
     report = models.FileField(upload_to='pdf/referat')
     date = models.DateField(default=timezone.now)
     description = models.CharField(max_length=50, blank=True)
+    semester = models.ForeignKey('BoardReportSemester', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Referat: "+str(self.date)
 
+class BoardReportSemester(models.Model):
+    year = models.IntegerField(default=0)
+    semester = models.CharField(max_length=500, default="")
+
+    def __str__(self):
+        return self.semester + " " + str(self.year)
 
 class Protocol(models.Model):
     protocol = models.FileField(upload_to='pdf/protokoll')
