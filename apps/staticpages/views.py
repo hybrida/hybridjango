@@ -148,7 +148,7 @@ class BoardReportView(LoginRequiredMixin, AboutView):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
         context['active_page'] = 'board'
-        context['reportsemseters'] = BoardReportSemester.objects.all().order_by('semester').reverse().order_by('year')
+        context['reportsemseters'] = BoardReportSemester.objects.all().order_by('semester').order_by('year').reverse()
         return context
 
 
