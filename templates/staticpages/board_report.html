@@ -14,6 +14,17 @@
             top: 80px;
         }
     </style>
+    <script>
+    function showhide(pk) {
+        var x = document.getElementById("reports" + pk);
+
+        if (x.style.display === "none"){
+            x.style.display = "block";
+        } else{
+            x.style.display = "none";
+        }
+    }
+    </script>
 
     <div class="container" style="width: 70%">
         <h1>Møtereferat</h1>
@@ -28,9 +39,16 @@
             {% endif %}
         </div>
         <div class="list-group">
-            {% for report in reports %}
-                <a id="rapport" href="/uploads/{{ report.report }}" class="list-group-item" target="_blank">Referat {{ report.date }} <br> {{ report.description }}</a>
-            {% endfor %}
+        {% for BoardReportYear in reportsemseters %}
+            <a onclick="showhide({{ BoardReportYear.pk }})" id="rapport" class="list-group-item" target="_blank"> {{ BoardReportYear.semester }}  {{ BoardReportYear.year }}</a>
+                <div id = "reports{{ BoardReportYear.pk }}" style="display: none">
+                {% for report in  reports %}
+                    {% if report.semester == BoardReportYear %}
+                        <a id="rapport" href="/uploads/{{ report.report }}" class="list-group-item" target="_blank">Referat {{ report.date }} <br> {{ report.description }}</a>
+                    {% endif %}
+                {% endfor %}
+                </div>
+        {% endfor %}
         </div>
     </div>
 {% endblock %}
