@@ -1,11 +1,15 @@
 from django.contrib import admin
 
 from apps.bedkom.models import Bedpress
-from .models import Event, Attendance, Participation, Mark
+from .models import Event, Attendance, Participation, ParticipationSecondary, Mark
 
 
 class ParticipationInline(admin.TabularInline):
     model = Participation
+
+
+class ParticipationSecondaryInline(admin.TabularInline):
+    model = ParticipationSecondary
 
 
 class AttendanceAdmin(admin.ModelAdmin):
@@ -13,6 +17,7 @@ class AttendanceAdmin(admin.ModelAdmin):
     filter_horizontal = ('participants', 'specializations')
     inlines = [
         ParticipationInline,
+        ParticipationSecondaryInline,
     ]
 
 
