@@ -1,4 +1,5 @@
 from django.db import models
+from apps.registration.models import Hybrid
 
 class Course(models.Model):
 
