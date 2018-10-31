@@ -103,6 +103,23 @@ def SendAdmittedMail(hybrid, attendance):
             mail,
         )
 
+def SendMarkMail(hybrid, mark):
+    mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
+    if hybrid.email: mail = hybrid.email
+    successful = send_mail(
+        'Du er tildelt en prikk på nettsiden',
+        'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga {reason}\n'
+        'Denne prikken vil du ha til {expireDate}\n'
+        'Du har totalt {prikker} prikk(er)\n'.format(
+            name = hybrid.get_full_name(),
+            reason = mark.reason,
+            expireDate = mark.start + datetime.timedelta(days=30),
+            prikker = Mark.objects.all().filter(recipent=hybrid)),
+        'robot@hybrida.no',
+        mail,
+    )
+
+
 class EventCreate(PermissionRequiredMixin, generic.CreateView):
     permission_required = 'events.add_event'
     model = Event
