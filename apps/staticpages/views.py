@@ -207,7 +207,7 @@ def search(request):
 
 @permission_required(['staticpages.add_application'])
 def application_table(request):
-    applications = Application.objects.all()
+    applications = Application.objects.all().order_by('pk').reverse()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
 @permission_required(['staticpages.add_commiteapplication'])
