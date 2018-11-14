@@ -1,0 +1,120 @@
+{% extends 'standard_wide.html' %}
+{% load num_marks %}
+{% block link%}
+{% endblock %}
+{% load static %}
+{% block title %}Prikker{% endblock %}
+{% block text %}
+
+    <h1>Prikker</h1>
+    {% if user.is_authenticated %}
+        <h3 style="font-size: 30px">Du har {{ user|num_marks }} prikk{% if user|num_marks != 1 %}er{% endif %}</h3>
+        <br>
+    {% endif %}
+
+    {% if user.is_authenticated and user|num_marks > 0 %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 style="font-size: 30px ">Regler</h3>
+                    <ul>
+                        <li style="font-size: 16px ">Du får 1 prikk for å komme for sent til et arrangement.</li>
+                        <li style="font-size: 16px ">Du får yttligere 1 prikk for å ikke møte på det arrangementet.</li>
+                        <li style="font-size: 16px ">Du vil motta en mail hvis du blir tildelt en prikk.</li>
+                        <li style="font-size: 16px ">En prikk varer i {{ Duration }} dager.</li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6">
+                    <h3 style="font-size: 30px ">Din{% if user|num_marks > 1 %}e{% endif %} prikk{% if user|num_marks > 1 %}er{% endif %}</h3>
+                    <ul>
+                    {% for mark in Mark_ends %}
+                        <li style="font-size: 16px ">
+                            Du har {{ mark.value }} prikk{% if mark.value > 1 %}er{% endif %} som varer til og med den {{ mark.start }}.
+                        </li>
+                    {% endfor %}
+                    </ul>
+                 </div>
+            </div>
+        </div>
+    {% else %}
+        <h3 style="font-size: 30px ">Regler</h3>
+        <ul>
+            <li style="font-size: 16px">Du får 1 prikk for å komme for sent til et arrangement.</li>
+            <li style="font-size: 16px ">Du får yttligere 1 prikk for å ikke møte på det arrangementet.</li>
+            <li style="font-size: 16px ">Du vil motta en mail hvis du blir tildelt en prikk.</li>
+            <li style="font-size: 16px ">En prikk varer i {{ Duration }} dager.</li>
+        </ul>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <h3 style="font-size: 30px ">Konsekvenser</h3>
+
+        {% if Delays.exists %}
+            <h4 style="font-size: 20px ">Utsatt påmeling</h4>
+            <P style="margin-left: 2.5%; font-size: 16px ">Utsatt påmelding vil si at du må vente før du får lov til å melde deg på et arrangement.<br>
+            F.eks med {{ Delay.marks }} prikk{% if Delay.marks > 1%}er{% endif %} må du vente
+                {{ Delay.minutes }} minutt{% if Delay.minutes > 1 %}er{% endif %} før du kan melde deg på et arrangement.</P>
+            <div style="margin-left: 2.5%; margin-right: 2.5%;">
+                <table id="Delays" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <tr>
+                        <th>Prikker</th>
+                        <th>Ventetid</th>
+                    </tr>
+                    {% for delay in Delays %}
+                        <tr>
+                            <td style="font-size: 16px{% if user|num_marks >= delay.marks %};font-weight: bold{% endif %}">
+                                {{ delay.marks }}
+                            </td>
+                            <td style="font-size: 16px{% if user|num_marks >= delay.marks %};font-weight: bold{% endif %}">
+                                {{ delay.minutes }} minutt{% if delay.minutes > 1 %}er{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <br>
+            {% comment %}
+            <ul>
+                {% for delay in Delays %}
+                    <li style="font-size: 16px {% if user|num_marks >= delay.marks %}; font-weight: bold{% endif %}">
+                        Med {{ delay.marks }} prikk{% if delay.marks > 1 %}er{% endif %} kan du ikke melde deg på
+                        arrangementer før {{ delay.minutes }} minutt{% if delay.minutes > 1 %}er{% endif %} etter at påmeldingen åpnes.
+                   </li>
+                {% endfor %}
+            </ul>
+            {% endcomment %}
+            <br>
+        {% endif %}
+
+        {% if Goes_on_secondary != 0 %}
+            <h4 style="font-size: 20px ">Sekundærventelisten</h4>
+            <p style="margin-left: 2.5%; font-size: 16px ">Hvis du er på sekundærventelisten til et arrangement vil du først få plass på det arrangementet når
+                påmeldingen stenger, hvis det ikke er fullt allerede.</p>
+            <ul>
+                <li style="font-size: 16px{% if user|num_marks >= Goes_on_secondary %}; font-weight: bold{% endif %}">
+                    Med {{ Goes_on_secondary }} prikk{% if Goes_on_secondary > 1 %}er{% endif %} får du bare meldt deg på sekundærventelisten.
+                </li>
+            </ul>
+            <br>
+        {% endif %}
+
+        {% if Too_many_marks != 0 %}
+            <h4 style="font-size: 20px ">Blokkert fra arrangementer</h4>
+            <ul>
+                <li style="font-size: 16px {% if user|num_marks >= Too_many_marks %}; font-weight: bold{% endif %}">
+                Med {{ Too_many_marks }} prikk{% if Too_many_marks > 1 %}er{% endif %} får du ikke meldt deg på Hybrida sine arrangementer.
+                </li>
+            </ul>
+            <br>
+        {% endif %}
+
+        {% if not Delays.exists and Goes_on_secondary == 0 and Too_many_marks == 0 %}
+            <p style="font-size: 16px ">Ser ikke ut til at det er noen konsekvenser for øyeblikket.</p>
+        {% endif %}
+        <br>
+        <br>
+
+    {% endif %}
+
+{%  endblock %}

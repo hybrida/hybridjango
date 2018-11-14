@@ -16,6 +16,7 @@
                 <li><a href="{% url 'about' %}">Om Hybrida</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
+                    <li><a href="{% url 'mark' %}">Prikker</a></li>
                 {% else %}
                     <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
                     <li><a href="{% url 'ringen' %}">I&IKT-ringen</a></li>

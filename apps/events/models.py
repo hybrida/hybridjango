@@ -91,6 +91,9 @@ class Attendance(models.Model):
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
 
+    def signup_has_opened(self):
+        return self.signup_start < timezone.now()
+
     def signup_closed(self):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
 
@@ -149,45 +152,35 @@ class Attendance(models.Model):
         return '{}, {}'.format(self.name, self.event)
 
     def get_number_of_marks(self, hybrid):
-        marks = Mark.objects.all().filter(recipent=hybrid)
+        marks = Mark.objects.all().filter(recipient=hybrid)
         totalMarks = 0
         for mark in marks:
             totalMarks += mark.value
         return totalMarks
 
-    def too_many_marks(self, hybrid):
-        maxMarks = 5 #maks antall prikker man kan ha før man ikke kan melde seg på
-        if maxMarks <= self.get_number_of_marks(hybrid):
+    def too_many_marks(self, hybrid, maxmarks):
+        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid):
             return True
         return False
 
-    def goes_on_secondary(self, hybrid):
-        maxMarks = 2 # maks antall prikker man kan ha før man havner på sekundærventelista
-        if self.too_many_marks(hybrid):
-            return False
-        if maxMarks > self.get_number_of_marks(hybrid):
-            return False
-        return True
-
-    def signup_delay(self, hybrid):
-        marks = self.get_number_of_marks(hybrid)
-        delay = 0
-        #Kan bruke f.eks 0.5 for en halvtime
-        if marks == 1: #Antall timer man må vente med å melde seg på et arrangement med 3 prikker
-            delay = 1
-        elif marks == 2: #Antall timer man må vente med å melde seg på et arrangement med 2 prikker
-            delay = 2
-        elif marks == 3: #Antall timer man må vente med å melde seg på et arrangement med 1 prikk
-            delay = 4
-        return delay
-
-    def delay_over(self, hybrid): #Sjekker om ventetiden er over
-        if self.new_signup_time(hybrid) < timezone.now():
+    def goes_on_secondary(self, hybrid, maxmarks, too_many):
+        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
             return True
         return False
 
-    def new_signup_time(self, hybrid):
-        return self.signup_start + datetime.timedelta(hours=self.signup_delay(hybrid))
+    def signup_delay(self, hybrid, delays):
+        for delay in delays:    
+            if delay.marks <= self.get_number_of_marks(hybrid):
+                return delay.minutes
+        return 0
+
+    def delay_over(self, hybrid, delays): #Sjekker om ventetiden er over
+        if self.new_signup_time(hybrid, delays) < timezone.now():
+            return True
+        return False
+
+    def new_signup_time(self, hybrid, delays):
+        return self.signup_start + datetime.timedelta(minutes=self.signup_delay(hybrid, delays))
 
     def get_sorted_secondary(self):
         return self.participantsSecondary.order_by('participationsecondary__timestamp')
@@ -224,21 +217,45 @@ class Mark(models.Model):
     @staticmethod
     def num_marks(user):
         num = 0
-        for mark in Mark.objects.all().filter(recipent=user):
+        for mark in Mark.objects.all().filter(recipient=user):
             num += mark.value
         return num
 
-    recipent = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):
-        return '{}, {} - 30 dager'.format(self.recipent, self.start)
+        return '{}, {} - {} dager'.format(self.recipient, self.start, MarkPunishment.objects.all().last().duration)
 
     #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken
     def check_mark(self):
-        time = self.start + datetime.timedelta(days=30)
+        time = self.start + datetime.timedelta(days=MarkPunishment.objects.all().last().duration)
         if datetime.now >= time:
             self.delete(self)
+
+
+def Mark_ends(marks):
+    for mark in marks:
+        mark.start += datetime.timedelta(days=MarkPunishment.objects.all().last().duration)
+        mark.start = mark.start.date
+    return marks
+
+
+class Delay(models.Model):
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+', default=None)
+    marks = models.PositiveIntegerField(default=0)
+    minutes = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('marks', 'minutes',)
+        ordering = ['-marks']
+
+
+class MarkPunishment(models.Model):
+    delay = models.ManyToManyField(Delay, blank=True)
+    duration = models.PositiveIntegerField(default=0)
+    goes_on_secondary = models.PositiveIntegerField(default=0)
+    too_many_marks = models.PositiveIntegerField(default=0)

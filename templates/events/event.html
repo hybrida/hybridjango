@@ -43,25 +43,27 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        {{ grade }}. Klasse: {{ attendance.get_signed|grade_list:grade|length }} påmeldte
+                        {{ grade }}. Klasse: {% if attendance.signup_has_opened %}{{ attendance.get_signed|grade_list:grade|length }}{% else %}0{% endif %} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_{{ grade }}">
-                        {% for participant in attendance.get_signed|grade_list:grade|dictsort:'first_name' %}
-                            <div style="margin-top: 7px" class="col-sm-6">
-                                <a href="{% url 'profile' participant.username %}">
-                                    <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
-                                        <img src="/uploads/{{ participant.image }}" width="45px"
-                                             style="vertical-align: middle">
-                                        <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
-                                    </div>
-                                    {{ participant.get_full_name }}
-                                </a>
-                            </div>
-                        {% endfor %}
+                        {% if attendance.signup_has_opened %}
+                            {% for participant in attendance.get_signed|grade_list:grade|dictsort:'first_name' %}
+                                <div style="margin-top: 7px" class="col-sm-6">
+                                    <a href="{% url 'profile' participant.username %}">
+                                        <div style="height: 50px; width: 50px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 1em">
+                                            <img src="/uploads/{{ participant.image }}" width="45px"
+                                                 style="vertical-align: middle">
+                                            <span style="height: 50px; vertical-align: middle; display: inline-block;"></span>
+                                        </div>
+                                        {{ participant.get_full_name }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
-            {% if attendance.full %}
+            {% if attendance.full and attendance.signup_has_opened %}
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_waiting' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
@@ -83,7 +85,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if attendance.get_sorted_secondary %}
+            {% if attendance.get_sorted_secondary and attendance.signup_has_opened %}
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_secondary' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
@@ -207,15 +209,19 @@
         </table>
         <div class="progress" style="margin-bottom: 0; margin-top: .5em">
             <div class="progress-bar"
-                 style="min-width: 4em;
-                         width: {% widthratio attendance.o.get_signed|length attendance.o.max_participants 100 %}%">
-                {{ attendance.o.get_signed|length }}
-                / {{ attendance.o.max_participants }}
-                {% if attendance.o.get_waiting %}
-                    + {{ attendance.o.get_waiting|length }}
-                {% endif %}
-                {% if attendance.o.get_sorted_secondary %}
-                    + {{ attendance.o.get_sorted_secondary|length }}
+                 style="min-width: 4em; width:{% if attendance.o.signup_has_opened %}
+                                     {% widthratio attendance.o.get_signed|length attendance.o.max_participants 100 %}{% else %} 0 {% endif %}%">
+                {% if attendance.o.signup_has_opened %}
+                    {{ attendance.o.get_signed|length }}
+                    / {{ attendance.o.max_participants }}
+                    {% if attendance.o.get_waiting %}
+                        + {{ attendance.o.get_waiting|length }}
+                    {% endif %}
+                    {% if attendance.o.get_sorted_secondary %}
+                        + {{ attendance.o.get_sorted_secondary|length }}
+                    {% endif %}
+                {% else %}
+                    0 / {{ attendance.o.max_participants }}
                 {% endif %}
             </div>
         </div>
@@ -303,7 +309,7 @@
 
                             {% elif attendance.is_invited and attendance.too_many_marks %}
                                 <br>
-                                <p> Sorry, not sorry, du har for mange prikker til å melde deg på arrangementer med Hybrida </p>
+                                <p> Du har for mange prikker til å melde deg på arrangementer med Hybrida. </p>
                             {% endif %}
                         </form>
                     {% elif attendance.o.signup_open and not attendance.delay_over%}

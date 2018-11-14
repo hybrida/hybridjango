@@ -7,10 +7,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
+import datetime
 
 from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
-from .models import Event, EventComment, Attendance, Participation, Mark, ParticipationSecondary
+from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Mark_ends
 from apps.registration.models import Hybrid
 
 
@@ -54,7 +55,7 @@ class EventView(generic.DetailView):
             #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).exists():
                 ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).delete()
-        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user):
+        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user, MarkPunishment.objects.all().last().goes_on_secondary, MarkPunishment.objects.all().last().too_many_marks):
             ParticipationSecondary.objects.get_or_create(hybrid=user, attendance=attendance)
 
         self.object = self.get_object()
@@ -71,6 +72,7 @@ class EventView(generic.DetailView):
                 'o': attendance,
                 'is_invited': attendance.invited(user) if user.is_authenticated else False,
                 'can_join': attendance.can_join(user) if user.is_authenticated else False,
+                'signup_has_opened':attendance.signup_has_opened(),
                 'is_participant': attendance.is_participant(user),
                 'is_signed': attendance.is_signed(user),
                 'is_waiting': attendance.is_waiting(user),
@@ -78,11 +80,12 @@ class EventView(generic.DetailView):
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
                 'number_of_marks': attendance.get_number_of_marks(user) if user.is_authenticated else 0,
-                'too_many_marks': attendance.too_many_marks(user) if user.is_authenticated else False,
-                'goes_on_secondary': attendance.goes_on_secondary(user) if user.is_authenticated else False,
-                'signup_delay': attendance.signup_delay(user) if user.is_authenticated else 0,
-                'delay_over': attendance.delay_over(user) if user.is_authenticated else True,
-                'new_signup_time': attendance.new_signup_time(user) if user.is_authenticated else attendance.signup_start,
+                'too_many_marks': attendance.too_many_marks(user, MarkPunishment.objects.all().last().too_many_marks) if user.is_authenticated else False,
+                'goes_on_secondary': attendance.goes_on_secondary(user, MarkPunishment.objects.all().last().goes_on_secondary,
+                                        MarkPunishment.objects.all().last().too_many_marks) if user.is_authenticated else False,
+                'signup_delay': attendance.signup_delay(user, Delay.objects.all()) if user.is_authenticated else 0,
+                'delay_over': attendance.delay_over(user, Delay.objects.all()) if user.is_authenticated else True,
+                'new_signup_time': attendance.new_signup_time(user, Delay.objects.all()) if user.is_authenticated else attendance.signup_start,
                 'get_sorted_secondary': attendance.get_sorted_secondary() if user.is_authenticated else False,
                 'is_participantSecondary': attendance.is_participantSecondary(user) if user.is_authenticated else False,
                 'placementSecondary': attendance.get_placementSecondary(user) if attendance.is_participantSecondary(user) else None,
@@ -107,14 +110,16 @@ def SendMarkMail(hybrid, mark):
     mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
     if hybrid.email: mail = hybrid.email
     successful = send_mail(
-        'Du er tildelt en prikk på nettsiden',
-        'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga {reason}\n'
-        'Denne prikken vil du ha til {expireDate}\n'
-        'Du har totalt {prikker} prikk(er)\n'.format(
+        'Du er tildelt {value} prikk(er)',
+        'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga;\n {reason}\n'
+        'Denne prikken vil du ha til og med {expireDate}\n'
+        'Du har totalt {prikker} prikk(er)\n'
+        '{url}'.format(url="https://hybrida.no/hendelser/prikker",
+            value = mark.value,
             name = hybrid.get_full_name(),
             reason = mark.reason,
-            expireDate = mark.start + datetime.timedelta(days=30),
-            prikker = Mark.objects.all().filter(recipent=hybrid)),
+            expireDate = mark.start + datetime.timedelta(days=MarkPunishment.objects.all().last().duration),
+            prikker = Mark.objects.all().filter(recipient=hybrid)),
         'robot@hybrida.no',
         mail,
     )
@@ -231,10 +236,28 @@ def unattended(request, pk):
             print('\n' * 5)
             pk = request.POST.get('givemark')
             participant = Hybrid.objects.get(pk=pk)
-            Mark.objects.create(event=event, recipent=participant, value=1)
+            Mark.objects.create(event=event, recipient=participant, value=1)
 
 
 
     return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
+
+
+class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, generic.base.View):
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        user = self.request.user
+
+
+        context.update({
+            'Mark_ends': Mark_ends(Mark.objects.all().filter(recipient=user)) if user.is_authenticated else False,
+            'Goes_on_secondary': MarkPunishment.objects.all().last().goes_on_secondary,
+            'Too_many_marks': MarkPunishment.objects.all().last().too_many_marks,
+            'Delay': Delay.objects.all().last(),
+            'Delays': Delay.objects.all().order_by('marks'),
+            'Duration': MarkPunishment.objects.all().last().duration,
+        })
+
+        return self.render_to_response(context)
 
 
