@@ -45,7 +45,7 @@ def order(request):
         'productInfo': ProductInfo.objects.filter(order=user_order),
         'order': user_order,
         'user_orders': user_orders,
-         }
+         'user_order': user_order, }
                   )
 
 
@@ -419,7 +419,7 @@ def shop(request):
                                 productinfo.save()
                             current_user_order.save()
                         current_user_order.save()
-                        return HttpResponseRedirect("/kilt/bestilling")
+                        return redirect('kilt:info')
                     else:
                         order_list = Order.objects.create(user=user)
                         order_list.comment = comment
@@ -433,7 +433,7 @@ def shop(request):
                         order_list.save()
                         active_order.orders.add(order_list)
                         active_order.save()
-                        return HttpResponseRedirect("/kilt/bestilling")
+                        return redirect('kilt:info')
 
     return render(request, "kiltshop/shop.html",
                   {"products": Product.objects.all(),
