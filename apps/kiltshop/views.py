@@ -45,7 +45,7 @@ def order(request):
         'productInfo': ProductInfo.objects.filter(order=user_order),
         'order': user_order,
         'user_orders': user_orders,
-         'user_order': user_order, }
+         }
                   )
 
 
