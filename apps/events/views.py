@@ -11,7 +11,7 @@ import datetime
 
 from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
-from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Mark_ends
+from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Mark_ends, Rule
 from apps.registration.models import Hybrid
 
 
@@ -256,6 +256,7 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
             'Delay': Delay.objects.all().last(),
             'Delays': Delay.objects.all().order_by('marks'),
             'Duration': MarkPunishment.objects.all().last().duration,
+            'Rules': Rule.objects.all(),
         })
 
         return self.render_to_response(context)

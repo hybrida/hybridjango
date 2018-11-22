@@ -254,8 +254,14 @@ class Delay(models.Model):
         ordering = ['-marks']
 
 
+class Rule(models.Model):
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+', default=None)
+    rule = models.CharField(max_length=500, blank=True, default='')
+
+
 class MarkPunishment(models.Model):
     delay = models.ManyToManyField(Delay, blank=True)
+    rules = models.ManyToManyField(Rule, blank=True)
     duration = models.PositiveIntegerField(default=0)
     goes_on_secondary = models.PositiveIntegerField(default=0)
     too_many_marks = models.PositiveIntegerField(default=0)
