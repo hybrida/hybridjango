@@ -16,7 +16,7 @@ def index(request):
 @login_required
 def order(request):
     user_orders = Order.objects.filter(user=request.user).order_by('-pk') # gets all orders for specific user.
-    user_order = Order.objects.filter(user=request.user).last() # default order to show is newest
+    user_order = user_orders.first()
     if request.method == 'POST':
         # changes the shown order to the one selected on list
         if 'showOrder' in request.POST:
@@ -40,13 +40,12 @@ def order(request):
         if not user_order.products.first() and not user_order.comment:
             user_order.delete()
 
-    return render(request, "kiltshop/bestilling.html",
-        {'products': Product.objects.filter(order=user_order),
+    return render(request, "kiltshop/bestilling.html", {
+        'products': Product.objects.filter(order=user_order),
         'productInfo': ProductInfo.objects.filter(order=user_order),
         'order': user_order,
-        'user_orders': user_orders,
-         'user_order': user_order, }
-                  )
+        'user_orders': user_orders
+    })
 
 
 def admin_orderoverview(request):
@@ -350,7 +349,7 @@ def shop(request):
 
     last_user_order = Order.objects.filter(user=user).last()
     if last_user_order:
-        last_order_orderinfo = OrderInfo.objects.filter(orders=Order.objects.filter(pk=last_user_order.pk)).last()
+        last_order_orderinfo = OrderInfo.objects.filter(orders__id=last_user_order.pk).last()
     else:
         last_order_orderinfo = None
     # checks if the users last order is in the active timeframe.
