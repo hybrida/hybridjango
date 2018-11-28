@@ -36,7 +36,7 @@ class Order(models.Model):
     status = models.BooleanField(default=False)
 
     def get_orderinfo(self): #fetches the orderinfo an order lies in
-        return OrderInfo.objects.filter(orders=Order.objects.filter(pk=self.pk)).first()
+        return OrderInfo.objects.filter(orders__id=self.pk).first()
 
     def __str__(self):
         return str("Ordre #"+str(self.pk)+" for "+self.user.first_name+" "+self.user.last_name)
