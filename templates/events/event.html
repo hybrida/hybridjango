@@ -43,10 +43,15 @@
                 <div style="margin-top: 10px">
                     <strong onclick="$ ( '#showhide{{ attendance.id }}_{{ grade }}' ).toggle ( ) ; adjust_height()"
                             style="cursor: pointer;">
-                        {{ grade }}. Klasse: {% if attendance.signup_has_opened %}{{ attendance.get_signed|grade_list:grade|length }}{% else %}0{% endif %} påmeldte
+                        {{ grade }}. Klasse: {% comment %} Remove to hide attendance before event starts
+                        {% if attendance.signup_has_opened %}{% endcomment %}{{ attendance.get_signed|grade_list:grade|length }}
+                        {% comment %}{% else %}0{% endif %}{% endcomment %} påmeldte
                     </strong>
                     <div style="display: none" class="row" id="showhide{{ attendance.id }}_{{ grade }}">
+                        {% comment %} Remove to hide attendance before event starts (Also remove the equvalent
+                        comments below for the progressbar and in events.html)
                         {% if attendance.signup_has_opened %}
+                        {% endcomment %}
                             {% for participant in attendance.get_signed|grade_list:grade|dictsort:'first_name' %}
                                 <div style="margin-top: 7px" class="col-sm-6">
                                     <a href="{% url 'profile' participant.username %}">
@@ -59,7 +64,9 @@
                                     </a>
                                 </div>
                             {% endfor %}
+                        {% comment %} Remove to hide attendance before event starts
                         {% endif %}
+                        {% endcomment %}
                     </div>
                 </div>
             {% endfor %}
@@ -211,7 +218,10 @@
             <div class="progress-bar"
                  style="min-width: 4em; width:{% if attendance.o.signup_has_opened %}
                                      {% widthratio attendance.o.get_signed|length attendance.o.max_participants 100 %}{% else %} 0 {% endif %}%">
+                {% comment %}Remove to hide attendance before event starts (Also remove the equvivalent comments
+                above for the attendance lists and in events.html)
                 {% if attendance.o.signup_has_opened %}
+                {% endcomment %}
                     {{ attendance.o.get_signed|length }}
                     / {{ attendance.o.max_participants }}
                     {% if attendance.o.get_waiting %}
@@ -220,9 +230,11 @@
                     {% if attendance.o.get_sorted_secondary %}
                         + {{ attendance.o.get_sorted_secondary|length }}
                     {% endif %}
+                {% comment %}Remove to hide attendance before event starts
                 {% else %}
                     0 / {{ attendance.o.max_participants }}
                 {% endif %}
+                {% endcomment %}
             </div>
         </div>
         {% if user.is_authenticated %}
