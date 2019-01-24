@@ -225,6 +225,7 @@ input[type=checkbox]:checked + label {
 
             <div id="content-col" class="col-md-8 space-above">
                 <div class="white-box" id="text-box">
+                <a class="btn btn-primary" href="{% url 'shop' %}">Tilbake</a>
                     <h1>{{ product.name }}</h1>
                     {{ product.description|safe }}
                     <form action="{% url 'add_to_cart' product.pk %}" method="post" enctype="multipart/form-data">
