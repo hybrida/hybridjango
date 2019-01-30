@@ -26,7 +26,7 @@ class Product(models.Model):
     )
 
     available_choices = (
-        ('På lager', 'PÅ lager'),
+        ('På lager', 'På lager'),
         ('Under bestilling', 'Under bestilling'),
         ('Ikke tilgjengelig', 'Ikke tilgjengelig')
     )
@@ -44,6 +44,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop')
 
 
 class OrderElement(models.Model):
