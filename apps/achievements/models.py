@@ -7,7 +7,10 @@ import os
 
 # Create your models here.
 
-# model that contains the basic view functionality for the badges, will have 1to1 link to a certain set of requirements for that badge
+# model that contains the basic view functionality for the badges,
+# will have 1to1 link to a certain set of requirements for that badge
+
+
 class Badge(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
@@ -28,3 +31,12 @@ class BadgeForslag(models.Model):
 
     def get_absolute_url(self):
         return reverse('scoreboard')
+
+
+class BadgeRequest(models.Model):
+    user = models.ForeignKey(Hybrid)
+    badge = models.ForeignKey(Badge)
+    comment = models.CharField()
+
+    class Meta:
+        unique_together = ('badge', 'user',)

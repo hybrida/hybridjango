@@ -7,13 +7,19 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
 from .forms import BadgeForslagForm
-from .models import Badge
+from .models import Badge, BadgeRequest
 from django.shortcuts import redirect
 
 
 class SendBadge(CreateView):
     model = BadgeForslag
     fields = ['navn', 'beskrivelse', 'tildeles', 'badge_bilde', 'scorepoints']
+
+
+class BadgeRequestView(CreateView):
+    model = BadgeRequest
+    fields = ['comment']
+
 
 class DeleteBadge(DeleteView):
     model = BadgeForslag
