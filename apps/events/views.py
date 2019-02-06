@@ -236,7 +236,7 @@ def unattended(request, pk):
             print('\n' * 5)
             pk = request.POST.get('givemark')
             participant = Hybrid.objects.get(pk=pk)
-            Mark.objects.create(event=event, recipient=participant, value=1)
+            Mark.objects.get_or_create(event=event, recipient=participant, defaults={'value': 1})
 
 
 

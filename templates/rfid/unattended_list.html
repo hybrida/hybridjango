@@ -1,5 +1,6 @@
 {% extends 'events/dashboard_sidebar.html' %}
 {% load static %}
+{% load mark_extras %}
 {% block unstyled_text %}
     <div class="white-box">
         <table class="table table-responsive sortable table-hover">
@@ -29,6 +30,7 @@
                                 {{ participant.username }}@stud.ntnu.no
                             </a>
                         </td>
+                        {% if not participant|got_mark:event %}
                         <td>
                             <form method="post">
                                     {% csrf_token %}
@@ -37,6 +39,7 @@
                                     </button>
                             </form>
                         </td>
+                        {% endif %}
                     </tr>
                     {% endif %}
                 {% endfor %}
