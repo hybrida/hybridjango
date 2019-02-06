@@ -5,11 +5,7 @@ from .models import Subject, File
 class KokfForm(forms.ModelForm):
     class Meta:
         model = File
-        fields = [
-            'name',
-            'file',
-            'subject'
-        ]
+        exclude = ['author']
 
 
 class KoksForm(forms.ModelForm):

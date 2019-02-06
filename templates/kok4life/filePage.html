@@ -4,9 +4,10 @@
 
 <div>
     <ul>
-        {% for File in files %}
+        {% for file in files %}
             <li>
-                <a href="/uploads/{{ File.file }} ">{{ File.name }}</a>
+                <a href="/uploads/{{ file.file }} ">{{ file.name }}</a>
+                {# : {{ file.author }}</a>#}
             </li>
         {% endfor %}
 

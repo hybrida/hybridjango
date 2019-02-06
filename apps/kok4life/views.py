@@ -7,6 +7,7 @@ from .forms import KokfForm, KoksForm
 def fileForm(request):
     if request.method == 'POST':
         form = KokfForm(request.POST, request.FILES)
+        form.instance.author = request.user
         if form.is_valid():
             form.save()
             return redirect('kok:firstPage')
