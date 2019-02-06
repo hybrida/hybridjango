@@ -7,3 +7,4 @@ def course_views(request):
     return render(request, 'evaluation/main_page.html', {'courses':courses})
 
 
+
