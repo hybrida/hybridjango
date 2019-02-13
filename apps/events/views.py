@@ -253,10 +253,10 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
             'Mark_ends': Mark_ends(Mark.objects.all().filter(recipient=user)) if user.is_authenticated else False,
             'Goes_on_secondary': MarkPunishment.objects.all().last().goes_on_secondary,
             'Too_many_marks': MarkPunishment.objects.all().last().too_many_marks,
-            'Delay': Delay.objects.all().last(),
-            'Delays': Delay.objects.all().order_by('marks'),
+            'Delay': Delay.objects.all().filter(punishment=MarkPunishment.objects.all().last()),
+            'Delays': Delay.objects.all().filter(punishment=MarkPunishment.objects.all().last()).order_by('marks'),
             'Duration': MarkPunishment.objects.all().last().duration,
-            'Rules': Rule.objects.all(),
+            'Rules': Rule.objects.all().filter(punishment=MarkPunishment.objects.all().last()),
         })
 
         return self.render_to_response(context)

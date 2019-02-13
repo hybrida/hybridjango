@@ -40,10 +40,10 @@
     {% else %}
         <h3 style="font-size: 30px ">Regler</h3>
         <ul>
-            <li style="font-size: 16px">Du får 1 prikk for å komme for sent til et arrangement.</li>
-            <li style="font-size: 16px ">Du får yttligere 1 prikk for å ikke møte på det arrangementet.</li>
-            <li style="font-size: 16px ">Du vil motta en mail hvis du blir tildelt en prikk.</li>
-            <li style="font-size: 16px ">En prikk varer i {{ Duration }} dager.</li>
+            {% for rule in Rules %}
+                <li style="font-size: 16px ">{{ rule.rule }}</li>
+            {% endfor %}
+            <li style="font-size: 16px ">En prikk varer i {{ Duration }} dag{% if Duration != 1 %}er.{% endif %}</li>
         </ul>
     {% endif %}
 
