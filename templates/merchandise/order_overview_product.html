@@ -1,0 +1,128 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+                    <h1>Bestillinger</h1>
+                    <table class="table table-responsive sortable table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-lg-3">Navn</th>
+                        <th class="col-xs-2">Dato</th>
+                        <th class="col-xs-2">Produkter</th>
+                        <th class="col-xs-2">Antall og Størrelser</th>
+                        <th class="col-xs-1">Sum</th>
+                        <th class="col-xs-2">Betalt</th>
+                        <th class="col-xs-2">Hentet</th>
+                        <th class="col-xs-1">Rediger</th>
+                        <th class="col-xs-1">Slett</th>
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+
+                        {% for order in orders %}
+                            <form action="{% url 'order_status_change' order.pk %}" method="POST" id="{{ order.id }}">
+                            </form>
+                            <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden" form="{{ order.id }}">
+                            <tr id="row{{ order.id }}">
+                                <td class="text-left">{{ order.user.get_full_name }}</td>
+                                <td class="text-left">{{ order.timestamp}}</td>
+                            <td class="">
+                                {% if order == mainorder %}
+
+                                        {% for p in products %}
+                                            {{ p.name }} <br>
+                                        {% endfor %}
+                                {% else %}
+                                <a href="{% url 'order_overview_product' order.pk %}" style="align-items: center">
+                                    <span style="color: #1b6d85; font-size: xx-large" class="glyphicon-list glyphicon"></span></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order == mainorder %}
+                                    {% for e in elements %}
+                                        {{ e.number }}
+                                        {% if e.size %}
+
+                                            {{ e.size }} <br>
+                                            {% else %}
+                                            <br>
+                                        {% endif %}
+                                        {% endfor %}
+                                {% endif %}
+                            </td>
+                                <td class="text-left">{{ order.sum }}</td>
+                                {% if order.paid == 'Betalt' %}
+                                    <td data-value="1" style="background-color: lightgreen" class="text-left">
+                                {% elif order.paid == 'Ikke betalt' %}
+                                    <td data-value="3" style="background-color: indianred" class="text-left">
+                                {% else %}
+                                    <td>
+                                {% endif %}
+                                <div id="paidText"><p id="" style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ order.paid }}</p></div>
+                                <div id="paidField" style="display: none">
+                                    <input name="order_id" value="{{ order.pk }}" hidden>
+                                    <select class="form-control" id="paidForm" name="paidForm" autocomplete="off" form="{{ order.id }}" required>
+                                        <option value="Betalt">Betalt</option>
+                                        <option value="Ikke betalt">Ikke betalt</option>
+                                    </select>
+                                </div>
+                                </td>
+                                {% if order.delivered == 'Hentet' %}
+                                    <td data-value="1" style="background-color: lightgreen" class="text-left">
+                                {% elif order.delivered == 'Ikke hentet' %}
+                                    <td data-value="3" style="background-color: indianred" class="text-left">
+                                {% else %}
+                                    <td>
+                                {% endif %}
+                                <div id="deliveredText"><p id="" style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ order.delivered }}</p></div>
+                                <div id="deliveredField" style="display: none">
+                                    <select class="form-control" id="deliveredForm" name="deliveredForm" autocomplete="off" form="{{ order.id }}" required>
+                                        <option value="Betalt">Hentet</option>
+                                        <option value="Ikke betalt">Ikke hentet</option>
+                                    </select>
+                                </div>
+                                </td>
+                                <td>
+                                    <button id="editButton"  class="btn btn-primary" onclick="showHide(row{{order.id}})">Rediger</button>
+                                    <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%" form="{{ order.id }}">Lagre</button>
+                                </td>
+                                <td>
+                                    <form method="POST" action="{% url 'delete_order' order.pk %}">
+                                   {% csrf_token %}
+                                    <button class="btn btn-primary" type="submit">
+                                        <span class="glyphicon-trash glyphicon"></span>
+                                    </button>
+                                </form></td>
+                            </tr>
+                        {%endfor  %}
+
+                    </tbody>
+
+                    </table>
+    <script>
+            function showHide(variable) {
+            var z = variable.querySelector("#hideButton");
+            var a = variable.querySelector("#editButton");
+            var b = variable.querySelector("#paidText");
+            var c = variable.querySelector("#paidField");
+            var d = variable.querySelector("#deliveredText");
+            var e = variable.querySelector("#deliveredField");
+            if (a.style.display === "none" && z.style.display === "block") {
+                z.style.display = "none";
+                a.innerHTML = "Rediger";
+                b.style.display = "block";
+                c.style.display = "none";
+                d.style.display = "block";
+                e.style.display = "none";
+            } else {
+                z.style.display = "block";
+                a.innerHTML = "Tilbake";
+                b.style.display = "none";
+                c.style.display = "block";
+                d.style.display = "none";
+                e.style.display = "block";
+            }
+        }
+    </script>
+
+{% endblock %}

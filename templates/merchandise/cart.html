@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-sortable.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bedkom.css" %}">
+
+{% block content %}
+    <div class="container">
+        <div class="row space-below">
+            <div class="col-xs-12 space-above">
+                <div class="white-box" id="text-box">
+                    <h1>Handlekurv</h1>
+                    <table class="table table-responsive sortable table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-lg-3">Produkt</th>
+                        <th class="col-xs-2">Antall</th>
+                        <th class="col-xs-3">Pris</th>
+                        <th class="col-xs-1">Slett</th>
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+
+                        {% for element in cart.products.all %}
+                            <tr>
+                            <td class="text-left">{{ element.product.name }} {{ element.size }}</td>
+                            <td class="text-left">{{ element.number }}</td>
+                            <td class="text-left">{{ element.product.price }}</td>
+                            <td class="text-left">
+                                <form method="POST" action="{% url 'delete_element' element.pk %}">
+                                   {% csrf_token %}
+                                    <button class="btn btn-primary" type="submit">
+                                        <span class="glyphicon-trash glyphicon"></span>
+                                    </button>
+                                </form>
+                            </td>
+                            </tr>
+                        {%endfor  %}
+                            <tr>
+                            <td class="text-left" style="font-size: large; font-weight: bold">Sum</td>
+                            <td class="text-left"></td>
+                            <td class="text-left" style="font-size: large; font-weight: bold">{{ sum }}</td>
+                            </tr>
+
+                    </tbody>
+
+                    </table>
+                {% if cart.products.all %}
+                <a href="{% url 'order_cart' %}" class="btn-primary btn">Bestill</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,293 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+     <style>
+* {box-sizing: border-box}
+body {font-family: Verdana, sans-serif; margin:0}
+.mySlides {display: none}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+
+
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+input[type=checkbox]:checked + label {
+    box-shadow: 0 0 5px #005675;
+    color: #005675;
+}
+
+        input[type=radio]:checked + label {
+            box-shadow: 0 0 5px #005675;
+            color: #005675;
+        }
+
+        .form-control {
+            width: 50px;
+        }
+
+       div.desc {
+            font-size: 20px;
+            padding-bottom: 0.5em;
+            padding-top: 0.2em;
+        }
+
+        .checkbox label, .radio label{
+            min-height: 250px;
+            padding-left: 0;
+        }
+
+        .responsive:hover{
+
+           background-position: 95% center;
+           background-repeat: no-repeat;
+           border: 1px solid #AAA;
+           color: #555;
+           font-size: inherit;
+           overflow: hidden;
+           padding: 5px 10px;
+           white-space: nowrap;
+
+        }
+
+        .responsive {
+            padding: 0 0.5em;
+            float: left;
+            width: 24.99999%;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .responsive {
+                width: 49.99999%;
+                margin: 6px 0;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .responsive {
+                width: 100%;
+            }
+
+            .commentbox {
+                width: 100%;
+            }
+        }
+</style>
+
+    <div class="container">
+        <div class="row space-below">
+
+            <div id="content-col" class="col-md-4 space-above">
+                <div class="white-box" id="text-box">
+                    <div id="banner">
+                      <!-- Full-width images with number and caption text -->
+                  <div class="mySlides ">
+
+                    <img src="{{ product.main_image.url }}" style="width:100%">
+                    <div class="text"></div>
+                  </div>
+                    {% if product.image1 %}
+                  <div class="mySlides ">
+
+                    <img src="{{ product.image1.url }}" style="width:100%">
+                    <div class="text"></div>
+                  </div>
+                    {% endif %}
+                    {% if product.image2 %}
+                    <div class="mySlides ">
+                    <img src="{{ product.image2.url }}" style="width:100%">
+                    <div class="text"></div>
+                    </div>
+                    {% endif %}
+                                        {% if product.image2 %}
+                  <div class="mySlides ">
+                    <img src="{{ product.image2.url }}" style="width:100%">
+                    <div class="text"></div>
+                  </div>
+                {% endif %}
+                                        {% if product.image3 %}
+                  <div class="mySlides ">
+                    <img src="{{ product.image3.url }}" style="width:100%">
+                    <div class="text"></div>
+                  </div>
+                {% endif %}
+                  <!-- Next and previous buttons -->
+                  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+                <br>
+
+                <!-- The dots/circles -->
+                    <div style="text-align:center">
+                      <span class="dot" onclick="currentSlide(1)"></span>
+                    {% if product.image1 %}
+                            <span class="dot" onclick="currentSlide(2)"></span>
+                    {% endif %}
+                        {% if product.image2 %}
+                            <span class="dot" onclick="currentSlide(3)"></span>
+                        {% endif %}
+                        {% if product.image3 %}
+                            <span class="dot" onclick="currentSlide(4)"></span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="content-col" class="col-md-8 space-above">
+                <div class="white-box" id="text-box">
+                <a class="btn btn-primary" href="{% url 'shop' %}">Tilbake</a>
+                    <h1>{{ product.name }}</h1>
+                    {{ product.description|safe }}
+                    <form action="{% url 'add_to_cart' product.pk %}" method="post" enctype="multipart/form-data">
+                        <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden">
+                        {% if list_size != 0 %}
+                            <br>Størrelse:<br>
+                            <select name="size_form">
+                            {% for size in product.sizes.all %}
+                                <option>{{ size.name }}</option>
+                            {% endfor %}
+                            </select>
+                        {% endif %}
+                        <br>
+                        Antall:<br>
+                        <input type="number" name="number" value="1" style="width: 7%">
+                        <h2 style="">{{ product.price }} kr</h2>
+                        {% if product.available == "På lager" %}
+                            <button type="submit" class="btn btn-lg btn-primary">Legg til i handlekurv</button>
+                            <span style="color: green" class="glyphicon glyphicon-ok"></span> {{ product.available }}
+                        {% endif %}
+                        {% if product.available == "Under bestilling" %}
+                            <button type="submit" class="btn btn-lg btn-primary">Legg til i handlekurv</button>
+                            <span style="color: yellow" class="glyphicon glyphicon-ok"></span> {{ product.available }}
+                        {% endif %}
+                        {% if product.available == "Ikke tilgjengelig" %}
+                            <a style="color: grey" class="btn btn-lg btn-primary">Legg til i handlekurv</a>
+                            <span style="color: red" class="glyphicon glyphicon-remove"></span> {{ product.available }}
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+          showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+          showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          var dots = document.getElementsByClassName("dot");
+          if (n > slides.length) {slideIndex = 1}
+          if (n < 1) {slideIndex = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          for (i = 0; i < dots.length; i++) {
+              dots[i].className = dots[i].className.replace(" active", "");
+          }
+          slides[slideIndex-1].style.display = "block";
+          dots[slideIndex-1].className += " active";
+        }
+    </script>
+
+
+{% endblock %}
