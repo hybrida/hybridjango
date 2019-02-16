@@ -30,3 +30,5 @@ db.sqlite3
 
 static/pdf/updatek
 .gitignore.local
+
+uploads/

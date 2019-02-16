@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from .views import BadgeTable, DeleteBadge
 
 from .views import *
 
@@ -11,5 +10,5 @@ urlpatterns = [
         url(r'^badgeform/add/$', SendBadge.as_view(), name='badgeform-add'),
         url(r'^badgeform/table/$', BadgeTable, name='badgetable'),
         url(r'^badgeform/(?P<pk>[0-9]+)/delete', DeleteBadge.as_view(), name='badgeform-delete'),
-
+        url(r'^badges/requests/(?P<status>.*)$', BadgeRequestView.as_view(template_name='achievements/badgerequest_table.html'), name='badgerequest-list')
 ]

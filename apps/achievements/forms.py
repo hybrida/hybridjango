@@ -22,5 +22,9 @@ class BadgeRequestForm(forms.ModelForm):
 
     class Meta:
         model = BadgeRequest
-        exclude = ['user', 'badge']
+        exclude = ['user', 'badge', 'status']
         fields = ['comment']
+
+    def __init__(self, *args, **kwargs):
+        super(BadgeRequestForm, self).__init__(*args, **kwargs)
+        self.fields['comment'].widget.attrs.update({'class': 'form-control'})

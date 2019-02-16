@@ -34,9 +34,32 @@ class BadgeForslag(models.Model):
 
 
 class BadgeRequest(models.Model):
-    user = models.ForeignKey(Hybrid)
-    badge = models.ForeignKey(Badge)
-    comment = models.CharField()
+    PENDING = 'P'
+    APPROVED = 'A'
+    DENIED = 'D'
+    CHOICES_STATUS = (
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (DENIED, 'Denied')
+    )
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=255)
+    status = models.CharField(max_length=1, choices=CHOICES_STATUS)
 
     class Meta:
         unique_together = ('badge', 'user',)
+
+    def approve(self):
+        self.badge.user.add(self.user)
+        self.badge.save()
+        self.status = BadgeRequest.APPROVED
+        self.save()
+
+    def deny(self):
+        self.status = BadgeRequest.DENIED
+        self.save()
+
+    def set_pending(self):
+        self.status = BadgeRequest.PENDING
+        self.save()
