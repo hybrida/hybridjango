@@ -42,10 +42,16 @@ class BadgeRequest(models.Model):
         (APPROVED, 'Approved'),
         (DENIED, 'Denied')
     )
-    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
-    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
-    comment = models.CharField(max_length=255)
-    status = models.CharField(max_length=1, choices=CHOICES_STATUS)
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE, null=False, blank=False)
+    badge = models.ForeignKey(Badge, on_delete=models.CASCADE, null=False, blank=False)
+    comment = models.CharField(max_length=255, blank=True)
+    status = models.CharField(
+        max_length=1,
+        choices=CHOICES_STATUS,
+        null=False,
+        blank=False,
+        default=PENDING
+    )
 
     class Meta:
         unique_together = ('badge', 'user',)
