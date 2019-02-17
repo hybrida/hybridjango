@@ -76,7 +76,7 @@ class Order(models.Model):
     )
     user = models.ForeignKey(Hybrid, related_name='order_user', on_delete=models.CASCADE, blank=True)
     products = models.ManyToManyField(OrderElement, blank=True)
-    timestamp = models.DateField(blank=False, default=timezone.now())
+    timestamp = models.DateField(blank=False, default=timezone.now)
     sum = models.IntegerField(default=0)
     paid = models.CharField(choices=paid_choices, default='Ikke betalt', max_length=100)
     delivered = models.CharField(choices=delivered_choices, default='Ikke hentet', max_length=100)
