@@ -26,6 +26,29 @@
             </tbody>
         </table>
     </div>
+
+    <h1 id="title">Endringsforslag</h1>
+        <form method = "post" id="suggestions">
+        {% csrf_token %}        
+            <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Tekst</th>
+                </tr>
+                </thead>
+                <tbody id="suggestionTable">
+                    {% for suggestion in suggestions %}
+                    <tr>
+                        <th>{{suggestion.author}}</th>
+                        <th>{{suggestion.suggestionText}}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    
 {% endblock %}
 
 {% block sidebar %}
@@ -40,7 +63,7 @@
     </form>
     <hr>
     <h2>Ny avstemning</h2>
-    <form method="post" action="{% url 'ballot:overview' %}" id="form">
+    <form method="post" action="{% url 'ballot:overview' %}" id="ballot_form">
         {% csrf_token %}
         <div class="form-group">
             <span>Tittel</span>
@@ -76,7 +99,7 @@
         </div>
         <div class="btn-group btn-group-justified" role="group">
             <div class="btn-group" role="group">
-                <a role="button" class="btn btn-primary" type="submit" id="submit">Start Avstemming</a>
+                <input role="button" class="btn btn-primary" type="submit" name="ballot_form" id="start_vote" value="Start Avstemming" >
             </div>
         </div>
     </form>
@@ -124,12 +147,27 @@
                         $('#title').html(response.title);
                     }
                 })
+            // To make sure the suggestions show up in realtime, we need to do something here
+            // Hopefully less hacky than what's above
+            //This is just copied from 
+            {% comment %} $.ajax({
+                url: '{% url 'ballot:suggestion'%}',
+                type: 'GET',
+                success: function (response) {
+                    console.log("JeuJeuJeu")
+                }
+
+            }) {% endcomment %}
             },
             500);
 
-        $('#submit').click(function () {
-            $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {
+        $('#start_vote').click(function () {
+            $.post('{% url 'ballot:overview' %}', $('#ballot_form').serialize(), function (response) {
             })
+        });
+
+        $('#toggle_suggestions').click(function () {
+            $.post('{% url 'ballot:overview' %}', $('#suggestions').serialize(), function (response) {})
         });
 
         function removeChoice(number) {

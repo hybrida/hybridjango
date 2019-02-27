@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^oversikt$', overview, name='overview'),
     url(r'^resultater$', get_results, name='results'),
     url(r'^valg$', get_choices, name='choices'),
+    url(r'^forslag',suggestion, name='suggestion'),
 ]

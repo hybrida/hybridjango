@@ -38,6 +38,22 @@
             </div>
         </div>
     </form>
+    {% if suggestions_enabled %}
+        <br>
+        <br>
+    <h2>Nytt forslag</h2>
+    <form method="post" id="suggestion_form">
+        {% csrf_token %}
+        <div class="form-group">
+            <span>Send inn forslag</span>
+            <input class="form-control" type="text" name="suggestionText" action=""/>
+        </div>
+        <div class="col-md-12" id="submitSuggestionContainer">
+                <a class="btn btn-primary" id="submitSuggestionButton" role="button"
+                   data-toggle="popover" data-trigger="focus" tabindex="0">Send inn</a>
+        </div>
+    </form>
+    {% endif %}
 {% endblock %}
 
 {% block script %}
@@ -76,11 +92,22 @@
                     }
                 }
             })
+            // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
+            // Hopefully less hacky than what's over
+            {% comment %} $.ajax({
+                url: '{% url 'ballot:suggestion'%}',
+                type: 'GET',
+                success: function (response) {
+                    console.log("jaudajuada")
+                }
+
+            }) {% endcomment %}
         }
 
         $(document).ready(refresh_ballot(true));
         setInterval(refresh_ballot, 1000);
 
+        var submitSuggestionButton = $('#submitSuggestionButton');
         var submitButton = $('#submitButton');
         var timeoutID;
 
@@ -91,6 +118,11 @@
                 submitButton.attr('data-placement', 'top');
                 submitButton.popover('show');
             });
+        });
+
+        submitSuggestionButton.click(function () {
+            $.post('{% url 'ballot:suggestion'%}', $('#suggestion_form').serialize())
+            document.getElementById("suggestion_form").reset();
         });
 
         submitButton.on('shown.bs.popover', function () {

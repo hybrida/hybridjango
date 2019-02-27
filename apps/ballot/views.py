@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from apps.rfid.models import GeneralAssembly
@@ -23,27 +23,58 @@ class Ballot:
     votes = []
     active = True
 
+class Suggestion:
+    num = 0
+    author = "Ikke vevsjef"
+    suggestionText = "Vevkom burde ta over styret"
+    suggestions_enabled = False
+
+
 
 empty_vote = 'Tomt'
-
+suggestion_list = []
 
 @login_required
 def overview(request):
     user = request.user
-    if not user.username == 'sindreeo':
+    if not user.username == 'henninok':
         return redirect('login')
     if request.method == 'POST':
-        Ballot.title = request.POST.get('title', 'Avstemning')
-        Ballot.only_members = True if request.POST.get('membersOnly') else False
-        Ballot.empty_votes = True if request.POST.get('empty_votes') else False
-        Ballot.is_attending = True if request.POST.get('is_attending') else False
-        Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
-        Ballot.votes = []
-        Ballot.has_voted = []
-        Ballot.nr += 1
+        if 'ballot_form' in request.POST:
+            Ballot.title = request.POST.get('title', 'Avstemning')
+            Ballot.only_members = True if request.POST.get('membersOnly') else False
+            Ballot.empty_votes = True if request.POST.get('empty_votes') else False
+            Ballot.is_attending = True if request.POST.get('is_attending') else False
+            Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
+            Ballot.votes = []
+            Ballot.has_voted = []
+            Ballot.nr += 1
+        elif 'toggle_suggestions' in request.POST:
+            Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
+            return HttpResponseRedirect('#')
     elif 'active' in request.GET:
         Ballot.active = not (request.GET['active'] == 'Deaktiver')
-    return render(request, 'ballot/overview.html', context={'active': Ballot.active})
+    return render(
+        request, 'ballot/overview.html', context={
+            'active': Ballot.active,
+            'suggestions' : suggestion_list,
+            'suggestions_enabled' : Suggestion.suggestions_enabled
+            },
+        )
+
+@login_required
+def suggestion(request):
+    user = request.user
+    if request.method == 'POST':
+        sugg = Suggestion()
+        sugg.num += 1
+        sugg.author = user
+        sugg.suggestionText = request.POST.get('suggestionText')
+        suggestion_list.append(sugg)
+
+    return render(request, 'ballot/voteview.html', context={
+            'suggestions_enabled' : Suggestion.suggestions_enabled
+    })
 
 
 @login_required
@@ -66,6 +97,7 @@ def get_ballot_dict(user):
         'choices': choices,
         'has_voted': user.pk in Ballot.has_voted,
         'active': Ballot.active,
+        'suggestions_enabled' : Suggestion.suggestions_enabled,
     }
 
 
@@ -98,7 +130,7 @@ def vote(request):
 
 def get_results(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'sindreeo'):
+    if not (user.is_authenticated and user.username == 'henninok'):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})
