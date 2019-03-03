@@ -3,8 +3,15 @@ from django.shortcuts import render, redirect
 from django.db.models import Max, Min
 from .models import CakeMaker, MeetingReport, Project, Guide
 from .forms import ProjectForm, MeetingReportForm
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.views.generic.edit import CreateView
+from os import path, listdir
+from hybridjango import settings
+from hybridjango.utils import group_test
+import re
+from django.http import HttpResponse, HttpResponseNotFound
+from io import StringIO
+from django.contrib.auth.hashers import PBKDF2PasswordHasher
 
 
 @permission_required(['vevkom.add_project'])
@@ -13,8 +20,15 @@ def index(request):
     referats = MeetingReport.objects.all().order_by('date').reverse()
     Projects = Project.objects.all()
     guides = Guide.objects.all()
+    _, dump_filenames = get_backup_filenames()
 
-    return render(request, "internside/internside.html", {"cake_makers": cake_makers, "referats": referats, "Projects": Projects,"guides": guides })
+    return render(request, "internside/internside.html", {
+        "cake_makers": cake_makers,
+        "referats": referats,
+        "Projects": Projects,
+        "guides": guides,
+        "dump_filenames": dump_filenames
+    })
 
 
 @permission_required(['vevkom.add_project'])
@@ -122,3 +136,38 @@ def AddMeetingReport(request):
         return render(request, 'internside/meetingreport_form.html', {
             'form': form,
         })
+
+
+@user_passes_test(group_test("Vevkom"))
+def serve_data_dump(request):
+    # get password and filename from form (see internside.html)
+    password = request.GET.get("password", None)
+    filename = request.GET.get("filename", None)
+    folder, files = get_backup_filenames()
+    if filename is None or filename not in files:
+        return HttpResponseNotFound("Not a valid file")
+    if password is None:
+        return HttpResponseNotFound("You must provide a default password")
+    # hash the password given in request
+    hasher = PBKDF2PasswordHasher()
+    default_password = hasher.encode(password, hasher.salt(), iterations=100000)
+    # write new file content to stream
+    stream = StringIO()
+    with open(path.join(folder, filename), 'r') as f:
+        for line in f.readlines():
+            # use regex to replace passwords with hashed password
+            stream.write(re.sub(r'(\s*"password":) ".*"', r'\1 "{}"'.format(default_password), line))
+    # reset stream to start so that we can read it
+    stream.seek(0)
+    # create response from stream
+    new_file_name = filename.split('.')[0] + '_SAFE.json'
+    response = HttpResponse(stream.read(), content_type='application/json')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(new_file_name)
+    return response
+
+
+def get_backup_filenames():
+    # backups are in MEDIA_ROOT (uploads) folder
+    folder_path = path.join(settings.MEDIA_ROOT, "backups")
+    # sort in reverse to get newest
+    return folder_path, sorted(listdir(folder_path), reverse=True)
