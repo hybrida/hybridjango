@@ -23,7 +23,6 @@ from . import ISO_8601
 
 
 def get_service():
-    # Silence logging from the google API client for level WARNING or lower
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
