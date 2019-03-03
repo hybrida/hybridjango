@@ -32,3 +32,5 @@ static/pdf/updatek
 .gitignore.local
 
 uploads/
+
+hybridjango/utils/secrets
