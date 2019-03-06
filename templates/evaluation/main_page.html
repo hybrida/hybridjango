@@ -6,94 +6,89 @@
     <h1>FAGEVALUERINGER</h1>
 
     <div>
-        <table>
-            <tr>
-                <td style="width:50%" align="left">
+        <div class="dropdown" align="left">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false"> <span class="glyphicon glyphicon-search"> </span> </a>
+            <div class="dropdown-menu">
+                <form class="navbar-form" role="search" action="#" method="GET">
+                    <div class="form-group">
+                        <input id="course-search" type="text" class="form-control" name="tekst"
+                               placeholder="Søk fag/fagkode"/>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                    {% if user.is_authenticated %}
-                        <li class="dropdown">
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                         aria-expanded="false"> <span class="glyphicon glyphicon-search"> </span> </a>
-                            <div class="dropdown-menu">
-                                <form class="navbar-form" role="search" action="{% url 'search' %}" method="GET">
-                                    <div class="form-group">
-                                        <input id="course-search" type="text" class="form-control" name="tekst"
-                                        placeholder="Søk fag/fagkode"/>
-                                  </div>
-                                </form>
-                            </div>
-                        </li>
-                    {% endif %}
-                </td>
-
-                <td align="right">
-                    <button class="btn btn-primary btn-lg"> Skriv din vurdering! </button>
-                </td>
-            </tr>
-        </table>
+        <button class="btn btn-primary" style="margin-left:80%"> Skriv din vurdering!</button>
     </div>
     {# Table start #}
-            <div style="overflow-x:auto; padding-top: 15px">
-                <table class="table table-responsive sortable table-hover">
-                    <thead>
-                    <tr style="background-color: #428bca; height: 30px; color: white;">
-                        <th class="col-xs-2">Fag</th>
-                        <th class="col-xs-2">Fagkode</th>
-                        <th class="col-xs-2">Linje</th>
-                        <th class="col-xs-3">Semester</th>
-                        <th class="col-xs-1">Evalueringer</th>
-                        <th class="col-xs-1">Gjennomsnittsvurdering</th>
-                    </tr>
-                    </thead>
-                    {# Table body - Important to have class="list" for search to function #}
-                    <tbody class="">
-
-                    {% for course in courses %}
-                            <tr id="row{{ course.id }}" >
-                                <td class="text-left; name" style="font-size: x-large; "><a
-
-                                        style="color: #005675; font-size:16px">{{ course.name }}</a>
-                                </td>
-                                <td class="text-left; responsible"> {{ course.course_code }}</td>
-                                <td class="text-left"> {{ course.specialization }}
-                                </td>
-                                <td class="text-left; tag" >{{ course.semester }}</td>
-                                <div >
-
-                                    <td class="text-left">
-                                        <div id="commentshidden" style="display: block;" >{{ course.number_of_evaluations }}</div>
-                                    </td>
-                                </div>
-                                <td class="Evaluations" style="font-size: medium; margin: auto; text-align: center">
-                                   <div id="statusText" class="container">
-                                    <div class="row" style="white-space: nowrap">
-                                        {% if course.average_score >= 1 %}
-                                           <span class="glyphicon glyphicon-star">
+    <div style="overflow-x:hidden; padding-top: 15px">
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+            <tr style="background-color: #428bca; height: 30px; color: white;" class="row">
+                <th class="col-xs-3">Fag</th>
+                <th class="col-xs-3">Fagkode</th>
+                <th class="col-xs-2">Linje</th>
+                <th class="col-xs-2">Semester</th>
+                <th class="col-xs-1">Evalueringer</th>
+                <th class="col-xs-1">Gjennomsnittsvurdering</th>
+            </tr>
+            </thead>
+            {# Table body - Important to have class="list" for search to function #}
+            <tbody>
+            {% for course in courses %}
+                <tr id="row{{ course.id }}" class="row">
+                    <td class="text-left; name; col-xs-3" style="font-size:x-large;"><a
+                            style="color: #005675; font-size:16px">{{ course.name }}</a>
+                    </td>
+                    <td class="text-left; responsible; col-xs-3"> {{ course.course_code }}</td>
+                    <td class="text-left; col-xs-2"> {{ course.specialization }}</td>
+                    <td class="text-left; tag; col-xs-2">{{ course.semester }}</td>
+                    <div>
+                        <td class="text-left; col-xs-1">
+                            <div id="evaluation_count">{{ course.number_of_evaluations }}</div>
+                        </td>
+                    </div>
+                    <td class="Evaluations; col-xs-1" style="font-size: medium; text-align:left">
+                        <div id="statusText">
+                            <div class="row" style="white-space: nowrap"; align="left">
+                                {% if course.average_score >= 1 %}
+                                    <span class="glyphicon glyphicon-star">
                                            </span>
-                                       {% endif %}
-                                        {% if course.average_score >= 2 %}
-                                           <span class="glyphicon glyphicon-star">
+                                {% endif %}
+                                {% if course.average_score >= 2 %}
+                                    <span class="glyphicon glyphicon-star">
                                            </span>
-                                       {% endif %}{% if course.average_score >= 3 %}
-                                           <span class="glyphicon glyphicon-star">
+                                {% endif %}{% if course.average_score >= 3 %}
+                                <span class="glyphicon glyphicon-star">
                                            </span>
-                                       {% endif %}{% if course.average_score >= 4 %}
-                                           <span class="glyphicon glyphicon-star">
+                            {% endif %}{% if course.average_score >= 4 %}
+                                <span class="glyphicon glyphicon-star">
                                            </span>
-                                       {% endif %}{% if course.average_score == 5 %}
-                                           <span class="glyphicon glyphicon-star">
+                            {% endif %}{% if course.average_score == 5 %}
+                                <span class="glyphicon glyphicon-star">
                                            </span>
-                                       {% endif %}</div>
+                            {% endif %}</div>
+                            <br>
+                            <div class="row" style="white-space: nowrap";
+                                 align="left">{{ course.average_score }}/ 5
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
 
-                                       <br>
-                                       {{ course.average_score }} / 5
-                                   </div>
-                            </tr>
-                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-                    </tbody>
-
-                </table>
-            </div>
+    {# Add to table class to fix column length - doesn't work at the moment... #}
+    <style>
+        .table-fit {
+            width: auto !important;
+            table-layout: auto !important;
+            white-space: nowrap;
+        }
+    </style>
 
 {% endblock text %}
