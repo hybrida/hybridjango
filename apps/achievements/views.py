@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-from .forms import BadgeRequestForm
+from .forms import BadgeRequestForm, BadgeForm
 from .models import Badge, BadgeRequest
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 
@@ -24,7 +24,11 @@ class DeleteBadge(DeleteView):
 
 def BadgeTable(request):
     badge_forms = BadgeForslag.objects.all()
-    return render(request, '../templates/achievements/badeform_table.html', {"badge_forms": badge_forms})
+    form = BadgeForm()
+    return render(request, '../templates/achievements/badeform_table.html', {
+        "badge_forms": badge_forms,
+        "form": form
+    })
 
 
 def overview(request):

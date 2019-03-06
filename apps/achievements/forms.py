@@ -1,9 +1,9 @@
 from django import forms
-from .models import BadgeForslag, BadgeRequest
+
+from .models import BadgeForslag, BadgeRequest, Badge
 
 
 class BadgeForslagForm(forms.ModelForm):
-
     class Meta:
         model = BadgeForslag
         exclude = ['profil']
@@ -19,7 +19,6 @@ class BadgeForslagForm(forms.ModelForm):
 
 
 class BadgeRequestForm(forms.ModelForm):
-
     class Meta:
         model = BadgeRequest
         exclude = ['user', 'badge', 'status']
@@ -28,3 +27,15 @@ class BadgeRequestForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(BadgeRequestForm, self).__init__(*args, **kwargs)
         self.fields['comment'].widget.attrs.update({'class': 'form-control'})
+
+
+class BadgeForm(forms.ModelForm):
+    class Meta:
+        model = Badge
+        exclude = ['user']
+        fields = ['name', 'description', 'badge_image', 'scorepoints']
+
+    def __init__(self, *args, **kwargs):
+        super(BadgeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})

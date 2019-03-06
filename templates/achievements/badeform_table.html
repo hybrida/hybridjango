@@ -40,9 +40,47 @@
 
     </tbody>
 </table></div>
+    <a data-toggle="modal" data-target="#exampleModal">Yeet</a>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title-field">Opprett badge</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal-body">
+
+                        </div>
+                            {{ form }}
+                            <label for="give-contrib-badge">Give contributor badge to {NAME}</label>
+                            <input type="checkbox" class="form-control" name="give-contrib-badge" id="give-contrib-badge" checked>
+                            <input type="hidden" name="forslag-id" id="forslag-id" value="-1">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                        <button type="submit" id="submit-button" class="btn btn-primary">Godkjenn</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock text %}
 {% block sidebar %}
 <p>Hjelp oss å forbedre badgesystemet ved å sende inn egne forslag til badges. Legg ved i beskrivelsen hvem du synes forjener badgen din</p>
 
 
 {% endblock sidebar %}
+{% block script %}
+    <script>
+        function setModalContent() {
+            console.log("method stub");
+        }
+    </script>
+{% endblock script %}
