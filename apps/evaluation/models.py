@@ -35,7 +35,7 @@ class Course(models.Model):
 
 class Evaluation(models.Model):
 
-    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE, blank=True, null=True)
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,

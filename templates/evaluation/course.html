@@ -1,0 +1,29 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+    <h1>{{ course.name}}</h1>
+
+
+
+
+    <div style="overflow-x:auto; padding-top: 15px">
+                <table class="table table-responsive sortable table-hover">
+                    <thead>
+                    <tr style="background-color: #428bca; height: 30px; color: white;">
+                        <th class="col-xs-2">Evalueringer</th>
+                    </tr>
+                    </thead>
+                    {# Table body - Important to have class="list" for search to function #}
+                    <tbody class="">
+                    {% for e in evaluations %}
+                            <tr >
+                            <td><h3>{{e.title}}</h3></td>
+                            </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+{% endblock %}
