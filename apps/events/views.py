@@ -11,7 +11,7 @@ import datetime
 
 from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
-from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Mark_ends, Rule
+from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Rule, closest_end_of_semester_date
 from apps.registration.models import Hybrid
 
 
@@ -55,7 +55,8 @@ class EventView(generic.DetailView):
             #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).exists():
                 ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).delete()
-        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user, MarkPunishment.objects.all().last().goes_on_secondary, MarkPunishment.objects.all().last().too_many_marks):
+        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user,
+                MarkPunishment.objects.all().last().goes_on_secondary, MarkPunishment.objects.all().last().too_many_marks):
             ParticipationSecondary.objects.get_or_create(hybrid=user, attendance=attendance)
 
         self.object = self.get_object()
@@ -118,7 +119,7 @@ def SendMarkMail(hybrid, mark):
             value = mark.value,
             name = hybrid.get_full_name(),
             reason = mark.reason,
-            expireDate = mark.start + datetime.timedelta(days=MarkPunishment.objects.all().last().duration),
+            expireDate = mark.end,
             prikker = Mark.objects.all().filter(recipient=hybrid)),
         'robot@hybrida.no',
         mail,
@@ -250,7 +251,7 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
 
 
         context.update({
-            'Mark_ends': Mark_ends(Mark.objects.all().filter(recipient=user)) if user.is_authenticated else False,
+            'End_date': closest_end_of_semester_date(),
             'Goes_on_secondary': MarkPunishment.objects.all().last().goes_on_secondary,
             'Too_many_marks': MarkPunishment.objects.all().last().too_many_marks,
             'Delay': Delay.objects.all().filter(punishment=MarkPunishment.objects.all().last()),

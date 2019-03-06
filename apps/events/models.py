@@ -213,6 +213,20 @@ class EventComment(models.Model):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
 
+def closest_end_of_semester():
+    now = datetime.date.today()
+    end_sem1 = datetime.date(now.year,7, 1)
+    end_sem2 = datetime.date(now.year+1,1,1)
+    delta = end_sem1 - now
+    if delta.days <= 0:
+        return (end_sem2-now).days
+    else:
+        return delta.days
+
+def closest_end_of_semester_date():
+    return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
+
+
 class Mark(models.Model):
     @staticmethod
     def num_marks(user):
@@ -224,6 +238,7 @@ class Mark(models.Model):
     recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
+    end = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()))
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
@@ -232,16 +247,9 @@ class Mark(models.Model):
 
     #Sjekker om vi har passert utløpsdatoen, og eventuelt sletter prikken
     def check_mark(self):
-        time = self.start + datetime.timedelta(days=MarkPunishment.objects.all().last().duration)
+        time = self.end
         if datetime.now >= time:
             self.delete(self)
-
-
-def Mark_ends(marks):
-    for mark in marks:
-        mark.start += datetime.timedelta(days=MarkPunishment.objects.all().last().duration)
-        mark.start = mark.start.date
-    return marks
 
 
 class Delay(models.Model):
@@ -262,6 +270,6 @@ class Rule(models.Model):
 class MarkPunishment(models.Model):
     delay = models.ManyToManyField(Delay, blank=True)
     rules = models.ManyToManyField(Rule, blank=True)
-    duration = models.PositiveIntegerField(default=0)
+    duration = closest_end_of_semester()
     goes_on_secondary = models.PositiveIntegerField(default=0)
     too_many_marks = models.PositiveIntegerField(default=0)
