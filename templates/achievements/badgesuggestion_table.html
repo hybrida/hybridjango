@@ -18,17 +18,17 @@
     </thead>
 
     <tbody class="list">
-    {% for BadgeForslag in badge_forms %}
+    {% for suggestion in suggestions %}
     <tr>
-        <td>{{ BadgeForslag.navn }}</td>
-        <td>{{ BadgeForslag.beskrivelse }}</td>
-        <td><img style="width: 40%" src="{{ BadgeForslag.badge_bilde.url }}"><td>
-        <td>{{ BadgeForslag.tildeles }}</td>
-        <td>{{ BadgeForslag.scorepoints }}</td>
+        <td>{{ suggestion.name }}</td>
+        <td>{{ suggestion.description }}</td>
+        <td><img style="width: 40%" src="{{ suggestion.image.url }}"><td>
+        <td>{{ suggestion.award_to }}</td>
+        <td>{{ suggestion.scorepoints }}</td>
         <td>
-            <form action="{% url 'badgeform-delete' BadgeForslag.id %}" method="post" >
+            <form action="{% url 'badgesuggestion-delete' suggestion.id %}" method="post" >
                 {% csrf_token %}
-                <input type="hidden" value="{{ BadgeForm.id }}" name="badgeform_id">
+                <input type="hidden" value="{{ suggestion.id }}" name="badgeform_id">
                 <button type="submit" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-trash"></span></button>
             </form>

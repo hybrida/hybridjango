@@ -1,32 +1,32 @@
 import json
 from os import path
-from .models import BadgeForslag
+from .models import BadgeSuggestion
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-from .forms import BadgeRequestForm, BadgeForm
+from .forms import BadgeRequestForm, BadgeForm, BadgeSuggestionForm
 from .models import Badge, BadgeRequest
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 
 
-class SendBadge(CreateView):
-    model = BadgeForslag
-    fields = ['navn', 'beskrivelse', 'tildeles', 'badge_bilde', 'scorepoints']
+class CreateSuggestion(CreateView):
+    form_class = BadgeSuggestionForm
+    template_name = 'achievements/badgesuggestion_form.html'
 
 
 class DeleteBadge(DeleteView):
-    model = BadgeForslag
-    success_url = reverse_lazy('badgetable')
+    model = BadgeSuggestion
+    success_url = reverse_lazy('badgesuggestion-table')
 
 
-def BadgeTable(request):
-    badge_forms = BadgeForslag.objects.all()
+def badge_suggestions_table(request):
+    suggestions = BadgeSuggestion.objects.all()
     form = BadgeForm()
-    return render(request, '../templates/achievements/badeform_table.html', {
-        "badge_forms": badge_forms,
+    return render(request, '../templates/achievements/badgesuggestion_table.html', {
+        "suggestions": suggestions,
         "form": form
     })
 
