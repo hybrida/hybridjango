@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         # Named (optional) arguments
         parser.add_argument(
-            '--upload',
+            '--upload', '-u',
             action='store_true',
             dest='upload',
             help='Upload backup file to Google Drive',
