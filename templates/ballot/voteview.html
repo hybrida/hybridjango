@@ -59,6 +59,14 @@
 {% block script %}
     <script>
         var lastNr = {{ nr }};
+        //This is just nasty. This is python-django-syntax, within the JS scriptblock
+        //Python returnts sugg_enabled = True/False, JS just understands true/false
+        //Hence this beauty
+        {% if suggestions_enabled %}
+            var suggestions_enabled = true
+        {% else %}
+            var suggestions_enabled = false
+        {% endif %}
 
         function refresh_ballot(force) {
             $.ajax({
@@ -93,15 +101,19 @@
                 }
             })
             // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
-            // Hopefully less hacky than what's over
-            {% comment %} $.ajax({
-                url: '{% url 'ballot:suggestion'%}',
-                type: 'GET',
-                success: function (response) {
-                    console.log("jaudajuada")
-                }
-
-            }) {% endcomment %}
+            //Currently works, as in gets the log to log. Unsure about the html-refreshing thingy
+            
+            // $.ajax({
+            //     url: '{% url 'ballot:suggestion'%}',
+            //     type: 'GET',
+            //     success: function (response) {
+            //         if (suggestions_enabled) {
+            //             $('#suggestion_form').html();
+            //             console.log("WHohoashfgipubgasrg")
+            //         }
+            //     }
+            // })
+            
         }
 
         $(document).ready(refresh_ballot(true));
@@ -131,6 +143,14 @@
             timeoutID = setTimeout(function () {
                 $pop.popover('hide');
             }, 2000);
+        });
+
+        $('#suggestion_form').on('keyup keypress', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) { 
+                e.preventDefault();
+                return false;
+            }
         });
     </script>
 {% endblock %}

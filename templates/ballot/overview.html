@@ -26,29 +26,6 @@
             </tbody>
         </table>
     </div>
-
-    <h1 id="title">Endringsforslag</h1>
-        <form method = "post" id="suggestions">
-        {% csrf_token %}        
-            <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Navn</th>
-                    <th>Tekst</th>
-                </tr>
-                </thead>
-                <tbody id="suggestionTable">
-                    {% for suggestion in suggestions %}
-                    <tr>
-                        <th>{{suggestion.author}}</th>
-                        <th>{{suggestion.suggestionText}}</th>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </form>
-    
 {% endblock %}
 
 {% block sidebar %}
@@ -147,17 +124,6 @@
                         $('#title').html(response.title);
                     }
                 })
-            // To make sure the suggestions show up in realtime, we need to do something here
-            // Hopefully less hacky than what's above
-            //This is just copied from 
-            {% comment %} $.ajax({
-                url: '{% url 'ballot:suggestion'%}',
-                type: 'GET',
-                success: function (response) {
-                    console.log("JeuJeuJeu")
-                }
-
-            }) {% endcomment %}
             },
             500);
 
@@ -166,9 +132,6 @@
             })
         });
 
-        $('#toggle_suggestions').click(function () {
-            $.post('{% url 'ballot:overview' %}', $('#suggestions').serialize(), function (response) {})
-        });
 
         function removeChoice(number) {
             $("#choice-" + number).remove();

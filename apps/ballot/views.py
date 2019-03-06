@@ -65,14 +65,22 @@ def overview(request):
 @login_required
 def suggestion(request):
     user = request.user
+    if not user.username == 'henninok':
+        return redirect('login')
     if request.method == 'POST':
-        sugg = Suggestion()
-        sugg.num += 1
-        sugg.author = user
-        sugg.suggestionText = request.POST.get('suggestionText')
-        suggestion_list.append(sugg)
+        if 'toggle_suggestions' in request.POST:
+            Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
+            return HttpResponseRedirect('#')
+        else:
+            sugg = Suggestion()
+            sugg.num += 1
+            sugg.author = user
+            sugg.suggestionText = request.POST.get('suggestionText')
+            suggestion_list.append(sugg)
 
-    return render(request, 'ballot/voteview.html', context={
+
+    return render(request, 'ballot/suggestions.html', context={
+            'suggestions' : suggestion_list,
             'suggestions_enabled' : Suggestion.suggestions_enabled
     })
 

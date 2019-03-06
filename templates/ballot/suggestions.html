@@ -1,0 +1,56 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+    <h1 id="title">Endringsforslag</h1>
+        <form method = "post" id="suggestions">
+        {% csrf_token %}        
+            <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Tekst</th>
+                </tr>
+                </thead>
+                <tbody id="suggestionTable">
+                    {% for suggestion in suggestions %}
+                    <tr>
+                        <th>{{suggestion.author}}</th>
+                        <th>{{suggestion.suggestionText}}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    
+{% endblock text %}
+
+{% block script %}
+
+    <script>
+        $('#toggle_suggestions').click(function () {
+            $.post('{% url 'ballot:suggestion' %}', $('#suggestions').serialize(), function (response) {})
+        });
+{% comment %} 
+        function refresh(force): {
+
+            // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
+            //Currently works, as in gets the log to log. Unsure about the html-refreshing thingy
+            $.ajax({
+                url: '{% url 'ballot:suggestion'%}',
+                type: 'GET',
+                success: function (response) {
+                    if (suggestions_enabled || force) {
+                        $('#suggestion_form').html();
+                        console.log("WHohoashfgipubgasrg")
+                    }
+                }
+            })
+        }
+
+        $(document).ready(refresh(true));
+        setInterval(refresh, 1000);
+         {% endcomment %}
+    </script>
+{% endblock script %}
