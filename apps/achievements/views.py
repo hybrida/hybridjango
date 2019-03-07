@@ -15,7 +15,13 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound
 class CreateSuggestion(CreateView):
     form_class = BadgeSuggestionForm
     template_name = 'achievements/badgesuggestion_form.html'
+    success_url = reverse_lazy('scoreboard')
 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.suggested_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
 class DeleteBadge(DeleteView):
     model = BadgeSuggestion
@@ -23,6 +29,30 @@ class DeleteBadge(DeleteView):
 
 
 def badge_suggestions_table(request):
+    if request.method == 'POST':
+        suggestion = BadgeSuggestion.objects.get(pk=int(request.POST.get("suggestion-id")))
+
+        # Use image from suggestion or the one uploaded in form
+        if request.POST.get('use-suggested-image') == 'on':
+            image = suggestion.image
+        else:
+            image = request.FILES.get('badge_image')
+
+        # use django form validation
+        form = BadgeForm(request.POST, {'badge_image': image})
+        if form.is_valid():
+            form.save()
+
+            # give contributor badge to whoever gave the suggestion
+            if request.POST.get('give-contrib-badge') == 'on' and suggestion.suggested_by:
+                Badge.objects.get(name="Contributor").user.add(suggestion.suggested_by)
+
+            # don't need the suggestion after the badge is created
+            suggestion.delete()
+
+        return HttpResponseRedirect('#')
+
+    # suggestions as dict rather than list for js indexing by id
     suggestions = {
         suggestion.id: {
             'name': suggestion.name,
@@ -34,10 +64,9 @@ def badge_suggestions_table(request):
             'suggested_by': suggestion.suggested_by.full_name if suggestion.suggested_by else ""
         } for suggestion in BadgeSuggestion.objects.all()
     }
-    form = BadgeForm()
     return render(request, '../templates/achievements/badgesuggestion_table.html', {
         "suggestions": suggestions,
-        "form": form
+        "form": BadgeForm()
     })
 
 

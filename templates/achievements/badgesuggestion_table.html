@@ -50,7 +50,7 @@
     <div class="modal fade" id="createBadgeModal" tabindex="-1" role="dialog" aria-labelledby="createBadgeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h5 class="modal-title" id="title-field">Opprett badge</h5>
@@ -104,22 +104,26 @@
         let suggestions = {{ suggestions|safe }};
         let imageCheckbox = document.getElementById("image-checkbox");
         function setModalContent(id) {
+            // set all the contents of the modal from the selected suggestion
             let suggestion = suggestions[id];
+            document.getElementById("suggestion-id").setAttribute("value", id);
             document.getElementById("id_name").setAttribute("value", suggestion.name);
-            //document.getElementById("id_description").setAttribute("value", suggestion.description);
             document.getElementById("id_description").innerText = suggestion.description;
             document.getElementById("id_scorepoints").setAttribute("value", suggestion.scorepoints);
             document.getElementById("image-preview").src = suggestion.image_url;
+            // let changeImage handle image input visibility
             changeImage();
 
             let label = document.getElementById("contrib-label");
             let checkbox = document.getElementById("contrib-checkbox");
             if (suggestion.suggested_by) {
+                // if someone suggested the badge, we can give them contributor
                 label.innerHTML = `Give Contributor badge to ${suggestion.suggested_by}`;
                 label.style.display = 'block';
                 checkbox.checked = true;
                 checkbox.style.display = 'block';
             } else {
+                // if there is no such field, we cant :(
                 label.style.display = 'none';
                 checkbox.checked = false;
                 checkbox.style.display = 'none';
@@ -130,9 +134,11 @@
             let fileInput = document.getElementById("id_badge_image");
             if (imageCheckbox.checked) {
                 image.style.display = 'block';
+                fileInput.required = false;
                 fileInput.style.display = 'none';
             } else {
                 image.style.display = 'none';
+                fileInput.required = true;
                 fileInput.style.display = 'block';
             }
         }
