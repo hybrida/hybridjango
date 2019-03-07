@@ -2,47 +2,52 @@
 {% load static %}
 
 {% block text %}
-
     <div>
-<table class="table table-responsive sortable table-hover">
-    <thead>
-        <tr style="background-color: #428bca; height: 30px; color: white;">
-            <th class="col-xs-2">Navn</th>
-            <th class="col-xs-2">Beskrivelse</th>
-            <th class="col-xs-3">Bilde</th>
-            <th class="col-xs-3">Tildeles</th>
-            <th class="col-xs-4">Scorepoints</th>
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+                <tr style="background-color: #428bca; height: 30px; color: white;">
+                    <th class="col-xs-2">Navn</th>
+                    <th class="col-xs-3">Beskrivelse</th>
+                    <th class="col-xs-2">Bilde</th>
+                    <th class="col-xs-2">Tildeles</th>
+                    <th class="col-xs-1">Scorepoints</th>
+                    <th class="col-xs-2" colspan="2">Handling</th>
+                </tr>
+            </thead>
 
-
-        </tr>
-    </thead>
-
-    <tbody class="list">
-    {% for suggestion in suggestions %}
-    <tr>
-        <td>{{ suggestion.name }}</td>
-        <td>{{ suggestion.description }}</td>
-        <td><img style="width: 40%" src="{{ suggestion.image.url }}"><td>
-        <td>{{ suggestion.award_to }}</td>
-        <td>{{ suggestion.scorepoints }}</td>
-        <td>
-            <form action="{% url 'badgesuggestion-delete' suggestion.id %}" method="post" >
-                {% csrf_token %}
-                <input type="hidden" value="{{ suggestion.id }}" name="badgeform_id">
-                <button type="submit" class="btn btn-sm btn-default">
-                <span class="glyphicon glyphicon-trash"></span></button>
-            </form>
-        </td>
-    </tr>
-
-
-    {% endfor %}
-
-    </tbody>
-</table></div>
-    <a data-toggle="modal" data-target="#exampleModal">Yeet</a>
+            <tbody class="list">
+                {% for id, suggestion in suggestions.items %}
+                    <tr>
+                        <td class="col-xs-2">{{ suggestion.name }}</td>
+                        <td class="col-xs-3">{{ suggestion.description }}</td>
+                        <td class="col-xs-2"><img style="width: 100%" src="{{ suggestion.image_url }}"></td>
+                        <td class="col-xs-2">{{ suggestion.award_to }}</td>
+                        <td class="col-xs-1">{{ suggestion.scorepoints }}</td>
+                        <td class="col-xs-1">
+                            <form action="{% url 'badgesuggestion-delete' id %}" method="post" >
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ suggestion.id }}" name="badgeform_id">
+                                <button type="submit" class="btn btn-sm btn-default">
+                                <span class="glyphicon glyphicon-trash"></span></button>
+                            </form>
+                        </td>
+                        <td class="col-xs-1">
+                           <button
+                                class="btn btn-sm btn-default"
+                                data-toggle="modal"
+                                data-target="#createBadgeModal"
+                                onclick=setModalContent({{ id }})
+                           >
+                               <span class="glyphicon glyphicon-edit"></span>
+                           </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createBadgeModal" tabindex="-1" role="dialog" aria-labelledby="createBadgeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form method="POST">
@@ -57,10 +62,27 @@
                         <div id="modal-body">
 
                         </div>
-                            {{ form }}
-                            <label for="give-contrib-badge">Give contributor badge to {NAME}</label>
-                            <input type="checkbox" class="form-control" name="give-contrib-badge" id="give-contrib-badge" checked>
-                            <input type="hidden" name="forslag-id" id="forslag-id" value="-1">
+                            {% for field in form %}
+                                {% if field.name == "badge_image" %}
+                                    <label for="image-checkbox" id="image-label">Use suggested image</label>
+                                    <input
+                                            type="checkbox"
+                                            class="form-control"
+                                            name="use-suggested-image"
+                                            id="image-checkbox"
+                                            checked
+                                            onchange="changeImage()"
+                                    >
+                                {% endif %}
+                                {{ field.label_tag }}
+                                {% if field.name == "badge_image" %}
+                                    <img class="center" id="image-preview" style="width: 30%" src="" alt="Image missing">
+                                {% endif %}
+                                {{ field }}
+                            {% endfor %}
+                            <label for="contrib-checkbox" id="contrib-label">Give Contributor badge to ${NAME}</label>
+                            <input type="checkbox" class="form-control" name="give-contrib-badge" id="contrib-checkbox" checked>
+                            <input type="hidden" name="suggestion-id" id="suggestion-id" value="-1">
                     </div>
 
                     <div class="modal-footer">
@@ -72,15 +94,47 @@
         </div>
     </div>
 {% endblock text %}
+
 {% block sidebar %}
-<p>Hjelp oss å forbedre badgesystemet ved å sende inn egne forslag til badges. Legg ved i beskrivelsen hvem du synes forjener badgen din</p>
-
-
+    <p>Hjelp oss å forbedre badgesystemet ved å sende inn egne forslag til badges. Legg ved i beskrivelsen hvem du synes forjener badgen din</p>
 {% endblock sidebar %}
+
 {% block script %}
     <script>
-        function setModalContent() {
-            console.log("method stub");
+        let suggestions = {{ suggestions|safe }};
+        let imageCheckbox = document.getElementById("image-checkbox");
+        function setModalContent(id) {
+            let suggestion = suggestions[id];
+            document.getElementById("id_name").setAttribute("value", suggestion.name);
+            //document.getElementById("id_description").setAttribute("value", suggestion.description);
+            document.getElementById("id_description").innerText = suggestion.description;
+            document.getElementById("id_scorepoints").setAttribute("value", suggestion.scorepoints);
+            document.getElementById("image-preview").src = suggestion.image_url;
+            changeImage();
+
+            let label = document.getElementById("contrib-label");
+            let checkbox = document.getElementById("contrib-checkbox");
+            if (suggestion.suggested_by) {
+                label.innerHTML = `Give Contributor badge to ${suggestion.suggested_by}`;
+                label.style.display = 'block';
+                checkbox.checked = true;
+                checkbox.style.display = 'block';
+            } else {
+                label.style.display = 'none';
+                checkbox.checked = false;
+                checkbox.style.display = 'none';
+            }
+        }
+        function changeImage() {
+            let image = document.getElementById("image-preview");
+            let fileInput = document.getElementById("id_badge_image");
+            if (imageCheckbox.checked) {
+                image.style.display = 'block';
+                fileInput.style.display = 'none';
+            } else {
+                image.style.display = 'none';
+                fileInput.style.display = 'block';
+            }
         }
     </script>
 {% endblock script %}

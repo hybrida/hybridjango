@@ -23,7 +23,17 @@ class DeleteBadge(DeleteView):
 
 
 def badge_suggestions_table(request):
-    suggestions = BadgeSuggestion.objects.all()
+    suggestions = {
+        suggestion.id: {
+            'name': suggestion.name,
+            'description': suggestion.description,
+            'award_to': suggestion.award_to,
+            'image_url': suggestion.image.url,
+            'scorepoints': suggestion.scorepoints,
+            # js doesn't like Hybrid objects or None, so we replace them with strings
+            'suggested_by': suggestion.suggested_by.full_name if suggestion.suggested_by else ""
+        } for suggestion in BadgeSuggestion.objects.all()
+    }
     form = BadgeForm()
     return render(request, '../templates/achievements/badgesuggestion_table.html', {
         "suggestions": suggestions,
