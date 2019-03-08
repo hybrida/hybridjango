@@ -12,6 +12,7 @@ import re
 from django.http import HttpResponse, HttpResponseNotFound
 from io import StringIO
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
+from hybridjango.utils import drive
 
 
 @permission_required(['vevkom.add_project'])
@@ -20,7 +21,7 @@ def index(request):
     referats = MeetingReport.objects.all().order_by('date').reverse()
     Projects = Project.objects.all()
     guides = Guide.objects.all()
-    _, dump_filenames = get_backup_filenames()
+    dump_filenames = drive.get_backup_filenames()
 
     return render(request, "internside/internside.html", {
         "cake_makers": cake_makers,
@@ -143,7 +144,7 @@ def serve_data_dump(request):
     # get password and filename from form (see internside.html)
     password = request.GET.get("password", None)
     filename = request.GET.get("filename", None)
-    folder, files = get_backup_filenames()
+    files = drive.get_backup_filenames()
     if filename is None or filename not in files:
         return HttpResponseNotFound("Not a valid file")
     if password is None:
@@ -152,22 +153,17 @@ def serve_data_dump(request):
     hasher = PBKDF2PasswordHasher()
     default_password = hasher.encode(password, hasher.salt(), iterations=100000)
     # write new file content to stream
-    stream = StringIO()
-    with open(path.join(folder, filename), 'r') as f:
-        for line in f.readlines():
-            # use regex to replace passwords with hashed password
-            stream.write(re.sub(r'(\s*"password":) ".*"', r'\1 "{}"'.format(default_password), line))
+    input_stream = drive.get_backup_from_filename(filename)
+    output_stream = StringIO()
+    for line in input_stream.readlines():
+        # decode bytes to str
+        line_str = line.decode('UTF-8')
+        # use regex to replace passwords with hashed password
+        output_stream.write(re.sub(r'(\s*"password":) ".*"', r'\1 "{}"'.format(default_password), line_str))
     # reset stream to start so that we can read it
-    stream.seek(0)
+    output_stream.seek(0)
     # create response from stream
     new_file_name = filename.split('.')[0] + '_SAFE.json'
-    response = HttpResponse(stream.read(), content_type='application/json')
+    response = HttpResponse(output_stream.read(), content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(new_file_name)
     return response
-
-
-def get_backup_filenames():
-    # backups are in MEDIA_ROOT (uploads) folder
-    folder_path = path.join(settings.MEDIA_ROOT, "backups")
-    # sort in reverse to get newest
-    return folder_path, sorted(listdir(folder_path), reverse=True)

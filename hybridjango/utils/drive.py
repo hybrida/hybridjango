@@ -1,11 +1,12 @@
 import pickle
 import os.path
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.auth.transport.requests import Request
 from datetime import datetime
 from .secrets import FOLDER_ID  # SEE BELOW
 from . import ISO_8601
+from io import BytesIO
 
 # This file will throw ImportErrors on the .secrets module except when in production
 # This is by design, as the secrets-folder contains sensitive information and is ignored explicitly by Git
@@ -17,7 +18,8 @@ from . import ISO_8601
 # 4. Generate a valid pickled credentials file called token.pickle
 # 5. Add token.pickle to the secrets folder
 
-# For further help with step 4, see https://developers.google.com/drive/api/v3/quickstart/python
+# For further help with step 4, ask vevsjef for a script
+# or see https://developers.google.com/drive/api/v3/quickstart/python
 # Required scopes for credentials file:
 # SCOPES = ['https://www.googleapis.com/auth/drive.readonly', 'https://www.googleapis.com/auth/drive.file']
 
@@ -63,6 +65,54 @@ def upload_db_backup(filename):
         fields='id'
     ).execute()
     print("Backup successfully uploaded with file ID {}".format(file.get('id')))
+    return bool(file.get('id'))
+
+
+def get_backup_filenames():
+    service = get_service()
+    if service is None:
+        print("Error with credentials. Terminating.")
+        return
+
+    query = "'{}' in parents".format(FOLDER_ID)
+    results = service.files().list(
+        q=query,
+        pageSize=10,
+        fields="nextPageToken, files(name)"
+    ).execute()
+    files = sorted(results.get("files", []), key=lambda f: f.get("name"), reverse=True)
+    print(files)
+    return [*map(lambda f: f.get('name'), files)]
+
+
+def get_backup_from_filename(filename):
+    service = get_service()
+    if service is None:
+        print("Error with credentials. Terminating.")
+        return
+
+    query = "'{}' in parents and name = '{}'".format(FOLDER_ID, filename)
+    results = service.files().list(
+        q=query,
+        pageSize=10,
+        fields="nextPageToken, files(id, name)"
+    ).execute()
+    files = results.get('files')
+    if files:
+        request = service.files().get_media(
+            fileId=files[0].get('id'),
+            alt='json'
+        )
+        stream = BytesIO()
+        downloader = MediaIoBaseDownload(stream, request)
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            print("Download {:%}".format(status.progress()))
+        stream.seek(0)
+        return stream
+    else:
+        return None
 
 
 def manage_and_delete_backups(cutoff=None, keep_amount=None):
