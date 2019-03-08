@@ -1,14 +1,6 @@
 from django.db import models
 from apps.registration.models import Hybrid
 from apps.griffensorden.models import Ridder
-from django.urls import reverse
-
-import os
-
-# Create your models here.
-
-# model that contains the basic view functionality for the badges,
-# will have 1to1 link to a certain set of requirements for that badge
 
 
 class Badge(models.Model):
@@ -22,15 +14,13 @@ class Badge(models.Model):
         return self.name
 
 
-class BadgeForslag(models.Model):
-    navn = models.CharField(max_length=200)
-    beskrivelse = models.TextField()
-    tildeles = models.CharField(max_length=1000)
-    badge_bilde = models.ImageField(upload_to='badges')
+class BadgeSuggestion(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    award_to = models.CharField(max_length=1000)
+    image = models.ImageField(upload_to='badges')
     scorepoints = models.PositiveIntegerField()
-
-    def get_absolute_url(self):
-        return reverse('scoreboard')
+    suggested_by = models.ForeignKey(Hybrid, on_delete=models.CASCADE, null=True)
 
 
 class BadgeRequest(models.Model):

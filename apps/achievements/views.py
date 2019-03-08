@@ -1,30 +1,73 @@
 import json
 from os import path
-from .models import BadgeForslag
+from .models import BadgeSuggestion
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-from .forms import BadgeRequestForm
+from .forms import BadgeRequestForm, BadgeForm, BadgeSuggestionForm
 from .models import Badge, BadgeRequest
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 
 
-class SendBadge(CreateView):
-    model = BadgeForslag
-    fields = ['navn', 'beskrivelse', 'tildeles', 'badge_bilde', 'scorepoints']
+class CreateSuggestion(CreateView):
+    form_class = BadgeSuggestionForm
+    template_name = 'achievements/badgesuggestion_form.html'
+    success_url = reverse_lazy('scoreboard')
 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.suggested_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
 class DeleteBadge(DeleteView):
-    model = BadgeForslag
-    success_url = reverse_lazy('badgetable')
+    model = BadgeSuggestion
+    success_url = reverse_lazy('badgesuggestion-table')
 
 
-def BadgeTable(request):
-    badge_forms = BadgeForslag.objects.all()
-    return render(request, '../templates/achievements/badeform_table.html', {"badge_forms": badge_forms})
+def badge_suggestions_table(request):
+    if request.method == 'POST':
+        suggestion = BadgeSuggestion.objects.get(pk=int(request.POST.get("suggestion-id")))
+
+        # Use image from suggestion or the one uploaded in form
+        if request.POST.get('use-suggested-image') == 'on':
+            image = suggestion.image
+        else:
+            image = request.FILES.get('badge_image')
+
+        # use django form validation
+        form = BadgeForm(request.POST, {'badge_image': image})
+        if form.is_valid():
+            form.save()
+
+            # give contributor badge to whoever gave the suggestion
+            if request.POST.get('give-contrib-badge') == 'on' and suggestion.suggested_by:
+                Badge.objects.get(name="Contributor").user.add(suggestion.suggested_by)
+
+            # don't need the suggestion after the badge is created
+            suggestion.delete()
+
+        return HttpResponseRedirect('#')
+
+    # suggestions as dict rather than list for js indexing by id
+    suggestions = {
+        suggestion.id: {
+            'name': suggestion.name,
+            'description': suggestion.description,
+            'award_to': suggestion.award_to,
+            'image_url': suggestion.image.url,
+            'scorepoints': suggestion.scorepoints,
+            # js doesn't like Hybrid objects or None, so we replace them with strings
+            'suggested_by': suggestion.suggested_by.full_name if suggestion.suggested_by else ""
+        } for suggestion in BadgeSuggestion.objects.all()
+    }
+    return render(request, '../templates/achievements/badgesuggestion_table.html', {
+        "suggestions": suggestions,
+        "form": BadgeForm()
+    })
 
 
 def overview(request):
