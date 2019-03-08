@@ -7,6 +7,7 @@ from datetime import datetime
 from .secrets import FOLDER_ID  # SEE BELOW
 from . import ISO_8601
 from io import BytesIO
+from hybridjango.settings import BASE_DIR
 
 # This file will throw ImportErrors on the .secrets module except when in production
 # This is by design, as the secrets-folder contains sensitive information and is ignored explicitly by Git
@@ -29,7 +30,7 @@ def get_service():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    filename = 'hybridjango/utils/secrets/token.pickle'
+    filename = os.path.join(BASE_DIR, 'hybridjango/utils/secrets/token.pickle')
     if os.path.exists(filename):
         with open(filename, 'rb') as token:
             creds = pickle.load(token)
