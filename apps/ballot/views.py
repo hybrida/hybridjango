@@ -26,7 +26,7 @@ class Ballot:
 class Suggestion:
     num = 0
     author = "Ikke vevsjef"
-    suggestionText = "Vevkom burde ta over styret"
+    suggestion_text = "Vevkom burde ta over styret"
     suggestions_enabled = False
 
 
@@ -49,40 +49,45 @@ def overview(request):
             Ballot.votes = []
             Ballot.has_voted = []
             Ballot.nr += 1
-        elif 'toggle_suggestions' in request.POST:
-            Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
-            return HttpResponseRedirect('#')
+        return HttpResponseRedirect('#')
     elif 'active' in request.GET:
         Ballot.active = not (request.GET['active'] == 'Deaktiver')
     return render(
         request, 'ballot/overview.html', context={
             'active': Ballot.active,
-            'suggestions' : suggestion_list,
-            'suggestions_enabled' : Suggestion.suggestions_enabled
             },
         )
 
 @login_required
-def suggestion(request):
+def suggestion_overview(request):
     user = request.user
     if not user.username == 'henninok':
         return redirect('login')
+
     if request.method == 'POST':
         if 'toggle_suggestions' in request.POST:
             Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
-            return HttpResponseRedirect('#')
-        else:
-            sugg = Suggestion()
-            sugg.num += 1
-            sugg.author = user
-            sugg.suggestionText = request.POST.get('suggestionText')
-            suggestion_list.append(sugg)
-
+        return HttpResponseRedirect("#")
 
     return render(request, 'ballot/suggestions.html', context={
-            'suggestions' : suggestion_list,
             'suggestions_enabled' : Suggestion.suggestions_enabled
     })
+
+@login_required
+def post_suggestion(request):
+    sugg = Suggestion()
+    sugg.num += 1
+    sugg.author = request.user
+    sugg.suggestion_text = request.POST.get('suggestion_text')
+    suggestion_list.append(sugg)
+
+@login_required
+def get_suggestions(request):
+    json_list = [{
+        "author_name" : suggestion.author.full_name,
+        "suggestion_text" : suggestion.suggestion_text,
+    } for suggestion in suggestion_list]
+    return JsonResponse({"suggestion_list" : json_list})
 
 
 @login_required

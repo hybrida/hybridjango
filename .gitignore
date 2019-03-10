@@ -3,6 +3,9 @@
 *.iws
 *.iml
 
+#VSCode
+.vscode/
+
 # Python stuff
 __pycache__/
 *.py[cod]

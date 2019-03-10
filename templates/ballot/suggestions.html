@@ -6,23 +6,17 @@
         <form method = "post" id="suggestions">
         {% csrf_token %}        
             <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Navn</th>
-                    <th>Tekst</th>
-                </tr>
-                </thead>
-                <tbody id="suggestionTable">
-                    {% for suggestion in suggestions %}
-                    <tr>
-                        <th>{{suggestion.author}}</th>
-                        <th>{{suggestion.suggestionText}}</th>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </form>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Tekst</th>
+            </tr>
+            </thead>
+            <tbody id="suggestionTable">
+            </tbody>
+        </table>
     
 {% endblock text %}
 
@@ -30,20 +24,30 @@
 
     <script>
         $('#toggle_suggestions').click(function () {
-            $.post('{% url 'ballot:suggestion' %}', $('#suggestions').serialize(), function (response) {})
+            $.post('{% url 'ballot:suggestion_overview' %}', $('#suggestions').serialize(), function (response) {})
         });
-{% comment %} 
-        function refresh(force): {
+        function refresh(force) {
 
             // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
             //Currently works, as in gets the log to log. Unsure about the html-refreshing thingy
             $.ajax({
-                url: '{% url 'ballot:suggestion'%}',
+                url: '{% url 'ballot:get_suggestions'%}',
                 type: 'GET',
                 success: function (response) {
-                    if (suggestions_enabled || force) {
-                        $('#suggestion_form').html();
-                        console.log("WHohoashfgipubgasrg")
+                    let table_body = document.getElementById("suggestionTable");
+                    while (table_body.firstChild) {
+                        table_body.removeChild(table_body.firstChild)
+                    }
+                    for (let suggestion of response.suggestion_list) {
+                        let row = document.createElement("tr")
+                        let author = document.createElement("td")
+                        let suggestion_text = document.createElement("td")
+                        author.innerHTML = suggestion.author_name
+                        suggestion_text.innerHTML = suggestion.suggestion_text
+                        row.appendChild(author)
+                        row.appendChild(suggestion_text)
+                        table_body.appendChild(row)
+
                     }
                 }
             })
@@ -51,6 +55,5 @@
 
         $(document).ready(refresh(true));
         setInterval(refresh, 1000);
-         {% endcomment %}
     </script>
 {% endblock script %}

@@ -38,41 +38,40 @@
             </div>
         </div>
     </form>
-    {% if suggestions_enabled %}
+    <div id = "suggestion_container" style = "display: none" >
         <br>
         <br>
-    <h2>Nytt forslag</h2>
-    <form method="post" id="suggestion_form">
-        {% csrf_token %}
-        <div class="form-group">
-            <span>Send inn forslag</span>
-            <input class="form-control" type="text" name="suggestionText" action=""/>
-        </div>
-        <div class="col-md-12" id="submitSuggestionContainer">
-                <a class="btn btn-primary" id="submitSuggestionButton" role="button"
-                   data-toggle="popover" data-trigger="focus" tabindex="0">Send inn</a>
-        </div>
-    </form>
-    {% endif %}
+        <h2>Nytt forslag</h2>
+        <form method="post" id="suggestion_form">
+            {% csrf_token %}
+            <div class="form-group">
+                <span>Send inn forslag</span>
+                <input class="form-control" type="text" name="suggestion_text" action=""/>
+            </div>
+            <div class="col-md-12" id="submitSuggestionContainer">
+                    <a class="btn btn-primary" id="submitSuggestionButton" role="button"
+                    data-toggle="popover" data-trigger="focus" tabindex="0">Send inn</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% block script %}
     <script>
         var lastNr = {{ nr }};
-        //This is just nasty. This is python-django-syntax, within the JS scriptblock
-        //Python returnts sugg_enabled = True/False, JS just understands true/false
-        //Hence this beauty
-        {% if suggestions_enabled %}
-            var suggestions_enabled = true
-        {% else %}
-            var suggestions_enabled = false
-        {% endif %}
 
         function refresh_ballot(force) {
             $.ajax({
                 url: '{% url 'ballot:choices' %}',
                 type: 'GET',
                 success: function (response) {
+                    let container = document.getElementById("suggestion_container");
+                    if (response.suggestions_enabled) {
+                        container.style.display = "block";
+                    } else {
+                        container.style.display = "none";
+                    }
+                    
                     if (response.nr !== lastNr || force) {
                         lastNr = response.nr;
                         var newChoices = "";
@@ -100,19 +99,6 @@
                     }
                 }
             })
-            // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
-            //Currently works, as in gets the log to log. Unsure about the html-refreshing thingy
-            
-            // $.ajax({
-            //     url: '{% url 'ballot:suggestion'%}',
-            //     type: 'GET',
-            //     success: function (response) {
-            //         if (suggestions_enabled) {
-            //             $('#suggestion_form').html();
-            //             console.log("WHohoashfgipubgasrg")
-            //         }
-            //     }
-            // })
             
         }
 
@@ -133,7 +119,7 @@
         });
 
         submitSuggestionButton.click(function () {
-            $.post('{% url 'ballot:suggestion'%}', $('#suggestion_form').serialize())
+            $.post('{% url 'ballot:post_suggestion'%}', $('#suggestion_form').serialize())
             document.getElementById("suggestion_form").reset();
         });
 
