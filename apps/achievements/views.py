@@ -1,43 +1,147 @@
 import json
 from os import path
-from .models import BadgeForslag
+from .models import BadgeSuggestion
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
-from .forms import BadgeForslagForm
-from .models import Badge
-from django.shortcuts import redirect
+from .forms import BadgeRequestForm, BadgeForm, BadgeSuggestionForm
+from .models import Badge, BadgeRequest
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 
 
-class SendBadge(CreateView):
-    model = BadgeForslag
-    fields = ['navn', 'beskrivelse', 'tildeles', 'badge_bilde', 'scorepoints']
+class CreateSuggestion(CreateView):
+    form_class = BadgeSuggestionForm
+    template_name = 'achievements/badgesuggestion_form.html'
+    success_url = reverse_lazy('scoreboard')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.suggested_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(self.success_url)
 
 class DeleteBadge(DeleteView):
-    model = BadgeForslag
-    success_url = reverse_lazy('badgetable')
+    model = BadgeSuggestion
+    success_url = reverse_lazy('badgesuggestion-table')
 
 
-def BadgeTable(request):
-    badge_forms = BadgeForslag.objects.all()
-    return render(request, '../templates/achievements/badeform_table.html', {"badge_forms": badge_forms})
+def badge_suggestions_table(request):
+    if request.method == 'POST':
+        suggestion = BadgeSuggestion.objects.get(pk=int(request.POST.get("suggestion-id")))
+
+        # Use image from suggestion or the one uploaded in form
+        if request.POST.get('use-suggested-image') == 'on':
+            image = suggestion.image
+        else:
+            image = request.FILES.get('badge_image')
+
+        # use django form validation
+        form = BadgeForm(request.POST, {'badge_image': image})
+        if form.is_valid():
+            form.save()
+
+            # give contributor badge to whoever gave the suggestion
+            if request.POST.get('give-contrib-badge') == 'on' and suggestion.suggested_by:
+                Badge.objects.get(name="Contributor").user.add(suggestion.suggested_by)
+
+            # don't need the suggestion after the badge is created
+            suggestion.delete()
+
+        return HttpResponseRedirect('#')
+
+    # suggestions as dict rather than list for js indexing by id
+    suggestions = {
+        suggestion.id: {
+            'name': suggestion.name,
+            'description': suggestion.description,
+            'award_to': suggestion.award_to,
+            'image_url': suggestion.image.url,
+            'scorepoints': suggestion.scorepoints,
+            # js doesn't like Hybrid objects or None, so we replace them with strings
+            'suggested_by': suggestion.suggested_by.full_name if suggestion.suggested_by else ""
+        } for suggestion in BadgeSuggestion.objects.all()
+    }
+    return render(request, '../templates/achievements/badgesuggestion_table.html', {
+        "suggestions": suggestions,
+        "form": BadgeForm()
+    })
 
 
 def overview(request):
-    return render(request, '../templates/achievements/achievments_overview.html', )
+    return render(request, '../templates/achievements/achievments_overview.html')
 
 
 class BadgeView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
+        data = {}
+        user_badges = request.user.hybridbadges.all()
+        for badge in Badge.objects.all():
+            data[badge.id] = {
+                "name": badge.name,
+                "description": badge.description,
+                "scorepoints": badge.scorepoints,
+                "badge_image": str(badge.badge_image),
+                "user_has": badge in user_badges
+            }
+            queryset = BadgeRequest.objects.filter(badge=badge, user=request.user)
+            if queryset.exists():
+                req = queryset.first()
+                data[badge.id]["request"] = {
+                    "status": req.get_status_display(),
+                    "comment": req.comment
+                }
         context = self.get_context_data(**kwargs)
         #Adding the badges to the context to find them in the html file
         context.update({
             'Badges': Badge.objects.all(),
+            'data': json.dumps(data),
+            'form': BadgeRequestForm()
         })
 
         return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        BadgeRequest.objects.create(
+            user=request.user,
+            badge=Badge.objects.get(id=request.POST.get("badge-id", -1)),
+            comment=request.POST.get("comment", ""),
+            status=BadgeRequest.PENDING
+        )
+        return HttpResponseRedirect('#')
+
+
+class BadgeRequestView(PermissionRequiredMixin, TemplateResponseMixin, ContextMixin, View):
+    permission_required = 'achievements.can_change_badgerequest'
+
+    def get(self, request, status, **kwargs):
+        if status == "all":
+            requests = BadgeRequest.objects.all()
+        elif status == "approved":
+            requests = BadgeRequest.objects.filter(status=BadgeRequest.APPROVED)
+        elif status == "denied":
+            requests = BadgeRequest.objects.filter(status=BadgeRequest.DENIED)
+        elif status == "pending" or status == "":
+            requests = BadgeRequest.objects.filter(status=BadgeRequest.PENDING)
+        else:
+            return HttpResponseNotFound("Not a valid argument; try approved, denied, pending or nothing")
+        context = self.get_context_data(**kwargs)
+        context.update({
+            'requests': requests,
+            'status': status
+        })
+        return self.render_to_response(context)
+
+    def post(self, request, status, **kwargs):
+        if "approve" in request.POST:
+            BadgeRequest.objects.get(id=request.POST.get("request-id", -1)).approve()
+        elif "deny" in request.POST:
+            BadgeRequest.objects.get(id=request.POST.get("request-id", -1)).deny()
+        elif "pending" in request.POST:
+            BadgeRequest.objects.get(id=request.POST.get("request-id", -1)).set_pending()
+        return HttpResponseRedirect('#')
 
 
 class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
@@ -56,6 +160,7 @@ class ScoreboardViewCurrent(TemplateResponseMixin, ContextMixin, View):
         })
 
         return self.render_to_response(context)
+
 
 class ScoreboardViewAllTime(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):

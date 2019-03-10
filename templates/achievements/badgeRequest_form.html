@@ -1,0 +1,17 @@
+{% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <h1>Be om "badge" for "bruker"</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+            <label>{{ field.label_tag }}</label>
+            <div>{{ field }}</div>
+            </div>
+
+        {% endfor %}
+        <button type="submit" value="Save" class="btn btn-primary">Send inn</button>
+    </form>
+{% endblock %}
