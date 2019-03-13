@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^for_bedrifter$', AboutView.as_view(template_name='staticpages/for_companies.html'), name='for_companies'),
     url(r'^updatek$', updatek, name='updatek'),
     url(r'^komite$', AboutView.as_view(template_name='staticpages/committees.html'), name='committees'),
+    url(r'^interessegrupper$', AboutView.as_view(template_name='staticpages/interest_groups.html'), name='interest_groups'),
     url(r'^styret$', AboutView.as_view(template_name='staticpages/board.html'), name='board'),
     url(r'^styret/referat$', BoardReportView.as_view(template_name='staticpages/board_report.html'),
         name='board_report'),

@@ -1,0 +1,88 @@
+{% extends 'staticpages/about.html' %}
+{% load static %}
+{% block unstyled_text %}
+    <article class="white-box">
+        <h1>Hybridas interessegrupper:</h1>
+
+        <p>Hybridas interessegrupper er grupper for interesser hehe. Sosialt og gøy, og sørger for at hybridene har ende flere kule tilbud,
+             som for eksempel en turgruppe hehehe</p>
+
+        <p>De forskjellige interessegruppene styrer seg på forskjellig vis.. Hihi
+            De velger ledere selv og sånn.
+        Styre fikser den teksten her og sånn YEye</p>
+
+        <p>
+            Totalt er det mange interessegrupper:
+            <ul>
+                <li>Turingen.</li>
+                <li>Strikk</li>
+                <li>...</li>
+                <li>...</li>
+                <li>HybridaFK</li>
+            </ul>
+        </p>
+
+        <p>I tillegg NOE.</p>
+
+        <p>Les mer om de enkelte interessegruppene i sidebaren til høyre.</p>
+
+    </article>
+
+    <a name="turingen" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/about/turingen.png' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Turingen</h2>
+        <p>Turingen er Hybridas turgruppe. De arrangerer flere turer i semesteret og står generelt for mye god stemning.
+            Dette er definitift Hybridas beste interessegruppe, om ikke også bedre enn noen av komiteene :O hehe
+        </p>
+        <p>Kontaktperson: <p> Sven</p></p>
+    </article>
+
+    <a name="knit" class="anchor"></a>
+    <article class="white-box space-above">
+        <div class="remove-whitebox-padding">
+            <img src="{% static 'img/gensergjengen.jpg' %}" class="center-block img-responsive art-img" width="100%">
+        </div>
+        <h2>Hybridastrikk</h2>
+        <p>Hybridastrikk driver (visstnok) med strikking. Tidligere har dette vært et hemmelig sted jentene på linja har konspirert mot guttene,
+            men nå i senere tider har det også lurt seg inn noen gutter. Hva de egentlig driver med er fortsatt uklart
+        </p>
+        <p>Kontaktperson: Sikkert Kia</p>
+    </article>
+
+    <a name="gruppe1" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>....</h2>
+        <p>...
+            Interessegruppene kan sikkert mekke disse tekstene selv tenker jeg. 
+            ...
+        </p>
+        <p>Kontaktperson: ... </p>
+    </article>
+
+    <a name="gruppe2" class="anchor"></a>
+    <article class="white-box space-above">
+            <h2>....</h2>
+            <p>...
+                ...
+                ...
+            </p>
+            <p>Kontaktperson: ... </p>
+        </article>
+
+    <a name="hybridafk" class="anchor"></a>
+    <article class="white-box space-above">
+        <h2>HybridaFK</h2>
+        <p>Hybridas fotballlag.</p>
+        <p>Kontaktperson: Bendik </p>
+    </article>
+{% endblock %}
+{% block sublinks %}
+    <a href="#turingen">Turingen</a>
+    <a href="#knit">Hybridastrikk</a>
+    <a href="#gruppe1">Interessegruppe1</a>
+    <a href="#gruppe2">Interessegruppe2</a>
+    <a href="#hybridafk">HybridaFK</a>
+{% endblock %}

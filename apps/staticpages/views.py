@@ -71,6 +71,7 @@ aboutpages = [
     ('history', "Hybridas historie"),
     ('board', "Styret"),
     ('committees', "Komiteer"),
+    ('interest_groups', "Interessegrupper"),
     ('griffensorden', "Griffens Orden"),
     ('statutter', "Statutter"),
     ('tillitsvalgte', 'Tillitsvalgte'),
