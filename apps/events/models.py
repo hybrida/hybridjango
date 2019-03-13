@@ -151,41 +151,42 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def get_number_of_marks(self, hybrid): #Finds the number of marks a user has
+    def get_number_of_marks(self, hybrid):  # Finds the number of marks a user has
         marks = Mark.objects.all().filter(recipient=hybrid)
         totalMarks = 0
         for mark in marks:
             totalMarks += mark.value
         return totalMarks
 
-    def too_many_marks(self, hybrid, maxmarks): #Checks if a user has too many marks to sign up to an event
+    def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
         if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid):
             return True
         return False
 
-    def goes_on_secondary(self, hybrid, maxmarks, too_many): #Checks whether a user goes on the secondary waitinglist or not
+    def goes_on_secondary(self, hybrid, maxmarks,
+                          too_many):  # Checks whether a user goes on the secondary waitinglist or not
         if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
             return True
         return False
 
-    def signup_delay(self, hybrid, delays): #Finds how many minutes a users signup time is delayed
-        for delay in delays:    
+    def signup_delay(self, hybrid, delays):  # Finds how many minutes a users signup time is delayed
+        for delay in delays:
             if delay.marks <= self.get_number_of_marks(hybrid):
                 return delay.minutes
         return 0
 
-    def delay_over(self, hybrid, delays): #Checks if signup delay is over
+    def delay_over(self, hybrid, delays):  # Checks if signup delay is over
         if self.new_signup_time(hybrid, delays) < timezone.now():
             return True
         return False
 
-    def new_signup_time(self, hybrid, delays): #Checks at what time a user can signup to an event
+    def new_signup_time(self, hybrid, delays):  # Checks at what time a user can signup to an event
         return self.signup_start + datetime.timedelta(minutes=self.signup_delay(hybrid, delays))
 
-    def get_sorted_secondary(self): #Returns a sorted secondary waitinglist
+    def get_sorted_secondary(self):  # Returns a sorted secondary waitinglist
         return self.participantsSecondary.order_by('participationsecondary__timestamp')
 
-    def is_participantSecondary(self, hybrid): #Checks if a user is on the secondary waitinglist
+    def is_participantSecondary(self, hybrid):  # Checks if a user is on the secondary waitinglist
         return self.participantsSecondary.filter(pk=hybrid.pk).exists()
 
     def get_placementsSecondary(self):
@@ -212,18 +213,20 @@ class EventComment(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
-#Checks which semester we're in and returns the amount of days to the end of that semester
+
+# Checks which semester we're in and returns the amount of days to the end of that semester
 def closest_end_of_semester():
     now = datetime.date.today()
-    end_sem1 = datetime.date(now.year,7, 1)
-    end_sem2 = datetime.date(now.year+1,1,1)
+    end_sem1 = datetime.date(now.year, 7, 1)
+    end_sem2 = datetime.date(now.year + 1, 1, 1)
     delta = end_sem1 - now
     if delta.days <= 0:
-        return (end_sem2-now).days
+        return (end_sem2 - now).days
     else:
         return delta.days
 
-#Returns the date of the end of the semester we're in
+
+# Returns the date of the end of the semester we're in
 def closest_end_of_semester_date():
     return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
 
@@ -239,14 +242,16 @@ class Mark(models.Model):
     recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
-    end = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()))
+    end = models.DateTimeField(
+        default= datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
+                                 datetime.datetime.min.time()))
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):
         return '{}, {} - {} dager'.format(self.recipient, self.start, MarkPunishment.objects.all().last().duration)
 
-    #Checks if the mark has passed it's expiredate, if so it deletes it self
+    # Checks if the mark has passed it's expiredate, if so it deletes it self
     def check_mark(self):
         time = self.end
         if datetime.now >= time:
@@ -254,7 +259,8 @@ class Mark(models.Model):
 
 
 class Delay(models.Model):
-    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+', default=None)
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+',
+                                   default=None)
     marks = models.PositiveIntegerField(default=0)
     minutes = models.PositiveIntegerField(default=0)
 
@@ -264,13 +270,16 @@ class Delay(models.Model):
 
 
 class Rule(models.Model):
-    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+', default=None)
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+',
+                                   default=None)
     rule = models.CharField(max_length=500, blank=True, default='')
 
 
 class MarkPunishment(models.Model):
-    delay = models.ManyToManyField(Delay, blank=True) #Delays to signup based on the amount of marks a user has
-    rules = models.ManyToManyField(Rule, blank=True) #The rules displayed in the mark.html
-    duration = closest_end_of_semester() #How long a mark lasts
-    goes_on_secondary = models.PositiveIntegerField(default=0) #How many marks to put a user on a secondary waitinglist
-    too_many_marks = models.PositiveIntegerField(default=0) #How many marks to block a user from signing up to events
+    delay = models.ManyToManyField(Delay, blank=True)  # Delays to signup based on the amount of marks a user has
+    rules = models.ManyToManyField(Rule, blank=True)  # The rules displayed in the mark.html
+    duration = closest_end_of_semester()  # How long a mark lasts
+    goes_on_secondary = models.PositiveIntegerField(
+        default=0)  # How many marks to put a user on a secondary waitinglist
+    too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
+    signoff_close = models.PositiveIntegerField(default=1)  # How many hours before event start does signoff close
