@@ -7,6 +7,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
+from django.utils import timezone
+
 
 from apps.events.forms import EventForm
 from apps.rfid.models import Appearances
@@ -14,17 +16,33 @@ from .models import Event, EventComment, Attendance, Participation
 
 
 class EventList(generic.ListView):
-    model = Event
     template_name = 'events/events.html'
-    ordering = ('-weight', '-event_start')
     paginate_by = 10
     page_kwarg = 'side'
 
     def get_queryset(self):
-        queryset = super(EventList, self).get_queryset().filter(hidden=False, news=True)
+        queryset = Event.objects.filter(hidden=False, news=True)
+        queryset_not_attendance = queryset.filter(attendance__isnull=True)
+        queryset = queryset.filter(attendance__isnull=False)
+        queryset_active = queryset.filter(
+            attendance__signup_start__lte=timezone.now(),
+            attendance__signup_end__gte=timezone.now()
+        )
+        queryset_not_opened = queryset.filter(
+            attendance__signup_start__gt=timezone.now()
+        )
+        queryset_closed = queryset.filter(
+            attendance__signup_end__lt=timezone.now()
+        )
+        queryset_low_priority = queryset_closed | queryset_not_attendance
+        queryset_final = [*queryset_active.order_by("attendance__signup_end"),
+                          *queryset_not_opened.order_by("attendance__signup_start"),
+                          *queryset_low_priority.order_by("-event_start")
+                          ]
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(public=True)
-        return queryset
+            # queryset_final = queryset_final.filter(public=True)
+            queryset_final = [*filter(lambda e: e.public, queryset_final)]
+        return queryset_final
 
 
 class EventView(generic.DetailView):
@@ -34,7 +52,7 @@ class EventView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         attendance = Attendance.objects.get(pk=request.POST['attendance'])
         user = request.user
-        if request.POST['action'] == 'leave' and attendance.signup_open():
+        if request.POST['action'] == 'leave' and attendance.signup_open:
             #En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
                 #førstemann på venteliste blir plukket ut og sendt en mail.

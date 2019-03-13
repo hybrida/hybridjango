@@ -26,8 +26,6 @@ from .models import Application, CommiteApplication, BoardReportSemester
 
 
 class FrontPage(EventList):
-    model = EventList.model
-    queryset = EventList.queryset
 
     def get_context_data(self, **kwargs):
         tp_events = TPEvent.objects.filter(event_start__gte=timezone.now())

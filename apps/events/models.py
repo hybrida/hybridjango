@@ -14,10 +14,9 @@ class Event(models.Model):
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='events', blank=True)
-    event_start = models.DateTimeField(null=True, blank=True)
+    event_start = models.DateTimeField(default=timezone.now)
     event_end = models.DateTimeField(null=True, blank=True)
     location = models.CharField(max_length=50, blank=True)
-    weight = models.IntegerField(default=0)
     hidden = models.BooleanField(default=False)
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
@@ -72,11 +71,17 @@ class Attendance(models.Model):
     def invited_specialization(self, specialization):
         return not self.specializations.count() or specialization in self.specializations.all()
 
+    @property
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
 
+    @property
     def signup_closed(self):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
+
+    @property
+    def signup_not_opened(self):
+        return self.signup_start and self.signup_end and timezone.now() < self.signup_start
 
     def invited(self, user):
         return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
@@ -95,7 +100,7 @@ class Attendance(models.Model):
         return self.participants.count() >= self.max_participants
 
     def can_join(self, user):
-        return self.signup_open() and self.invited(user)
+        return self.signup_open and self.invited(user)
 
     def get_placements(self):
         return enumerate(self.get_sorted_hybrids())
