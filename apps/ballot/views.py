@@ -1,8 +1,9 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from apps.rfid.models import GeneralAssembly
+from hybridjango.utils import group_test
 
 
 class Ballot:
@@ -34,11 +35,9 @@ class Suggestion:
 empty_vote = 'Tomt'
 suggestion_list = []
 
-@login_required
+@user_passes_test(group_test("Tellekorps"))
 def overview(request):
     user = request.user
-    if not user.username == 'henninok':
-        return redirect('login')
     if request.method == 'POST':
         if 'ballot_form' in request.POST:
             Ballot.title = request.POST.get('title', 'Avstemning')
@@ -58,15 +57,14 @@ def overview(request):
             },
         )
 
-@login_required
+@user_passes_test(group_test("Nestleder"))
 def suggestion_overview(request):
     user = request.user
-    if not user.username == 'henninok':
-        return redirect('login')
-
     if request.method == 'POST':
         if 'toggle_suggestions' in request.POST:
             Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
+        elif 'clear_suggestions' in request.POST:
+            del suggestion_list[:]
         return HttpResponseRedirect("#")
 
     return render(request, 'ballot/suggestions.html', context={
@@ -81,7 +79,7 @@ def post_suggestion(request):
     sugg.suggestion_text = request.POST.get('suggestion_text')
     suggestion_list.append(sugg)
 
-@login_required
+@user_passes_test(group_test("Nestleder"))
 def get_suggestions(request):
     json_list = [{
         "author_name" : suggestion.author.full_name,
@@ -140,10 +138,10 @@ def vote(request):
 
     return HttpResponse("Du avga ingen stemme")
 
-
+@user_passes_test(group_test("Tellekorps"))
 def get_results(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'henninok'):
+    if not (user.is_authenticated and group_test("Tellekorps")):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})

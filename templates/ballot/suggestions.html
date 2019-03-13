@@ -3,10 +3,23 @@
 
 {% block text %}
     <h1 id="title">Endringsforslag</h1>
-        <form method = "post" id="suggestions">
-        {% csrf_token %}        
-            <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
-        </form>
+    <table>
+            <tr>
+                <td>
+                    <form method = "post" id="suggestions">
+                            {% csrf_token %}   
+                                <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
+                    </form>
+                </td>
+                <td>
+                    <form method = "post" id="clear">
+                            {% csrf_token %}
+                                <input type="submit" name="clear_suggestions" id="clear_suggestions" value ="Fjern forslag" class="btn btn-default">
+                    </form>
+                </td>
+            </tr>
+        
+
         <table class="table">
             <thead>
             <tr>
