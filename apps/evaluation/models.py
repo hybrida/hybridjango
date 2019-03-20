@@ -52,6 +52,7 @@ class Evaluation(models.Model):
     title = models.CharField(max_length=255)
     evaluation_lecturer = models.TextField()
     evaluation_course = models.TextField()
+    score = models.IntegerField(default=0)
 
 
 

@@ -2,28 +2,78 @@
 {% load static %}
 
 {% block text %}
-    <h1>{{ course.name}}</h1>
+    <h1>{{ course.course_code }}: {{ course.name }}</h1>
 
-
+    <div style="overflow-x:auto; padding-top: 15px">
+        <table class="table table-responsive sortable table-hover">
+            <tr>
+                <td width="50%" align="center">
+                </td>
+                <td width="50%" align="right">
+                    <button class="btn btn-primary"> Skriv din vurdering! </button>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" align="center">
+                    <button class="btn btn-primary"> Link1</button>
+                </td>
+                <td width="50%" align="center">
+                    <button class="btn btn-primary"> Link2</button>
+                </td>
+            </tr>
+        </table>
+    </div>
 
 
     <div style="overflow-x:auto; padding-top: 15px">
-                <table class="table table-responsive sortable table-hover">
-                    <thead>
-                    <tr style="background-color: #428bca; height: 30px; color: white;">
-                        <th class="col-xs-2">Evalueringer</th>
-                    </tr>
-                    </thead>
-                    {# Table body - Important to have class="list" for search to function #}
-                    <tbody class="">
-                    {% for e in evaluations %}
-                            <tr >
-                            <td><h3>{{e.title}}</h3></td>
-                            </tr>
-                    {% endfor %}
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+            <tr style="background-color: #428bca; height: 30px; color: white; width:100%">
+                <th width="100%" class="col-xs-2"> Evalueringer </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for e in evaluations %}
+                <tr>
+                    <td width="50%"> {# left collum #}
+                        <h4>{{ e.title }}</h4> <br>
+                        <p> Foreleser: {{ e.lecturer }}</p>
+                        <p> Vurdering av faget: {{ e.evaluation_course }} </p>
+                        <p> Vurdering av foreleser: {{ e.evaluation_lecturer }} </p>
+                    </td>
+                    <td width="50%" align="right"> {# right collum #}
+                        <h4></h4>
+                        <p> Antall stjerner:
+                            {% if e.score >= 1 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}
+                            {% if e.score >= 2 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}
+                            {% if e.score >= 3 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}
+                            {% if e.score >= 4 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}
+                            {% if e.score == 5 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %} </p> {# Score #}
+                        <p> Faget ble tatt: {{ e.season }} {{ e.semester }}.klasse, {{ e.year }}</p>
+                        <p>Skrevet av: {{ e.author }}</p>
+                    </td>
 
-                    </tbody>
+                </tr>
+            {% endfor %}
 
-                </table>
-            </div>
+            </tbody>
+
+        </table>
+    </div>
 {% endblock %}
