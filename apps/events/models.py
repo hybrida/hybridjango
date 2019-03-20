@@ -1,11 +1,14 @@
+import datetime
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-import datetime
 from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
+
+'''The main event class'''
 
 
 class Event(models.Model):
@@ -34,6 +37,9 @@ class Event(models.Model):
         return '{}: {}'.format(self.timestamp.date(), self.title)
 
 
+'''A special kind of event, pulled from Teknologiportens site'''
+
+
 class TPEvent(models.Model):
     tp_id = models.IntegerField(default=0, unique=True)
     title = models.CharField(max_length=150)
@@ -41,6 +47,9 @@ class TPEvent(models.Model):
 
     def get_absolute_url(self):
         return 'http://teknologiporten.no/nb/arrangement/{}'.format(self.tp_id)
+
+
+'''the sign up class, adds a Hybrid to the signed up list'''
 
 
 class Participation(models.Model):
@@ -58,6 +67,9 @@ class Participation(models.Model):
                                                           timestamp=self.timestamp)
 
 
+'''A secondary wait list for those users that already have a mark, functions the same as participation'''
+
+
 class ParticipationSecondary(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     hybrid = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
@@ -70,6 +82,10 @@ class ParticipationSecondary(models.Model):
     def __str__(self):
         return '{timestamp}-{hybrid}-{attendance}'.format(hybrid=self.hybrid, attendance=self.attendance,
                                                           timestamp=self.timestamp)
+
+
+'''the main participation model, links the primary and secondary waiting list. It also defines who will be able to 
+attend the event, price and so forth'''
 
 
 class Attendance(models.Model):
@@ -204,6 +220,9 @@ class Attendance(models.Model):
                 in self.get_placementsSecondary()]
 
 
+'''A model that will contain any feedback or comment that may be instered into the event'''
+
+
 class EventComment(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     author = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
@@ -214,7 +233,9 @@ class EventComment(models.Model):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
 
-# Checks which semester we're in and returns the amount of days to the end of that semester
+'''Checks which semester we're in and returns the amount of days to the end of that semester'''
+
+
 def closest_end_of_semester():
     now = datetime.date.today()
     end_sem1 = datetime.date(now.year, 7, 1)
@@ -226,9 +247,14 @@ def closest_end_of_semester():
         return delta.days
 
 
-# Returns the date of the end of the semester we're in
+'''Returns the date of the end of the semester we're in'''
+
+
 def closest_end_of_semester_date():
     return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
+
+
+'''A model that contains a mark given to users for transgressions in accordance with the rules regarding events'''
 
 
 class Mark(models.Model):
@@ -243,8 +269,8 @@ class Mark(models.Model):
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(
-        default= datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
-                                 datetime.datetime.min.time()))
+        default=datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
+                                          datetime.datetime.min.time()))
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
@@ -269,10 +295,16 @@ class Delay(models.Model):
         ordering = ['-marks']
 
 
+'''A class that contain one or more rule that the markpunishement model uses'''
+
+
 class Rule(models.Model):
     punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+',
                                    default=None)
     rule = models.CharField(max_length=500, blank=True, default='')
+
+
+'''A model that will contain 1 or more rules that will be implemented on the site'''
 
 
 class MarkPunishment(models.Model):
