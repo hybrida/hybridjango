@@ -1,0 +1,72 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+    <h1 id="title">Endringsforslag</h1>
+    <table>
+            <tr>
+                <td>
+                    <form method = "post" id="suggestions">
+                            {% csrf_token %}   
+                                <input type="submit" name="toggle_suggestions" id="toggle_suggestions" value ="{% if suggestions_enabled %}Deaktiver{% else %}Aktiver{% endif %}" class="btn btn-default">
+                    </form>
+                </td>
+                <td>
+                    <form method = "post" id="clear">
+                            {% csrf_token %}
+                                <input type="submit" name="clear_suggestions" id="clear_suggestions" value ="Fjern forslag" class="btn btn-default">
+                    </form>
+                </td>
+            </tr>
+        
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Tekst</th>
+            </tr>
+            </thead>
+            <tbody id="suggestionTable">
+            </tbody>
+        </table>
+    
+{% endblock text %}
+
+{% block script %}
+
+    <script>
+        $('#toggle_suggestions').click(function () {
+            $.post('{% url 'ballot:suggestion_overview' %}', $('#suggestions').serialize(), function (response) {})
+        });
+        function refresh(force) {
+
+            // To make sure the suggestionsbox is enabled/disabled in realtime, we need to do something here
+            //Currently works, as in gets the log to log. Unsure about the html-refreshing thingy
+            $.ajax({
+                url: '{% url 'ballot:get_suggestions'%}',
+                type: 'GET',
+                success: function (response) {
+                    let table_body = document.getElementById("suggestionTable");
+                    while (table_body.firstChild) {
+                        table_body.removeChild(table_body.firstChild)
+                    }
+                    for (let suggestion of response.suggestion_list) {
+                        let row = document.createElement("tr")
+                        let author = document.createElement("td")
+                        let suggestion_text = document.createElement("td")
+                        author.innerHTML = suggestion.author_name
+                        suggestion_text.innerHTML = suggestion.suggestion_text
+                        row.appendChild(author)
+                        row.appendChild(suggestion_text)
+                        table_body.appendChild(row)
+
+                    }
+                }
+            })
+        }
+
+        $(document).ready(refresh(true));
+        setInterval(refresh, 1000);
+    </script>
+{% endblock script %}

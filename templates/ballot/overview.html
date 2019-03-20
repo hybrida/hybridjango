@@ -40,7 +40,7 @@
     </form>
     <hr>
     <h2>Ny avstemning</h2>
-    <form method="post" action="{% url 'ballot:overview' %}" id="form">
+    <form method="post" action="{% url 'ballot:overview' %}" id="ballot_form">
         {% csrf_token %}
         <div class="form-group">
             <span>Tittel</span>
@@ -76,7 +76,7 @@
         </div>
         <div class="btn-group btn-group-justified" role="group">
             <div class="btn-group" role="group">
-                <a role="button" class="btn btn-primary" type="submit" id="submit">Start Avstemming</a>
+                <input role="button" class="btn btn-primary" type="submit" name="ballot_form" id="start_vote" value="Start Avstemming" >
             </div>
         </div>
     </form>
@@ -127,10 +127,11 @@
             },
             500);
 
-        $('#submit').click(function () {
-            $.post('{% url 'ballot:overview' %}', $('#form').serialize(), function (response) {
+        $('#start_vote').click(function () {
+            $.post('{% url 'ballot:overview' %}', $('#ballot_form').serialize(), function (response) {
             })
         });
+
 
         function removeChoice(number) {
             $("#choice-" + number).remove();
