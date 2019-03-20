@@ -35,6 +35,5 @@ class EventAdmin(admin.ModelAdmin):
     exclude = ('timestamp',)
 
 
-
 admin.site.register(Event, EventAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
