@@ -5,22 +5,15 @@
 
     <h1>FAGEVALUERINGER</h1>
 
-    <div>
-        <div class="dropdown" align="left">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false"> <span class="glyphicon glyphicon-search"> </span> </a>
-            <div class="dropdown-menu">
-                <form class="navbar-form" role="search" action="#" method="GET">
-                    <div class="form-group">
-                        <input id="course-search" type="text" class="form-control" name="tekst"
-                               placeholder="Søk fag/fagkode"/>
-                    </div>
-                </form>
+        <button class="btn btn-primary" style="margin-left:80%"> Skriv din vurdering!</button>
+
+        <div class="topnav">
+            <div class="searchbar">
+                <input id="course-search" type="text" name="search" placeholder="Søk fag/fagkode">
+                <button type="submit"><i class="fa fa-search"></i></button>
             </div>
         </div>
 
-        <button class="btn btn-primary" style="margin-left:80%"> Skriv din vurdering!</button>
-    </div>
     {# Table start #}
     <div style="overflow-x:hidden; padding-top: 15px">
         <table class="table table-responsive sortable table-hover">
@@ -28,7 +21,7 @@
             <tr style="background-color: #428bca; height: 30px; color: white;" class="row">
                 <th class="col-xs-3">Fag</th>
                 <th class="col-xs-3">Fagkode</th>
-                <th class="col-xs-2">Linje</th>
+                <th class="col-xs-2">Spesialisering</th>
                 <th class="col-xs-2">Semester</th>
                 <th class="col-xs-1">Evalueringer</th>
                 <th class="col-xs-1">Gjennomsnittsvurdering</th>
@@ -38,8 +31,8 @@
             <tbody>
             {% for course in courses %}
                 <tr id="row{{ course.id }}" class="row">
-                    <td class="text-left; name; col-xs-3" style="font-size:x-large;"><a
-                            href="{% url 'evaluation:get_course' course.pk %}"
+                    <td class="text-left; name; col-xs-3" style="font-size:x-large;">
+                        <a href="{% url 'evaluation:get_course' course.pk %}" target="_blank"
                             style="color: #005675; font-size:16px">{{ course.name }}</a>
                     </td>
                     <td class="text-left; responsible; col-xs-3"> {{ course.course_code }}</td>
@@ -52,7 +45,7 @@
                     </div>
                     <td class="Evaluations; col-xs-1" style="font-size: medium; text-align:left">
                         <div id="statusText">
-                            <div class="row" style="white-space: nowrap"; align="left">
+                            <div class="row" style="white-space: nowrap" ; align="left">
                                 {% if course.average_score >= 1 %}
                                     <span class="glyphicon glyphicon-star">
                                            </span>
@@ -71,24 +64,43 @@
                                            </span>
                             {% endif %}</div>
                             <br>
-                            <div class="row" style="white-space: nowrap";
+                            <div class="row" style="white-space: nowrap" ;
                                  align="left">{{ course.average_score }}/ 5
                             </div>
                         </div>
                     </td>
                 </tr>
             {% endfor %}
-
             </tbody>
         </table>
     </div>
 
-    {# Add to table class to fix column length - doesn't work at the moment... #}
     <style>
-        .table-fit {
-            width: auto !important;
-            table-layout: auto !important;
-            white-space: nowrap;
+        .topnav input[type=text] {
+            padding: 6px;
+            margin-top: 8px;
+            font-size: 17px;
+            border: none;
+        }
+
+        .topnav .searchbar button {
+            padding: 6px 10px;
+            margin-top: 8px;
+            margin-right: 16px;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .topnav .searchbar button:hover {
+            background: #ccc;
+        }
+
+        @media screen and (max-width: 600px) {
+            .topnav .searchbar {
+                float: none;
+            }
         }
     </style>
 

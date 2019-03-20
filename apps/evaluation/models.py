@@ -18,7 +18,7 @@ class Course(models.Model):
     specialization = models.CharField(choices=Specializations, max_length=250, blank=True)
     grades_link = models.CharField(max_length=255)
     ntnu_link = models.CharField(max_length=255)
-    average_score = models.DecimalField(decimal_places=2, max_digits=3, blank=True, null=True )
+    average_score = models.DecimalField(decimal_places=2, max_digits=3, blank=True, null=True)
 
     Semesters = (
         ('Høst 3.', 'Høst 3.'),
