@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'tinymce',
     'apps.vevkom',
     'apps.merchandise',
+    'apps.lan',
     'hybridjango'
 ]
 

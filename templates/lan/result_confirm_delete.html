@@ -1,0 +1,9 @@
+{% extends 'standard_sidebar.html' %}
+{% block text %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Er du sikker på at du vil slette "{{ object }}"?</p>
+        <input class="btn btn-danger" type="submit"
+               value="Ja, jeg er helt 100% sikker på at jeg vil slette {{ object }} for evig og alltid."/>
+    </form>
+{% endblock text %}

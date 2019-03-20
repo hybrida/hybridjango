@@ -1,0 +1,25 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+<h1>Dirt Rally Rankings</h1>
+<table class="table table-responsive sortable table-hover">
+    <thead>
+        <tr style="background-color: #428bca; height: 30px; color: white;">
+            <th>Tid</th>
+            <th>Navn</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in object_list%}
+            <tr>
+                <td> {{result.time}} </td>
+                <td> {{result.user.full_name}} </td>
+                <td><a method="POST" href="{% url 'result-delete' result.pk %}"><button class="btn btn-primary btn-danger">Slett</button> </a></td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock text %}
