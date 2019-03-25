@@ -60,43 +60,48 @@ Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt
 
 {% block script %}
     <script>
-        // save django template variable as a js object
-        let data = {{ data | safe }}
         function setModalContent(badgeID) {
-            // get the badge from data object
-            let badge = data[badgeID];
-            // if the user already has requested badge
-            if (badge.request) {
-                // get request
-                let request = badge.request;
-                // set title
-                document.getElementById("title-field").innerText = `Din søknad om ${badge.name}`;
-                // hide form
-                document.getElementById("form-container").style.display = 'none';
-                document.getElementById("submit-button").style.display = 'none';
-                // set modal contents
-                document.getElementById("modal-body").innerText = `Status: ${request["status"]}\n`
-                    + `Din kommentar: ${request["comment"]}`;
-            } else if (badge.user_has) {
-                // set title
-                document.getElementById("title-field").innerText = `${badge.name}`;
-                // set modal contents
-                document.getElementById("modal-body").innerText = "Du har allerede denne badgen!";
-                // hide form
-                document.getElementById("form-container").style.display = 'none';
-                document.getElementById("submit-button").style.display = 'none';
-            } else {
-                // set title
-                document.getElementById("title-field").innerText = `Søk om å få tildelt ${badge.name}`;
-                // show form
-                document.getElementById("form-container").style.display = 'block';
-                document.getElementById("submit-button").style.display = 'inline-block';
-                document.getElementById("badge-id").setAttribute("value", badgeID);
-                // set modal contents
-                document.getElementById("modal-body").innerText = `Scorepoints: ${badge.scorepoints}\n`
-                    + `Beskrivelse: ${badge.description}\n`
-                    + `Vil du ha den?`;
-            }
+            $.ajax({
+                // typing urls manually is bad practice, as it creates an issue if the url is changed
+                // generally, use the builtin django url template tag, which uses url names
+                // here, however, it is necessary to have the url "hardcoded" in
+                url: `/achievements/badges/data/${badgeID}`,
+                type: 'GET',
+                success: function (badge) {
+                    // if the user already has requested badge
+                    if (badge.request) {
+                        // get request
+                        let request = badge.request;
+                        // set title
+                        document.getElementById("title-field").innerText = `Din søknad om ${badge.name}`;
+                        // hide form
+                        document.getElementById("form-container").style.display = 'none';
+                        document.getElementById("submit-button").style.display = 'none';
+                        // set modal contents
+                        document.getElementById("modal-body").innerText = `Status: ${request["status"]}\n`
+                            + `Din kommentar: ${request["comment"]}`;
+                    } else if (badge.user_has) {
+                        // set title
+                        document.getElementById("title-field").innerText = `${badge.name}`;
+                        // set modal contents
+                        document.getElementById("modal-body").innerText = "Du har allerede denne badgen!";
+                        // hide form
+                        document.getElementById("form-container").style.display = 'none';
+                        document.getElementById("submit-button").style.display = 'none';
+                    } else {
+                        // set title
+                        document.getElementById("title-field").innerText = `Søk om å få tildelt ${badge.name}`;
+                        // show form
+                        document.getElementById("form-container").style.display = 'block';
+                        document.getElementById("submit-button").style.display = 'inline-block';
+                        document.getElementById("badge-id").setAttribute("value", badgeID);
+                        // set modal contents
+                        document.getElementById("modal-body").innerText = `Scorepoints: ${badge.scorepoints}\n`
+                            + `Beskrivelse: ${badge.description}\n`
+                            + `Vil du ha den?`;
+                    }
+                }
+            });
         }
     </script>
 {% endblock %}

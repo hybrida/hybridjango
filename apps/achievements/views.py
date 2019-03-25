@@ -9,7 +9,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView
 from .forms import BadgeRequestForm, BadgeForm, BadgeSuggestionForm
 from .models import Badge, BadgeRequest
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
+from django.shortcuts import get_object_or_404
 
 
 class CreateSuggestion(CreateView):
@@ -74,30 +75,32 @@ def overview(request):
     return render(request, '../templates/achievements/achievments_overview.html')
 
 
+def badge_request_data(request, badge_id):
+    print('and I aint never stopped')
+    badge = get_object_or_404(Badge, pk=badge_id)
+    data = {
+        "name": badge.name,
+        "description": badge.description,
+        "scorepoints": badge.scorepoints,
+        "badge_image": str(badge.badge_image),
+        "user_has": badge in request.user.hybridbadges.all()
+    }
+    queryset = BadgeRequest.objects.filter(badge=badge, user=request.user)
+    if queryset.exists():
+        req = queryset.first()
+        data["request"] = {
+            "status": req.get_status_display(),
+            "comment": req.comment
+        }
+    return JsonResponse(data)
+
+
 class BadgeView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
-        data = {}
-        user_badges = request.user.hybridbadges.all()
-        for badge in Badge.objects.all():
-            data[badge.id] = {
-                "name": badge.name,
-                "description": badge.description,
-                "scorepoints": badge.scorepoints,
-                "badge_image": str(badge.badge_image),
-                "user_has": badge in user_badges
-            }
-            queryset = BadgeRequest.objects.filter(badge=badge, user=request.user)
-            if queryset.exists():
-                req = queryset.first()
-                data[badge.id]["request"] = {
-                    "status": req.get_status_display(),
-                    "comment": req.comment
-                }
         context = self.get_context_data(**kwargs)
         #Adding the badges to the context to find them in the html file
         context.update({
             'Badges': Badge.objects.all(),
-            'data': json.dumps(data),
             'form': BadgeRequestForm()
         })
 

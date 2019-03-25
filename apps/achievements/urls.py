@@ -10,5 +10,6 @@ urlpatterns = [
         url(r'^suggestion/add/$', CreateSuggestion.as_view(), name='badgesuggestion-add'),
         url(r'^suggestion/table/$', badge_suggestions_table, name='badgesuggestion-table'),
         url(r'^suggestion/(?P<pk>[0-9]+)/delete', DeleteBadge.as_view(), name='badgesuggestion-delete'),
-        url(r'^badges/requests/(?P<status>.*)$', BadgeRequestView.as_view(template_name='achievements/badgerequest_table.html'), name='badgerequest-list')
+        url(r'^badges/requests/(?P<status>.*)$', BadgeRequestView.as_view(template_name='achievements/badgerequest_table.html'), name='badgerequest-list'),
+        url(r'^badges/data/(?P<badge_id>[0-9]+)$', badge_request_data, name='badgerequest-data')
 ]
