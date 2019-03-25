@@ -1,0 +1,15 @@
+{% comment %} this won't work without also including request_modal_snippet.html {% endcomment %}
+<a data-toggle="modal" data-target="#exampleModal" onclick=setModalContent({{ badge.id }})>
+    <img
+        title="
+            Name: {{ badge.name }}
+            Description: {{ badge.description }}
+            Scorepoints: {{ badge.scorepoints }}
+        "
+        src="/uploads/{{ badge.badge_image }}"
+        alt="Name: {{ badge.name }}"
+        {% if style %}
+            style="{{ style }}"
+        {% endif %}
+    />
+</a>
