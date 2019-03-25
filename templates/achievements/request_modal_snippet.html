@@ -14,7 +14,21 @@
 
                     </div>
                     <div id="form-container">
-                        {{ form }}
+                        {% comment %}
+                            Manually rendered BadgeRequestForm below:
+                            Entering the form manually like this is bad practice,
+                            as it creates an issue if the form is changed in forms.py.
+                            Generally, pass the form from the view and render is using {{ form }}
+                            In this case we enter it manually to avoid altering multiple views
+                        {% endcomment %}
+                        <tr>
+                            <th>
+                                <label for="id_comment">Comment:</label>
+                            </th>
+                            <td>
+                                <input type="text" name="comment" maxlength="255" class="form-control" id="id_comment" />
+                            </td>
+                        </tr>
                     </div>
                 </div>
                 <input type="hidden" name="badge-id" id="badge-id" value="-1">
@@ -30,9 +44,13 @@
 <script>
     function setModalContent(badgeID) {
         $.ajax({
-            // typing urls manually is bad practice, as it creates an issue if the url is changed
-            // generally, use the builtin django url template tag, which uses url names
-            // here, however, it is necessary to have the url "hardcoded" in
+            {% comment %}
+                Typing urls manually is bad practice, as it creates an issue if the url is changed
+                Generally, use the builtin django url template tag, which uses url names
+                Here it would be: {% url 'achievements:badgerequest-data' badge_id %}
+                Here, however, it is necessary to have the url "hardcoded" in,
+                because we don't have the badge_id variable available at render time
+            {% endcomment %}
             url: `/achievements/badges/data/${badgeID}`,
             type: 'GET',
             success: function (badge) {

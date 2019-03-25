@@ -100,8 +100,7 @@ class BadgeView(TemplateResponseMixin, ContextMixin, View):
         context = self.get_context_data(**kwargs)
         #Adding the badges to the context to find them in the html file
         context.update({
-            'Badges': Badge.objects.all(),
-            'form': BadgeRequestForm()
+            'Badges': Badge.objects.all()
         })
 
         return self.render_to_response(context)

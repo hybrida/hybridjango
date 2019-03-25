@@ -22,6 +22,7 @@ class BadgeSuggestionForm(forms.ModelForm):
 
 
 class BadgeRequestForm(forms.ModelForm):
+    # If you change this form, you also have to change it in achievements/request_modal_snippet.html
     class Meta:
         model = BadgeRequest
         exclude = ['user', 'badge', 'status']
