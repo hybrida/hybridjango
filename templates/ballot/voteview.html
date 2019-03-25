@@ -38,6 +38,22 @@
             </div>
         </div>
     </form>
+    <div id = "suggestion_container" style = "display: none" >
+        <br>
+        <br>
+        <h2>Nytt forslag</h2>
+        <form method="post" id="suggestion_form">
+            {% csrf_token %}
+            <div class="form-group">
+                <span>Send inn forslag</span>
+                <input class="form-control" type="text" name="suggestion_text" action=""/>
+            </div>
+            <div class="col-md-12" id="submitSuggestionContainer">
+                    <a class="btn btn-primary" id="submitSuggestionButton" role="button"
+                    data-toggle="popover" data-trigger="focus" tabindex="0">Send inn</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% block script %}
@@ -49,6 +65,13 @@
                 url: '{% url 'ballot:choices' %}',
                 type: 'GET',
                 success: function (response) {
+                    let container = document.getElementById("suggestion_container");
+                    if (response.suggestions_enabled) {
+                        container.style.display = "block";
+                    } else {
+                        container.style.display = "none";
+                    }
+                    
                     if (response.nr !== lastNr || force) {
                         lastNr = response.nr;
                         var newChoices = "";
@@ -76,11 +99,13 @@
                     }
                 }
             })
+            
         }
 
         $(document).ready(refresh_ballot(true));
         setInterval(refresh_ballot, 1000);
 
+        var submitSuggestionButton = $('#submitSuggestionButton');
         var submitButton = $('#submitButton');
         var timeoutID;
 
@@ -93,12 +118,25 @@
             });
         });
 
+        submitSuggestionButton.click(function () {
+            $.post('{% url 'ballot:post_suggestion'%}', $('#suggestion_form').serialize())
+            document.getElementById("suggestion_form").reset();
+        });
+
         submitButton.on('shown.bs.popover', function () {
             var $pop = $(this);
             window.clearTimeout(timeoutID);
             timeoutID = setTimeout(function () {
                 $pop.popover('hide');
             }, 2000);
+        });
+
+        $('#suggestion_form').on('keyup keypress', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) { 
+                e.preventDefault();
+                return false;
+            }
         });
     </script>
 {% endblock %}

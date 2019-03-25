@@ -4,12 +4,16 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.auth.transport.requests import Request
 from datetime import datetime
-from .secrets import FOLDER_ID  # SEE BELOW
 from . import ISO_8601
 from io import BytesIO
 from hybridjango.settings import BASE_DIR
 
-# This file will throw ImportErrors on the .secrets module except when in production
+try:
+    from .secrets import FOLDER_ID  # SEE BELOW
+except ImportError as e:
+    print(e.msg)
+
+# This file will raise (and except) ImportErrors on the .secrets module except when in production
 # This is by design, as the secrets-folder contains sensitive information and is ignored explicitly by Git
 
 # If you desire a local setup of drive-uploads, do the following:
