@@ -76,7 +76,6 @@ def overview(request):
 
 
 def badge_request_data(request, badge_id):
-    print('and I aint never stopped')
     badge = get_object_or_404(Badge, pk=badge_id)
     data = {
         "name": badge.name,
