@@ -112,7 +112,9 @@ class BadgeView(TemplateResponseMixin, ContextMixin, View):
             comment=request.POST.get("comment", ""),
             status=BadgeRequest.PENDING
         )
-        return HttpResponseRedirect('#')
+        # next field in request.POST is set to {{ request.path }}
+        # this means the redirect goes back to where the user came from
+        return HttpResponseRedirect(request.POST.get('next', '/'))
 
 
 class BadgeRequestView(PermissionRequiredMixin, TemplateResponseMixin, ContextMixin, View):

@@ -1,7 +1,7 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="POST">
+            <form method="POST" action="{% url 'achievements' %}">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title" id="title-field">Modal title</h5>
@@ -32,6 +32,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="badge-id" id="badge-id" value="-1">
+                <input type="hidden" name="next" value="{{ request.path }}">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" id="submit-button" class="btn btn-primary">Søk om badge</button>
