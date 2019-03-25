@@ -50,6 +50,6 @@ class Command(BaseCommand):
 
         if options['upload']:
             success = drive.upload_db_backup(filename)
-            if success:
+            if success and options['delete']:
                 print('Deleting file')
                 remove(filename)
