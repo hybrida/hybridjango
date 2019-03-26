@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-
+from django.views.generic import RedirectView
 
 from apps.staticpages.views import FrontPage
 
@@ -46,4 +46,7 @@ urlpatterns = [
                   url(r'^tinymce/', include('tinymce.urls')),
                   url(r'^vevkom/', include('apps.vevkom.urls'), name='vevkom'),
                   # url(r'^butikk/', include('apps.merchandise.urls'), name='merchandise')
+
+                  # TODO temprary, remove after 32. general assembly  2019-03-27
+                  url(r'^hjelp$', RedirectView.as_view(url='https://forms.gle/jcr8hjdvP8tJKzGL6'), name='missing-user')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
