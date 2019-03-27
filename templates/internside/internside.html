@@ -113,11 +113,16 @@
 </style>
 <div class="parallax">
     <h1 style="padding-top: 300px; font-weight: bolder; font-size: 500%; color: white">Vevkom Internside</h1>
-    <div class="col-xs-1 col-xs-offset-5">
-        <a class="btn btn-primary" style=" padding-top: -50px; margin-left: 45%; width: 135px "href="{% url 'badgetable' %}">Innsendte badges</a>
-    </div>
-    <div class="col-xs-1">
-        <a class="btn btn-primary" style=" padding-top: -50px; margin-left: 45%; width: 135px "href="{% url 'badgerequest-list' 'pending' %}">Badgeforespørsler</a>
+    <div class="row">
+        <div class="col-xs-1 col-xs-offset-4 text-center">
+            <a class="btn btn-primary" style=" padding-top: -50px; margin-left: 45%; width: 135px "href="{% url 'badgesuggestion-table' %}">Innsendte badges</a>
+        </div>
+        <div class="col-xs-2 text-center">
+            <a class="btn btn-primary" style=" padding-top: -50px; margin-left: 45%; width: 135px "href="{% url 'badgerequest-list' 'pending' %}">Badgeforespørsler</a>
+        </div>
+        <div class="col-xs-1 text-center">
+            <a class="btn btn-primary" data-toggle="modal" style=" padding-top: -50px; margin-left: 45%; width: 135px " data-target="#dataDumpModal">Datadump</a>
+        </div>
     </div>
 </div>
     <div>
@@ -311,4 +316,42 @@
                 </div>
             </div>
         </div>
+
+    <!-- Data dump modal -->
+    <div class="modal fade" id="dataDumpModal" tabindex="-1" role="dialog" aria-labelledby="dataDumpModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'internside:serve_data_dump' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="title-field">Last ned datadump</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <select name="filename" class="form-control">
+                            {% if dump_filenames %}
+                                {% for filename in dump_filenames %}
+                                    <option>{{ filename }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option selected disabled>Ingen filer tilgjengelige</option>
+                            {% endif %}
+                        </select>
+                        <input name="password" class="form-control" type="text" placeholder="Felles passord" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button
+                                type="submit"
+                                id="submit-button"
+                                class="btn btn-primary"
+                                {% if not dump_filenames %} disabled {% endif %}
+                        >Last ned</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
