@@ -48,13 +48,13 @@
                                 <th>{{ item.Number }}</th>
                                 <th> <a href="../../hybrid/{{ item.Username }}" style="color: black">{{ item.Full_Name}} </a></th>
                                 <th>
-                                    {% for badge in Badges %}
-                                        {% if badge.name in item.Badger %}
-                                            <img title="Name: {{ badge.name }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 7%;height: auto;margin-left: 1%">
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% with style="width: 7%;height: auto;margin-left: 1%" %}
+                                        {% for badge in Badges %}
+                                            {% if badge.name in item.Badger %}
+                                                {% include 'achievements/badge_image_snippet.html' %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
                                 </th>
                                 <th>{{ item.Score }} </th>
                             </tr>
@@ -64,4 +64,5 @@ Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt
             </div>
         </div>
 
+    {% include 'achievements/request_modal_snippet.html' %}
 {%  endblock %}
