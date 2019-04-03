@@ -59,6 +59,24 @@ class EventView(generic.DetailView):
                 MarkPunishment.objects.all().last().goes_on_secondary, MarkPunishment.objects.all().last().too_many_marks):
             ParticipationSecondary.objects.get_or_create(hybrid=user, attendance=attendance)
 
+        elif request.POST['action'] == 'leaveLate' and attendance.signoff_open():
+            # En bruker trykker på "meld av"-knappen sent, det sjekkes at avmeldingen er åpen og at brukeren faktisk er påmeldt
+            if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
+                # førstemann på venteliste blir plukket ut og sendt en mail.
+                if attendance.get_waiting().exists():
+                    first_waiter = attendance.get_waiting()[0]
+                    SendAdmittedMail(first_waiter, attendance)
+                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+                else:
+                    #Gives a mark and sends a mail to the reciever for signing off late when there was no one to take their place
+                    SendMarkMail(user, attendance.late_signoff_mark(user))
+                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+            # Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
+            # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
+            elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() and not attendance.is_signed(
+                    user):
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+
         self.object = self.get_object()
         return self.render_to_response(context=self.get_context_data(**kwargs))
 
@@ -77,6 +95,7 @@ class EventView(generic.DetailView):
                 'is_participant': attendance.is_participant(user),
                 'is_signed': attendance.is_signed(user),
                 'is_waiting': attendance.is_waiting(user),
+                'waiting_exists': attendance.get_waiting().exists(),
                 'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
@@ -91,6 +110,8 @@ class EventView(generic.DetailView):
                 'is_participantSecondary': attendance.is_participantSecondary(user) if user.is_authenticated else False,
                 'placementSecondary': attendance.get_placementSecondary(user) if attendance.is_participantSecondary(user) else None,
                 'waiting_placementSecondary': attendance.get_waiting_placementsSecondary(),
+                'get_signoff_close': attendance.get_signoff_close(),
+                'signoff_is_open': attendance.signoff_open(),
             } for attendance in list(event.attendance_set.all())]
         return context
 
@@ -111,13 +132,17 @@ def SendMarkMail(hybrid, mark):
     mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
     if hybrid.email: mail = hybrid.email
     successful = send_mail(
-        'Du er tildelt {value} prikk(er)',
+        'Du er tildelt {value} prikk',
         'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga;\n {reason}\n'
+        'Arrangementet det er snakk om er {title}\n'
         'Denne prikken vil du ha til og med {expireDate}\n'
         'Du har totalt {prikker} prikk(er)\n'
-        '{url}'.format(url="https://hybrida.no/hendelser/prikker",
+        '{urlEvent}\n'
+        '{urlPrikker}'.format(urlEvent="https://hybrida.no/hendelser/" + str(mark.event.pk),
+            urlPrikker="https://hybrida.no/hendelser/prikker",
             value = mark.value,
             name = hybrid.get_full_name(),
+            title = mark.event.title,
             reason = mark.reason,
             expireDate = mark.end,
             prikker = Mark.objects.all().filter(recipient=hybrid)),
@@ -258,6 +283,7 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
             'Delays': Delay.objects.all().filter(punishment=MarkPunishment.objects.all().last()).order_by('marks'),
             'Duration': MarkPunishment.objects.all().last().duration,
             'Rules': Rule.objects.all().filter(punishment=MarkPunishment.objects.all().last()),
+            'Signoff_close': MarkPunishment.objects.all().last().signoff_close,
         })
 
         return self.render_to_response(context)

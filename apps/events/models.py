@@ -219,6 +219,19 @@ class Attendance(models.Model):
                 for (index, participant)
                 in self.get_placementsSecondary()]
 
+    def get_signoff_close(self):
+        if MarkPunishment.objects.all().last().signoff_close == 0:
+            return self.signup_end
+        return self.event.event_start - datetime.timedelta(hours=MarkPunishment.objects.all().last().signoff_close)
+
+    def signoff_open(self):
+        return self.get_signoff_close() > timezone.now()
+
+    def late_signoff_mark(self, hybrid):
+        mark = Mark.objects.create(recipient=hybrid, value=1, event=self.event,
+                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
+        return mark
+
 
 '''A model that will contain any feedback or comment that may be instered into the event'''
 
