@@ -2,23 +2,39 @@
 {% load static %}
 
 {% block text %}
-    <h1>{{ course.course_code }}: {{ course.name }}</h1>
+    <h1>{{ course.course_code }}  {{ course.name }} &nbsp; {% if course.average_score >= 1 %}
+        <span class="glyphicon glyphicon-star">
+        </span>
+    {% endif %}
+    {% if course.average_score >= 2 %}
+        <span class="glyphicon glyphicon-star">
+        </span>
+    {% endif %}
+    {% if course.average_score >= 3 %}
+        <span class="glyphicon glyphicon-star">
+        </span>
+    {% endif %}
+    {% if course.average_score >= 4 %}
+        <span class="glyphicon glyphicon-star">
+        </span>
+    {% endif %}
+    {% if course.average_score == 5 %}
+        <span class="glyphicon glyphicon-star">
+        </span>
+    {% endif %} </h1>
 
     <div style="overflow-x:auto; padding-top: 15px">
         <table class="table table-responsive sortable table-hover">
+            <tr>&nbsp;</tr> {# Bare mellomrom #}
             <tr>
-                <td width="50%" align="center">
-                </td>
-                <td width="50%" align="right">
-                    <button class="btn btn-primary">Skriv din vurdering!</button>
-                </td>
-            </tr>
-            <tr>
-                <td width="50%" align="center">
+                <td width="10%">
                     <button class="btn btn-primary" onclick=" window.open('https://grades.no/course/{{course.course_code}}/','_blank')"> Grades</button>
                 </td>
-                <td width="50%" align="center">
+                <td width="50%" >
                     <button class="btn btn-primary" onclick=" window.open('https://www.ntnu.no/studier/emner/{{course.course_code}}/','_blank')"> NTNU </button>
+                </td>
+                <td width="30%" align="right">
+                    <button class="btn btn-primary">Skriv din vurdering!</button>
                 </td>
             </tr>
         </table>

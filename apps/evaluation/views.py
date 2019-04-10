@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Course, Evaluation
-
+from .forms import EvaluationForm
 # Create your views here.
 def course_views(request):
     courses = Course.objects.all().order_by('course_code')
@@ -12,4 +12,16 @@ def get_course(request, pk):
     evaluations = Evaluation.objects.filter(course=course).all()
     return render(request,'evaluation/course.html', {'course':course, 'evaluations':evaluations})
 
+def get_evaluation_form(request):
+        form = EvaluationForm(request.POST)
+        if request.method == 'POST':
+            form = EvaluationForm(request.POST)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.save()
+                return redirect('internside:index')
+
+        return render(request, 'evaluation/evaluation_form.html', {
+            'form': form,
+        })
 

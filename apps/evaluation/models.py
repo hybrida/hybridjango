@@ -1,5 +1,6 @@
 from django.db import models
 from apps.registration.models import Hybrid
+from tinymce import HTMLField
 
 class Course(models.Model):
 
@@ -32,6 +33,9 @@ class Course(models.Model):
     semester = models.CharField(choices=Semesters, max_length=250, blank=False, default="")
     number_of_evaluations = models.IntegerField(default=0, blank=True)
 
+    def __str__self(self):
+        return str(self.name)
+
 
 class Evaluation(models.Model):
 
@@ -50,9 +54,19 @@ class Evaluation(models.Model):
     semester = models.IntegerField(blank=False, null=False) #1.-5.år
     season = models.CharField(max_length=255, blank=False, null=False) #Høst/vår
     title = models.CharField(max_length=255)
-    evaluation_lecturer = models.TextField()
-    evaluation_course = models.TextField()
+    evaluation_lecturer = HTMLField()
+    evaluation_course = HTMLField()
     score = models.IntegerField(default=0)
+    Profiles = (
+        ('Geomatikk', 'Geomatikk'),
+        ('Konstruksjonsteknikk', 'Konstruksjonsteknikk'),
+        ('Marin teknikk', 'Marin teknikk'),
+        ('Petroleumsfag', 'Petroleumsfag'),
+        ('Produksjonsledelse', 'Produksjonsledelse'),
+        ('Maskinteknikk', 'Maskinteknikk')
 
+    )
+    profile = models.CharField(choices=Profiles, max_length=250, blank=False, default="")
 
-
+    def __str__self(self):
+        return str(self.title)
