@@ -12,16 +12,17 @@ from django.urls import resolve, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
+from django.core.mail import send_mail
 
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid
 from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport, Protocol
+from apps.staticpages.models import BoardReport, Protocol, Ktv_report
 from hybridjango.settings import STATIC_FOLDER
-from .forms import CommiteApplicationForm
-from .models import Application, CommiteApplication
+from .forms import CommiteApplicationForm, ApplicationForm
+from .models import Application, CommiteApplication, BoardReportSemester
 
 
 class FrontPage(EventList):
@@ -104,12 +105,12 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
         context.update({
             'leder': Hybrid.objects.get(username='andrsly'),
             'nestleder': Hybrid.objects.get(username='martahal'),
-            'skattmester': Hybrid.objects.get(username='torstsol'),
+            'skattmester': Hybrid.objects.get(username='martwan'),
             'bksjef': Hybrid.objects.get(username='helenesm'),
             'festivalus': Hybrid.objects.get(username='jakobdr'),
-            'vevsjef': Hybrid.objects.get(username='sindreeo'),
-            'jentekomsjef': Hybrid.objects.get(username='renatebf'),
-            'redaktor': Hybrid.objects.get(username='kriraae'),
+            'vevsjef': Hybrid.objects.get(username='sondremb'),
+            'jentekomsjef': Hybrid.objects.get(username='eliserb'),
+            'redaktor': Hybrid.objects.get(username='konradvt'),
         })  # Can be initialized only on startup (using middleware for example) if it becomes too costly
         return self.render_to_response(context)
 
@@ -141,11 +142,13 @@ class ProtocolView(LoginRequiredMixin, AboutView):
         context['active_page'] = 'statutter'
         return context
 
+
 class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
         context['active_page'] = 'board'
+        context['reportsemseters'] = BoardReportSemester.objects.all().order_by('pk').reverse()
         return context
 
 
@@ -204,7 +207,7 @@ def search(request):
 
 @permission_required(['staticpages.add_application'])
 def application_table(request):
-    applications = Application.objects.all()
+    applications = Application.objects.all().order_by('pk').reverse()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
 
 @permission_required(['staticpages.add_commiteapplication'])
@@ -214,10 +217,43 @@ def commiteapplications(request):
     return render(request, 'staticpages/commite_applications.html', {"comapplications": comapplications})
 
 
-class application(CreateView):
-    model = Application
-    fields = ['navn', 'beskrivelse']
+def application(request):
+    form = ApplicationForm(request.POST)
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            pplication = form.save(commit=False)
+            pplication.save()
+            mail = ['skattmester@hybrida.no']
+            sucsessful = send_mail('Søknad om støtte fra styret',
+                                   'Navn: {navn}\n{beskrivelse}'
+                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   'robot@hybrida.no',
+                                   mail,
+                                   )
 
+            return redirect('about')
+
+    return render(request, 'staticpages/application_form.html', {
+        'form': form,
+    })
+
+def edit_application(request, pk):
+    applications = Application.objects.all()
+    user = request.user
+    if request.POST:
+        print(request.POST.get('applicationForm'))
+
+        comment = request.POST['text']
+        application_id = request.POST['Application_id']
+        granted = request.POST.get('grantForm', False)
+
+        if user.is_authenticated:
+                application = applications.get(pk=application_id)
+                application.granted = granted
+                application.comment = comment
+                application.save()
+    return redirect('application_table')
 
 class DeleteApplication(DeleteView):
     model = Application
@@ -243,3 +279,15 @@ def AddComApplication(request):
 def NewStudent(request):
 
     return render(request, 'staticpages/ny_student.html')
+
+def ChangeAcceptedStatus(request):
+    request.user.accepted_conditions = True
+    request.user.save()
+    return redirect('/')
+
+class KTVReportView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(KTVReportView, self).get_context_data(**kwargs)
+        context['reports'] = Ktv_report.objects.all().order_by('date').reverse()
+        context['active_page'] = 'tillitsvalgte'
+        return context

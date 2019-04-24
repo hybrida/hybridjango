@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Hybrid
+from .models import Hybrid, Specialization
 
 
 class MyUserAdmin(UserAdmin):
@@ -21,3 +21,4 @@ class MyUserAdmin(UserAdmin):
     )
 
 admin.site.register(Hybrid, MyUserAdmin)
+admin.site.register(Specialization)

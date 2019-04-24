@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     'apps.achievements',
     'tinymce',
     'apps.vevkom',
-
+    'apps.merchandise',
+    'hybridjango'
 ]
 
 MIDDLEWARE = [

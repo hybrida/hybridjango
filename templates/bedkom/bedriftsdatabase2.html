@@ -56,7 +56,7 @@
                 <button class="btn btn-primary">Referater</button>
             </a>
 
-            <a style="float: right; padding-right: 10px" href="{% url 'admin:bedkom_company_add' %}">
+            <a style="float: right; padding-right: 10px" href="{% url 'new_company' %}">
                 <button class="btn btn-primary">Lag ny bedrift</button>
             </a>
             <a style="float: right; padding-right: 10px; padding-bottom: 15px"
@@ -89,6 +89,7 @@
                     <tr style="background-color: #428bca; height: 30px; color: white;">
                         <th class="col-xs-2">Navn</th>
                         <th class="col-xs-2">Ansvarlig</th>
+                        <th class="col-xs-2">Relevante Spesialiseringer</th>
                         <th class="col-xs-3">Info</th>
                         <th class="col-xs-4">Siste Kommentar</th>
                         <th class="col-xs-1">Status</th>
@@ -108,6 +109,12 @@
                                     <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden" form="{{ company.id }}">
                                 </td>
                                 <td class="text-left; responsible">{{ company.responsible.first_name }} {{ company.responsible.middle_name }} {{ company.responsible.last_name }}</td>
+                                <td class="text-left">
+                                    {% for Spesialization in company.relevant_spesializations.all %}
+                                        {{ Spesialization }}
+                                        <br>
+                                    {% endfor %}
+                                </td>
                                 <td class="text-left; tag" >{{ company.info }}</td>
                                 <div >
 

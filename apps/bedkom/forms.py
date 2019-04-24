@@ -17,6 +17,16 @@ class CompanyForm(forms.ModelForm):
         ]
         model = Company
 
+    def __init__(self, *args, **kwargs):
+            super(CompanyForm, self).__init__(*args, **kwargs)
+            self.fields['name'].widget.attrs.update({'class': 'form-control'})
+            self.fields['responsible'].widget.attrs.update({'class': 'form-control'})
+            self.fields['address'].widget.attrs.update({'class': 'form-control'})
+            self.fields['info'].widget.attrs.update({'class': 'form-control'})
+            self.fields['logo'].widget.attrs.update({'class': 'form-control'})
+            self.fields['priority'].widget.attrs.update({'class': 'form-control'})
+            self.fields['status'].widget.attrs.update({'class': 'form-control'})
+
 class BedpressForm(forms.ModelForm):
     ingress = forms.CharField(widget=forms.Textarea)
 

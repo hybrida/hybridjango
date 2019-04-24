@@ -1,4 +1,4 @@
-{% extends 'standard_sidebar_small.html' %}
+{% extends 'standard_wide.html' %}
 {% load static %}
 {% block title %}Scoreboard{% endblock %}
 {% block link%}
@@ -23,6 +23,7 @@
 {% block text %}
 
     <h1 style="text-align: center; font-size: 60px;color: darkblue;"> {% if Current %} Current Scoreboard {% else %} All Time Scoreboard {% endif %}</h1>
+    <a type="button" class="btn btn-primary" href="{% url 'badgesuggestion-add' %}">Send inn badge</a>
     <div style="margin-bottom: 2%; margin-left: 2%; margin-top: -1%; text-align: center; font-size: 20px;color:gray;">
         {% if Current %}
             <a class="updateUMFer" href="/achievements/all_time/">Se All Time Scoreboardet</a>
@@ -47,13 +48,13 @@
                                 <th>{{ item.Number }}</th>
                                 <th> <a href="../../hybrid/{{ item.Username }}" style="color: black">{{ item.Full_Name}} </a></th>
                                 <th>
-                                    {% for badge in Badges %}
-                                        {% if badge.name in item.Badger %}
-                                            <img title="Name: {{ badge.name }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 7%;height: auto;margin-left: 1%">
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% with style="width: 7%;height: auto;margin-left: 1%" %}
+                                        {% for badge in Badges|dictsortreversed:"scorepoints" %}
+                                            {% if badge.name in item.Badger %}
+                                                {% include 'achievements/badge_image_snippet.html' %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
                                 </th>
                                 <th>{{ item.Score }} </th>
                             </tr>
@@ -62,10 +63,6 @@ Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt
                 </div>
             </div>
         </div>
+
+    {% include 'achievements/request_modal_snippet.html' %}
 {%  endblock %}
-<!--Adding a smaller sidebar for the buttons-->
-{% block sidebar %}
-    <a style="width: 100%" type="button" class="btn btn-primary" href="{% url 'badgeform-add' %}">Send inn badge</a>
-    <br>
-    <a style="width: 100%" type="button" class="btn btn-primary" href="{% url 'badgerequest-add' %}">Krev badge</a>
-{% endblock %}

@@ -120,9 +120,7 @@
                 <div class="col">
                     <div class="row">
                         {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
-                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
+                            {% include 'achievements/badge_image_snippet.html' %}
                         {% endfor %}
                     </div>
                 </div>
@@ -151,5 +149,7 @@ Scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
         </div>
     </div>
     </div>
+
+    {% include 'achievements/request_modal_snippet.html' %}
 {% endblock %}
 ##grid layout bootstrap

@@ -75,9 +75,11 @@
                     <br>
                     sigurdsp@stud.ntnu.no
                 </p>
-                <div style="padding-left: 0%"><img src="{% static "img/FP2018.png" %}"
-                            ></div>
-                <p style="font-weight: bold">Endringer: NB! Parken vil si høgskoleparken. Infomøte er på Rom S4 og ikke VE1</p>
+                 <video controls width="100%">
+                  <source src="/uploads/fp2018.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
                 <h3>Påmelding</h3>
                 <p>
                     NB! Dersom du har fått studieplass på Ingeniørvitenskap og IKT til høsten er det veldig viktig at
@@ -115,8 +117,8 @@
             <div class="container"  style="overflow-x: hidden; max-width: 100%" >
             <div class="row space-below">
                 <div class="col-md-4 space-above" >
-                    <div class="white-box" onclick="showHide1()">
-                        <div style="padding-left: 47%; font-size: x-large"><span class="glyphicon glyphicon-home"></span></div>
+                    <div class="white-box">
+                        <div style="padding-left: 47%; font-size: x-large" onclick="showHide1()"><span class="glyphicon glyphicon-home"></span></div>
                         <h3>Skaff deg et sted å bo</h3>
                         <div id="text1" style="display: none">
                             <p>
@@ -139,17 +141,17 @@
                             </p>
                             <p>NB! Husk å melde adresseendring i Folkeregisteret og videresending i Posten. </p>
                         </div>
-                        <div style="padding-left: 47%" id="pilned1">
+                        <div style="padding-left: 47%" id="pilned1" onclick="showHide1()">
                             <span class="glyphicon glyphicon-menu-down"></span>
                         </div>
-                        <div style="padding-left: 47%; display: none" id="pilopp1">
+                        <div style="padding-left: 47%; display: none" onclick="showHide1()" id="pilopp1">
                             <span class="glyphicon glyphicon-menu-up"></span>
                         </div>
                     </div>
                 </div>
-                <div id="sidebar-col" class="col-md-4 space-above" onclick="showHide2()">
+                <div id="sidebar-col" class="col-md-4 space-above">
                     <div class="white-box" id="sidebar">
-                        <div style="padding-left: 47%; font-size: x-large"><span class="glyphicon glyphicon-piggy-bank"></span></div>
+                        <div style="padding-left: 47%; font-size: x-large"onclick="showHide2()"><span class="glyphicon glyphicon-piggy-bank"></span></div>
                         <h3>Søk lånekassen og betal semesteravgiften</h3>
                         <div id="text2" style="display: none">
                         <p>
@@ -174,27 +176,27 @@
                             Lånekassen: gå inn på http://www.lanekassen.no/ og søk om stipend og lån. Saksbehandlingstiden kan være lang rundt semesterstart. Husk at ingenting utbetales før semesteravgift er betalt! Lånet er rentefritt så lenge du er i utdanning.
                         </p>
                         </div>
-                        <div style="padding-left: 47%" id="pilopp2">
+                        <div style="padding-left: 47%" onclick="showHide2()" id="pilopp2">
                             <span class="glyphicon glyphicon-menu-down"></span>
                         </div>
-                        <div style="padding-left: 47%; display: none" id="pilned2">
+                        <div style="padding-left: 47%; display: none" onclick="showHide2()" id="pilned2">
                             <span class="glyphicon glyphicon-menu-up"></span>
                         </div>
                     </div>
                 </div>
                 <div id="sidebar-col" class="col-md-4 space-above">
-                    <div class="white-box" id="sidebar" onclick="showHide3()">
-                        <div style="padding-left: 47%; font-size: x-large"><span class="glyphicon glyphicon-education"></span></div>
+                    <div class="white-box" id="sidebar" >
+                        <div style="padding-left: 47%; font-size: x-large" onclick="showHide3()"><span class="glyphicon glyphicon-education"></span></div>
                         <h3>Skolestart</h3>
                         <div id="text3" style="display: none">
                             <p>
                                 Immatrikulering: Immatrikuleringen er en samling på gressplenen bak Hovedbygget på Gløshaugen. Dette er en seremoni med diverse taler, underholdning og litt informasjon om studiene i Trondheim for å ønske alle studentene ved NTNU velkommen. Folkemengden du møter på gressplenen på immatrikuleringen er flesteparten av de nye studentene i Trondheim dette semesteret. Rundt omkring bygningene på campus er det mange forskjellige foreninger, komiteer og idrettslag som har stands, og dette er en fin måte å få litt oversikt over fritidstilbudet med frivillig arbeid og aktiviteter som tilbys i byen. Dette er også et fint sted å samle inn diverse gratis ting! Etter seremonien vil du bli presentert for de fagansatte på linjen og motta et diplom for å ønskes velkommen til linjen Ingeniørvitenskap & IKT. På kvelden er det immatrikuleringsfest på Samfundet der store deler av studentene deltar!
                             </p>
                         </div>
-                        <div id="pil3" style="padding-left: 47%">
+                        <div id="pil3" onclick="showHide3()" style="padding-left: 47%">
                             <span class="glyphicon glyphicon-menu-down"></span>
                         </div>
-                        <div id="hiddenpil3" style="padding-left: 47%; display: none">
+                        <div id="hiddenpil3" onclick="showHide3()" style="padding-left: 47%; display: none">
                             <span class="glyphicon glyphicon-menu-up"></span>
                         </div>
                     </div>
@@ -207,7 +209,7 @@
                 <div class="row space-below">
                     <div class="col-xs-12 space-above">
                         <div style="background-color: #002a80" class="white-box" id="text-box">
-                            <div style="padding-left: 45%"><img src="{% static "img/Griff, drop shadow.png" %}"
+                            <div style="display: block; margin-left: auto; margin-right: auto; width: 100px"><img src="{% static "img/Griff, drop shadow.png" %}"
                             id="logo"></div>
                             <h3 style="color: white">Linjeforeningen</h3>
                             <P style="color: white">
@@ -236,7 +238,7 @@
                     <div class="row space-below">
                         <div class="col-xs-12 space-above">
                             <div style="background-color: #002a80" class="white-box" id="text-box">
-                                <div style="padding-left:40%; width: 60%"><img src="{% static "img/tp_logo_negativ.svg" %}"
+                                <div style="margin-right: auto;margin-left: auto; width: 200px"><img src="{% static "img/tp_logo_negativ.svg" %}"
                             ></div>
                                 <p style="color: white">
                                     Som NTNU sin største bedriftskontakt jobber vi i Teknologiporten med å knytte kontakt mellom elever og næringslivet. Gjennom semesteret arrangerer vi bl.a bedriftspresentasjoner, karrieredager og konkurranser. Vi er også med på å arrangere noen av de største konferansene i Trondheimsregionen, alt for at dere som studenter skal finne deres ideelle fremtidige arbeidsplass. I tillegg til det faglige som bedriftskontakt jobber vi også med å være gode representanter på diverse hytteturer, immball, julebord o.l på tvers av linjene, så det sosiale er det definitivt ikke mangel på.

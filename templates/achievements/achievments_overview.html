@@ -16,13 +16,14 @@
                 <div style="margin-left: 1%; margin-right: 1%;">
                     <br>
                       {% for badge in Badges|dictsortreversed:"scorepoints"%}
-                          <img title="Name: {{ badge }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" src="/uploads/{{ badge.badge_image }}" alt="image" style="width: 18.5%;height: auto; margin-bottom: 1%;margin-left: 1%">
+                          {% with style="width: 18.5%;height: auto; margin-bottom: 1%;margin-left: 1%"  %}
+                            {% include 'achievements/badge_image_snippet.html' %}
+                          {% endwith %}
                       {% endfor %}
                     <br>
                 </div>
             </div>
         </div>
 
+    {% include 'achievements/request_modal_snippet.html' %}
 {%  endblock %}

@@ -116,14 +116,15 @@ class EventView(generic.DetailView):
         return context
 
 def SendAdmittedMail(hybrid, attendance):
-    mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
-    if hybrid.email: mail = hybrid.email
+    mail = [hybrid.email if hybrid.email else '{}@stud.ntnu.no'.format(hybrid.username)]
     successful = send_mail(
-            'Du har fått plass på {title}',
-            'Hei {name},\n\nDet er en glede å meddele at du har fått plass på {title}\n'
-            '{url}'.format(url="https://hybrida.no/hendelser/" + str(attendance.event.pk),
-            title = attendance.event.title,
-            name = hybrid.get_full_name()),
+            'Du har fått plass på {title}'
+                .format(title=attendance.event.title),
+            'Hei {name},\n\nDet er en glede å meddele at du har fått plass på {title}\n{url}'
+                .format(url="https://hybrida.no/hendelser/" + str(attendance.event.pk),
+                    title = attendance.event.title,
+                    name = hybrid.get_full_name()
+                ),
             'robot@hybrida.no',
             mail,
         )

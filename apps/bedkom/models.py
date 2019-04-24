@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from apps.events.models import Event
-from apps.registration.models import Hybrid
+from apps.registration.models import Hybrid, Specialization
 
 
 class Contact_person(models.Model):
@@ -27,6 +27,7 @@ class Company(models.Model):
                             help_text='Hvem er bedriften, hva gjør de og hvilke fagområder er de involvert i?')
     logo = models.ImageField(upload_to='companies', default='placeholder-logo.png')
     contact_person = models.ForeignKey(Contact_person, blank=True, null=True, on_delete=models.CASCADE)
+    relevant_spesializations = models.ManyToManyField(Specialization,blank=True)
 
     CHOICES_STATUS = (
         ('Booket', 'Booket'),
