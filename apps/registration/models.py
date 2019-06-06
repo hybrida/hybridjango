@@ -80,3 +80,29 @@ class RecoveryMail(models.Model):
 
     def __str__(self):
         return "{}_{}".format(self.hybrid, self.timestamp)
+
+
+class ContactPerson(models.Model):
+    """
+    A class for users to be presented somewhere on the site as contact persons
+    E.g. the board, KTV, ITV
+    """
+
+    def __getattr__(self, item):
+        """
+        When calling foo.bar (getting attribute bar on object foo) in python,
+        the actual call is foo.__getattribute__('bar').
+        If that fails, foo.__getattr__('bar') is attempted.
+
+        Here, we override __getattr__ with a call to user.__getattribute__.
+        This means that attributes in the user object that do not exist here can be gotten directly,
+        e.g. calling contact_person_object.first_name will return contact_person_object.user.first_name.
+        """
+        return self.user.__getattribute__(item)
+
+    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE, null=False, blank=False)
+    title = models.CharField(max_length=128, null=False, blank=False)
+    # a unique name for getting objects, even when title is the same
+    search_name = models.CharField(max_length=128, null=False, blank=False, unique=True)
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)

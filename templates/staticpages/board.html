@@ -7,142 +7,26 @@
     </article>
 
     <div class="row">
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/leder.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ leder.get_full_name }}</h3>
+        {% for member in board %}
+            {% comment %} offset the last member if it is the first on its row {% endcomment %}
+            <div class="col-sm-6 {% if forloop.last and not forloop.counter|divisibleby:2 %}col-sm-offset-3{% endif %}">
+                <div class="white-box space-above">
+                    <div class="remove-whitebox-padding">
+                        <img src="/uploads/{{ member.image }}" class="center-block img-responsive art-img" width="100%">
+                        <div class="image-info-overlay">
+                            <div>
+                                <h3>{{ member.get_full_name }}</h3>
+                            </div>
                         </div>
                     </div>
+                    <br>
+                    <a href="{% url 'contact_us' %}#{{ member.search_name }}" style="color: #005675">
+                        <h3>{{ member.title }}</h3>
+                    </a>
+                    <p>{{ member.description }}.</p>
                 </div>
-                <br>
-                <a href="{% url 'contact_us' %}#leder" style="color: #005675">
-                    <h3>Leder</h3>
-                </a>
-                <p>Vår ærede leder. Har det overordnede ansvaret i Hybrida, og er rett og slett helt sjef.</p>
             </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/nestleder.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ nestleder.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#nestleder" style="color: #005675">
-                    <h3>Nestleder</h3>
-                </a>
-                <p>"Samarbeider" med lederen om det organisatoriske og administrative ansvaret i styret.</p>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/skattmester.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ skattmester.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#skattmester" style="color: #005675">
-                    <h3>Skattmester</h3>
-                </a>
-                <p>Ansvaret for pengestrømmen inn og, selvfølgelig mest, ut. Driver i følge pålitelige kilder ikke med
-                    underslag.</p>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/festivalus.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ festivalus.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#festivalus" style="color: #005675">
-                    <h3>Festivalus</h3>
-                </a>
-                <p>Ansvaret for det som blir arrangert av fester, turer og en hel rekke andre festlige og koselige
-                    arrangementer.</p>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/bksjef.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ bksjef.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#bksjef" style="color: #005675">
-                    <h3>Bedriftskomitésjef</h3>
-                </a>
-                <p>Fikser og ordner med profileringen av linja og linjeforeningen utad til bedrifter og næringslivet. Sørger for at vi får de saftigste jobbene på markedet.</p>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/vevsjef.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ vevsjef.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#vevsjef" style="color: #005675">
-                    <h3>Vevsjef</h3>
-                </a>
-                <p>Har ansvaret for utvikling og drift av nettsidene og HybridLAN, samt informasjonsflyten i linjeforeningen.</p><br>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="white-box space-above">
-                <div class="remove-whitebox-padding">
-                    <img src="{% static 'img/about/jentesj.png' %}" class="center-block img-responsive art-img"
-                         width="100%">
-                    <div class="image-info-overlay">
-                        <div>
-                            <h3>{{ jentekomsjef.get_full_name }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <a href="{% url 'contact_us' %}#jentekomsjef" style="color: #005675">
-                    <h3>Jentekomitésjef</h3>
-                </a>
-                <p>Sjef for jentekomiteen, eller chicas united som det kalles i spania. Sørger for at damene oppfører seg i henhold til forskriftene.</p>
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 {% endblock %}
 {% block sublinks %}
