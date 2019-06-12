@@ -1,5 +1,6 @@
 {% extends 'standard_wide.html' %}
 {% load static %}
+{% load template_filters %}
 {% block title %}{{ hybrid.hybridname }}{% endblock title %}
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
@@ -110,6 +111,24 @@
                     </table>
                 </div>
                 <br>
+                <div class="list" >
+                    {% for attendance in attendance_list_chronological%}
+
+                        <div>
+                            <a href="{% url 'event' attendance.get_event_pk%}">
+                                <span>
+                                    {{ attendance.get_event_name }}
+                                <time datetime="{{ attendance.get_event_start|date:'c' }}">
+                                    {{attendance.get_event_start|date:'d. b' }}
+                                    {{ attendance|get_if_waiting:request.user }}
+                                </time>
+
+
+                                </span>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
                 <div class="col">
                     <div class="row">
                         {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
