@@ -87,8 +87,21 @@ function submitFeedback() {
 
     // Send JSON post request
     $.post("/api/feedback", {ANONYMOUS: anonymous, DATA: text, csrfmiddlewaretoken: csrftoken}
-    ).fail(function() {
-      alert("Noe gikk galt og forslaget ble ikke sent.");
+    ).fail(function(response) {
+        if (response.responseText === 'ERR_WEBHOOK_MISSING') {
+            alert("Forslaget ble ikke sendt fordi Webhook mangler.\n" +
+                "Hvis du ser denne feilmeldingen på hybrida.no, kontakt vevsjef umiddelbart.\n" +
+                "Hvis du er utvikler i vevkom og ser dette lokalt, sjekk nettleserkonsollen.\n"
+            );
+            console.log(
+                "Slack Webhook URL ligger ikke i kode av sikkerhetsgrunner.\n" +
+                "Innholdet i POST-requesten som sendes til slack ble sendt til stdout, " +
+                "altså ouptut på terminalen hvor du kjører server.\n" +
+                "Hvis du trenger at feedback fra lokal server ender i Slack, kontakt vevsjef for hjelp."
+            );
+        } else {
+            alert("Noe gikk galt og forslaget ble ikke sent.");
+        }
     }).done(function() {
       $content.val(""); // Reset text
       toggleFeedbackBox(); // Hide box
