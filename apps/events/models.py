@@ -75,6 +75,15 @@ class Attendance(models.Model):
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
 
+    def get_event_name(self):
+        return self.event.title
+
+    def get_event_start(self):
+        return self.event.event_start
+
+    def get_event_pk(self):
+        return self.event.pk
+
     def signup_closed(self):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
 

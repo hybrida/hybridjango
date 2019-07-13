@@ -41,7 +41,6 @@ def feedback(request):
                 URI(subject) + '&body=' + URI(bodyPreText + data)
 
             # Static information
-            postURL = 'https://hooks.slack.com/services/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' # Test channel: 'https://hooks.slack.com/services/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'
             authorIcon = 'https://slack-files.com/T0CAJ0U4A-F2WLMK087-7d8bf05908'
             fallback = 'Feedback received'
             color = 'good'
@@ -61,9 +60,16 @@ def feedback(request):
                 ]
             }
 
-            slackResponse = requests.post(postURL, data=json.dumps(jsonObj))
-            if slackResponse.status_code == requests.codes.ok:
-                return HttpResponse("ok")
+            try:
+                from hybridjango.utils.secrets import SLACK_WEBHOOK_URL
+                slackResponse = requests.post(SLACK_WEBHOOK_URL, data=json.dumps(jsonObj))
+                if slackResponse.status_code == requests.codes.ok:
+                    return HttpResponse("ok")
+            except ImportError as e:
+                print(e.msg)
+                print('No slack webhook URL found, dumping feedback to stdout')
+                print(jsonObj)
+                return HttpResponseBadRequest("ERR_WEBHOOK_MISSING")
 
     return HttpResponseBadRequest("invalid request")
 
