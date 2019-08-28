@@ -111,6 +111,7 @@
                     </table>
                 </div>
                 <br>
+                {% if request.user == hybrid %}
                 <div class="list" >
                     {% for attendance in attendance_list_chronological%}
 
@@ -129,6 +130,7 @@
                         </div>
                     {% endfor %}
                 </div>
+                {% endif %}
                 <div class="col">
                     <div class="row">
                         {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
