@@ -297,3 +297,12 @@ class KTVReportView(LoginRequiredMixin, AboutView):
         context['reports'] = Ktv_report.objects.all().order_by('date').reverse()
         context['active_page'] = 'tillitsvalgte'
         return context
+
+
+# TODO fjern senere - dette er en vits som ble laget for en styregave
+def OnlinePictureView(request):
+    return render(
+        request,
+        'staticpages/online_picture.html',
+        {'image': Hybrid.objects.get(username="OnlineHybridDyr").image}
+    )
