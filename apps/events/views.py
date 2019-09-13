@@ -130,10 +130,10 @@ def SendAdmittedMail(hybrid, attendance):
         )
 
 def SendMarkMail(hybrid, mark):
-    mail = ['{}@stud.ntnu.no'.format(hybrid.username)]
-    if hybrid.email: mail = hybrid.email
+    mail = [hybrid.email if hybrid.email else '{}@stud.ntnu.no'.format(hybrid.username)]
     successful = send_mail(
-        'Du er tildelt {value} prikk',
+        'Du er tildelt {value} prikk'
+                .format(value = mark.value),
         'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga;\n {reason}\n'
         'Arrangementet det er snakk om er {title}\n'
         'Denne prikken vil du ha til og med {expireDate}\n'
@@ -141,7 +141,6 @@ def SendMarkMail(hybrid, mark):
         '{urlEvent}\n'
         '{urlPrikker}'.format(urlEvent="https://hybrida.no/hendelser/" + str(mark.event.pk),
             urlPrikker="https://hybrida.no/hendelser/prikker",
-            value = mark.value,
             name = hybrid.get_full_name(),
             title = mark.event.title,
             reason = mark.reason,
