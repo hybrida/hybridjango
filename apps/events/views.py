@@ -272,7 +272,6 @@ def unattended(request, pk):
             for participant in participants:
                 if participant not in users:
                     Mark.objects.get_or_create(event=event, recipient=participant, defaults={'value': 1})
-                    print(participant.full_name)
 
 
     return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid, 'marks': marks})
