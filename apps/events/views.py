@@ -255,6 +255,7 @@ def unattended(request, pk):
     attendance = Attendance.objects.filter(event=event)
     appearance = Appearances.objects.filter(event=event).first()
     has_rfid = Appearances.objects.filter(event=event).exists()
+    marks = Mark.objects.filter(event=event).all()
     users = appearance.users.all()
 
     if request.method == 'POST':
@@ -264,10 +265,17 @@ def unattended(request, pk):
             participant = Hybrid.objects.get(pk=pk)
             Mark.objects.get_or_create(event=event, recipient=participant, defaults={'value': 1})
 
+        if 'give_mark_all' in request.POST:
+            pk = request.POST.get('give_mark_all')
+            print(pk)
+            participants=Attendance.objects.get(event=event).get_signed()
+            for participant in participants:
+                if participant not in users:
+                    Mark.objects.get_or_create(event=event, recipient=participant, defaults={'value': 1})
+                    print(participant.full_name)
 
 
-    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid})
-
+    return render(request, "rfid/unattended_list.html", {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid, 'marks': marks})
 
 class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, generic.base.View):
     def get(self, request, *args, **kwargs):

@@ -12,7 +12,14 @@
                     <th>Kjønn</th>
                     <th>Matpreferanser</th>
                     <th>Epost</th>
-                    <th>Prikk</th>
+                    <th>Gi Prikker til alle
+                        <form method="post">
+                        {% csrf_token %}
+                            <button class="button" onclick="return confirm('gi alle brukere prikk?')" title="gi alle prikker!" name="give_mark_all" type="submit" value="{{ event.title }}">
+                                <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -31,10 +38,10 @@
                             </a>
                         </td>
                         {% if not participant|got_mark:event %}
-                        <td>
+                        <td> Gi prikk
                             <form method="post">
                                     {% csrf_token %}
-                                    <button class="button" onclick="return confirm('Er du sikker på at du vil gi mark til denne brukeren?')" name="givemark" type="submit" value="{{ participant.pk }}">
+                                    <button class="button" onclick="return confirm('Er du sikker på at du vil gi mark til denne brukeren?')"title="gi prikk til +{{ participant.get_full_name }}" name="givemark" type="submit" value="{{ participant.pk }}">
                                         <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                                     </button>
                             </form>
