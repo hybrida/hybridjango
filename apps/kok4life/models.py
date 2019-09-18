@@ -3,6 +3,7 @@ from django.db import models
 from apps.registration.models import Hybrid
 
 
+# TODO: Subject description, other information?
 class Subject(models.Model):
     name = models.CharField(max_length=50)
 

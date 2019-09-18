@@ -4,6 +4,8 @@ from .models import File, Subject
 from .forms import KokFileForm, KokSubjectForm
 
 
+# TODO: Login required for forms?
+# TODO: PEP 8?
 def fileForm(request):
     if request.method == 'POST':
         form = KokFileForm(request.POST, request.FILES)

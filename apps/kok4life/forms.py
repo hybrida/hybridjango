@@ -11,4 +11,5 @@ class KokFileForm(forms.ModelForm):
 class KokSubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
+        # TODO: Excess code?
         fields = ['name']
