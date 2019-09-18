@@ -38,7 +38,6 @@ class Profile(LoginRequiredMixin, generic.DetailView):
        #     return redirect('profile', hybrid)
 
 
-
 class EditProfile(generic.UpdateView):
     model = Hybrid
     slug_field = 'username'
@@ -120,6 +119,5 @@ def complete_registration(request, uidb64, token):
     else:
         form = None
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
-
 
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row space-below">
+            <div id="content-col" class="col-md-10 space-above">
+                {% block unstyled_text %}
+                    <div class="white-box" id="text-box">
+                        {% block text %}
+                        {% endblock text %}
+                    </div>
+                {% endblock unstyled_text %}
+            </div>
+            <div id="sidebar-col" class="col-md-2 space-above">
+                {% block unstyled_sidebar %}
+                    <div class="white-box" id="sidebar">
+                        {% block sidebar %}
+                        {% endblock sidebar %}
+                    </div>
+                {% endblock unstyled_sidebar %}
+                {% block sidebar_extra %}
+                {% endblock sidebar_extra %}
+            </div>
+            {% block extra %}
+            {% endblock extra %}
+        </div>
+    </div>
+{% endblock content %}

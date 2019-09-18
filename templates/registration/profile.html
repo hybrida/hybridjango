@@ -1,4 +1,5 @@
 {% extends 'standard_wide.html' %}
+{% load mark_extras %}
 {% load static %}
 {% load template_filters %}
 {% block title %}{{ hybrid.hybridname }}{% endblock title %}
@@ -106,6 +107,12 @@
                             <tr>
                                 <td>Spesialisering</td>
                                 <td>{{ hybrid.specialization.name }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if user == hybrid %}
+                            <tr>
+                                <td>Prikker</td>
+                                <td>{{ user|num_marks }}</td>
                             </tr>
                         {% endif %}
                     </table>
