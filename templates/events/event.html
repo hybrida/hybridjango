@@ -281,9 +281,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <i style="color: red; font-size: 12px">Ordinær avmeldingsfrist {{ attendance.o.signup_end }}</i> <br>
+                                <i style="color: red; font-size: 12px">Ordinær
+                                    avmeldingsfrist {{ attendance.o.signup_end }}</i> <br>
                                 {% if not attendance.o.signup_end == attendance.get_signoff_close %}
-                                    <i style="color: red; font-size: 12px">Sen avmeldingsfrist {{ attendance.get_signoff_close }}</i>
+                                    <i style="color: red; font-size: 12px">Sen
+                                        avmeldingsfrist {{ attendance.get_signoff_close }}</i>
                                 {% endif %}
 
 
@@ -321,9 +323,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <i style="color: red; font-size: 12px">Ordinær avmeldingsfrist {{ attendance.o.signup_end }}</i> <br>
+                                <i style="color: red; font-size: 12px">Ordinær
+                                    avmeldingsfrist {{ attendance.o.signup_end }}</i> <br>
                                 {% if not attendance.o.signup_end == attendance.get_signoff_close %}
-                                    <i style="color: red; font-size: 12px">Sen avmeldingsfrist {{ attendance.get_signoff_close }}</i>
+                                    <i style="color: red; font-size: 12px">Sen
+                                        avmeldingsfrist {{ attendance.get_signoff_close }}</i>
                                 {% endif %}
 
                             {% elif attendance.is_invited and not attendance.goes_on_secondary and not attendance.too_many_marks %}
@@ -334,7 +338,8 @@
                             {% elif attendance.is_invited and attendance.goes_on_secondary %}
                                 <input name="action" value="joinSecondary" type="hidden">
                                 <button type="submit" class=" btn btn-primary btn-block">
-                                    Meld meg på sekundærventelisten <br> Du har {{ attendance.number_of_marks }} prikker
+                                    Meld meg på sekundærventelisten <br> Du har {{ attendance.number_of_marks }}
+                                    prikk{% if attendance.number_of_marks != 1 %}er{% endif %}
                                 </button>
 
                             {% elif attendance.is_invited and attendance.too_many_marks %}
@@ -374,10 +379,12 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <p>Hvis du melder deg av mister du plassen din{% if attendance.is_waiting %} i
+                                            <p>Hvis du melder deg av mister du plassen din{% if attendance.is_waiting %}
+                                                i
                                                 køen{% endif %} </p>
                                             {% if not attendance.waiting_exists %}
-                                                <p>Det er ingen på ventelisten, hvis du melder deg av får du én prikk</p>
+                                                <p>Det er ingen på ventelisten, hvis du melder deg av får du én
+                                                    prikk</p>
                                             {% endif %}
                                             <p>Er du sikker?</p>
                                             <p class="debug-url"></p>
@@ -391,8 +398,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <i style="color: red; font-size: 12px">Ordinær avmeldingsfrist var {{ attendance.o.signup_end }}</i> <br>
-                            <i style="color: red; font-size: 12px">Sen avmeldingsfrist {{ attendance.get_signoff_close }}</i>
+                            <i style="color: red; font-size: 12px">Ordinær avmeldingsfrist
+                                var {{ attendance.o.signup_end }}</i> <br>
+                            <i style="color: red; font-size: 12px">Sen
+                                avmeldingsfrist {{ attendance.get_signoff_close }}</i>
                         </form>
                     {% endif %}
                 </div>
