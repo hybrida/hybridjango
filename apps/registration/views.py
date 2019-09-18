@@ -14,6 +14,7 @@ from django.views import generic
 from apps.achievements.models import Badge
 from .forms import HybridForm
 from .models import Hybrid, RecoveryMail
+from apps.events.models import Event, Attendance
 
 
 class Profile(LoginRequiredMixin, generic.DetailView):
@@ -21,10 +22,13 @@ class Profile(LoginRequiredMixin, generic.DetailView):
     slug_field = 'username'
     template_name = 'registration/profile.html'
 
-    def get_badge_context_data(self, **kwargs):
-        context = super(Profile, self).get_context_data(**kwargs)
-        badges = Badge.objects.all()
-        context['badges'] = badges
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        attendance_list_chronological = []
+        for attendance in Attendance.objects.all():
+            if (attendance.is_waiting(self.request.user) or attendance.is_signed(self.request.user)) and attendance.event.event_start > timezone.now():
+                attendance_list_chronological.append(attendance)
+        context['attendance_list_chronological'] = attendance_list_chronological
         return context
 
    # def post(self, request, *args, **kwargs): midlertidig fjernet

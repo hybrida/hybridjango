@@ -17,7 +17,7 @@ from django.core.mail import send_mail
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
-from apps.registration.models import Hybrid
+from apps.registration.models import Hybrid, ContactPerson
 from apps.registration.models import get_graduation_year
 from apps.staticpages.models import BoardReport, Protocol, Ktv_report
 from hybridjango.settings import STATIC_FOLDER
@@ -102,16 +102,24 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+        board_search_names = [
+            'leder',
+            'nestleder',
+            'skattmester',
+            'festivalus',
+            'bksjef',
+            'vevsjef',
+            'jentekomsjef'
+        ]
+        # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
+        board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
         context.update({
-            'leder': Hybrid.objects.get(username='andrsly'),
-            'nestleder': Hybrid.objects.get(username='martahal'),
-            'skattmester': Hybrid.objects.get(username='martwan'),
-            'bksjef': Hybrid.objects.get(username='helenesm'),
-            'festivalus': Hybrid.objects.get(username='jakobdr'),
-            'vevsjef': Hybrid.objects.get(username='sondremb'),
-            'jentekomsjef': Hybrid.objects.get(username='eliserb'),
-            'redaktor': Hybrid.objects.get(username='konradvt'),
-        })  # Can be initialized only on startup (using middleware for example) if it becomes too costly
+            # map titles to ContactPerson objects, used instead of board_dict.values() to preserve order
+            'board': [*map(board_dict.get, board_search_names)],
+            # ** operator unpacks board dict, adding its mapped contents to the context dict
+            **board_dict,
+            'redaktor': ContactPerson.objects.get(search_name='redaktor')
+        })
         return self.render_to_response(context)
 
 
