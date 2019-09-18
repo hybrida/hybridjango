@@ -18,7 +18,18 @@ def get_evaluation_form(request):
             form = EvaluationForm(request.POST)
             if form.is_valid():
                 application = form.save(commit=False)
+                application.author = request.user
                 application.save()
+                course =Course.objects.filter(pk=application.course.pk).first()
+                course.number_of_evaluations = Evaluation.objects.filter(course=course).__len__()
+                average = 0
+                for i in Evaluation.objects.filter(course=course):
+                    average += i.score
+                print(Evaluation.objects.filter(course=course).__len__())
+
+                print(average)
+                course.average_score = average/(Evaluation.objects.filter(course=course).__len__())
+                course.save()
                 return redirect('evaluation:course_views')
 
         return render(request, 'evaluation/evaluation_form.html', {
