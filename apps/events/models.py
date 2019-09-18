@@ -280,6 +280,14 @@ def closest_end_of_semester_date():
     return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
 
 
+'''Time and date the mark will delete itself'''
+
+
+def mark_end_default():
+    return datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
+                                          datetime.datetime.min.time())
+
+
 '''A model that contains a mark given to users for transgressions in accordance with the rules regarding events'''
 
 
@@ -294,9 +302,7 @@ class Mark(models.Model):
     recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
-    end = models.DateTimeField(
-        default=datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
-                                          datetime.datetime.min.time()))
+    end = models.DateTimeField(default=mark_end_default)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
