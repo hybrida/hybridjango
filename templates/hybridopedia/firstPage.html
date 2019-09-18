@@ -1,0 +1,54 @@
+{% extends 'standard_sidebar.html' %}
+
+{% block text %}
+
+<!-- TODO: Check grammatical and spelling errors -->
+<div>
+    <h2 style="color:royalblue" >HYBRIDAS OFFISIELLE (BETA) KOKSIDE</h2>
+    <p>Her er kan du legge inn din egen kok, og enda viktiere finne noen andre sin
+    <a href="https://www.instagram.com/p/BqHav09FTRS" style="color:black;font-weight: bold;">kok!<br> </a>
+    For å bruke denne siden trenger du bare å klikke på faget du skal koke i og finne riktig lf. <br>
+        <br>
+    Hvis du vil legge til legge til et nytt fag: <br>
+    - Trykk på "Legg til ny kok" til høyre. <br>
+    - Skriv inn fagkode og fagnavn "FFF#### - Fagnavn" <br>
+    - Trykk på lagre og du er good! <br>
+        <br>
+    Hvis du skal legge til kok i et fag: <br>
+    - Trykk på "Legg til nytt fag" til høyre.<br>
+    - Skriv inn navn på øving/innlevering.<br>
+    - Velg riktig fil fra pc'n din. <br>
+    - Fra Subject velger du det faget som passer. <br>
+    - Trykk lagre og se ditt mesterverk puttet til god nytte for alle din medhybrider <3
+    </p>
+
+
+    <ul>
+
+        {% for Subject in subjects %}
+            <li>
+
+                <a href="fag/{{ Subject.pk }}" style="color:royalblue">{{ Subject.name }}</a>
+
+            </li>
+
+
+        {% endfor %}
+
+
+    </ul>
+
+</div>
+
+
+
+{% endblock text %}
+
+{% block sidebar %}
+
+         <a class="btn btn-default" href="{% url 'kok:fileForm' %}">Legg til ny kok</a>
+    <br>
+    <br>
+         <a class="btn btn-default" href="{% url 'kok:subjectForm' %}">Legg til nytt fag</a>
+
+{% endblock sidebar %}
