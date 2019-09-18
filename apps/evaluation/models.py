@@ -33,8 +33,8 @@ class Course(models.Model):
     semester = models.CharField(choices=Semesters, max_length=250, blank=False, default="")
     number_of_evaluations = models.IntegerField(default=0, blank=True)
 
-    def __str__self(self):
-        return str(self.name)
+    def __str__(self):
+        return self.name
 
 
 class Evaluation(models.Model):
@@ -68,5 +68,5 @@ class Evaluation(models.Model):
     )
     profile = models.CharField(choices=Profiles, max_length=250, blank=False, default="")
 
-    def __str__self(self):
-        return str(self.title)
+    def __str__(self):
+        return self.name

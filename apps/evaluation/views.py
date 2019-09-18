@@ -19,7 +19,7 @@ def get_evaluation_form(request):
             if form.is_valid():
                 application = form.save(commit=False)
                 application.save()
-                return redirect('internside:index')
+                return redirect('evaluation:course_views')
 
         return render(request, 'evaluation/evaluation_form.html', {
             'form': form,
