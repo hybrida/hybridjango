@@ -1,0 +1,25 @@
+{% extends 'standard_sidebar.html' %}
+{% load static %}
+{% block text %}
+
+    <!-- Include author -->
+<div>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="/uploads/{{ file.file }} ">{{ file.name }}</a>
+                {# : {{ file.author }}</a>#}
+            </li>
+        {% endfor %}
+
+    </ul>
+
+
+</div>
+
+{% endblock text%}
+{% block sidebar %}
+
+         <a class="btn btn-default" href="{% url 'kok:fileForm' %}">Legg til ny kok</a>
+
+{% endblock sidebar %}
