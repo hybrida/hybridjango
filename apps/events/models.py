@@ -25,7 +25,7 @@ class Event(models.Model):
     hidden = models.BooleanField(default=False)
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
-    signoff_close = models.PositiveIntegerField(null=True, blank=True)
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
@@ -346,4 +346,4 @@ class MarkPunishment(models.Model):
     goes_on_secondary = models.PositiveIntegerField(
         default=0)  # How many marks to put a user on a secondary waitinglist
     too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
-    signoff_close = models.PositiveIntegerField(null=True, blank=True)  # How many hours before event start does signoff close
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)  # How many hours before event start does signoff close
