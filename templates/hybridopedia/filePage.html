@@ -7,7 +7,7 @@
     <ul>
         {% for file in files %}
             <li>
-                <a href="/uploads/{{ file.file }} ">{{ file.name }}</a>
+                <a href="/uploads/{{ file.file }} ">{{ file.name }} lagt ut av: {{ file.author }}</a>
                 {# : {{ file.author }}</a>#}
             </li>
         {% endfor %}
@@ -20,6 +20,6 @@
 {% endblock text%}
 {% block sidebar %}
 
-         <a class="btn btn-default" href="{% url 'kok:fileForm' %}">Legg til ny kok</a>
+         <a class="btn btn-default" href="{% url 'hybridopedia:fileForm' %}">Legg til ny kok</a>
 
 {% endblock sidebar %}
