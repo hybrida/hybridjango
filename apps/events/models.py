@@ -241,7 +241,7 @@ class Attendance(models.Model):
         return self.get_signoff_close() > timezone.now()
 
     def late_signoff_mark(self, hybrid):
-        mark = Mark.objects.create(recipient=hybrid, value=1, event=self.event,
+        mark = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
                                    reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
         return mark
 
