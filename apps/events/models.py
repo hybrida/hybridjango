@@ -25,7 +25,7 @@ class Event(models.Model):
     hidden = models.BooleanField(default=False)
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
-    signoff_close = models.PositiveIntegerField(null=True, blank=True)
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
@@ -241,7 +241,7 @@ class Attendance(models.Model):
         return self.get_signoff_close() > timezone.now()
 
     def late_signoff_mark(self, hybrid):
-        mark = Mark.objects.create(recipient=hybrid, value=1, event=self.event,
+        mark = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
                                    reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
         return mark
 
@@ -311,9 +311,8 @@ class Mark(models.Model):
 
     # Checks if the mark has passed it's expiredate, if so it deletes it self
     def check_mark(self):
-        time = self.end
-        if datetime.now >= time:
-            self.delete(self)
+        if datetime.datetime.now() >= self.end:
+            self.delete()
 
 
 class Delay(models.Model):
@@ -346,4 +345,4 @@ class MarkPunishment(models.Model):
     goes_on_secondary = models.PositiveIntegerField(
         default=0)  # How many marks to put a user on a secondary waitinglist
     too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
-    signoff_close = models.PositiveIntegerField(null=True, blank=True)  # How many hours before event start does signoff close
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)  # How many hours before event start does signoff close
