@@ -311,9 +311,8 @@ class Mark(models.Model):
 
     # Checks if the mark has passed it's expiredate, if so it deletes it self
     def check_mark(self):
-        time = self.end
-        if datetime.now >= time:
-            self.delete(self)
+        if datetime.datetime.now() >= self.end:
+            self.delete()
 
 
 class Delay(models.Model):
