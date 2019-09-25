@@ -43,11 +43,13 @@
     {% endfor %}
     </div>
 
+
     <!-- sidebar inlogging for the order of the Griff members -->
-    {% if perms.ridder.add_ridder %}
         {% block sublinks %}
+            {% if perms.griffensorden.add_ridder %}
                 <a href="{% url 'admin:griffensorden_ridder_add'%}">Ridder Admin</a>
+            {% endif %}
         {% endblock %}
-    {% endif %}
+
 
 {% endblock text %}

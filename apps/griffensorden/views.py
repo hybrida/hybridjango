@@ -28,14 +28,6 @@ class GriffenView (TemplateResponseMixin, ContextMixin, View):
         context['after_pages'] = after_pages
 
         context.update({
-            'leder': Hybrid.objects.get(username='martiaks'),
-            'nestleder': Hybrid.objects.get(username='sigribra'),
-            'skattmester': Hybrid.objects.get(username='shahiths'),
-            'bksjef': Hybrid.objects.get(username='ludviglj'),
-            'festivalus': Hybrid.objects.get(username='njknudse'),
-            'vevsjef': Hybrid.objects.get(username='anstra'),
-            'jentekomsjef': Hybrid.objects.get(username='andrsly'),
-            'redaktor': Hybrid.objects.get(username='amaliams'),
             'Ridder': Ridder.objects.all(),
             'Year': year}
         )
