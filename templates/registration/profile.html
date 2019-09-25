@@ -1,4 +1,5 @@
 {% extends 'standard_wide.html' %}
+{% load mark_extras %}
 {% load static %}
 {% load template_filters %}
 {% block title %}{{ hybrid.hybridname }}{% endblock title %}
@@ -108,9 +109,16 @@
                                 <td>{{ hybrid.specialization.name }}</td>
                             </tr>
                         {% endif %}
+                        {% if user == hybrid %}
+                            <tr>
+                                <td>Prikker</td>
+                                <td>{{ user|num_marks }}</td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div>
                 <br>
+                {% if request.user == hybrid %}
                 <div class="list" >
                     {% for attendance in attendance_list_chronological%}
 
@@ -129,6 +137,7 @@
                         </div>
                     {% endfor %}
                 </div>
+                {% endif %}
                 <div class="col">
                     <div class="row">
                         {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}

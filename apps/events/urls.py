@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^ny$', EventCreate.as_view(), name='new_event'),
     url(r'^(?P<pk>[0-9]+)/kommenter$', comment_event, name='comment_event'),
     url(r'^(?P<pk>[0-9]+)/slett_kommentar$', delete_comment_event, name='delete_comment_event'),
+    url(r'^prikker$', MarkView.as_view(template_name='events/mark.html'), name='mark'),
 ]

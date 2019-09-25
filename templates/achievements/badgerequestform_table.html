@@ -1,0 +1,44 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+
+    <div>
+<table class="table table-responsive sortable table-hover">
+    <thead>
+        <tr style="background-color: #428bca; height: 30px; color: white;">
+            <th class="col-xs-2">Bruker</th>
+            <th class="col-xs-2">Badge</th>
+            <th class="col-xs-3">Begrunnelse</th>
+
+
+        </tr>
+    </thead>
+
+    <tbody class="list">
+    {% for BadgeRequest in badge_forms %}
+    <tr>
+        <td>{{ BadgeRequest.user}}</td>
+        <td>{{ BadgeRequest.badge }}</td>
+        <td>{{ BadgeRequest.reason }}</td>
+        <td>
+            <form action="{% url 'badgerequest-delete' BadgeRequest.id %}" method="post" >
+                {% csrf_token %}
+                <input type="hidden" value="{{ BadgeForm.id }}" name="badgeform_id">
+                <button type="submit" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-trash"></span></button>
+            </form>
+        </td>
+    </tr>
+
+
+    {% endfor %}
+
+    </tbody>
+</table></div>
+{% endblock text %}
+{% block sidebar %}
+<p>Synes du at du fortjener en badge, da er det bare å kreve en her så ser vi på det</p>
+
+
+{% endblock sidebar %}
