@@ -6,6 +6,7 @@ from apps.registration.models import Hybrid
 # TODO: Subject description, other information?
 class Subject(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    author = models.ForeignKey(Hybrid, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name

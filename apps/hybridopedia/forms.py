@@ -17,6 +17,7 @@ class HybridopediaFileForm(forms.ModelForm):
 class HybridopediaSubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
+        exclude = ['author']
         fields = ['name']
 
     def __init__(self, *args, **kwargs):

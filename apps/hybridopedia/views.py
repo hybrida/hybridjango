@@ -23,6 +23,7 @@ def fileForm(request):
 def subjectForm(request):
     if request.method == 'POST':
         form = HybridopediaSubjectForm(request.POST)
+        form.instance.author = request.user
         if form.is_valid():
             form.save()
             return redirect('hybridopedia:firstPage')
