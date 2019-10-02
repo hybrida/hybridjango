@@ -93,7 +93,6 @@ def badge_request_data(request, badge_id):
         }
     return JsonResponse(data)
 
-
 class BadgeView(TemplateResponseMixin, ContextMixin, View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

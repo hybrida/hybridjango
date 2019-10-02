@@ -18,6 +18,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import RedirectView
+from django.urls import path
 
 from apps.staticpages.views import FrontPage
 
@@ -45,6 +46,8 @@ urlpatterns = [
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),
                   url(r'^vevkom/', include('apps.vevkom.urls'), name='vevkom'),
+                 # url(r'^update_k/', include('apps.update_k.urls'), name='update_k'),
+
                   # url(r'^butikk/', include('apps.merchandise.urls'), name='merchandise')
 
                   # TODO temprary, remove after 32. general assembly  2019-03-27
