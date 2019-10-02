@@ -47,7 +47,7 @@
     <!-- sidebar inlogging for the order of the Griff members -->
         {% block sublinks %}
             {% if perms.griffensorden.add_ridder %}
-                <a href="{% url 'admin:griffensorden_ridder_add'%}">Ridder Admin</a>
+                <a href="{% url 'griffadmin'%}">Ridder Admin</a>
             {% endif %}
         {% endblock %}
 

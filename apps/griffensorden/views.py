@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Ridder
+from .forms import *
 from django.urls import resolve
 from apps.registration.models import Hybrid
 from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
@@ -48,3 +49,17 @@ aboutpages = [
     ('for_companies', "For bedrifter"),
     ('contact_us', "Kontakt oss"),
 ]
+
+def AddRidder(request):
+    form = RidderForm(request.POST)
+    if request.method == 'POST':
+        form = RidderForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            return redirect('griffensorden')
+
+    return render(request, 'griffensorden/griffadmin.html', {
+        'form':form,
+    })
