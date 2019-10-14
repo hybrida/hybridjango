@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'tinymce',
     'apps.vevkom',
     'apps.merchandise',
-    'hybridjango'
+    'hybridjango',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

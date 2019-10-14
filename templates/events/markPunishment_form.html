@@ -1,0 +1,29 @@
+{% extends 'standard_sidebar.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <h3>Endre konsekvensene for Prikksystemet</h3>
+
+    <div class="card-body">
+        {% crispy form %}
+    </div>
+{% endblock text %}
+{% block sidebar %}
+    <h3>Hvordan fungerer Prikksystemet?</h3>
+    <br>
+    <p>
+        Si det du
+    </p>
+{% endblock sidebar %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+    </script>
+{% endblock script %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+{% endblock %}

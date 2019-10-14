@@ -316,7 +316,7 @@ class Mark(models.Model):
 
 
 class Delay(models.Model):
-    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+',
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name="has_delays",
                                    default=None)
     marks = models.PositiveIntegerField(default=0)
     minutes = models.PositiveIntegerField(default=0)
@@ -330,7 +330,7 @@ class Delay(models.Model):
 
 
 class Rule(models.Model):
-    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name='+',
+    punishment = models.ForeignKey('MarkPunishment', blank=True, on_delete=models.CASCADE, related_name="has_rules",
                                    default=None)
     rule = models.CharField(max_length=500, blank=True, default='')
 

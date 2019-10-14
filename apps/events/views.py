@@ -1,17 +1,18 @@
 import csv
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
+from django.db import transaction
 import datetime
 
-from apps.events.forms import EventForm
+from .forms import *
 from apps.rfid.models import Appearances
-from .models import Event, EventComment, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Rule, closest_end_of_semester_date
+from .models import *
 from apps.registration.models import Hybrid
 
 
@@ -295,4 +296,105 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
 
         return self.render_to_response(context)
 
+
+class MarkPunishmentEdit(generic.UpdateView):
+    model = MarkPunishment
+    template_name = 'events/markPunishment_form.html'
+    form_class = MarkPunishmentForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(MarkPunishmentEdit, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['rules'] = RuleFormSet(self.request.POST, instance=self.object)
+            data['delays'] = DelayFormSet(self.request.POST, instance=self.object)
+        else:
+            data['rules'] = RuleFormSet(instance=self.object)
+            data['delays'] = DelayFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        rules = context['rules']
+        delays = context['delays']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+            if rules.is_valid():
+                rules.instance = self.object
+                rules.save()
+            if delays.is_valid():
+                delays.instance = self.object
+                delays.save()
+        return super(MarkPunishmentEdit, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('edit_mark_punishment', kwargs={'pk': self.object.pk})
+#
+#
+# class RuleCreate(PermissionRequiredMixin, generic.CreateView):
+#     permission_required = 'events.add_rule'
+#     model = Rule
+#     form_class = RuleForm
+#
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         return super(RuleCreate, self).form_valid(form)
+#
+#
+# class RuleEdit(PermissionRequiredMixin, generic.UpdateView):
+#     permission_required = 'events.change_rule'
+#     model = Rule
+#     form_class = RuleForm
+#
+#
+# class RuleDelete(PermissionRequiredMixin, generic.DeleteView):
+#     permission_required = 'events.delete_rule'
+#     model = Rule
+#     success_url = reverse_lazy('edit_mark_punishment')
+#
+#
+# class DelayCreate(PermissionRequiredMixin, generic.CreateView):
+#     permission_required = 'events.add_delay'
+#     model = Delay
+#     form_class = DelayForm
+#
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         return super(DelayCreate, self).form_valid(form)
+#
+#
+# class DelayEdit(PermissionRequiredMixin, generic.UpdateView):
+#     permission_required = 'events.change_delay'
+#     model = Delay
+#     form_class = DelayForm
+#
+#
+# class DelayDelete(PermissionRequiredMixin, generic.DeleteView):
+#     permission_required = 'events.delete_delay'
+#     model = Delay
+#     success_url = reverse_lazy('edit_mark_punishment')
+
+
+
+    # markPunishment = MarkPunishment.objects.all().get(pk=pk)
+    # rules = Rule.objects.filter(punishment=MarkPunishment.objects.filter(pk=pk))
+    # context = {
+    #     'rules': rules,
+    # }
+    #
+    # if request.POST:
+    #     form = MarkPunishmentForm(request.POST, instance= markPunishment)
+    #     if form.is_valid():
+    #         markPunishment = form.save(commit=False)
+    #         markPunishment.goes_on_secondary = form.cleaned_data['goes_on_secondary']
+    #         markPunishment.too_many_marks = form.cleaned_data['too_many_marks']
+    #         markPunishment.signoff_close = form.cleaned_data['signoff_close']
+    #         markPunishment.save()
+    #         return redirect("edit_mark_punishment", pk)
+    # form = MarkPunishmentForm(instance= markPunishment)
+    # context.update({
+    #     'form': form,
+    # })
+    # return render(request, "events/markPunishment_form.html", context)
 
