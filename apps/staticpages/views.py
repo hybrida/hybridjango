@@ -267,6 +267,7 @@ class DeleteApplication(DeleteView):
     model = Application
     success_url =  reverse_lazy('application_table')
 
+
 @login_required
 def AddComApplication(request):
         form = CommiteApplicationForm(request.POST)
@@ -281,6 +282,7 @@ def AddComApplication(request):
         return render(request, 'staticpages/comapplication_form.html', {
             'form': form,
         })
+
 
 def NewStudent(request):
 
@@ -297,3 +299,12 @@ class KTVReportView(LoginRequiredMixin, AboutView):
         context['reports'] = Ktv_report.objects.all().order_by('date').reverse()
         context['active_page'] = 'tillitsvalgte'
         return context
+
+
+# TODO fjern senere - dette er en vits som ble laget for en styregave
+def OnlinePictureView(request):
+    return render(
+        request,
+        'staticpages/online_picture.html',
+        {'image': Hybrid.objects.get(username="OnlineHybridDyr").image}
+    )
