@@ -4,10 +4,11 @@
 
     <!-- Include author -->
 <div>
+    <h1>Fag: {{ subject.first|upper }}</h1>
     <ul>
         {% for file in files %}
             <li>
-                <a href="/uploads/{{ file.file }} ">{{ file.name }} lagt ut av: {{ file.author }}</a>
+                <a href="/uploads/{{ file.file }} ">{{ file }} lagt ut av: {{ file.author }}</a>
                 {# : {{ file.author }}</a>#}
             </li>
         {% endfor %}

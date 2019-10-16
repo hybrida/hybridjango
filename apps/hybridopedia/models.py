@@ -3,7 +3,7 @@ from django.db import models
 from apps.registration.models import Hybrid
 
 
-# TODO: Subject description, other information?
+# TODO: Split name into course_id and name, schema migration, data migration
 class Subject(models.Model):
     name = models.CharField(max_length=50, unique=True)
     author = models.ForeignKey(Hybrid, on_delete=models.SET_NULL, null=True)
