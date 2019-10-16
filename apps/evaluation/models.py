@@ -69,4 +69,4 @@ class Evaluation(models.Model):
     profile = models.CharField(choices=Profiles, max_length=250, blank=False, default="")
 
     def __str__(self):
-        return self.name
+        return self.title

@@ -32,7 +32,7 @@
             {% for course in courses %}
                 <tr id="row{{ course.id }}" class="row">
                     <td class="text-left; name; col-xs-3" style="font-size:x-large;">
-                        <a href="{% url 'evaluation:get_course' course.pk %}" target="_blank"
+                        <a href="{% url 'evaluation:get_course' course.pk %}"
                             style="color: #005675; font-size:16px">{{ course.name }}</a>
                     </td>
                     <td class="text-left; responsible; col-xs-3"> {{ course.course_code }}</td>
