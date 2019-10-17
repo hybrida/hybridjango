@@ -14,7 +14,6 @@ class EventCommentForm(forms.ModelForm):
 
 
 class EventForm(forms.ModelForm):
-
     class Meta:
         exclude = [
             'author',
@@ -28,7 +27,6 @@ class EventForm(forms.ModelForm):
 
 
 class MarkPunishmentForm(forms.ModelForm, BootstrapFormMixin):
-
     class Meta:
         model = MarkPunishment
         exclude = [
@@ -49,18 +47,20 @@ class MarkPunishmentForm(forms.ModelForm, BootstrapFormMixin):
                 Field('goes_on_secondary'),
                 Field('too_many_marks'),
                 Field('signoff_close'),
-                Fieldset('Add rules',
-                    Formset('rules')),
+                HTML("<br>"),
+                HTML("<br>"),
                 Fieldset('Add delays',
-                    Formset('delays')),
+                         Formset('delays')),
+                HTML("<br>"),
+                Fieldset('Add rules',
+                         Formset('rules')),
                 HTML("<br>"),
                 ButtonHolder(Submit('submit', 'save')),
-                )
             )
+        )
 
 
 class RuleForm(forms.ModelForm, BootstrapFormMixin):
-
     class Meta:
         model = Rule
         exclude = [
@@ -71,11 +71,10 @@ class RuleForm(forms.ModelForm, BootstrapFormMixin):
 RuleFormSet = inlineformset_factory(
     MarkPunishment, Rule, form=RuleForm,
     fields=['rule'], extra=1, can_delete=True
-    )
+)
 
 
 class DelayForm(forms.ModelForm, BootstrapFormMixin):
-
     class Meta:
         model = Delay
         exclude = [
@@ -86,4 +85,4 @@ class DelayForm(forms.ModelForm, BootstrapFormMixin):
 DelayFormSet = inlineformset_factory(
     MarkPunishment, Delay, form=DelayForm,
     fields=['marks', 'minutes'], extra=1, can_delete=True
-    )
+)
