@@ -46,6 +46,7 @@ urlpatterns = [
                   url(r'^tinymce/', include('tinymce.urls')),
                   url(r'^vevkom/', include('apps.vevkom.urls'), name='vevkom'),
                   url(r'^hybridopedia/', include('apps.hybridopedia.urls'), name='hybridopedia'),
+                  url(r'interestgroups', include('apps.interestgroups.urls'), name='interestgroups'),
                   # url(r'^butikk/', include('apps.merchandise.urls'), name='merchandise')
 
                   # TODO temprary, remove after 32. general assembly  2019-03-27

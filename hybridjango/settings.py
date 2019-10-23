@@ -69,6 +69,8 @@ INSTALLED_APPS = [
     'apps.hybridopedia',
     'hybridjango',
     'crispy_forms',
+    'apps.interestgroups',
+    'hybridjango'
 ]
 
 MIDDLEWARE = [
