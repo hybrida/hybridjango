@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'apps.vevkom',
     'apps.merchandise',
     'apps.hybridopedia',
-    'hybridjango'
+    'hybridjango',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

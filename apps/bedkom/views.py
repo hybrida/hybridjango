@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404, redirect
+from ..events.models import MarkPunishment
 from .forms import CompanyForm
 from .models import Company, CompanyComment, Bedpress, MeetingReport
 from django.views.generic.edit import CreateView
@@ -10,7 +11,7 @@ def index(request):
     companies = Company.objects.all()
     for company in companies:
         company.last_comment = company.companycomment_set.order_by('timestamp').last()
-    return render(request, "bedkom/bedriftsdatabase2.html", {"companies": companies})
+    return render(request, "bedkom/bedriftsdatabase2.html", {"companies": companies, "pk": MarkPunishment.objects.last().pk})
 
 
 @permission_required(['bedkom.add_company'])
