@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
 from hybridjango.custom_layout_object import *
 from hybridjango.mixins import BootstrapFormMixin
-from .models import EventComment, Event, MarkPunishment, Rule, Delay
+from .models import *
 
 
 class EventCommentForm(forms.ModelForm):
