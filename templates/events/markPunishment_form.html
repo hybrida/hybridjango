@@ -1,0 +1,52 @@
+{% extends 'standard_sidebar.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <h3>Endre konsekvensene for Prikksystemet</h3>
+
+    <div class="card-body">
+        {% crispy form %}
+    </div>
+{% endblock text %}
+{% block sidebar %}
+    <h3>Hvordan fungerer Prikksystemet?</h3>
+    <br>
+    <p>
+        "Goes on secondary" er hvor mange prikke som skal til før noen kun kan melde seg på en sekundær venteliste.
+        De som står på den sekundære ventelisten får kun plass på en hendelse hvis det er ledige plasser etter at
+        påmeldingen stenger.
+    </p>
+    <p>
+        "Too many marks" er hvor mange prikke som skal til før noen ikke lenger kan melde seg på hendelser på nettsiden
+    </p>
+    <p>
+        "Signoff close" er et standard antall timer før hendelsen starter at avmeldingen skal stenge. 0 betyr dermed at
+        avmeldingen stenger når hendelsen starter, og 5 er 5 timer før den starter. <br>
+        Hvis feltet er tomt stenger avmeldingen samtidig som påmeldingen. <br>
+        <strong><u>MERK</u></strong> at dette er kun en standardverdi som blir bare brukt <i>hvis og bare hvis</i>
+        "signoff close" feltet for hendelsen er tomt.
+        Så for at avmeldingen skal stenge samtidig som påmeldingen må både dette feltet og feltet i hendelsen være tomt
+    </p>
+    <p>
+        "Delays" er hvor mange minutter etter at påmeldingen åpner for alle den åpner for de med det antall(eller flere)
+        prikker som delay objektet har. F.eks: Hvis du har 2 delay objekt, det ene er 1 prikk og 10 minutter, det andre
+        er 2 prikker og 20 minutter, da vil påmeldingen åpne 10 minutter etter ordinær åpningstid for alle med 1 prikk
+        og 20 minutter etter for alle med 2 eller flere prikker.
+    </p>
+    <p>
+        "Rules" er teksten som står under Regler på siden med informasjon om prikksystemet.<br>
+        <a href="../../prikker">www.hybrid.no/hendelser/prikker</a>
+    </p>
+{% endblock sidebar %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/locales/bootstrap-datetimepicker.no.js' %}"
+            charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+    </script>
+{% endblock script %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">
+{% endblock %}

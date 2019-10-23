@@ -48,6 +48,8 @@ class Project(models.Model):
     def __str__self(self):
         return str(self.name)
 
+    class Meta:
+        ordering = ['-status', 'priority']
 
 
 class Guide(models.Model):
