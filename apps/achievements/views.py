@@ -117,7 +117,7 @@ class BadgeView(TemplateResponseMixin, ContextMixin, View):
 
 
 class BadgeRequestView(PermissionRequiredMixin, TemplateResponseMixin, ContextMixin, View):
-    permission_required = 'achievements.can_change_badgerequest'
+    permission_required = 'achievements.change_badgerequest'
 
     def get(self, request, status, **kwargs):
         if status == "all":
