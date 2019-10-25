@@ -47,6 +47,7 @@ class MarkPunishmentForm(forms.ModelForm, BootstrapFormMixin):
                 Field('goes_on_secondary'),
                 Field('too_many_marks'),
                 Field('signoff_close'),
+                Field('mark_on_late_signoff'),
                 HTML("<br>"),
                 HTML("<br>"),
                 Fieldset('Add delays',

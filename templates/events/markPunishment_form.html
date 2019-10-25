@@ -8,6 +8,7 @@
     <div class="card-body">
         {% crispy form %}
     </div>
+
 {% endblock text %}
 {% block sidebar %}
     <h3>Hvordan fungerer Prikksystemet?</h3>
@@ -26,7 +27,10 @@
         Hvis feltet er tomt stenger avmeldingen samtidig som påmeldingen. <br>
         <strong><u>MERK</u></strong> at dette er kun en standardverdi som blir bare brukt <i>hvis og bare hvis</i>
         "signoff close" feltet for hendelsen er tomt.
-        Så for at avmeldingen skal stenge samtidig som påmeldingen må både dette feltet og feltet i hendelsen være tomt
+    </p>
+    <p>
+        "Mark on late signoff" er om man får en prikk for å melde seg av en hendelse i perioden hvor påmeldingen er
+        stengt, men avmeldingen fortsatt er åpen. Hvis den er huket av vil prikker bli utdelt i den perioden.
     </p>
     <p>
         "Delays" er hvor mange minutter etter at påmeldingen åpner for alle den åpner for de med det antall(eller flere)

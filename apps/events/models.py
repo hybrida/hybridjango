@@ -26,6 +26,7 @@ class Event(models.Model):
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
     signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
+    signoff_close_on_signup_close = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
@@ -119,7 +120,6 @@ class Attendance(models.Model):
 
     def get_event_pk(self):
         return self.event.pk
-
 
     def signup_closed(self):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
@@ -233,6 +233,8 @@ class Attendance(models.Model):
     def get_signoff_close(self):
         if MarkPunishment.objects.all().last().signoff_close == None and self.event.signoff_close == None:
             return self.signup_end
+        elif self.event.signoff_close_on_signup_close == True:
+            return self.signup_end
         elif self.event.signoff_close != None:
             return self.event.event_start - datetime.timedelta(hours=self.event.signoff_close)
         return self.event.event_start - datetime.timedelta(hours=MarkPunishment.objects.all().last().signoff_close)
@@ -242,7 +244,7 @@ class Attendance(models.Model):
 
     def late_signoff_mark(self, hybrid):
         mark = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
-                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
+                                          reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
         return mark
 
 
@@ -285,7 +287,7 @@ def closest_end_of_semester_date():
 
 def mark_end_default():
     return datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
-                                          datetime.datetime.min.time())
+                                     datetime.datetime.min.time())
 
 
 '''A model that contains a mark given to users for transgressions in accordance with the rules regarding events'''
@@ -345,4 +347,6 @@ class MarkPunishment(models.Model):
     goes_on_secondary = models.PositiveIntegerField(
         default=0)  # How many marks to put a user on a secondary waitinglist
     too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
-    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)  # How many hours before event start does signoff close
+    signoff_close = models.PositiveIntegerField(default=None, null=True,
+                                                blank=True)  # How many hours before event start does signoff close
+    mark_on_late_signoff = models.BooleanField(default=True)  # If a mark is given or not for signing off late

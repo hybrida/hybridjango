@@ -70,9 +70,11 @@ class EventView(generic.DetailView):
                     first_waiter = attendance.get_waiting()[0]
                     SendAdmittedMail(first_waiter, attendance)
                     Participation.objects.filter(hybrid=user, attendance=attendance).delete()
-                else:
+                elif MarkPunishment.objects.all().last().mark_on_late_signoff:
                     # Gives a mark and sends a mail to the reciever for signing off late when there was no one to take their place
                     SendMarkMail(user, attendance.late_signoff_mark(user))
+                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+                else:
                     Participation.objects.filter(hybrid=user, attendance=attendance).delete()
             # Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
             # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
