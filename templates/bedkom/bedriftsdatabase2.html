@@ -63,6 +63,12 @@
                href="{% url 'admin:bedkom_bedpress_add' %}">
                 <button class="btn btn-primary">Lag Bedriftspresentasjon</button>
             </a>
+            {% if perms.events.change_markpunishment %}
+                <a style="float: right; padding-right: 10px; padding-bottom: 15px"
+                   href="{% url 'edit_mark_punishment' pk=pk %}">
+                    <button class="btn btn-primary">Endre Prikk Regler</button>
+                </a>
+            {% endif %}
             <p style="display: inline-block;">Hybrida Bedriftsdatabase</p>
             <div></div>
 
