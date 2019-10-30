@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from os import path
 
 from django.conf import settings
@@ -15,8 +14,6 @@ class Command(BaseCommand):
         scoreboard_current = []
         scoreboard_all_time = []
 
-        current_year = int(datetime.now().year)
-
         for hybrid in Hybrid.objects.all():
             badges = hybrid.hybridbadges.all()
             hybrid_dict = {
@@ -29,7 +26,7 @@ class Command(BaseCommand):
 
             scoreboard_all_time.append(hybrid_dict)
 
-            if hybrid.graduation_year >= current_year:
+            if hybrid.get_grade() <= 5:
                 scoreboard_current.append(hybrid_dict.copy())
 
         scoreboard_current.sort(key=lambda dct: dct['Score'], reverse=True)
