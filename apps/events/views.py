@@ -303,6 +303,7 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
             'Duration': MarkPunishment.objects.all().last().duration,
             'Rules': Rule.objects.all().filter(punishment=MarkPunishment.objects.all().last()),
             'Signoff_close': MarkPunishment.objects.all().last().signoff_close,
+            'Mark_on_late_signoff': MarkPunishment.objects.all().last().mark_on_late_signoff,
         })
 
         return self.render_to_response(context)
