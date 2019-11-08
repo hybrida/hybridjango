@@ -36,7 +36,7 @@ class BadgeRequestForm(forms.ModelForm):
 class BadgeForm(forms.ModelForm):
     class Meta:
         model = Badge
-        exclude = ['user']
+        exclude = ['user', 'weight']
         fields = ['name', 'description', 'badge_image', 'scorepoints']
 
     def __init__(self, *args, **kwargs):

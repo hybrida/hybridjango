@@ -5,6 +5,7 @@ from apps.griffensorden.models import Ridder
 
 class Badge(models.Model):
     name = models.CharField(max_length=200)
+    weight = models.PositiveIntegerField(default=10)
     description = models.TextField()
     badge_image = models.ImageField(upload_to='badges')
     scorepoints = models.PositiveIntegerField()
@@ -12,6 +13,9 @@ class Badge(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-weight', '-scorepoints']
 
 
 class BadgeSuggestion(models.Model):
