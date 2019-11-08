@@ -178,27 +178,21 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def get_number_of_marks(self, hybrid):  # Finds the number of marks a user has
-        marks = Mark.objects.all().filter(recipient=hybrid)
-        totalMarks = 0
-        for mark in marks:
-            totalMarks += mark.value
-        return totalMarks
 
     def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
-        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid):
+        if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
             return True
         return False
 
     def goes_on_secondary(self, hybrid, maxmarks,
                           too_many):  # Checks whether a user goes on the secondary waitinglist or not
-        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
+        if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
             return True
         return False
 
     def signup_delay(self, hybrid, delays):  # Finds how many minutes a users signup time is delayed
         for delay in delays:
-            if delay.marks <= self.get_number_of_marks(hybrid):
+            if delay.marks <= get_number_of_marks(hybrid):
                 return delay.minutes
         return 0
 
@@ -288,6 +282,17 @@ def closest_end_of_semester_date():
 def mark_end_default():
     return datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
                                      datetime.datetime.min.time())
+
+
+'''Returns the total amount of marks a user has'''
+
+
+def get_number_of_marks(hybrid):  # Finds the number of marks a user has
+    marks = Mark.objects.all().filter(recipient=hybrid)
+    totalMarks = 0
+    for mark in marks:
+        totalMarks += mark.value
+    return totalMarks
 
 
 '''A model that contains a mark given to users for transgressions in accordance with the rules regarding events'''

@@ -104,7 +104,7 @@ class EventView(generic.DetailView):
                 'placement': attendance.get_placement(user) if attendance.is_participant(user) else None,
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
-                'number_of_marks': attendance.get_number_of_marks(user) if user.is_authenticated else 0,
+                'number_of_marks': get_number_of_marks(user) if user.is_authenticated else 0,
                 'too_many_marks': attendance.too_many_marks(user,
                                                             MarkPunishment.objects.all().last().too_many_marks) if user.is_authenticated else False,
                 'goes_on_secondary': attendance.goes_on_secondary(user,
@@ -145,18 +145,19 @@ def SendMarkMail(hybrid, mark):
     successful = send_mail(
         'Du er tildelt {value} prikk'
             .format(value=mark.value),
-        'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga;\n {reason}\n'
-        'Arrangementet det er snakk om er {title}\n'
-        'Denne prikken vil du ha til og med {expireDate}\n'
-        'Du har totalt {prikker} prikk(er)\n'
-        '{urlEvent}\n'
-        '{urlPrikker}'.format(urlEvent="https://hybrida.no/hendelser/" + str(mark.event.pk),
-                              urlPrikker="https://hybrida.no/hendelser/prikker",
-                              name=hybrid.get_full_name(),
-                              title=mark.event.title,
-                              reason=mark.reason,
-                              expireDate=mark.end,
-                              prikker=Mark.objects.all().filter(recipient=hybrid)),
+        'Hei {name},\n\nVi vil informere deg om at du er blitt tildelt en prikk pga.;\n'
+        '   {reason}\n'
+        'Arrangementet det er snakk om er {title}, {urlEvent}.\n'
+        'Denne prikken vil du ha til og med {expireDate}.\n'
+        'Du har totalt {prikker} prikk(er).\n'
+        'For mer informasjon angående regler og konsekvenser for prikksystenet gå til {urlPrikker}'
+            .format(urlEvent="https://hybrida.no/hendelser/" + str(mark.event.pk),
+                    urlPrikker="https://hybrida.no/hendelser/prikker",
+                    name=hybrid.get_full_name(),
+                    title=mark.event.title,
+                    reason=mark.reason,
+                    expireDate=mark.end,
+                    prikker=get_number_of_marks(hybrid)),
         'robot@hybrida.no',
         mail,
     )
