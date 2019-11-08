@@ -8,11 +8,29 @@ from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
 
+
+'''Defines rules for different type of events'''
+
+
+class EventType(models.Model):
+    name = models.CharField(max_length=150)
+
+    # Can choose which parts of the Mark Systems are active for a specific type of event
+    use_delay = models.BooleanField(default=False)
+    use_goes_on_secondary = models.BooleanField(default=False)
+    use_too_many_marks = models.BooleanField(default=False)
+    use_mark_on_late_signoff = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
 '''The main event class'''
 
 
 class Event(models.Model):
     title = models.CharField(max_length=150)
+    type = models.ForeignKey(EventType, on_delete=models.CASCADE, null=True)
     ingress = models.CharField(max_length=350, blank=True, default='')
     text = HTMLField(blank=True)
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
@@ -178,22 +196,23 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-
-    def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
-        if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
-            return True
+    def too_many_marks(self, hybrid, maxmarks):     # Checks if a user has too many marks to sign up to an event
+        if self.event.type.use_too_many_marks:
+            if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
+                return True
         return False
 
-    def goes_on_secondary(self, hybrid, maxmarks,
-                          too_many):  # Checks whether a user goes on the secondary waitinglist or not
-        if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
-            return True
+    def goes_on_secondary(self, hybrid, maxmarks, too_many):    # Checks whether a user goes on the secondary
+        if self.event.type.use_goes_on_secondary:               # waitinglist or not
+            if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
+                return True
         return False
 
     def signup_delay(self, hybrid, delays):  # Finds how many minutes a users signup time is delayed
-        for delay in delays:
-            if delay.marks <= get_number_of_marks(hybrid):
-                return delay.minutes
+        if self.event.type.use_delay:
+            for delay in delays:
+                if delay.marks <= get_number_of_marks(hybrid):
+                    return delay.minutes
         return 0
 
     def delay_over(self, hybrid, delays):  # Checks if signup delay is over
@@ -238,7 +257,7 @@ class Attendance(models.Model):
 
     def late_signoff_mark(self, hybrid):
         mark, created = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
-                                          reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
+                                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
         return mark
 
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.bedkom.models import Bedpress
-from .models import Event, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Rule, TPEvent
+from .models import EventType, Event, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Rule, TPEvent
 
 
 class ParticipationInline(admin.TabularInline):
@@ -55,6 +55,7 @@ class MarkPunishmentAdmin(admin.ModelAdmin):
     ]
     exclude = ('delay', 'rules', )
 
+admin.site.register(EventType)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
 admin.site.register(Mark)
