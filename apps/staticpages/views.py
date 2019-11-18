@@ -109,7 +109,8 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
             'festivalus',
             'bksjef',
             'vevsjef',
-            'jentekomsjef'
+            'jentekomsjef',
+            'prokomsjef',
         ]
         # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
         board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
