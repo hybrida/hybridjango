@@ -30,7 +30,7 @@ class EventType(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=150)
-    type = models.ForeignKey(EventType, default=EventType.objects.first(), on_delete=models.CASCADE)
+    type = models.ForeignKey(EventType, default=1, null=False, on_delete=models.CASCADE)
     ingress = models.CharField(max_length=350, blank=True, default='')
     text = HTMLField(blank=True)
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
