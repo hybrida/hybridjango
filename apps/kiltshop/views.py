@@ -270,7 +270,7 @@ def product_edit(request, pk):
 @permission_required(['kiltshop.add_order'])
 def order_new(request):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderPeriod.objects.filter(endTime__gte=now).first()
+    active_order = OrderPeriod.objects.filter(end_time__gte=now).first()
     if active_order:
         active = True
     else:
@@ -278,8 +278,8 @@ def order_new(request):
     action = 'Lag ny'
     if request.method == "POST":
         form = OrderPeriodForm(request.POST)
-        startTime = form['startTime'].value()
-        endTime = form['endTime'].value()
+        startTime = form['start_time'].value()
+        endTime = form['end_time'].value()
         print(startTime)
         print(endTime)
         if startTime == "" or endTime == "":
@@ -303,7 +303,7 @@ def order_new(request):
 @permission_required(['kiltshop.change_order'])
 def order_edit(request, pk):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderPeriod.objects.filter(endTime__gte=now).first()
+    active_order = OrderPeriod.objects.filter(end_time__gte=now).first()
     if active_order:
         active = True
     else:
@@ -312,8 +312,8 @@ def order_edit(request, pk):
     order = get_object_or_404(OrderPeriod, pk=pk)
     if request.method == "POST":
         form = OrderPeriodForm(request.POST, instance=order)
-        startTime=form['startTime'].value()
-        endTime=form['endTime'].value()
+        startTime=form['start_time'].value()
+        endTime=form['end_time'].value()
         if startTime == "" or endTime == "":
             messages.warning(request, 'Ugyldig input!')
             return redirect('kilt:order_edit', order.pk)
@@ -340,7 +340,7 @@ def shop(request):
     user = request.user
     types = Product.type_choices
     now = datetime.datetime.now()
-    active_order = OrderPeriod.objects.filter(endTime__gte=now).last()
+    active_order = OrderPeriod.objects.filter(end_time__gte=now).last()
 
     # Checks if there is an active timeframe
     active = False

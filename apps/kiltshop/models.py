@@ -46,17 +46,17 @@ class Order(models.Model):
 
 
 class OrderPeriod(models.Model):
-    startTime = models.DateTimeField(null=True, blank=True)
-    endTime = models.DateTimeField(null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
 
     def is_active(self):  # Checks if now is between start and end time.
-        return self.startTime <= timezone.now() <= self.endTime
+        return self.start_time <= timezone.now() <= self.end_time
 
     def is_waiting(self):  # Checks if the start time is in the future
-        return timezone.now() < self.startTime
+        return timezone.now() < self.start_time
 
     def __str__(self):
-        return "{} - {}".format(self.startTime, self.endTime)
+        return "{} - {}".format(self.start_time, self.end_time)
 
 
 class ProductInfo(models.Model):
