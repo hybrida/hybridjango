@@ -420,7 +420,7 @@ def shop(request):
                         current_user_order.save()
                         return redirect('kilt:info')
                     else:
-                        order_list = Order.objects.create(user=user)
+                        order_list = Order.objects.create(user=user, period=active_order)
                         order_list.comment = comment
                         for product in products:
                             number = int(request.POST.get('number-{id}'.format(id=product), 1))
@@ -430,8 +430,6 @@ def shop(request):
                                 productinfo = ProductInfo(order=order_list, product=item, size=size, number=number)
                                 productinfo.save()
                         order_list.save()
-                        active_order.orders.add(order_list)
-                        active_order.save()
                         return redirect('kilt:info')
 
     return render(request, "kiltshop/shop.html",
