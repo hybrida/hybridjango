@@ -17,4 +17,4 @@ class OrderForm(forms.ModelForm):
 class OrderPeriodForm(forms.ModelForm):
     class Meta:
         model = OrderPeriod
-        fields = ['orders', 'startTime', 'endTime']
+        fields = ['startTime', 'endTime']

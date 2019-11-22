@@ -33,13 +33,19 @@ class Order(models.Model):
     products = models.ManyToManyField(Product, through='ProductInfo')
     comment = models.CharField(max_length=200, blank=True)
     status = models.BooleanField(default=False)
+    period = models.ForeignKey(
+        'OrderPeriod',
+        related_name='orders',
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return "Ordre #{} for {}".format(self.pk, self.user.full_name)
 
 
 class OrderPeriod(models.Model):
-    orders = models.ManyToManyField(Order, related_name='period', blank=True)
     startTime = models.DateTimeField(null=True, blank=True)
     endTime = models.DateTimeField(null=True, blank=True)
 

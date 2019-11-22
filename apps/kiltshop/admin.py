@@ -25,9 +25,6 @@ class OrderAdmin(admin.ModelAdmin):
     }
 
 
-class OrderPeriodAdmin(admin.ModelAdmin):
-    filter_horizontal = ('orders',)
-
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderPeriod, OrderPeriodAdmin)
+admin.site.register(OrderPeriod)
