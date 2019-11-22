@@ -5,89 +5,86 @@
 {% endblock link %}
 {% block text %}
 
-<div class="responsive">
-{% if not products and not order.comment or order == None %}
-    <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
-{% else %}
-     <form action="" method="post">
-        {% csrf_token %}
-        <h2>Dine bestillinger:</h2>
-        <div class="styled-select slate center-block">
-            <select title="Velg ordre for å se bestilling" name="selected_order" id="{{ user.id }}">
-                {% for order in user_orders %}
-                    <option value="{{ order.pk }}">bestilling {{ order.period.endTime.year }} - ordre #{{ order.pk }}</option>
-                {% endfor %}
-            </select>
-        </div><br>
-        <input class="btn button btn-primary center-block" name="showOrder" type="submit" value="Vis bestilling">
-    <form action="" method="post">
-    {% csrf_token %}
-    {% if products %}
-        <h2>Bestilling {{order.period.endTime.year }} - {{ order }}</h2>
-        <div class="table-responsive">
-            <table class="table table-bordereds" >
-                <thead class="table-header">
-                    <tr>
-                        <th class="col-xs-7">Produkt</th>
-                        <th class="col-xs-2">Type</th>
-                        <th class="col-xs-2">Størrelse</th>
-                        <th class="col-xs-1">Antall</th>
-                    </tr>
-                </thead>
-                {% for item in products %}
-                    <tr class="table-items">
-                        <td>
-                            {{ item.name }}
-                        </td>
-                        <td>
-                            {{ item.get_type_display }}
-                        </td>
-                        <td>
-                             {% for info in productInfo %}
-                                {% if info.product_id == item.pk %}
+    <div class="responsive">
+        {% if not product_infos and not order.comment or order == None %}
+            <h2 id="notfound">Finner ingen bestilling for {{ request.user }}</h2>
+        {% else %}
+            <form action="" method="post">
+            {% csrf_token %}
+            <h2>Dine bestillinger:</h2>
+            <div class="styled-select slate center-block">
+                <select title="Velg ordre for å se bestilling" name="selected_order" id="{{ user.id }}">
+                    {% for order in user_orders %}
+                        <option value="{{ order.pk }}">
+                            Bestilling {{ order.period.end_time.year }} - ordre #{{ order.pk }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div><br>
+            <input class="btn button btn-primary center-block" name="showOrder" type="submit" value="Vis bestilling">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% if product_infos %}
+                    <h2>Bestilling {{ order.period.end_time.year }} - {{ order }}</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordereds">
+                            <thead class="table-header">
+                            <tr>
+                                <th class="col-xs-7">Produkt</th>
+                                <th class="col-xs-2">Type</th>
+                                <th class="col-xs-2">Størrelse</th>
+                                <th class="col-xs-1">Antall</th>
+                            </tr>
+                            </thead>
+                            {% for info in product_infos %}
+                                <tr class="table-items">
+                                <td>{{ info.product.name }}</td>
+                                <td>{{ info.product.get_type_display }}</td>
+                                <td>
                                     {% if info.size == None %}
                                         -
                                     {% else %}
-                                    {{ info.size }}
-                                    {% endif     %}
+                                        {{ info.size }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ info.number }}</td>
+                                {% if order.period.is_active %}
+                                    <td>
+                                        <button class="button" name="delete_product" type="submit"
+                                                value="{{ info.product.pk }}">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
                                 {% endif %}
                             {% endfor %}
-                        </td>
-                        <td>
-                            {% for info in productInfo %}
-                                {% if info.product_id == item.pk %}
-                                    {{ info.number }}
+                        </table>
+                    </div>
+                {% endif %}
+                {% if order.comment %}
+                    <div class="responsive" style="display: block; word-wrap: break-word;">
+                        <table class="table table-bordereds">
+                            <thead class="table-header">
+                            <tr>
+                                <th class="col-xs-11">Kommentar:</th>
+                                <th class="col-xs-1"></th>
+                            </tr>
+                            </thead>
+                            <tr class="table-items">
+                                <td>{{ order.comment }}</td>
+                                {% if order.period.is_active %}
+                                    <td>
+                                        <button style="font-size: 1.5em; padding-top: 1em" class="button"
+                                                name="delete_comment" type="submit" value="{{ order.pk }}">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
                                 {% endif %}
-                            {% endfor %}
-                        </td>
-                        {% if order.period.is_active %}
-                            <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% endif %}
-    {% if order.comment %}
-        <div class="responsive" style="display: block; word-wrap: break-word;">
-            <table class="table table-bordereds" >
-                <thead class="table-header">
-                    <tr>
-                        <th class="col-xs-11">Kommentar:    </th>
-                        <th class="col-xs-1"></th>
-                    </tr>
-                </thead>
-                <tr class="table-items">
-                    <td>{{ order.comment }}</td>
-                    {% if order.period.is_active %}
-                        <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
-                    {% endif %}
-                </tr>
-            </table>
-        <hr>
-        </div>
-    {% endif %}
-    </form>
-{% endif %}
-</div>
+                            </tr>
+                        </table>
+                        <hr>
+                    </div>
+                {% endif %}
+            </form>
+        {% endif %}
+    </div>
 {% endblock %}

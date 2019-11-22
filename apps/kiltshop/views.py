@@ -14,36 +14,34 @@ def index(request):
 
 
 @login_required
-def order(request):
-    user_orders = Order.objects.filter(user=request.user).order_by('-pk') # gets all orders for specific user.
-    user_order = user_orders.first()
+def show_order(request):
+    # all orders for this user
+    user_orders = Order.objects.filter(user=request.user).order_by('-pk')
+    # the order to display
+    shown_order = user_orders.first()
     if request.method == 'POST':
         # changes the shown order to the one selected on list
         if 'showOrder' in request.POST:
             order_id = request.POST.get('selected_order')
-            print(order_id)
-            if int(order_id) == -1:
-                pass
-            else:
-                user_order = Order.objects.filter(pk=order_id).first()
+            if int(order_id) != -1:
+                shown_order = Order.objects.get(pk=order_id)
         # deletes selected product from order
         if 'delete_product' in request.POST:
-            delete = request.POST.get('delete_product')
-            m_qs = ProductInfo.objects.filter(order=user_order, product=delete)
-            m = m_qs.get()
-            m.delete()
+            product_id = request.POST.get('delete_product')
+            product = ProductInfo.objects.get(order=shown_order, product=product_id)
+            product.delete()
         # deletes comment from order
         elif 'delete_comment' in request.POST:
-            user_order.comment = ""
-        user_order.save()
-    if user_order:
-        if not user_order.products.first() and not user_order.comment:
-            user_order.delete()
+            shown_order.comment = ""
+        shown_order.save()
+    if shown_order:
+        # delete order if it is empty
+        if not shown_order.products.first() and not shown_order.comment:
+            shown_order.delete()
 
     return render(request, "kiltshop/bestilling.html", {
-        'products': Product.objects.filter(order=user_order),
-        'productInfo': ProductInfo.objects.filter(order=user_order),
-        'order': user_order,
+        'product_infos': shown_order.productinfo_set.all(),
+        'order': shown_order,
         'user_orders': user_orders
     })
 

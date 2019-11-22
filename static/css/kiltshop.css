@@ -1,5 +1,4 @@
 .styled-select {
-   background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
    height: 29px;
    overflow: hidden;
    width: 240px;
@@ -15,7 +14,6 @@
 }
 
 .styled-select.slate {
-   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
    height: 34px;
    width: 240px;
 }

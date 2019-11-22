@@ -4,7 +4,7 @@ from .views import *
 app_name = 'kilt'
 urlpatterns = [
     url(r'^$', index, name='info'),
-    url(r'^bestilling/$', order, name='order'),
+    url(r'^bestilling/$', show_order, name='order'),
     url(r'^shop/$', shop, name='shop'),
     url(r'^admin/$', admin, name='admin'),
     url(r'^admin/bestilling/$', admin_orderoverview, name='admin_orderoverview'),
