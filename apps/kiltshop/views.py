@@ -52,7 +52,7 @@ def admin_orderoverview(request):
     if request.method == 'POST':
         if 'delete_orders' in request.POST:
             delete = request.POST.get('delete_orders')
-            OrderInfo.objects.filter(pk=delete).get().delete()
+            OrderPeriod.objects.filter(pk=delete).get().delete()
         if 'edit_order' in request.POST:
             edit = request.POST.get('edit_order')
             return redirect('kilt:order_edit', edit)

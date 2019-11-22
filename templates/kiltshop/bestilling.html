@@ -23,7 +23,7 @@
     <form action="" method="post">
     {% csrf_token %}
     {% if products %}
-        <h2>Bestilling {{order.get_orderinfo.endTime.year }} - {{ order }}</h2>
+        <h2>Bestilling {{order.period.endTime.year }} - {{ order }}</h2>
         <div class="table-responsive">
             <table class="table table-bordereds" >
                 <thead class="table-header">
@@ -60,7 +60,7 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        {% if order.get_orderinfo.is_active %}
+                        {% if order.period.is_active %}
                             <td><button class="button" name="delete_product" type="submit" value="{{ item.pk }}"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                         {% endif %}
                     </tr>
@@ -79,7 +79,7 @@
                 </thead>
                 <tr class="table-items">
                     <td>{{ order.comment }}</td>
-                    {% if order.get_orderinfo.is_active %}
+                    {% if order.period.is_active %}
                         <td><button  style="font-size: 1.5em; padding-top: 1em" class="button" name="delete_comment" type="submit" value="{{ order.pk }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </button></td>
                     {% endif %}
                 </tr>
