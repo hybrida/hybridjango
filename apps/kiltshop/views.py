@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
-from .models import Product, Order, ProductInfo, OrderInfo
-from .forms import ProductForm, OrderInfoForm
+from .models import Product, Order, ProductInfo, OrderPeriod
+from .forms import ProductForm, OrderPeriodForm
 import datetime
 
 
@@ -61,7 +61,7 @@ def admin_orderoverview(request):
             return redirect('kilt:order_view', show)
 
     return render(request, "kiltshop/order_display.html",
-                {'orderinfo':  OrderInfo.objects.all(),}
+                {'orderinfo':  OrderPeriod.objects.all(),}
     )
 
 #Viser bestillinger for en bestillingsperiode, totalt antall av hvert produkt med én størrelse og kan også
@@ -70,7 +70,7 @@ def admin_orderoverview(request):
 def order_view(request, pk):
     user_order = None
     user_products = None
-    current_order = OrderInfo.objects.filter(pk=pk).get() #Gjeldende bestillingsperiode
+    current_order = OrderPeriod.objects.filter(pk=pk).get() #Gjeldende bestillingsperiode
     all_ordered_products = ProductInfo.objects.all() #Alle bestilte produkter lagret i databasen
     orders = current_order.orders.all() #Alle bestillinger
 
@@ -155,7 +155,7 @@ def order_view(request, pk):
 def admin(request):
     orders = Order.objects.all()
     products = Product.objects.all()
-    orderinfo = OrderInfo.objects.all()
+    orderinfo = OrderPeriod.objects.all()
     user_order = None
     user_products = None
     total_items = ProductInfo.objects.all() #Alle produkter som har blitt bestilt med tilhørende info, i.e. størrelse
@@ -270,14 +270,14 @@ def product_edit(request, pk):
 @permission_required(['kiltshop.add_order'])
 def order_new(request):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+    active_order = OrderPeriod.objects.filter(endTime__gte=now).first()
     if active_order:
         active = True
     else:
         active = False
     action = 'Lag ny'
     if request.method == "POST":
-        form = OrderInfoForm(request.POST)
+        form = OrderPeriodForm(request.POST)
         startTime = form['startTime'].value()
         endTime = form['endTime'].value()
         print(startTime)
@@ -297,21 +297,21 @@ def order_new(request):
             order.save()
             return redirect('kilt:admin_orderoverview')
 
-    form = OrderInfoForm(request.POST)
+    form = OrderPeriodForm(request.POST)
     return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
 
 @permission_required(['kiltshop.change_order'])
 def order_edit(request, pk):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderInfo.objects.filter(endTime__gte=now).first()
+    active_order = OrderPeriod.objects.filter(endTime__gte=now).first()
     if active_order:
         active = True
     else:
         active = False
     action = "Rediger"
-    order = get_object_or_404(OrderInfo, pk=pk)
+    order = get_object_or_404(OrderPeriod, pk=pk)
     if request.method == "POST":
-        form = OrderInfoForm(request.POST, instance=order)
+        form = OrderPeriodForm(request.POST, instance=order)
         startTime=form['startTime'].value()
         endTime=form['endTime'].value()
         if startTime == "" or endTime == "":
@@ -332,7 +332,7 @@ def order_edit(request, pk):
                 order.save()
                 return redirect('kilt:admin_orderoverview')
 
-    form = OrderInfoForm(instance=order)
+    form = OrderPeriodForm(instance=order)
     return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
 
 @login_required
@@ -340,7 +340,7 @@ def shop(request):
     user = request.user
     types = Product.type_choices
     now = datetime.datetime.now()
-    active_order = OrderInfo.objects.filter(endTime__gte=now).last()
+    active_order = OrderPeriod.objects.filter(endTime__gte=now).last()
 
     # Checks if there is an active timeframe
     active = False
@@ -349,7 +349,7 @@ def shop(request):
 
     last_user_order = Order.objects.filter(user=user).last()
     if last_user_order:
-        last_order_orderinfo = OrderInfo.objects.filter(orders__id=last_user_order.pk).last()
+        last_order_orderinfo = OrderPeriod.objects.filter(orders__id=last_user_order.pk).last()
     else:
         last_order_orderinfo = None
     # checks if the users last order is in the active timeframe.

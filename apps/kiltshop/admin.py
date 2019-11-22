@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from .models import Product, Order, ProductInfo, OrderInfo
+from .models import Product, Order, ProductInfo, OrderPeriod
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -25,9 +25,9 @@ class OrderAdmin(admin.ModelAdmin):
     }
 
 
-class OrderInfoAdmin(admin.ModelAdmin):
+class OrderPeriodAdmin(admin.ModelAdmin):
     filter_horizontal = ('orders',)
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderInfo, OrderInfoAdmin)
+admin.site.register(OrderPeriod, OrderPeriodAdmin)

@@ -15,7 +15,7 @@
         <div class="styled-select slate center-block">
             <select title="Velg ordre for å se bestilling" name="selected_order" id="{{ user.id }}">
                 {% for order in user_orders %}
-                    <option value="{{ order.pk }}">bestilling {{ order.get_orderinfo.endTime.year }} - ordre #{{ order.pk }}</option>
+                    <option value="{{ order.pk }}">bestilling {{ order.period.endTime.year }} - ordre #{{ order.pk }}</option>
                 {% endfor %}
             </select>
         </div><br>
