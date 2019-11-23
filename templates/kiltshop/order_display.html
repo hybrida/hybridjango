@@ -45,8 +45,8 @@
                             <tr  style="background-color: #FDD">
                         {% endif %}
                             <td><button class="button" name="show_order" type="submit" value="{{ timeframe.pk }}"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button></td>
-                            <td>{{ timeframe.startTime }}</td>
-                            <td>{{ timeframe.endTime }}</td>
+                            <td>{{ timeframe.start_time }}</td>
+                            <td>{{ timeframe.end_time }}</td>
                             {% if timeframe.is_active %}
                                 <td>Aktiv</td>
                             {% else %}

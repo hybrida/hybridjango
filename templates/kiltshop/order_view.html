@@ -17,7 +17,7 @@
 </style>
 {% block text %}
     <div class="responsive">
-    <h2>Bestilling: {{ order.startTime }} - {{ order.endTime }}</h2>
+    <h2>Bestilling: {{ order.start_time }} - {{ order.end_time }}</h2>
     <hr>
     <form action="" method="post">
     {% csrf_token %}
