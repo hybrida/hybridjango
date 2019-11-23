@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from .models import Product, Order, ProductInfo, OrderPeriod
 from .forms import ProductForm, OrderPeriodForm
+from collections import Counter
 import datetime
 
 
@@ -62,91 +63,46 @@ def admin_orderoverview(request):
                 {'orderinfo':  OrderPeriod.objects.all(),}
     )
 
-#Viser bestillinger for en bestillingsperiode, totalt antall av hvert produkt med én størrelse og kan også
-#vise én enkelt bestilling for endring av betalingsstatus
-#Renderer order_view.html
-def order_view(request, pk):
+
+# shows order for a period, with a count for each product + size combination
+# can also display a single order and change payment status
+def orders_in_period(request, pk):
     user_order = None
-    user_products = None
-    current_order = OrderPeriod.objects.filter(pk=pk).get() #Gjeldende bestillingsperiode
-    all_ordered_products = ProductInfo.objects.all() #Alle bestilte produkter lagret i databasen
-    orders = current_order.orders.all() #Alle bestillinger
+    period = OrderPeriod.objects.get(pk=pk)
+    orders = period.orders.all()
 
-    orders_pk = [] #Alle pvrivate keys til order som tilhører den gjeldende perioden
-    for order in orders: #henter ut alle private keys fra ordre i gjeldende periode
-        orders_pk.append(order.pk)
-
-    ordered_products_numbered = [] #Liste med alle aktuelle produkter lagret på formen [navn, størrelse, antall]
-    for product in all_ordered_products: #finner alle enkeltprodukter som er bestilt i gjeldende periode og legger til listen
-        if product.order.pk in orders_pk:
-            ordered_products_numbered.append([product.product.name, product.size, product.number])
-
-
-    unique_ordered = []
-    if len(ordered_products_numbered) > 1:
-        start = True
-
-    #Summerer opp alle bestillinger av et produkt i en gitt størrelse
-    for item in ordered_products_numbered:
-        found = False
-        if start:
-            unique_ordered.append([item[0], item[1], item[2]])
-            start = False
-        else:
-            for i in range(0, len(unique_ordered)):
-                if item[0] == unique_ordered[i][0]: #produktnavn er lik et
-                    found = True
-                    if item[1] is not None and unique_ordered[i][1] is not None: #har en størrelse
-                        if item[1] == unique_ordered[i][1]: #størrelse er lik
-                            unique_ordered[i][2] += item[2] #antall legges til
-                        else:
-                            new = True
-                            for j in range(0, len(unique_ordered)):
-                                if item[1] == unique_ordered[j][1]:
-                                    new = False
-                                else:
-                                    pass
-                            if new:
-                                unique_ordered.append([item[0], item[1], item[2]])
-                    else:
-                        unique_ordered[i][2] += item[2]
-            if not found:
-                unique_ordered.append([item[0], item[1], item[2]])
-    unique_ordered.sort() #Sorterer listen alfabetisk
-
-
+    # we want to create a list of tuples of the form (name, size, count) for each combination of product and size
+    # first, get a list of tuples of the form (name, size)
+    unique_ordered = ProductInfo.objects.filter(order__period=period).values_list('product__name', 'size')
+    # we use the built-in Counter to get a dict on the form {tuple: count}
+    unique_ordered = Counter(unique_ordered)
+    # finally, transform the dict to a list of tuples of with the desired form
+    unique_ordered = [(*product, count) for product, count in unique_ordered.items()]
+    unique_ordered.sort()
 
     if request.method == 'POST':
-        #Viser en enkelt bestilling
+        # show a single order
         if 'showUser' in request.POST:
             user_id = request.POST.get('selected_user')
-            print(user_id)
-            if int(user_id) == -1:
-                pass
-            else:
+            if int(user_id) != -1:
                 user_order = orders.filter(user=user_id).first()
-                user_products = user_order.products.all()
 
-        #Endrer betalingsstatus for en bestilling
+        # change payment status of selected order
         if 'change_status' in request.POST:
             put = request.POST.get('order_status')
-            status = put.split(':')
-            order_pk = status[1]
-            status = status[0]
-            user_order = Order.objects.filter(pk=order_pk).first()
-            user_order.status = status
-            user_order.save()
+            status, order_pk = put.split(':')
+            order = Order.objects.get(pk=order_pk)
+            order.status = status
+            order.save()
             return HttpResponseRedirect("/kilt/admin")
 
-
-    return render(request, "kiltshop/order_view.html",
-                  {'order':current_order,
-                   'ordered_products':unique_ordered,
-                   'orders':orders,
-                   'user_order':user_order,
-                   'user_products':user_products,
-                   'user_productinfo': ProductInfo.objects.filter(order=user_order)}
-                  )
+    return render(request, "kiltshop/order_view.html", {
+        'period': period,
+        'ordered_products': unique_ordered,
+        'orders': orders,
+        'user_order': user_order,
+        'user_productinfos': ProductInfo.objects.filter(order=user_order)
+    })
 
 
 @permission_required(['kiltshop.add_order', 'kiltshop.change_order', 'kiltshop.delete_order'])

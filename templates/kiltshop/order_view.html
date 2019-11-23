@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% load static %}
 <style>
-     @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 700px) {
         .responsive {
             width: 49.99999%;
             margin: 6px 0;
@@ -17,30 +17,28 @@
 </style>
 {% block text %}
     <div class="responsive">
-    <h2>Bestilling: {{ order.start_time }} - {{ order.end_time }}</h2>
-    <hr>
-    <form action="" method="post">
-    {% csrf_token %}
-    <div id="allorders">
-        <p style="font-size: 2em;">Antall produkter:</p>
-            <table class="table table-bordered" style="width:100%" id="orders_table">
-                <thead>
+        <h2>Bestilling: {{ period.start_time }} - {{ period.end_time }}</h2>
+        <hr>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div id="allorders">
+                <p style="font-size: 2em;">Antall produkter:</p>
+                <table class="table table-bordered" style="width:100%" id="orders_table">
+                    <thead>
                     <tr>
                         <th class="col-xs-5">Produkt</th>
                         <th class="col-xs-3">Størrelse</th>
                         <th class="col-xs-3">Antall</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for item in ordered_products %}
                         <tr>
-                            <!--  Liste over alle produkt (pluss størrelser) -->
+                            <!-- List of product+size combinations, with counts -->
 
-                            <!-- Produktnavn -->
-                            <td>
-                                {{ item.0 }}
-                            </td>
-                            <!-- Evt størrelser-->
+                            <!-- Product name -->
+                            <td>{{ item.0 }}</td>
+                            <!-- Size -->
                             <td align="Center" style="word-wrap: break-word; max-width: 40em;">
                                 {% if not item.1 %}
                                     -
@@ -48,117 +46,92 @@
                                     {{ item.1 }}
                                 {% endif %}
                             </td>
-                            <!-- Antall bestitlt -->
-                            <td align="Center"  style="word-wrap: break-word; max-width: 40em;">
+                            <!-- Amount ordered -->
+                            <td align="Center" style="word-wrap: break-word; max-width: 40em;">
                                 {{ item.2 }}
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table><hr/>
-    </div>
+                    </tbody>
+                </table>
+            </div>
 
-   <!-- Ordre (for enkelt bruker) -->
-    <div id="userorder" align="center">
-        <select title="Velg person for å se bestilling" name="selected_user" id="{{ user.id }}">
-            <option value="-1">Ingen</option>
-            {% for order in orders %}
-                {% if order.status %}
-                    <option style="background-color: #90ee90"  value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
-                {% else %}
-                    <option style="background-color: #FDD" value="{{ order.user.pk }}"> ({{ order.user.pk }}) {{ order.user.first_name }} {{ order.user.middle_name }} {{ order.user.last_name }} </option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        <input name="showUser" type="submit" value="Vis bestilling">
+            <!-- Ordre (for enkelt bruker) -->
+            <div id="userorder" align="center">
+                <select title="Velg person for å se bestilling" name="selected_user" id="{{ user.id }}">
+                    <option value="-1">Ingen</option>
+                    {% for order in orders %}
+                        <option style="background-color: {% if order.status %}#90ee90{% else %}#FDD{% endif %}"
+                                value="{{ order.user.pk }}">
+                            ({{ order.user.pk }}) {{ order.user.full_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input name="showUser" type="submit" value="Vis bestilling">
 
-        {% if not user_order == None %}
-            <div class="clearfix"></div>
-            <h2 style="font-size: 2em; padding-top: 1em"> Bestilling for {{ user_order.user.first_name }} {{ user_order.user.middle_name }} {{ user_order.user.last_name }} </h2>
-            <table class="table table-bordereds" >
-                <thead class="table-header">
-                    <tr>
-                        <th class="col-xs-4">Produkt</th>
-                        <th class="col-xs-2">Type</th>
-                        <th class="col-xs-2">Størrelse</th>
-                        <th class="col-xs-1">Antall</th>
-                    </tr>
-                </thead>
+                {% if not user_order == None %}
+                    <div class="clearfix"></div>
+                    <h2 style="font-size: 2em; padding-top: 1em"> Bestilling for {{ user_order.user.full_name }} </h2>
+                    <table class="table table-bordereds">
+                        <thead class="table-header">
+                        <tr>
+                            <th class="col-xs-4">Produkt</th>
+                            <th class="col-xs-2">Type</th>
+                            <th class="col-xs-2">Størrelse</th>
+                            <th class="col-xs-1">Antall</th>
+                        </tr>
+                        </thead>
 
-                {% for item in user_products %}
-                    <tr class="table-items">
-                        <td>
-                            {{ item.name }}
-                        </td>
-                        <td>
-                            {% if item.type == 'K' %}
-                                Kilt
-                            {% elif item.type == 'S' %}
-                                Sporran
-                            {% else %}
-                                Ekstra
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if item.type == 'K' %}
-                                {% for info in user_productinfo %}
-                                    {% if info.product_id == item.pk %}
+                        {% for info in user_productinfos %}
+                            <tr class="table-items">
+                                <td>{{ info.product.name }}</td>
+                                <td>{{ info.product.get_type_display }}</td>
+                                <td>
+                                    {% if info.size != None %}
                                         {{ info.size }}
+                                    {% else %}
+                                        -
                                     {% endif %}
-                                {% endfor %}
-                            {% elif item.type == 'E' %}
-                                {% for info in user_productinfo %}
-                                    {% if info.product_id == item.pk %}
-                                        {% if not item.name == 'Sokker' and not item.name == 'Flashes' %}
-                                            {{ info.size }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% for info in user_productinfo %}
-                                {% if info.product_id == item.pk %}
-                                    {{ info.number }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-            {% if user_order.status %}
-                <label style="padding-right: 3em; color: #449d44">Status: Betalt</label>
-                <label  style="padding-right: 2em" class="block"><input type="radio" name="order_status" value="True:{{ user_order.pk }}" checked="checked">Betalt</label>
-                <label style="padding-right: 2em"  class="block"><input  type="radio" name="order_status" value="False:{{ user_order.pk }}">Ikke betalt</label>
-                <input name="change_status" type="submit" value="Lagre">
-            {% else %}
-                <label style="padding-right: 3em; color: #ba2121">Status: Ikke betalt</label>
-                <label  style="padding-right: 2em" class="block"><input type="radio" name="order_status" value="True:{{ user_order.pk }}">Betalt</label>
-                <label style="padding-right: 2em"  class="block"><input  type="radio" name="order_status" value="False:{{ user_order.pk }}" checked="checked">Ikke betalt</label>
-                <input name="change_status" type="submit" value="Lagre">
-            {% endif %}
-        {% endif %}<hr>
-    </div>
-    </form>
-    <!-- Kommentarer -->
-    <p align="center" style="font-size: 2em;">Kommentarer:</p>
-    <table class="table table-bordered" style="width:100%" id="comment_table">
-        <thead>
+                                </td>
+                                <td>{{ info.number }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% with status=user_order.status %}
+                        <label style="padding-right: 3em; color: {% if status %}#449d44{% else %}#ba2121{% endif %}">
+                            Status: {% if status %}Betalt{% else %}Ikke betalt{% endif %}
+                        </label>
+                        <label style="padding-right: 2em" class="block">
+                            <input type="radio" name="order_status" value="True:{{ user_order.pk }}"
+                                   {% if status %}checked="checked"{% endif %}>
+                            Betalt
+                        </label>
+                        <label style="padding-right: 2em" class="block">
+                            <input type="radio" name="order_status" value="False:{{ user_order.pk }}"
+                                   {% if not status %}checked="checked"{% endif %}>
+                            Ikke betalt
+                        </label>
+                        <input name="change_status" type="submit" value="Lagre">
+                    {% endwith %}
+                {% endif %}
+                <hr>
+            </div>
+        </form>
+        <!-- Order comments -->
+        <p align="center" style="font-size: 2em;">Kommentarer:</p>
+        <table class="table table-bordered" style="width:100%" id="comment_table">
+            <thead>
             <tr>
                 <th class="col-xs-4">Navn</th>
                 <th class="col-xs-8">Kommentar</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for order in orders %}
                 {% if order.comment %}
                     <tr class="table-items">
                         <th>
-                           ({{ order.user.pk }}) {{ order.user.first_name }}  {{ order.user.last_name }}
+                            ({{ order.user.pk }}) {{ order.user.full_name }}
                         </th>
                         <td style="word-wrap: break-word; max-width: 40em;">
                             {{ order.comment }}
@@ -166,8 +139,8 @@
                     </tr>
                 {% endif %}
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
