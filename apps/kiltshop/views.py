@@ -47,21 +47,19 @@ def show_order(request):
     })
 
 
-def admin_orderoverview(request):
+@permission_required(['kiltshop.change_orderperiod'])
+def period_overview(request):
     if request.method == 'POST':
-        if 'delete_orders' in request.POST:
-            delete = request.POST.get('delete_orders')
-            OrderPeriod.objects.filter(pk=delete).get().delete()
-        if 'edit_order' in request.POST:
-            edit = request.POST.get('edit_order')
+        if 'edit_period' in request.POST:
+            edit = request.POST.get('edit_period')
             return redirect('kilt:order_edit', edit)
-        if 'show_order' in request.POST:
-            show = request.POST.get('show_order')
+        if 'show_period' in request.POST:
+            show = request.POST.get('show_period')
             return redirect('kilt:order_view', show)
 
-    return render(request, "kiltshop/order_display.html",
-                {'orderinfo':  OrderPeriod.objects.all(),}
-    )
+    return render(request, "kiltshop/order_display.html", {
+        'periods':  OrderPeriod.objects.all()
+    })
 
 
 # shows order for a period, with a count for each product + size combination
@@ -178,7 +176,7 @@ def order_new(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.save()
-            return redirect('kilt:admin_orderoverview')
+            return redirect('kilt:period_overview')
 
     form = OrderPeriodForm(request.POST)
     return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
@@ -213,7 +211,7 @@ def order_edit(request, pk):
         if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                return redirect('kilt:admin_orderoverview')
+                return redirect('kilt:period_overview')
 
     form = OrderPeriodForm(instance=order)
     return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
