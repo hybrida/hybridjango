@@ -29,9 +29,10 @@
                     <thead>
                     <tr>
                         <th class="col-xs-1">Vis</th>
+                        <th class="col-xs-1">Last ned</th>
                         <th class="col-xs-4">Start</th>
                         <th class="col-xs-4">Slutt</th>
-                        <th class="col-xs-4">Status</th>
+                        <th class="col-xs-3">Status</th>
                         <th class="col-xs-1">Endre</th>
                     </tr>
                     </thead>
@@ -42,6 +43,11 @@
                             <td>
                                 <button class="button" name="show_period" type="submit" value="{{ period.pk }}">
                                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="button" name="download_period" type="submit" value="{{ period.pk }}">
+                                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                                 </button>
                             </td>
                             <td>{{ period.start_time }}</td>

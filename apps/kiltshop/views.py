@@ -4,8 +4,10 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.http import HttpResponse
 from .models import Product, Order, ProductInfo, OrderPeriod
 from .forms import ProductForm, OrderPeriodForm
+from .utils import create_excel
 from collections import Counter
 import datetime
 
@@ -56,10 +58,22 @@ def period_overview(request):
         if 'show_period' in request.POST:
             show = request.POST.get('show_period')
             return redirect('kilt:order_view', show)
+        if 'download_period' in request.POST:
+            download = request.POST.get('download_period')
+            return redirect('kilt:download_as_excel', download)
 
     return render(request, "kiltshop/order_display.html", {
         'periods':  OrderPeriod.objects.all()
     })
+
+
+@permission_required(['kiltshop.change_orderperiod'])
+def download_period_as_excel(request, pk):
+    file = create_excel(pk)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format('kiltbestilling.xls')
+    file.save(response)
+    return response
 
 
 # shows order for a period, with a count for each product + size combination

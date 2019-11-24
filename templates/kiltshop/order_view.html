@@ -18,6 +18,7 @@
 {% block text %}
     <div class="responsive">
         <h2>Bestilling: {{ period.start_time }} - {{ period.end_time }}</h2>
+        <a href="{% url 'kilt:download_as_excel' period.pk %}">Last ned som excel-ark</a>
         <hr>
         <form action="" method="post">
             {% csrf_token %}

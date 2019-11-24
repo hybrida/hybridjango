@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^admin/bestilling/(?P<pk>[0-9]+)/vis/$', orders_in_period, name='order_view'),
     url(r'admin/bestilling/ny/$', order_new, name='order_new'),
     url(r'^admin/bestilling/(?P<pk>[0-9]+)/endre/$', order_edit, name='order_edit'),
+    url(r'^admin/bestilling/(?P<pk>[0-9]+)/excel$', download_period_as_excel, name='download_as_excel'),
 ]
