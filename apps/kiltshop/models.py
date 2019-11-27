@@ -46,8 +46,8 @@ class Order(models.Model):
 
 
 class OrderPeriod(models.Model):
-    start_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
+    start_time = models.DateTimeField(null=False, blank=False)
+    end_time = models.DateTimeField(null=False, blank=False)
 
     def is_active(self):  # Checks if now is between start and end time.
         return self.start_time <= timezone.now() <= self.end_time

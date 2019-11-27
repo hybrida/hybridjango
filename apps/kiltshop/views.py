@@ -5,6 +5,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.http import HttpResponse
+from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.urls import reverse_lazy
 from .models import Product, Order, ProductInfo, OrderPeriod
 from .forms import ProductForm, OrderPeriodForm
 from .utils import create_excel
@@ -54,7 +57,7 @@ def period_overview(request):
     if request.method == 'POST':
         if 'edit_period' in request.POST:
             edit = request.POST.get('edit_period')
-            return redirect('kilt:order_edit', edit)
+            return redirect('kilt:period_edit', edit)
         if 'show_period' in request.POST:
             show = request.POST.get('show_period')
             return redirect('kilt:order_view', show)
@@ -170,73 +173,21 @@ def product_edit(request, pk):
         'form': form
     })
 
-@permission_required(['kiltshop.add_order'])
-def order_new(request):
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderPeriod.objects.filter(end_time__gte=now).first()
-    if active_order:
-        active = True
-    else:
-        active = False
-    action = 'Lag ny'
-    if request.method == "POST":
-        form = OrderPeriodForm(request.POST)
-        startTime = form['start_time'].value()
-        endTime = form['end_time'].value()
-        print(startTime)
-        print(endTime)
-        if startTime == "" or endTime == "":
-            messages.warning(request, 'Ugyldig input!')
-            return redirect('kilt:order_new')
-        elif startTime >= endTime:
-            messages.warning(request, 'Starten må være før slutten!')
-            return redirect('kilt:order_new')
-        elif active:
-            if endTime>=str(now):
-                messages.warning(request, 'Man kan kun ha et tidsrom for bestilling frem i tid')
-                return redirect('kilt:order_new')
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.save()
-            return redirect('kilt:period_overview')
 
-    form = OrderPeriodForm(request.POST)
-    return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
+class NewPeriod(PermissionRequiredMixin, CreateView):
+    permission_required = 'kiltshop.add_orderperiod'
+    form_class = OrderPeriodForm
+    template_name = 'kiltshop/order_form.html'
+    success_url = reverse_lazy('kilt:period_overview')
 
-@permission_required(['kiltshop.change_order'])
-def order_edit(request, pk):
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    active_order = OrderPeriod.objects.filter(end_time__gte=now).first()
-    if active_order:
-        active = True
-    else:
-        active = False
-    action = "Rediger"
-    order = get_object_or_404(OrderPeriod, pk=pk)
-    if request.method == "POST":
-        form = OrderPeriodForm(request.POST, instance=order)
-        startTime=form['start_time'].value()
-        endTime=form['end_time'].value()
-        if startTime == "" or endTime == "":
-            messages.warning(request, 'Ugyldig input!')
-            return redirect('kilt:order_edit', order.pk)
-        elif startTime >= endTime:
-            messages.warning(request, 'Starten må være før slutten!')
-            return redirect('kilt:order_edit', order.pk)
-        if active:
-            if str(active_order.pk) == str(pk):
-                pass
-            elif endTime>=str(now):
-                messages.warning(request, 'Man kan kun ha et aktivt tidsrom for bestilling')
-                return redirect('kilt:order_edit', order.pk)
 
-        if form.is_valid():
-                order = form.save(commit=False)
-                order.save()
-                return redirect('kilt:period_overview')
+class EditPeriod(PermissionRequiredMixin, UpdateView):
+    permission_required = 'kiltshop.change_orderperiod'
+    model = OrderPeriod
+    form_class = OrderPeriodForm
+    template_name = 'kiltshop/order_form.html'
+    success_url = reverse_lazy('kilt:period_overview')
 
-    form = OrderPeriodForm(instance=order)
-    return render(request, "kiltshop/order_form.html", {'action':action,'form':form })
 
 @login_required
 def shop(request):

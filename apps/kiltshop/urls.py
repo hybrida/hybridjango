@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^admin/produkt/(?P<pk>[0-9]+)/endre/$', product_edit, name='product_edit'),
     url(r'^admin/produkt/ny/$', product_new, name='product_new'),
     url(r'^admin/bestilling/(?P<pk>[0-9]+)/vis/$', orders_in_period, name='order_view'),
-    url(r'admin/bestilling/ny/$', order_new, name='order_new'),
-    url(r'^admin/bestilling/(?P<pk>[0-9]+)/endre/$', order_edit, name='order_edit'),
+    url(r'admin/bestilling/ny/$', NewPeriod.as_view(extra_context={'new': True}), name='period_new'),
+    url(r'^admin/bestilling/(?P<pk>[0-9]+)/endre/$', EditPeriod.as_view(extra_context={'new': False}),
+        name='period_edit'),
     url(r'^admin/bestilling/(?P<pk>[0-9]+)/excel$', download_period_as_excel, name='download_as_excel'),
 ]
