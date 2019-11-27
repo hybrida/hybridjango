@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block text %}
-    <h3>{{ action }} Produkt</h3>
+    <h3>{% if new %}Lag nytt{% else %}Endre{% endif %} Produkt</h3>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form }}
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>

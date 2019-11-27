@@ -135,43 +135,29 @@ def product_overview(request):
     })
 
 
-@permission_required(['kiltshop.add_product'])
-def product_new(request):
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            # save without commit creates object without writing it to database
-            product = form.save(commit=False)
-            product.author = request.user
-            product.timestamp = timezone.now()
-            product.save()
-            return redirect('kilt:product_overview')
+class NewProduct(PermissionRequiredMixin, CreateView):
+    permission_required = 'kiltshop.add_product'
+    form_class = ProductForm
+    template_name = 'kiltshop/product_form.html'
 
-    form = ProductForm(request.POST)
-    return render(request, "kiltshop/product_form.html", {
-        'action': 'Lag nytt',
-        'form': form
-     })
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.timestamp = timezone.now()
+        form.save()
+        return redirect('kilt:product_overview')
 
 
-@permission_required(['kiltshop.change_product'])
-def product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
-        form = ProductForm(request.POST, instance=product)
-        if form.is_valid():
-            # save without commit creates object without writing it to database
-            product = form.save(commit=False)
-            product.author = request.user
-            product.published_date = timezone.now()
-            product.save()
-            return redirect('kilt:product_overview')
-    else:
-        form = ProductForm(instance=product)
-    return render(request, "kiltshop/product_form.html", {
-        'action': 'Rediger',
-        'form': form
-    })
+class EditProduct(PermissionRequiredMixin, UpdateView):
+    permission_required = 'kiltshop.change_product'
+    model = Product
+    form_class = ProductForm
+    template_name = 'kiltshop/product_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.timestamp = timezone.now()
+        form.save()
+        return redirect('kilt:product_overview')
 
 
 class NewPeriod(PermissionRequiredMixin, CreateView):
