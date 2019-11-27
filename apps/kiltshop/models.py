@@ -13,10 +13,10 @@ class Product(models.Model):
         (EXTRA, 'Ekstra')
     )
 
-    name = models.CharField(max_length=150)
-    image = models.ImageField(upload_to='products', default='placeholder-event.png')
+    name = models.CharField(max_length=150, verbose_name='Navn')
+    image = models.ImageField(upload_to='products', default='placeholder-event.png', verbose_name='Bilde')
     type = models.CharField(max_length=1, choices=type_choices, default=KILT)
-    sizes = models.CharField(max_length=100, blank=True)
+    sizes = models.CharField(max_length=100, blank=True, verbose_name='Størrelser')
     link = models.CharField(max_length=1000, blank=True)
     author = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
