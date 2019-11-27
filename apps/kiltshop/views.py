@@ -119,16 +119,17 @@ def orders_in_period(request, pk):
 
 
 @permission_required(['kiltshop.delete_product'])
-def admin_productoverview(request):
+def product_overview(request):
     if request.method == "POST":
         if 'delete_product' in request.POST:
             delete = request.POST.get('delete_product')
-            Product.objects.filter(pk=delete).get().delete()
+            Product.objects.get(pk=delete).delete()
         if 'edit_product' in request.POST:
             edit = request.POST.get('edit_product')
             return redirect('kilt:product_edit', edit)
-    return render(request, "kiltshop/admin_productoverview.html",
-                  {'products': Product.objects.all()})
+    return render(request, "kiltshop/admin_productoverview.html", {
+        'products': Product.objects.all()
+    })
 
 @permission_required(['kiltshop.add_product'])
 def product_new(request):
@@ -140,7 +141,7 @@ def product_new(request):
             product.author = request.user
             product.timestamp = timezone.now()
             product.save()
-            return redirect('kilt:admin_productoverview')
+            return redirect('kilt:product_overview')
 
     form = ProductForm(request.POST)
     return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
@@ -157,7 +158,7 @@ def product_edit(request, pk):
             product.author = request.user
             product.published_date = timezone.now()
             product.save()
-            return redirect('kilt:admin_productoverview')
+            return redirect('kilt:product_overview')
     else:
         form = ProductForm(instance=product)
     return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
