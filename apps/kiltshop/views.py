@@ -153,11 +153,11 @@ def product_new(request):
 
 @permission_required(['kiltshop.change_product'])
 def product_edit(request, pk):
-    action = "Rediger"
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
+            # save without commit creates object without writing it to database
             product = form.save(commit=False)
             product.author = request.user
             product.published_date = timezone.now()
@@ -165,7 +165,10 @@ def product_edit(request, pk):
             return redirect('kilt:product_overview')
     else:
         form = ProductForm(instance=product)
-    return render(request, "kiltshop/product_form.html", {'action':action,'form':form })
+    return render(request, "kiltshop/product_form.html", {
+        'action': 'Rediger',
+        'form': form
+    })
 
 @permission_required(['kiltshop.add_order'])
 def order_new(request):
