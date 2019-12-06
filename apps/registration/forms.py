@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Hybrid
+from hybridjango.mixins import BootstrapFormMixin
+from .models import Hybrid, Subject
 
 
 class HybridForm(forms.ModelForm):
@@ -19,3 +20,14 @@ class HybridForm(forms.ModelForm):
             'food_preferences',
             'card_key',
         )
+
+
+class SubjectForm(forms.ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = Subject
+        exclude = ['author']
+        fields = ['name']
+
+    def __init__(self, *args, **kwargs):
+        super(SubjectForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})

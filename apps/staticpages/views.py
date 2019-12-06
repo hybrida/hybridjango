@@ -109,7 +109,8 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
             'festivalus',
             'bksjef',
             'vevsjef',
-            'jentekomsjef'
+            'jentekomsjef',
+            'prokomsjef',
         ]
         # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
         board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
@@ -299,12 +300,3 @@ class KTVReportView(LoginRequiredMixin, AboutView):
         context['reports'] = Ktv_report.objects.all().order_by('date').reverse()
         context['active_page'] = 'tillitsvalgte'
         return context
-
-
-# TODO fjern senere - dette er en vits som ble laget for en styregave
-def OnlinePictureView(request):
-    return render(
-        request,
-        'staticpages/online_picture.html',
-        {'image': Hybrid.objects.get(username="OnlineHybridDyr").image}
-    )

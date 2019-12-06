@@ -23,6 +23,11 @@
         {% for rule in Rules %}
             <li style="font-size: 16px ">{{ rule.rule }}</li>
         {% endfor %}
+        {% if Mark_on_late_signoff %}
+            <li style="font-size: 16px ">Melder man seg av et arrangement etter påmeldingen er stengt og det er ingen på
+                venteliste til å ta plassen får man en prikk.
+            </li>
+        {% endif %}
     </ul>
 
     {% if user.is_authenticated %}
