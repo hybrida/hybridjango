@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import File, Subject
-from .forms import HybridopediaFileForm, HybridopediaSubjectForm
+from apps.registration.models import Subject
+from apps.registration.forms import SubjectForm
+from .models import File
+from .forms import HybridopediaFileForm
 
 
 # TODO: Login required for forms?
@@ -22,13 +24,13 @@ def fileForm(request):
 
 def subjectForm(request):
     if request.method == 'POST':
-        form = HybridopediaSubjectForm(request.POST)
+        form = SubjectForm(request.POST)
         form.instance.author = request.user
         if form.is_valid():
             form.save()
             return redirect('hybridopedia:firstPage')
     else:
-        form = HybridopediaSubjectForm()
+        form = SubjectForm()
         return render(request, 'hybridopedia/subjectForm.html', {'form': form})
 
 
