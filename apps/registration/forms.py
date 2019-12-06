@@ -26,8 +26,4 @@ class SubjectForm(forms.ModelForm, BootstrapFormMixin):
     class Meta:
         model = Subject
         exclude = ['author']
-        fields = ['name']
-
-    def __init__(self, *args, **kwargs):
-        super(SubjectForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        fields = ['code', 'name']

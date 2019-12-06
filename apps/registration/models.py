@@ -109,7 +109,8 @@ class ContactPerson(models.Model):
 
 
 class Subject(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name="Fag navn")
+    code = models.CharField(max_length=10, unique=True, null=False, blank=False, verbose_name="Fag kode")
     author = models.ForeignKey(Hybrid, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
