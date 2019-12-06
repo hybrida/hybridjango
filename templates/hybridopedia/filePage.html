@@ -4,7 +4,8 @@
 
     <!-- Include author -->
 <div>
-    <h1>Fag: {{ subject.first|upper }}</h1>
+    <h1>{{ subject.first.code }} - {{ subject.first }}</h1>
+    <br>
     <ul>
         {% for file in files %}
             <li>

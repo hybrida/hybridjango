@@ -14,6 +14,9 @@ def move_data(apps, schema_editor):
     Subject = apps.get_model('registration', 'Subject')
     for oldSubject in OldSubject.objects.all():
         subject = Subject.objects.create()
+        if subject.pk < oldSubject.pk:
+            subject.delete()
+            subject = Subject.objects.create()
         subject.name = oldSubject.name
         subject.author = oldSubject.author
         subject.save()

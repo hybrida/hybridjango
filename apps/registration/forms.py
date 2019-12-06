@@ -35,6 +35,6 @@ class SubjectForm(forms.ModelForm, BootstrapFormMixin):
     class Meta:
         model = Subject
         exclude = ['author']
-        fields = ['name']
+        fields = ['code', 'name']
 
     name = forms.CharField(validators=[subject_name_validator], required=True)
