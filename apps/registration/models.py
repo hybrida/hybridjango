@@ -109,8 +109,8 @@ class ContactPerson(models.Model):
 
 
 class Subject(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="Fag navn")
-    code = models.CharField(max_length=10, unique=True, null=False, blank=False, verbose_name="Fag kode")
+    name = models.CharField(max_length=50, unique=True, verbose_name="Fagnavn")
+    code = models.CharField(max_length=10, unique=True, null=False, blank=False, verbose_name="Fagkode")
 
     Years = (
         ('First', 'Første'),
