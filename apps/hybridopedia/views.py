@@ -36,8 +36,17 @@ def subjectForm(request):
 
 @login_required
 def firstPage(request):
-    subjects = Subject.objects.all()
-    return render(request, "hybridopedia/firstPage.html", {"subjects": subjects})
+    context = {
+        "subjects": Subject.objects.all(),
+        "first": Subject.objects.filter(year="First"),
+        "second": Subject.objects.filter(year="Second"),
+        "third": Subject.objects.filter(year="Third"),
+        "fourth": Subject.objects.filter(year="Fourth"),
+        "fifth": Subject.objects.filter(year="Fifth"),
+        "thirdFifth": Subject.objects.filter(year="Third-Fifth"),
+        "rest": Subject.objects.filter(year="")
+    }
+    return render(request, "hybridopedia/firstPage.html", context)
 
 
 @login_required
