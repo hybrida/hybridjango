@@ -25,6 +25,7 @@ def move_data(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('registration', '0020_subject'),
+        ('hybridopedia', '0003_subject_author'),
     ]
 
     operations = [
