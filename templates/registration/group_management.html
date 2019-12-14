@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row space-below">
-            {% for group, members, is_committee, form in all_groups_and_members %}
+            {% for group, members, is_committee in all_groups_and_members %}
                 {% if is_committee or user.is_superuser %}
                     <div class="col-xs-12 space-above">
                         <div class="white-box" id="text-box">
@@ -15,18 +15,20 @@
                                 {% endfor %}
                             </ul>
 
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-member">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#add-member-{{ group.name }}">
                                 Legg til medlem
                             </button>
                             {# Opens the form to add a user to the group #}
-                            <div class="modal fade" id="add-member" tabindex="-1" role="dialog"
+                            <div class="modal fade" id="add-member-{{ group.name }}" tabindex="-1" role="dialog"
                                  aria-labelledby="myModalLabel" aria-hidden="true">
                                 <form method="POST">
+                                    {% csrf_token %}
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true">&times;
+                                                        aria-hidden="true">&times;
                                                 </button>
                                                 <h4 class="modal-title" id="myModalLabel">Legg til medlem
                                                     i {{ group.name }}</h4>
@@ -36,15 +38,17 @@
                                                 <input type="text" placeholder="Søk..." oninput="filter_search(this)"
                                                        style="padding: .75rem 1.25rem; width:100%"/>
                                                 <br>
-                                                {% csrf_token %}
-                                                {{ form.hybrider }}
+
+                                                {{ form.hybrids }}
                                             </div>
 
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                                     Avbryt
                                                 </button>
-                                                <button class="btn btn-primary" type="submit">Legg til</button>
+                                                <button class="btn btn-primary" type="submit" name="action"
+                                                        value="{{ group.name }}"> Legg til
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -61,9 +65,9 @@
 {% block script %}
     <script type="text/javascript">
         function filter_search(txtFilter) {
-            hybrids = document.getElementById("id_hybrider").children;
-            for(var i = 0; i < hybrids.length; i++) {
-                if(hybrids[i].innerHTML.toLowerCase().startsWith(txtFilter.value.toLowerCase()) || hybrids[i].selected == true){
+            hybrids = document.getElementById("id_hybrids").children;
+            for (var i = 0; i < hybrids.length; i++) {
+                if (hybrids[i].innerHTML.toLowerCase().startsWith(txtFilter.value.toLowerCase()) || hybrids[i].selected == true) {
                     hybrids[i].style.display = "block";
                 }
                 else {

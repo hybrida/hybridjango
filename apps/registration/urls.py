@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^register$', views.register, name='register'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.complete_registration, name='complete_registration'),
+    url(r'^group_management$', views.ManageGroups.as_view(), name='group_management'),
     url(r'^(?P<slug>[\w.@+-]+)$', views.Profile.as_view(), name='profile'),
     url(r'^(?P<slug>[\w.@+-]+)/endre$', views.EditProfile.as_view(), name='edit_profile'),
-    url(r'^group_management/$', views.ManageGroups.as_view(), name='group_management'),
 ]
