@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -10,9 +11,10 @@ from django.utils import timezone
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import generic
+from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 
 from apps.achievements.models import Badge
-from .forms import HybridForm
+from .forms import HybridForm, GroupForm
 from .models import Hybrid, RecoveryMail
 from apps.events.models import Event, Attendance
 
@@ -26,16 +28,18 @@ class Profile(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         attendance_list_chronological = []
         for attendance in Attendance.objects.all():
-            if (attendance.is_waiting(self.request.user) or attendance.is_signed(self.request.user)) and attendance.event.event_start > timezone.now():
+            if (attendance.is_waiting(self.request.user) or attendance.is_signed(
+                    self.request.user)) and attendance.event.event_start > timezone.now():
                 attendance_list_chronological.append(attendance)
         context['attendance_list_chronological'] = attendance_list_chronological
         return context
 
-   # def post(self, request, *args, **kwargs): midlertidig fjernet
-    #    if 'update' in self.request.POST:
-     #       hybrid = self.request.POST.get('update')
-      #      year_status_change.send(sender=Hybrid, instance=hybrid)
-       #     return redirect('profile', hybrid)
+
+# def post(self, request, *args, **kwargs): midlertidig fjernet
+#    if 'update' in self.request.POST:
+#       hybrid = self.request.POST.get('update')
+#      year_status_change.send(sender=Hybrid, instance=hybrid)
+#     return redirect('profile', hybrid)
 
 
 class EditProfile(generic.UpdateView):
@@ -121,3 +125,31 @@ def complete_registration(request, uidb64, token):
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
 
 
+class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
+    template_name = 'registration/group_management.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Styret').exists() or \
+               self.request.user.groups.filter(name='Redaktør').exists()
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        users = Hybrid.objects.all().order_by('first_name')
+        groups = Group.objects.all().order_by('name')
+        all_groups_and_members = []
+        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Vevkom']
+        for group in groups:
+            form = GroupForm()
+            is_committee = False
+            group_members = users.filter(groups__name=group.name)
+            if group.name in committees:
+                is_committee = True
+            all_groups_and_members.append([group, group_members, is_committee, form])
+
+        context.update({
+            'all_groups_and_members': all_groups_and_members,
+        })
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        form = GroupForm(request.POST)

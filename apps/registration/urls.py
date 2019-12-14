@@ -12,4 +12,5 @@ urlpatterns = [
         views.complete_registration, name='complete_registration'),
     url(r'^(?P<slug>[\w.@+-]+)$', views.Profile.as_view(), name='profile'),
     url(r'^(?P<slug>[\w.@+-]+)/endre$', views.EditProfile.as_view(), name='edit_profile'),
+    url(r'^group_management/$', views.ManageGroups.as_view(), name='group_management'),
 ]
