@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row space-below">
-            {% for group, members, is_committee, form in all_groups_and_members %}
+            {% for group, members, is_committee, form_add, form_remove in all_groups_and_members %}
                 {% if is_committee or user.is_superuser %}
                     <div class="col-xs-12 space-above">
                         <div class="white-box" id="text-box">
@@ -45,7 +45,7 @@
                                                        oninput="filter_search(this,'form-add-{{ group.name }}')"
                                                        style="padding: .75rem 1.25rem; width:100%"/>
                                                 <br>
-                                                {{ form.hybrids }}
+                                                {{ form_add.hybrids }}
                                             </div>
 
                                             <div class="modal-footer">
@@ -81,7 +81,7 @@
                                                        oninput="filter_search(this, 'form-remove-{{ group.name }}')"
                                                        style="padding: .75rem 1.25rem; width:100%"/>
                                                 <br>
-                                                {{ form.hybrids }}
+                                                {{ form_remove.hybrids }}
                                             </div>
 
                                             <div class="modal-footer">

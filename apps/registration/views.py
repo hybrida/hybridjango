@@ -125,35 +125,44 @@ def complete_registration(request, uidb64, token):
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
 
 
-def get_all_groups_and_members(users, groups, committees):
-    all_groups_and_members = []
-    form = GroupForm()
+def get_all_groups_members_and_form(users, groups, committees):
+    all_groups_members_and_form = []
+    hybrids = Hybrid.objects.filter(graduation_year__range=(timezone.now().year, timezone.now().year + 5)).order_by(
+        'first_name')
     for group in groups:
         is_committee = False
         group_members = users.filter(groups__name=group.name)
+        filtered_hybrids = hybrids
+        for member in group_members:
+            filtered_hybrids = filtered_hybrids.exclude(username=member.username)
+
+        form_add = GroupForm()
+        form_add.fields['hybrids'].queryset = filtered_hybrids
+        form_remove = GroupForm()
+        form_remove.fields['hybrids'].queryset = group_members
 
         if group.name in committees:
             is_committee = True
 
-        all_groups_and_members.append([group, group_members, is_committee, form])
-    return all_groups_and_members
+        all_groups_members_and_form.append([group, group_members, is_committee, form_add, form_remove])
+    return all_groups_members_and_form
 
 
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
+    committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
 
     def test_func(self):
         return self.request.user.groups.filter(name='Styret').exists() or \
-               self.request.user.groups.filter(name='Redaktør').exists()
+               self.request.user.groups.filter(name='Redaktør').exists() or self.request.user.is_superuser()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         users = Hybrid.objects.all().order_by('first_name')
         groups = Group.objects.all().order_by('name')
-        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
 
         context.update({
-            'all_groups_and_members': get_all_groups_and_members(users, groups, committees),
+            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.committees),
         })
         return self.render_to_response(context)
 
@@ -168,9 +177,8 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
         context = self.get_context_data(**kwargs)
         users = Hybrid.objects.all().order_by('first_name')
         groups = Group.objects.all().order_by('name')
-        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
 
         context.update({
-            'all_groups_and_members': get_all_groups_and_members(users, groups, committees),
+            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.committees),
         })
         return self.render_to_response(context)
