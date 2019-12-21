@@ -37,6 +37,7 @@ class GroupForm(forms.Form):
             'first_name'),
         widget=forms.SelectMultiple(attrs={
             'style': 'height:300px; width:100%',
+            'id': 'hybrids',
         }), required=True)
 
     def __init__(self, *args, **kwargs):

@@ -125,6 +125,20 @@ def complete_registration(request, uidb64, token):
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
 
 
+def get_all_groups_and_members(users, groups, committees):
+    all_groups_and_members = []
+    form = GroupForm()
+    for group in groups:
+        is_committee = False
+        group_members = users.filter(groups__name=group.name)
+
+        if group.name in committees:
+            is_committee = True
+
+        all_groups_and_members.append([group, group_members, is_committee, form])
+    return all_groups_and_members
+
+
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
 
@@ -134,48 +148,29 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = GroupForm()
         users = Hybrid.objects.all().order_by('first_name')
         groups = Group.objects.all().order_by('name')
-        all_groups_and_members = []
-        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Vevkom']
-        for group in groups:
-            is_committee = False
-            group_members = users.filter(groups__name=group.name)
-            if group.name in committees:
-                is_committee = True
-            all_groups_and_members.append([group, group_members, is_committee])
+        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
 
         context.update({
-            'all_groups_and_members': all_groups_and_members,
-            'form': form,
+            'all_groups_and_members': get_all_groups_and_members(users, groups, committees),
         })
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         form = GroupForm(request.POST)
         if form.is_valid():
-            print(request.POST.get("action", ""))
-            group = Group.objects.filter(name=request.POST.get("action", "")).first()
+            group = Group.objects.filter(name=request.POST.get("add_member", "")).first()
             hybrids = form.cleaned_data['hybrids']
             for hybrid in hybrids:
                 group.user_set.add(hybrid)
 
         context = self.get_context_data(**kwargs)
-        form = GroupForm()
         users = Hybrid.objects.all().order_by('first_name')
         groups = Group.objects.all().order_by('name')
-        all_groups_and_members = []
-        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Vevkom']
-        for group in groups:
-            is_committee = False
-            group_members = users.filter(groups__name=group.name)
-            if group.name in committees:
-                is_committee = True
-            all_groups_and_members.append([group, group_members, is_committee])
+        committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
 
         context.update({
-            'all_groups_and_members': all_groups_and_members,
-            'form': form,
+            'all_groups_and_members': get_all_groups_and_members(users, groups, committees),
         })
         return self.render_to_response(context)
