@@ -151,6 +151,7 @@ def get_all_groups_members_and_form(users, groups, committees):
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
     committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
+    requires_admin = ['Arrkom', 'Bedkom', 'Kjellersjef', 'Styret', 'Vevkom']
 
     def test_func(self):
         return self.request.user.groups.filter(name='Styret').exists() or \
@@ -184,9 +185,19 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
             if add_or_remove == 1:
                 for hybrid in hybrids:
                     group.user_set.add(hybrid)
+                    if group_name in self.requires_admin:
+                        hybrid.is_staff = True
+                        hybrid.save()
+
             if add_or_remove == 2:
                 for hybrid in hybrids:
                     group.user_set.remove(hybrid)
+                    hybrid.is_staff = False
+                    hybrid.save()
+                    for name in self.requires_admin:
+                        if hybrid.groups.filter(name=name).exists():
+                            hybrid.is_staff = True
+                            hybrid.save()
 
         context = self.get_context_data(**kwargs)
         users = Hybrid.objects.all().order_by('first_name')
