@@ -168,11 +168,25 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
 
     def post(self, request, *args, **kwargs):
         form = GroupForm(request.POST)
+        add_member = request.POST.get("add_member", "")
+        remove_member = request.POST.get("remove_member", "")
+        add_or_remove = 0
+        if add_member != "" and remove_member == "":
+            group_name = add_member
+            add_or_remove = 1
+        elif add_member == "" and remove_member != "":
+            group_name = remove_member
+            add_or_remove = 2
+
         if form.is_valid():
-            group = Group.objects.filter(name=request.POST.get("add_member", "")).first()
+            group = Group.objects.filter(name=group_name).first()
             hybrids = form.cleaned_data['hybrids']
-            for hybrid in hybrids:
-                group.user_set.add(hybrid)
+            if add_or_remove == 1:
+                for hybrid in hybrids:
+                    group.user_set.add(hybrid)
+            if add_or_remove == 2:
+                for hybrid in hybrids:
+                    group.user_set.remove(hybrid)
 
         context = self.get_context_data(**kwargs)
         users = Hybrid.objects.all().order_by('first_name')
