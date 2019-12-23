@@ -14,15 +14,13 @@ from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
 from django.core.mail import send_mail
 
+from hybridjango.settings import STATIC_FOLDER
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
-from apps.registration.models import Hybrid, ContactPerson
-from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport, Protocol, Ktv_report
-from hybridjango.settings import STATIC_FOLDER
+from apps.registration.models import Hybrid, ContactPerson, get_graduation_year
 from .forms import CommiteApplicationForm, ApplicationForm
-from .models import Application, CommiteApplication, BoardReportSemester
+from .models import Application, BoardReport, BoardReportSemester, CommiteApplication, Ktv_report, Protocol, Statute
 
 
 class FrontPage(EventList):
@@ -61,7 +59,6 @@ class FrontPage(EventList):
             context['Scorelist'] = scorelist
         except FileNotFoundError:
             context['Scorelist'] = []
-
 
         return context
 
@@ -144,6 +141,14 @@ def members(request):
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
 
+class StatutesView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(StatutesView, self).get_context_data(**kwargs)
+        context['statute'] = Statute.objects.all().last()
+        context['active_page'] = 'statutter'
+        return context
+
+
 class ProtocolView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(ProtocolView, self).get_context_data(**kwargs)
@@ -189,10 +194,10 @@ def updatek(request):
     context = {}
     dirs = os.listdir(UPDATEK)
     context['updatek'] = sorted([(
-                                     dir,
-                                     sorted(set([os.path.splitext(file)[0] for file in
-                                                 os.listdir(os.path.join(UPDATEK, dir))]))
-                                 ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
+        dir,
+        sorted(set([os.path.splitext(file)[0] for file in
+                    os.listdir(os.path.join(UPDATEK, dir))]))
+    ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
     return render(request, 'staticpages/updatek.html', context)
 
 
@@ -205,7 +210,7 @@ def search(request):
     job_object_company = Job.objects.filter(company__name__icontains=query)
     user_object_username = Hybrid.objects.filter(username__icontains=query)
 
-    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username,))
+    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username, ))
     print(complete_list)
 
     context = {
@@ -214,10 +219,12 @@ def search(request):
     }
     return render(request, 'staticpages/search.html', context)
 
+
 @permission_required(['staticpages.add_application'])
 def application_table(request):
     applications = Application.objects.all().order_by('pk').reverse()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
+
 
 @permission_required(['staticpages.add_commiteapplication'])
 def commiteapplications(request):
@@ -247,6 +254,7 @@ def application(request):
         'form': form,
     })
 
+
 def edit_application(request, pk):
     applications = Application.objects.all()
     user = request.user
@@ -258,41 +266,43 @@ def edit_application(request, pk):
         granted = request.POST.get('grantForm', False)
 
         if user.is_authenticated:
-                application = applications.get(pk=application_id)
-                application.granted = granted
-                application.comment = comment
-                application.save()
+            application = applications.get(pk=application_id)
+            application.granted = granted
+            application.comment = comment
+            application.save()
     return redirect('application_table')
+
 
 class DeleteApplication(DeleteView):
     model = Application
-    success_url =  reverse_lazy('application_table')
+    success_url = reverse_lazy('application_table')
 
 
 @login_required
 def AddComApplication(request):
+    form = CommiteApplicationForm(request.POST)
+    if request.method == 'POST':
         form = CommiteApplicationForm(request.POST)
-        if request.method == 'POST':
-            form = CommiteApplicationForm(request.POST)
-            if form.is_valid():
-                ComApplication = form.save(commit=False)
-                ComApplication.navn = request.user
-                ComApplication.save()
-                return redirect('about')
+        if form.is_valid():
+            ComApplication = form.save(commit=False)
+            ComApplication.navn = request.user
+            ComApplication.save()
+            return redirect('about')
 
-        return render(request, 'staticpages/comapplication_form.html', {
-            'form': form,
-        })
+    return render(request, 'staticpages/comapplication_form.html', {
+        'form': form,
+    })
 
 
 def NewStudent(request):
-
     return render(request, 'staticpages/ny_student.html')
+
 
 def ChangeAcceptedStatus(request):
     request.user.accepted_conditions = True
     request.user.save()
     return redirect('/')
+
 
 class KTVReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):

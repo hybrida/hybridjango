@@ -2,21 +2,38 @@
 {% load static %}
 {% block text %}
     <style>
-        #statuette{
+        #statuette {
             text-align: center;
             color: #1b6d85;
             font-size: 22px;
         }
     </style>
+
+    {% if perms.staticpages.add_statute %}
+        <a href="{% url 'admin:staticpages_statute_add' %}">
+            <button class="btn btn-xs btn-primary">Ny</button>
+        </a>
+        <a href="{% url 'admin:staticpages_statute_changelist' %}">
+            <button class="btn btn-xs btn-primary">Oversikt</button>
+        </a>
+    {% endif %}
+
     <h1>Statutter</h1>
     <div class="container" style="width: 70%">
-         <div class="list-group">
-            <h4><a id="statuette" href="{% static 'pdf/statutter/Statutter 2019.03.27.pdf' %}" class="list-group-item" target="_blank">Hybridas Statutter <br> (sist oppdatert 27. Mars 2019)</a></h4>
+        <div class="list-group">
+            <h4><a id="statuette" href="/uploads/{{ statute.statute }}" class="list-group-item" target="_blank">
+                Hybridas Statutter <br> (Sist oppdatert {{ statute.date }})
+            </a></h4>
 
-            <h4><a id="statuette" href="{% static 'pdf/VAGOStautter.pdf' %}" class="list-group-item" target="_blank">Statutter og retningslinjer for Griffens Orden</a></h4>
+            <h4><a id="statuette" href="{% static 'pdf/VAGOStautter.pdf' %}" class="list-group-item" target="_blank">
+                Statutter og retningslinjer for Griffens Orden
+            </a></h4>
 
-            <h4><a id="statuette" href="{% static 'pdf/bedkom statutter.pdf' %}" class="list-group-item" target="_blank">Statutter for Bedriftskomitéen</a></h4>
-         </div>
+            <h4><a id="statuette" href="{% static 'pdf/bedkom statutter.pdf' %}" class="list-group-item"
+                   target="_blank">
+                Statutter for Bedriftskomitéen
+            </a></h4>
+        </div>
     </div>
 
 {% endblock text %}
