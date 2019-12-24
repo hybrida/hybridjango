@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='Statute',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('statute', models.FileField(upload_to='pdf/statutter')),
-                ('date', models.DateField(default=django.utils.timezone.now)),
+                ('statute', models.FileField(upload_to='pdf/statutter', verbose_name='Statutter')),
+                ('date', models.DateField(default=django.utils.timezone.now, verbose_name='Dato (Format: ÅÅÅÅ-MM-DD)')),
             ],
         ),
     ]

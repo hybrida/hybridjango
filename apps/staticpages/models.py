@@ -23,8 +23,8 @@ class BoardReportSemester(models.Model):
 
 
 class Statute(models.Model):
-    statute = models.FileField(upload_to='pdf/statutter')
-    date = models.DateField(default=timezone.now)
+    statute = models.FileField(verbose_name="Statutter", upload_to='pdf/statutter')
+    date = models.DateField(verbose_name="Dato (Format: ÅÅÅÅ-MM-DD)", default=timezone.now)
 
     def __str__(self):
         return "Statutter sist oppdatert: " + str(self.date)
@@ -85,3 +85,13 @@ class Ktv_report(models.Model):
 
     def __str__(self):
         return "Referat: " + str(self.date)
+
+
+class Updatek(models.Model):
+    frontpage = models.FileField(verbose_name="Forsidebilde", upload_to='pdf/updatek')
+    pdf = models.FileField(upload_to='pdf/updatek')
+    school_year = models.CharField(verbose_name="Skoleår (Eks: 2018-2019 eller 2019-2020)", max_length=50, blank=True)
+    edition = models.IntegerField(verbose_name="Utgave nummer")
+
+    def __str__(self):
+        return str(self.school_year) + " Utgave: " + str(self.edition)

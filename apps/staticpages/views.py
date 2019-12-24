@@ -5,7 +5,7 @@ from os import path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
@@ -19,8 +19,9 @@ from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
 from apps.registration.models import Hybrid, ContactPerson, get_graduation_year
-from .forms import CommiteApplicationForm, ApplicationForm
-from .models import Application, BoardReport, BoardReportSemester, CommiteApplication, Ktv_report, Protocol, Statute
+from .forms import CommiteApplicationForm, ApplicationForm, UpdatekForm, StatuteForm
+from .models import Application, BoardReport, BoardReportSemester, CommiteApplication, Ktv_report, Protocol, Statute, \
+    Updatek
 
 
 class FrontPage(EventList):
@@ -149,6 +150,13 @@ class StatutesView(LoginRequiredMixin, AboutView):
         return context
 
 
+class StatuteCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'staticpages.add_statute'
+    model = Statute
+    form_class = StatuteForm
+    success_url = reverse_lazy('statutter')
+
+
 class ProtocolView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(ProtocolView, self).get_context_data(**kwargs)
@@ -187,18 +195,32 @@ class RingenView(TemplateResponseMixin, ContextMixin, View):
         return self.render_to_response(context)
 
 
-UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
+class UpdatekView(TemplateResponseMixin, ContextMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        updateks = Updatek.objects.all().order_by('-school_year', 'edition')
+        year = ''
+        editions = []
+        years_with_editions = []
+        for updatek in updateks:
+            if updatek.school_year == year:
+                editions.append(updatek)
+            else:
+                if year != '':
+                    years_with_editions.append([year, editions])
+                year = updatek.school_year
+                editions = []
+                editions.append(updatek)
+        years_with_editions.append([year, editions])
+        context['updatek'] = years_with_editions
+        return self.render_to_response(context)
 
 
-def updatek(request):
-    context = {}
-    dirs = os.listdir(UPDATEK)
-    context['updatek'] = sorted([(
-        dir,
-        sorted(set([os.path.splitext(file)[0] for file in
-                    os.listdir(os.path.join(UPDATEK, dir))]))
-    ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
-    return render(request, 'staticpages/updatek.html', context)
+class UpdatekCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'staticpages.add_updatek'
+    model = Updatek
+    form_class = UpdatekForm
+    success_url = reverse_lazy('updatek')
 
 
 @login_required
