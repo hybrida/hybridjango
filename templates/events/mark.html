@@ -98,6 +98,17 @@
             <br>
         {% endif %}
 
+        {% if Remove_on_too_many_marks %}
+            <h4 style="font-size: 20px ">Fjernet fra arrangementer</h4>
+            <ul>
+                <li style="font-size: 16px {% if user|num_marks >= Too_many_marks %}; font-weight: bold{% endif %}">
+                    Med {{ Too_many_marks }} prikk{% if Too_many_marks > 1 %}er{% endif %} blir du meldt av fremtidge
+                    arrangementer.
+                </li>
+            </ul>
+            <br>
+        {% endif %}
+
         {% if not Delays.exists and Goes_on_secondary == 0 and Too_many_marks == 0 %}
             <p style="font-size: 16px ">Ser ikke ut til at det er noen konsekvenser for øyeblikket.</p>
         {% endif %}

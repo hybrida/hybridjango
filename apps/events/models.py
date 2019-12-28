@@ -8,7 +8,6 @@ from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
 
-
 '''Defines rules for different type of events'''
 
 
@@ -20,6 +19,7 @@ class EventType(models.Model):
     use_goes_on_secondary = models.BooleanField(default=False)
     use_too_many_marks = models.BooleanField(default=False)
     use_mark_on_late_signoff = models.BooleanField(default=False)
+    use_remove_on_too_many_marks = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -196,14 +196,14 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def too_many_marks(self, hybrid, maxmarks):     # Checks if a user has too many marks to sign up to an event
+    def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
         if self.event.type.use_too_many_marks:
             if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
                 return True
         return False
 
-    def goes_on_secondary(self, hybrid, maxmarks, too_many):    # Checks whether a user goes on the secondary
-        if self.event.type.use_goes_on_secondary:               # waitinglist or not
+    def goes_on_secondary(self, hybrid, maxmarks, too_many):  # Checks whether a user goes on the secondary
+        if self.event.type.use_goes_on_secondary:  # waitinglist or not
             if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
                 return True
         return False
@@ -244,21 +244,16 @@ class Attendance(models.Model):
                 in self.get_placementsSecondary()]
 
     def get_signoff_close(self):
-        if MarkPunishment.objects.all().last().signoff_close == None and self.event.signoff_close == None:
+        if MarkPunishment.objects.all().last().signoff_close is None and self.event.signoff_close is None:
             return self.signup_end
-        elif self.event.signoff_close_on_signup_close == True:
+        elif self.event.signoff_close_on_signup_close is True:
             return self.signup_end
-        elif self.event.signoff_close != None:
+        elif self.event.signoff_close is not None:
             return self.event.event_start - datetime.timedelta(hours=self.event.signoff_close)
         return self.event.event_start - datetime.timedelta(hours=MarkPunishment.objects.all().last().signoff_close)
 
     def signoff_open(self):
         return self.get_signoff_close() > timezone.now()
-
-    def late_signoff_mark(self, hybrid):
-        mark, created = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
-                                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
-        return mark
 
 
 '''A model that will contain any feedback or comment that may be instered into the event'''
@@ -374,3 +369,5 @@ class MarkPunishment(models.Model):
     signoff_close = models.PositiveIntegerField(default=None, null=True,
                                                 blank=True)  # How many hours before event start does signoff close
     mark_on_late_signoff = models.BooleanField(default=True)  # If a mark is given or not for signing off late
+    remove_on_too_many_marks = models.BooleanField(
+        default=True)  # If a user has too many marks, they will be removed from future events
