@@ -296,7 +296,7 @@ class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, ge
         user = self.request.user
 
         context.update({
-            'End_date': closest_end_of_semester_date(),
+            'End_date': end_of_semester(),
             'Goes_on_secondary': MarkPunishment.objects.all().last().goes_on_secondary,
             'Too_many_marks': MarkPunishment.objects.all().last().too_many_marks,
             'Delay': Delay.objects.all().filter(punishment=MarkPunishment.objects.all().last()),

@@ -274,33 +274,24 @@ class EventComment(models.Model):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
 
-'''Checks which semester we're in and returns the amount of days to the end of that semester'''
+'''Checks which semester we're in and returns the date of the end of that semester'''
 
 
-def closest_end_of_semester():
-    now = datetime.date.today()
-    end_sem1 = datetime.date(now.year, 7, 1)
-    end_sem2 = datetime.date(now.year + 1, 1, 1)
-    delta = end_sem1 - now
-    if delta.days <= 0:
-        return (end_sem2 - now).days
+def end_of_semester():
+    today = datetime.date.today()
+    end_autumn = datetime.date(today.year + 1, 1, 1)
+    end_spring = datetime.date(today.year, 7, 1)
+    if end_spring > today:
+        return end_spring
     else:
-        return delta.days
+        return end_autumn
 
 
-'''Returns the date of the end of the semester we're in'''
+'''Returns the amount of days untill the end of the semester'''
 
 
-def closest_end_of_semester_date():
-    return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
-
-
-'''Time and date the mark will delete itself'''
-
-
-def mark_end_default():
-    return datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
-                                     datetime.datetime.min.time())
+def end_of_semester_days():
+    return (end_of_semester() - datetime.date.today()).days
 
 
 '''Returns the total amount of marks a user has'''
@@ -328,16 +319,16 @@ class Mark(models.Model):
     recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
-    end = models.DateTimeField(default=mark_end_default)
+    end = models.DateField(default=end_of_semester)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):
         return '{}, {} - {} dager'.format(self.recipient, self.start, MarkPunishment.objects.all().last().duration)
 
-    # Checks if the mark has passed it's expiredate, if so it deletes it self
+    # Checks if the mark is at or passed it's expiredate, if so it deletes itself
     def check_mark(self):
-        if datetime.datetime.now() >= self.end:
+        if datetime.date.today() >= self.end:
             self.delete()
 
 
@@ -367,7 +358,7 @@ class Rule(models.Model):
 class MarkPunishment(models.Model):
     delay = models.ManyToManyField(Delay, blank=True)  # Delays to signup based on the amount of marks a user has
     rules = models.ManyToManyField(Rule, blank=True)  # The rules displayed in the mark.html
-    duration = closest_end_of_semester()  # How long a mark lasts
+    duration = end_of_semester_days()  # How long a mark lasts
     goes_on_secondary = models.PositiveIntegerField(
         default=0)  # How many marks to put a user on a secondary waitinglist
     too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
