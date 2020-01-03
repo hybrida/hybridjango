@@ -33,22 +33,22 @@ class EventList(generic.ListView):
 class EventView(generic.DetailView):
     model = Event
     template_name = 'events/event.html'
-    mark_punishment = MarkPunishment.objects.last()
-    delays = Delay.objects.filter(punishment=mark_punishment)
 
     def post(self, request, *args, **kwargs):
         attendance = Attendance.objects.get(pk=request.POST['attendance'])
         user = request.user
+        mark_punishment = MarkPunishment.objects.last()
+
         if request.POST['action'] == 'leave' and attendance.signup_open():
-            # En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
+            # The "sign off"-button was pushed, checks if the user is signed up and if the signup is still open
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
-                # førstemann på venteliste blir plukket ut og sendt en mail.
+                # The first waiter is picked out and gets sent a mail telling them they got a spot in the event
                 if attendance.get_waiting().exists():
                     first_waiter = attendance.get_waiting()[0]
                     SendAdmittedMail(first_waiter, attendance)
                 Participation.objects.filter(hybrid=user, attendance=attendance).delete()
-            # Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste fra påmeldte på antall plasser,
-            # vil førstemann på venteliste automatisk bli flyttet til påmeldt.
+            # The user that signed off is actually removed. As attendance is just a single list dividing the waiting
+            # list from the participants by the index, the first person in line automatically becomes a participant.
             elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() and not attendance.is_signed(
                     user):
                 Participation.objects.filter(hybrid=user, attendance=attendance).delete()
@@ -56,32 +56,28 @@ class EventView(generic.DetailView):
             Participation.objects.get_or_create(hybrid=user, attendance=attendance)
 
         elif request.POST['action'] == 'leaveSecondary' and attendance.signup_open():
-            # En bruker trykker på "meld av"-knappen, det sjekkes at påmeldingen er åpen og at brukeren faktisk er påmeldt
+            # The "secondary sign off"button was pushed, checks if the user is signed up and if the signup is still open
             if ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).exists():
                 ParticipationSecondary.objects.filter(hybrid=user, attendance=attendance).delete()
-        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(user,
-                                                                                        self.mark_punishment.goes_on_secondary,
-                                                                                        self.mark_punishment.too_many_marks):
+        elif request.POST['action'] == 'joinSecondary' and attendance.goes_on_secondary(
+                user, mark_punishment.goes_on_secondary, mark_punishment.too_many_marks):
             ParticipationSecondary.objects.get_or_create(hybrid=user, attendance=attendance)
 
         elif request.POST['action'] == 'leaveLate' and attendance.signoff_open():
-            # En bruker trykker på "meld av"-knappen sent, det sjekkes at avmeldingen er åpen og at brukeren faktisk er påmeldt
+            # The "late sign off"-button was pushed, checks if the user is signed up and if the sign off is still open
             if Participation.objects.filter(hybrid=user, attendance=attendance).exists() and attendance.is_signed(user):
-                # førstemann på venteliste blir plukket ut og sendt en mail.
+                # The first waiter is picked out and gets sent a mail telling them they got a spot in the event
                 if attendance.get_waiting().exists():
                     first_waiter = attendance.get_waiting()[0]
                     SendAdmittedMail(first_waiter, attendance)
-                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
-                elif self.mark_punishment.mark_on_late_signoff and attendance.event.type.use_mark_on_late_signoff:
-                    # Gives a mark and sends a mail to the reciever for signing off late when there was no one to take their place
+                elif mark_punishment.mark_on_late_signoff and attendance.event.type.use_mark_on_late_signoff:
+                    # Gives a mark and sends a mail to the user for signing off late when no one could take their place
                     SendMarkMail(user, late_signoff_mark(hybrid=user, event=attendance.event))
-                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
-                else:
-                    Participation.objects.filter(hybrid=user, attendance=attendance).delete()
-            # Den som meldte seg av blir faktisk avmeldt. Ettersom attendance er en liste som kun skiller venteliste
-            # fra påmeldte på antall plasser, vil førstemann på venteliste automatisk bli flyttet til påmeldt.
-            elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() and not attendance.is_signed(
-                    user):
+                Participation.objects.filter(hybrid=user, attendance=attendance).delete()
+
+            elif Participation.objects.filter(hybrid=user, attendance=attendance).exists() \
+                    and not attendance.is_signed(user):
+                # Checks if the user is on he waiting list
                 Participation.objects.filter(hybrid=user, attendance=attendance).delete()
 
         self.object = self.get_object()
@@ -90,6 +86,8 @@ class EventView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
         user = self.request.user
+        mark_p = MarkPunishment.objects.last()
+        delays = Delay.objects.filter(punishment=mark_p)
         event = context['event']
         has_rfid = Appearances.objects.filter(event=event).exists()
         context['has_rfid'] = has_rfid
@@ -107,15 +105,14 @@ class EventView(generic.DetailView):
                 'waiting_placement': attendance.get_placement(
                     user) + 1 - attendance.max_participants if attendance.is_waiting(user) else None,
                 'number_of_marks': get_number_of_marks(user) if user.is_authenticated else 0,
-                'too_many_marks': attendance.too_many_marks(user,
-                                                            self.mark_punishment.too_many_marks) if user.is_authenticated else False,
-                'goes_on_secondary': attendance.goes_on_secondary(user,
-                                                                  self.mark_punishment.goes_on_secondary,
-                                                                  self.mark_punishment.too_many_marks) if user.is_authenticated else False,
-                'signup_delay': attendance.signup_delay(user, self.delays) if user.is_authenticated else 0,
-                'delay_over': attendance.delay_over(user, self.delays) if user.is_authenticated else True,
-                'new_signup_time': attendance.new_signup_time(user,
-                                                              self.delays) if user.is_authenticated else attendance.signup_start,
+                'too_many_marks': attendance.too_many_marks(user, mark_p.too_many_marks)
+                if user.is_authenticated else False,
+                'goes_on_secondary': attendance.goes_on_secondary(user, mark_p.goes_on_secondary, mark_p.too_many_marks)
+                if user.is_authenticated else False,
+                'signup_delay': attendance.signup_delay(user, delays) if user.is_authenticated else 0,
+                'delay_over': attendance.delay_over(user, delays) if user.is_authenticated else True,
+                'new_signup_time': attendance.new_signup_time(
+                    user, delays) if user.is_authenticated else attendance.signup_start,
                 'get_sorted_secondary': attendance.get_sorted_secondary() if user.is_authenticated else False,
                 'is_participantSecondary': attendance.is_participantSecondary(user) if user.is_authenticated else False,
                 'placementSecondary': attendance.get_placementSecondary(user) if attendance.is_participantSecondary(
@@ -316,8 +313,9 @@ def unattended(request, pk):
 
 
 def late_signoff_mark(event, hybrid):
-    mark, created = Mark.objects.get_or_create(recipient=hybrid, value=1, event=event,
-                                               reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
+    mark, created = Mark.objects.get_or_create(
+        recipient=hybrid, value=1, event=event,
+        reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
     remove_user_from_events(hybrid)
     return mark
 
@@ -347,17 +345,17 @@ def remove_user_from_events(hybrid):
 
 
 class MarkView(generic.base.TemplateResponseMixin, generic.base.ContextMixin, generic.base.View):
-    def get(self, request, *args, **kwargs):
+    def get(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        user = self.request.user
         mark_punishment = MarkPunishment.objects.last()
         delays = Delay.objects.filter(punishment=mark_punishment)
-        rules = Rule.objects.all().filter(punishment=mark_punishment)
+        rules = Rule.objects.filter(punishment=mark_punishment)
+
         context.update({
             'End_date': end_of_semester(),
             'Goes_on_secondary': mark_punishment.goes_on_secondary,
             'Too_many_marks': mark_punishment.too_many_marks,
-            'Delay': delays,
+            'Delay': delays.first(),
             'Delays': delays.order_by('marks'),
             'Duration': mark_punishment.duration,
             'Rules': rules,

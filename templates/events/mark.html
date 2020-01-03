@@ -34,7 +34,7 @@
         <h3 style="font-size: 30px ">Konsekvenser</h3>
 
         {% if Delays.exists %}
-            <h4 style="font-size: 20px ">Utsatt påmeling</h4>
+            <h4 style="font-size: 20px ">Utsatt påmelding</h4>
             <P style="margin-left: 2.5%; font-size: 16px ">Utsatt påmelding vil si at du må vente før du får lov til å
                 melde deg på et arrangement.<br>
                 F.eks med {{ Delay.marks }} prikk{% if Delay.marks > 1 %}er{% endif %} må du vente
@@ -69,8 +69,8 @@
                     </li>
                 {% endfor %}
             </ul>
-            {% endcomment %}
             <br>
+            {% endcomment %}
         {% endif %}
 
         {% if Goes_on_secondary != 0 %}
