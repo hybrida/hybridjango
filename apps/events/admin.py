@@ -1,38 +1,44 @@
 from django.contrib import admin
+import nested_admin
 
 from apps.bedkom.models import Bedpress
-from .models import EventType, Event, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, Rule, TPEvent
+from .models import EventType, Event, Attendance, Participation, ParticipationSecondary, Mark, MarkPunishment, Delay, \
+    Rule, TPEvent
 
 
-class ParticipationInline(admin.TabularInline):
+class ParticipationInline(nested_admin.NestedTabularInline):
     model = Participation
 
 
-class ParticipationSecondaryInline(admin.TabularInline):
+class ParticipationSecondaryInline(nested_admin.NestedTabularInline):
     model = ParticipationSecondary
 
 
-class AttendanceAdmin(admin.ModelAdmin):
+class AttendanceAdmin(nested_admin.NestedModelAdmin):
     model = Attendance
-    filter_horizontal = ('participants', 'specializations')
+    filter_horizontal = ('participants', 'participantsSecondary', 'specializations')
     inlines = [
         ParticipationInline,
         ParticipationSecondaryInline,
     ]
 
 
-class AttendanceInline(admin.StackedInline):
+class AttendanceInline(nested_admin.NestedStackedInline):
     model = Attendance
-    filter_horizontal = ('participants', 'specializations', 'groups')  # TODO: participants won't show up
+    filter_horizontal = ('participants', 'participantsSecondary', 'specializations', 'groups')
+    inlines = [
+        ParticipationInline,
+        ParticipationSecondaryInline,
+    ]
     extra = 0
 
 
-class BedpressInline(admin.TabularInline):
+class BedpressInline(nested_admin.NestedTabularInline):
     model = Bedpress
     extra = 0
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(nested_admin.NestedModelAdmin):
     inlines = [
         AttendanceInline,
         BedpressInline,
@@ -53,7 +59,8 @@ class MarkPunishmentAdmin(admin.ModelAdmin):
         DelayInline,
         RuleInline,
     ]
-    exclude = ('delay', 'rules', )
+    exclude = ('delay', 'rules',)
+
 
 admin.site.register(EventType)
 admin.site.register(Event, EventAdmin)
