@@ -1,6 +1,7 @@
 import datetime
 
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -120,9 +121,18 @@ class Attendance(models.Model):
     genders = models.CharField(max_length=3, default='MFU')
     grades = models.CharField(max_length=50, default='12345')
     specializations = models.ManyToManyField(Specialization, blank=True, limit_choices_to={'active': True})
+    groups = models.ManyToManyField(Group, blank=True)
 
     def invited_specialization(self, specialization):
         return not self.specializations.count() or specialization in self.specializations.all()
+
+    def invited_groups(self, groups):
+        if not self.groups.count():
+            return True
+        for group in groups:
+            if group in self.groups.all():
+                return True
+        return False
 
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
@@ -144,7 +154,7 @@ class Attendance(models.Model):
 
     def invited(self, user):
         return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
-            user.specialization)
+            user.specialization) and self.invited_groups(user.groups.all())
 
     def get_sorted_hybrids(self):
         return self.participants.order_by('participation__timestamp')
