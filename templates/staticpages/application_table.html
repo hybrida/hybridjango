@@ -54,7 +54,7 @@
                 <form action="{% url 'edit_application' Application.id %}" method="POST"
                       id="{{ Application.id }}"></form>
                 <tr id="row{{ Application.id }}">
-                    <td>{{ Application.date }}</td>
+                    <td>{% if Application.date %} {{ Application.date }} {% endif %}</td>
                     <td>{{ Application.name }}</td>
                     <td>{{ Application.description }}</td>
 
