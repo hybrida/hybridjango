@@ -150,7 +150,7 @@ def get_all_groups_members_and_form(users, groups, committees):
 
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
-    committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Redaksjonen', 'Ståpels', 'Vevkom']
+    committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Kjellerkom', 'Redaksjonen', 'Prokom', 'Ståpels', 'Vevkom']
     requires_admin = ['Arrkom', 'Bedkom', 'Kjellersjef', 'Styret', 'Vevkom']
 
     def test_func(self):
