@@ -40,8 +40,9 @@ class Protocol(models.Model):
 
 
 class Application(models.Model):
-    navn = models.CharField(max_length=500)
-    beskrivelse = models.TextField(max_length=5000)
+    name = models.CharField(max_length=500, verbose_name="navn")
+    date = models.DateField(default=timezone.now)
+    description = models.TextField(max_length=5000, verbose_name="beskrivelse")
 
     Grants = (
         ('Støttet', 'Støttet'),

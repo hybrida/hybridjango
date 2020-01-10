@@ -260,12 +260,12 @@ def application(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
-            pplication = form.save(commit=False)
-            pplication.save()
+            application_form = form.save(commit=False)
+            application_form.save()
             mail = ['skattmester@hybrida.no']
             sucsessful = send_mail('Søknad om støtte fra styret',
                                    'Navn: {navn}\n{beskrivelse}'
-                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   .format(navn=application_form.name, beskrivelse=application_form.description),
                                    'robot@hybrida.no',
                                    mail,
                                    )
@@ -288,10 +288,10 @@ def edit_application(request, pk):
         granted = request.POST.get('grantForm', False)
 
         if user.is_authenticated:
-            application = applications.get(pk=application_id)
-            application.granted = granted
-            application.comment = comment
-            application.save()
+            application_form = applications.get(pk=application_id)
+            application_form.granted = granted
+            application_form.comment = comment
+            application_form.save()
     return redirect('application_table')
 
 
