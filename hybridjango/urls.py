@@ -25,7 +25,6 @@ urlpatterns = [
                   url(r'^$', FrontPage.as_view(template_name='frontpage.html'), name='home'),
                   url(r'^admin/', admin.site.urls),
 
-                  url(r'^evaluation/', include('apps.evaluation.urls')),
                   url(r'^kilt/', include('apps.kiltshop.urls', namespace='kilt'), name='kiltshop'),
                   url(r'^bedkom/', include('apps.bedkom.urls')),
                   url(r'^kalender/', include('apps.eventcalendar.urls'), name='calendar'),
@@ -41,6 +40,7 @@ urlpatterns = [
                   url(r'^rfid/', include('apps.rfid.urls'), name='rfid'),
                   url(r'^gitlab/', include('apps.gitlab.urls'), name='gitlab'),
                   url(r'^achievements/', include('apps.achievements.urls'), name='achievements'),
+                  url(r'^evaluering/', include('apps.evaluation.urls'), name='evaluation'),
 
                   url(r'^api/', include('apps.api.urls'), name='api'),
                   url(r'^tinymce/', include('tinymce.urls')),

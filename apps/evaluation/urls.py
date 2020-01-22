@@ -1,10 +1,9 @@
 from django.conf.urls import url
+from .views import *
 
-from . import views
-
+app_name = 'evaluation'
 urlpatterns = [
-    url(r'^fall$', views.index, name='evaluation_fall'),
-    url(r'^spring$', views.spring, name='evaluation_spring'),
-    url(r'^(?P<pk>[0-9]+)$', views.evaluation, name='evaluation'),
-
+    url(r'^$', course_views , name='course_views'),
+    url(r'^fag/(?P<pk>[0-9]+)/$', get_course, name='get_course'),
+    url(r'^evaluation_form/$', get_evaluation_form, name='get_evaluation_form'),
 ]

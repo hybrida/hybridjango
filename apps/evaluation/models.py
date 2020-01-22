@@ -1,31 +1,72 @@
 from django.db import models
 from apps.registration.models import Hybrid
-from apps.registration.models import Specialization
-import datetime
-
+from tinymce import HTMLField
 
 class Course(models.Model):
-    code = models.CharField(max_length=10)
-    name = models.CharField(max_length=500, null=True)
-    semester = models.CharField(max_length=4, null=True)
+
+    name = models.CharField(max_length=255, blank=False, null=False)
+    course_code = models.CharField(max_length=255, blank=False, null=False)
+
+    Specializations = (
+        ('Geomatikk', 'Geomatikk'),
+        ('Konstruksjonsteknikk', 'Konstruksjonsteknikk'),
+        ('Marin teknikk', 'Marin teknikk'),
+        ('Petroleumsfag', 'Petroleumsfag'),
+        ('Produksjonsledelse', 'Produksjonsledelse'),
+        ('Maskinteknikk', 'Maskinteknikk')
+    )
+
+    specialization = models.CharField(choices=Specializations, max_length=250, blank=True)
+    grades_link = models.CharField(max_length=255)
+    ntnu_link = models.CharField(max_length=255)
+    average_score = models.DecimalField(decimal_places=2, max_digits=3, blank=True, null=True)
+
+    Semesters = (
+        ('Høst 3.', 'Høst 3.'),
+        ('Vår 3.', 'Vår 3.'),
+        ('Høst 4.', 'Høst 4.'),
+        ('Vår 4.', 'Vår 4.'),
+        ('Høst 5.', 'Høst 5.'),
+        ('Vår 5.', 'Vår 5.')
+
+    )
+    semester = models.CharField(choices=Semesters, max_length=250, blank=False, default="")
+    number_of_evaluations = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
-        return self.code + " - " + self.name
+        return self.name
 
 
 class Evaluation(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    workload = models.IntegerField(default=1)
-    difficulty = models.IntegerField(default=1)
-    learn = models.CharField(max_length=2500, null=True)
-    structure = models.CharField(max_length=2500, null=True)
-    useful = models.CharField(max_length=2500, null=True)
-    comment = models.CharField(max_length=2500, null=True)
-    grade = models.IntegerField(default=3)
-    year = models.IntegerField(default=2017)
-    anonymous = models.BooleanField(default=False)
-    specializaion = models.ForeignKey(Specialization, on_delete=models.CASCADE)
-    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+
+    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE, blank=True, null=True)
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        related_name="evaluation")
+    lecturer = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False)
+    year = models.IntegerField(default=2010, max_length=4, blank=False, null=False)
+    semester = models.IntegerField(blank=False, null=False) #1.-5.år
+    season = models.CharField(max_length=255, blank=False, null=False) #Høst/vår
+    title = models.CharField(max_length=255)
+    evaluation_lecturer = HTMLField()
+    evaluation_course = HTMLField()
+    score = models.IntegerField(default=0)
+    Profiles = (
+        ('Geomatikk', 'Geomatikk'),
+        ('Konstruksjonsteknikk', 'Konstruksjonsteknikk'),
+        ('Marin teknikk', 'Marin teknikk'),
+        ('Petroleumsfag', 'Petroleumsfag'),
+        ('Produksjonsledelse', 'Produksjonsledelse'),
+        ('Maskinteknikk', 'Maskinteknikk')
+
+    )
+    profile = models.CharField(choices=Profiles, max_length=250, blank=False, default="")
 
     def __str__(self):
-        return self.course.name + ": " + str(self.pk)
+        return self.title
