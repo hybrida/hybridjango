@@ -4,14 +4,14 @@
 {% block text %}
 
     <script>
-          function showHide3(variable) {
+        function showHide3(variable) {
             var x = variable.querySelector("#commentshidden");
             var y = variable.querySelector("#commentshidden2");
             var z = variable.querySelector("#hideButton");
             var a = variable.querySelector("#editButton");
             var b = variable.querySelector("#grantText");
             var c = variable.querySelector("#grantField");
-;
+
             if (x.style.display === "none" && y.style.display === "block") {
                 y.style.display = "none";
                 x.style.display = "block";
@@ -20,8 +20,7 @@
                 b.style.display = "block";
                 c.style.display = "none";
 
-                }
-            else {
+            } else {
                 z.style.display = "block";
                 x.style.display = "none";
                 y.style.display = "block";
@@ -33,76 +32,88 @@
         }
 
 
-
     </script>
 
     <div>
-<table class="table table-responsive sortable table-hover">
-    <thead>
-        <tr style="background-color: #428bca; height: 30px; color: white;">
-            <th class="col-xs-2">Navn</th>
-            <th class="col-lg-3">Beskrivlse</th>
-            <th class="col-xs-1">Støttet</th>
-            <th class="col-lg-3">Kommentar</th>
-            <th class="col-xs-1">Rediger</th>
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+            <tr style="background-color: #428bca; height: 30px; color: white;">
+                <th class="col-xs-1">Dato</th>
+                <th class="col-xs-2">Navn</th>
+                <th class="col-lg-3">Beskrivlse</th>
+                <th class="col-xs-1">Støttet</th>
+                <th class="col-lg-3">Kommentar</th>
+                <th class="col-xs-1">Rediger</th>
 
 
-        </tr>
-    </thead>
+            </tr>
+            </thead>
 
-    <tbody class="list">
-    {% for Application in applications %}
-        <form action="{% url 'edit_application' Application.id %}" method="POST" id="{{ Application.id }}"></form>
-    <tr id="row{{ Application.id }}">
-        <td>{{ Application.navn }}</td>
-        <td>{{ Application.beskrivelse }}</td>
+            <tbody class="list">
+            {% for Application in applications %}
+                <form action="{% url 'edit_application' Application.id %}" method="POST"
+                      id="{{ Application.id }}"></form>
+                <tr id="row{{ Application.id }}">
+                    <td>{% if Application.date %} {{ Application.date }} {% endif %}</td>
+                    <td>{{ Application.name }}</td>
+                    <td>{{ Application.description }}</td>
 
-                {% csrf_token %}
-                <input type="hidden" value="{{ Application.id }}" name="application_id">
-    <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden" form="{{ Application.id }}">
-        {% if Application.granted == 'Støttet' %}
-                                            <td data-value="1" style="background-color: lightgreen" class="text-left">
-                                        {% elif Application.granted == 'Delvis støttet' %}
-                                            <td data-value="2" style="background-color: yellow" class="text-left">
-                                        {% elif Application.granted == 'Ikke støttet' %}
-                                            <td data-value="3" style="background-color: indianred" class="text-left">
-                                        {% else %}
-                                            <td>
-                                        {% endif %}
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ Application.id }}" name="application_id">
+                    <input name="csrfmiddlewaretoken" value="{{ csrf_token }}" type="hidden"
+                           form="{{ Application.id }}">
+                    {% if Application.granted == 'Støttet' %}
+                        <td data-value="1" style="background-color: lightgreen" class="text-left">
+                            {% elif Application.granted == 'Delvis støttet' %}
+                        <td data-value="2" style="background-color: yellow" class="text-left">
+                            {% elif Application.granted == 'Ikke støttet' %}
+                        <td data-value="3" style="background-color: indianred" class="text-left">
+                            {% else %}
+                        <td>
+                    {% endif %}
 
-                                        <div id="grantText"><p id="" style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ Application.granted }}</p></div>
-                                        <div id="grantField" style="display: none">
-                                            <select class="form-control" id="grantForm" name="grantForm" autocomplete="off" form="{{ Application.id }}" required>
-                                                <option value="{{ Application.granted }}">{{ Application.granted }}</option>
-                                                <option value="Støttet">Støttet</option>
-                                                <option value="Delvis støttet">Delvis støttet</option>
-                                                <option value="Ikke støttet">Ikke støttet</option>
-                                            </select>
-                                        </div>
-                                        </td>
-                                                    <td class="text-left">
-                                                <div id="commentshidden" style="display: block;" >{{ Application.comment }}</div>
+                    <div id="grantText"><p id=""
+                                           style="font-size: large; color: #0f0f0f; margin: auto; text-align: center">{{ Application.granted }}</p>
+                    </div>
+                    <div id="grantField" style="display: none">
+                        <select class="form-control" id="grantForm" name="grantForm" autocomplete="off"
+                                form="{{ Application.id }}" required>
+                            <option value="{{ Application.granted }}">{{ Application.granted }}</option>
+                            <option value="Støttet">Støttet</option>
+                            <option value="Delvis støttet">Delvis støttet</option>
+                            <option value="Ikke støttet">Ikke støttet</option>
+                        </select>
+                    </div>
+                    </td>
+                    <td class="text-left">
+                        <div id="commentshidden" style="display: block;">{{ Application.comment }}</div>
 
-                                                <div style="display: none " id="commentshidden2">
-                                                    <div style="">
-                                                        <input name="Application_id" value="{{ Application.pk }}" form="{{ Application.id }}" hidden>
-                                                        <label for="comment" class="sr-only"></label>
-                                                        <textarea class="" id="description" name="text" style="width: 100%; height: 100%; margin-top: -18px; margin-bottom: -30px; margin-right: -19px"
-                                                                  autocomplete="off"
-                                                                   form="{{ Application.id }}">{{ Application.comment }}
+                        <div style="display: none " id="commentshidden2">
+                            <div style="">
+                                <input name="Application_id" value="{{ Application.pk }}" form="{{ Application.id }}"
+                                       hidden>
+                                <label for="comment" class="sr-only"></label>
+                                <textarea class="" id="description" name="text"
+                                          style="width: 100%; height: 100%; margin-top: -18px; margin-bottom: -30px; margin-right: -19px"
+                                          autocomplete="off"
+                                          form="{{ Application.id }}">{{ Application.comment }}
                                                         </textarea>
-                                                    </div>
-                                                </div>
-                                            </td>
-                <td>
-                    <button id="editButton"  class="btn btn-primary" onclick="showHide3(row{{Application.id}})">Rediger</button>
-                    <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%" form="{{ Application.id }}">Lagre</button>
-                </td>
-    </tr>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button id="editButton" class="btn btn-primary" onclick="showHide3(row{{ Application.id }})">
+                            Rediger
+                        </button>
+                        <button id="hideButton" type="submit" class="btn btn-primary" style="display: none; width: 100%"
+                                form="{{ Application.id }}">Lagre
+                        </button>
+                    </td>
+                </tr>
 
+            {% endfor %}
 
-    {% endfor %}
-
-    </tbody>
-</table></div>
+            </tbody>
+        </table>
+    </div>
 {% endblock text %}

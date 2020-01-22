@@ -1,0 +1,80 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+    <h2> {{ status | capfirst }} badge requests</h2>
+    <select class="form-control" value="{{ status }}" onchange="goto(this.value)">
+        <option {% if status == "all" %}selected{% endif %} value="all">All</option>
+        <option {% if status == "pending" %}selected{% endif %} value="pending">Pending</option>
+        <option {% if status == "approved" %}selected{% endif %} value="approved">Approved</option>
+        <option {% if status == "denied" %}selected{% endif %} value="denied">Denied</option>
+    </select>
+    <table class="table table-responsive sortable table-hover">
+        <thead>
+            <tr style="background-color: #428bca; height: 30px; color: white;">
+                <th class="col-xs-3" colspan="2">Badge</th>
+                <th class="col-xs-2">Bruker</th>
+                {% if status == "all" %}
+                    <th class="col-xs-4">Kommentar</th>
+                    <th class="col-xs-1">Status</th>
+                {% else %}
+                    <th class="col-xs-5">Kommentar</th>
+                {% endif %}
+                <th class="cols-xs-2" colspan="2">Handling</th>
+            </tr>
+        </thead>
+
+        <tbody class="list">
+            {% for req in requests %}
+                {% with badge=req.badge user=req.user %}
+                    <tr>
+                        <td class="col-xs-1">
+                            <img title="Name: {{ badge.name }}
+                                    Description: {{ badge.description }}
+                                    Scorepoints: {{ badge.scorepoints }}"
+                                 src="/uploads/{{ badge.badge_image }}"
+                                 alt="Name: {{ badge.name }}"
+                                 style="width: 100%; height: auto; margin-bottom: 1%; margin-left: 1%">
+                        </td>
+                        <td class="col-xs-2">{{ badge.name }} ({{ badge.scorepoints }} pts.)</td>
+                        <td class="col-xs-2"><a href="{% url 'profile' user.username %}">{{ user.full_name }}</a></td>
+                        {% if status == "all" %}
+                            <td class="col-xs-4">{{ req.comment }}</td>
+                            <td class="col-xs-1">{{ req.get_status_display }}</td>
+                        {% else %}
+                            <td class="col-xs-5">{{ req.comment }} </td>
+                        {% endif %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="request-id" value={{ req.id }}>
+                            {% if req.status == "A" %}
+                                <td class="col-xs-2" colspan="2">Kan ikke endre en godkjent request</td>
+                            {% else %}
+                                <td class="col-xs-1">
+                                    <button class="btn btn-primary" name="approve" type="submit">Godta</button>
+                                </td>
+                                <td class="col-xs-1">
+                                    <button
+                                            class="btn btn-primary"
+                                            name="{% if req.status == "D" %}pending{% else %}deny{% endif %}"
+                                            type="submit"
+                                    >
+                                        {% if req.status == "D" %}Pending{% else %}Avslå{% endif %}
+                                    </button>
+                                </td>
+                            {% endif %}
+                        </form>
+                    </tr>
+
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock text %}
+{% block script %}
+    <script>
+        function goto(status) {
+            window.location = "{% url "badgerequest-list" "" %}" + status;
+        }
+    </script>
+{% endblock script %}

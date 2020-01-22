@@ -1,5 +1,7 @@
 {% extends 'standard_wide.html' %}
+{% load mark_extras %}
 {% load static %}
+{% load template_filters %}
 {% block title %}{{ hybrid.hybridname }}{% endblock title %}
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
@@ -107,15 +109,39 @@
                                 <td>{{ hybrid.specialization.name }}</td>
                             </tr>
                         {% endif %}
+                        {% if user == hybrid %}
+                            <tr>
+                                <td>Prikker</td>
+                                <td>{{ user|num_marks }}</td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div>
                 <br>
+                {% if request.user == hybrid %}
+                <div class="list" >
+                    {% for attendance in attendance_list_chronological%}
+
+                        <div>
+                            <a href="{% url 'event' attendance.get_event_pk%}">
+                                <span>
+                                    {{ attendance.get_event_name }}
+                                <time datetime="{{ attendance.get_event_start|date:'c' }}">
+                                    {{attendance.get_event_start|date:'d. b' }}
+                                    {{ attendance|get_if_waiting:request.user }}
+                                </time>
+
+
+                                </span>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <div class="col">
                     <div class="row">
                         {% for badge in hybrid.hybridbadges.all|dictsortreversed:"scorepoints"  %}
-                            <img src="/uploads/{{ badge.badge_image }}" title="Name: {{ badge.name }}
-Description: {{ badge.description }}
-Scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
+                            {% include 'achievements/badge_image_snippet.html' %}
                         {% endfor %}
                     </div>
                 </div>
@@ -144,5 +170,7 @@ Scorepoints: {{ badge.scorepoints }}" class="badges"  alt="image">
         </div>
     </div>
     </div>
+
+    {% include 'achievements/request_modal_snippet.html' %}
 {% endblock %}
 ##grid layout bootstrap

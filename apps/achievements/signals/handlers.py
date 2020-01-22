@@ -20,9 +20,10 @@ def my_callback(sender, **kwargs):
 @receiver(post_save, sender=Ridder)
 def GriffBadge(sender=Ridder, **kwargs):
     inst_obj = kwargs['instance']
-    badge = Badge.objects.get(name="Griffens Orden")
-    badge.user.add(inst_obj.hybrid)
-    badge.save()
+    if Badge.objects.filter(name="Griffens Orden").exists():
+        badge = Badge.objects.get(name="Griffens Orden")
+        badge.user.add(inst_obj.hybrid)
+        badge.save()
 
 #function that awards membership status whenenever the user profiles field for membership returns true
 @receiver(post_save, sender=Hybrid)

@@ -1,4 +1,5 @@
 {% load static %}
+{% load has_group %}
 <nav class="navbar navbar-default navbar-fixed-top" xmlns="http://www.w3.org/1999/html">
     <div class="container" id="nav-container">
         <div class="navbar-header">
@@ -16,9 +17,8 @@
                 <li><a href="{% url 'about' %}">Om Hybrida</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'updatek' %}">Update<sup>k</sup></a></li>
-                    <li>
-                        <a href="{% url 'ecalendar' %}">Kalender</a>
-                    </li>
+                    <li><a href="{% url 'mark' %}">Prikker</a></li>
+                    <li><a href="{% url 'ecalendar' %}">Kalender</a></li>
                 {% else %}
                     <li><a href="{% url 'for_companies' %}">For bedrifter</a></li>
                     <li><a href="{% url 'ringen' %}">I&IKT-ringen</a></li>
@@ -36,6 +36,9 @@
 
                             <li>
                                 <a href="{% url 'ballot:index' %}">Avstemning</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'avvik' %}">Avviksmelding</a>
                             </li>
                             <li>
                                 <a href="{% url 'strikk' %}">Hybridastrikk</a>
@@ -112,6 +115,11 @@
                             {% if user.is_staff %}
                                 <li>
                                     <a href="{% url 'admin:index' %}">Administrering</a>
+                                </li>
+                            {% endif %}
+                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'group_management' %}">Gruppe administrering</a>
                                 </li>
                             {% endif %}
                             <li>

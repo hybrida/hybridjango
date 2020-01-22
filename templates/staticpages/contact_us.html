@@ -1,7 +1,7 @@
 {% extends 'staticpages/about.html' %}
 {% block text %}
     <article>
-        <h1>Kontaktinfo</h1>
+        <h1>Kontakt oss</h1>
         <br>
         <h4>Hovedstyret</h4>
         <p>styret@hybrida.no</p>
@@ -62,10 +62,24 @@
         <p>jentekomsjef@hybrida.no</p>
         <br>
 
+        <a name="prokomsjef" class="anchor"></a>
+        <h4>Prokomsjef</h4>
+        <p>{{ prokomsjef.get_full_name }}</p>
+        <p>prokom@hybrida.no</p>
+        <br>
+
         <a name="redaktor" class="anchor"></a>
         <h4>Redaktør</h4>
         <p>{{ redaktor.get_full_name }}</p>
         <p>updatek@hybrida.no</p>
+        <br>
+
+        <a name="avvik" class="anchor"></a>
+        <button type="button" class="btn btn-danger btn-block">
+            <h4>
+                <a href="{% url 'avvik' %}" style="color: black"> Send Avviksmelding </a>
+            </h4>
+        </button>
         <br>
 
     </article>

@@ -40,13 +40,25 @@
                         </div>
                         <div class="progress" style="margin-bottom: 0">
                             <div class="progress-bar"
-                                 style="min-width: 4em;
-                                         width: {% widthratio attendance.get_signed|length attendance.max_participants 100 %}%">
-                                {{ attendance.get_signed|length }}
-                                / {{ attendance.max_participants }}
-                                {% if attendance.get_waiting %}
-                                    + {{ attendance.get_waiting|length }}
+                                 style="min-width: 4em; width: {% if attendance.signup_has_opened %}
+                                     {% widthratio attendance.get_signed|length attendance.max_participants 100 %}{% else %} 0 {% endif %}%">
+                                {% comment %} Remove to hide attendance before event starts(Also remove the equivalent
+                                comments in event.html
+                                {% if attendance.signup_has_opened %}
+                                {% endcomment %}
+                                    {{ attendance.get_signed|length }}
+                                    / {{ attendance.max_participants }}
+                                    {% if attendance.get_waiting %}
+                                        + {{ attendance.get_waiting|length }}
+                                    {% endif %}
+                                    {% if attendance.get_sorted_secondary %}
+                                        + {{ attendance.get_sorted_secondary|length }}
+                                    {% endif %}
+                                {% comment %} Remove to hide attendance before event starts
+                                {% else %}
+                                    0 / {{ attendance.max_participants }}
                                 {% endif %}
+                                {% endcomment %}
                             </div>
                         </div>
                     {% endfor %}
