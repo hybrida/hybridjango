@@ -1,0 +1,107 @@
+{% extends 'standard_wide.html' %}
+{% load static %}
+
+{% block text %}
+
+    <h1>FAGEVALUERINGER</h1>
+
+        <a class="btn btn-primary" style="margin-left:80%" href="{% url 'evaluation:get_evaluation_form' %}"> Skriv din vurdering!</a>
+
+        <div class="topnav">
+            <div class="searchbar">
+                <input id="course-search" type="text" name="search" placeholder="Søk fag/fagkode">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+    {# Table start #}
+    <div style="overflow-x:hidden; padding-top: 15px">
+        <table class="table table-responsive sortable table-hover">
+            <thead>
+            <tr style="background-color: #428bca; height: 30px; color: white;" class="row">
+                <th class="col-xs-3">Fag</th>
+                <th class="col-xs-3">Fagkode</th>
+                <th class="col-xs-2">Spesialisering</th>
+                <th class="col-xs-2">Semester</th>
+                <th class="col-xs-1">Evalueringer</th>
+                <th class="col-xs-1">Gjennomsnittsvurdering</th>
+            </tr>
+            </thead>
+            {# Table body - Important to have class="list" for search to function #}
+            <tbody>
+            {% for course in courses %}
+                <tr id="row{{ course.id }}" class="row">
+                    <td class="text-left; name; col-xs-3" style="font-size:x-large;">
+                        <a href="{% url 'evaluation:get_course' course.pk %}"
+                            style="color: #005675; font-size:16px">{{ course.name }}</a>
+                    </td>
+                    <td class="text-left; responsible; col-xs-3"> {{ course.course_code }}</td>
+                    <td class="text-left; col-xs-2"> {{ course.specialization }}</td>
+                    <td class="text-left; tag; col-xs-2">{{ course.semester }}</td>
+                    <div>
+                        <td class="text-left; col-xs-1">
+                            <div id="evaluation_count">{{ course.number_of_evaluations }}</div>
+                        </td>
+                    </div>
+                    <td class="Evaluations; col-xs-1" style="font-size: medium; text-align:left">
+                        <div id="statusText">
+                            <div class="row" style="white-space: nowrap" ; align="left">
+                                {% if course.average_score >= 1 %}
+                                    <span class="glyphicon glyphicon-star">
+                                           </span>
+                                {% endif %}
+                                {% if course.average_score >= 2 %}
+                                    <span class="glyphicon glyphicon-star">
+                                           </span>
+                                {% endif %}{% if course.average_score >= 3 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}{% if course.average_score >= 4 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}{% if course.average_score == 5 %}
+                                <span class="glyphicon glyphicon-star">
+                                           </span>
+                            {% endif %}</div>
+                            <br>
+                            <div class="row" style="white-space: nowrap" ;
+                                 align="left">{{ course.average_score }}/ 5
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        .topnav input[type=text] {
+            padding: 6px;
+            margin-top: 8px;
+            font-size: 17px;
+            border: none;
+        }
+
+        .topnav .searchbar button {
+            padding: 6px 10px;
+            margin-top: 8px;
+            margin-right: 16px;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .topnav .searchbar button:hover {
+            background: #ccc;
+        }
+
+        @media screen and (max-width: 600px) {
+            .topnav .searchbar {
+                float: none;
+            }
+        }
+    </style>
+
+{% endblock text %}

@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import File, Subject
-from .forms import HybridopediaFileForm, HybridopediaSubjectForm
+from apps.registration.models import Subject
+from apps.registration.forms import SubjectForm
+from .models import File
+from .forms import HybridopediaFileForm
 
 
 # TODO: Login required for forms?
@@ -22,20 +24,29 @@ def fileForm(request):
 
 def subjectForm(request):
     if request.method == 'POST':
-        form = HybridopediaSubjectForm(request.POST)
+        form = SubjectForm(request.POST)
         form.instance.author = request.user
         if form.is_valid():
             form.save()
             return redirect('hybridopedia:firstPage')
     else:
-        form = HybridopediaSubjectForm()
+        form = SubjectForm()
         return render(request, 'hybridopedia/subjectForm.html', {'form': form})
 
 
 @login_required
 def firstPage(request):
-    subjects = Subject.objects.all()
-    return render(request, "hybridopedia/firstPage.html", {"subjects": subjects})
+    context = {
+        "subjects": Subject.objects.all(),
+        "first": Subject.objects.filter(year="First"),
+        "second": Subject.objects.filter(year="Second"),
+        "third": Subject.objects.filter(year="Third"),
+        "fourth": Subject.objects.filter(year="Fourth"),
+        "fifth": Subject.objects.filter(year="Fifth"),
+        "thirdFifth": Subject.objects.filter(year="Third-Fifth"),
+        "rest": Subject.objects.filter(year="")
+    }
+    return render(request, "hybridopedia/firstPage.html", context)
 
 
 @login_required

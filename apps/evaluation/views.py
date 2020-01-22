@@ -1,26 +1,38 @@
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Avg
+from django.shortcuts import render, redirect
 from .models import Course, Evaluation
+from .forms import EvaluationForm
+# Create your views here.
+def course_views(request):
+    courses = Course.objects.all().order_by('course_code')
+    return render(request, 'evaluation/main_page.html', {'courses':courses})
 
 
-def index(request):
-    courses = Course.objects.filter(semester="høst")
-    return render(request, 'evaluation/index.html',{"courses":courses})
+def get_course(request, pk):
+    course = Course.objects.filter(pk=pk).first()
+    evaluations = Evaluation.objects.filter(course=course).all()
+    return render(request,'evaluation/course.html', {'course':course, 'evaluations':evaluations})
 
+def get_evaluation_form(request):
+        form = EvaluationForm(request.POST)
+        if request.method == 'POST':
+            form = EvaluationForm(request.POST)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.author = request.user
+                application.save()
+                course =Course.objects.filter(pk=application.course.pk).first()
+                course.number_of_evaluations = Evaluation.objects.filter(course=course).__len__()
+                average = 0
+                for i in Evaluation.objects.filter(course=course):
+                    average += i.score
+                print(Evaluation.objects.filter(course=course).__len__())
 
-def spring(request):
-    courses = Course.objects.filter(semester="vår")
-    return render(request, 'evaluation/våremner.html',{"courses":courses})
+                print(average)
+                course.average_score = average/(Evaluation.objects.filter(course=course).__len__())
+                course.save()
+                return redirect('evaluation:course_views')
 
+        return render(request, 'evaluation/evaluation_form.html', {
+            'form': form,
+        })
 
-def evaluation(request, pk):
-    course = get_object_or_404(Course, pk=pk)
-    evaluations = Evaluation.objects.filter(course_id=pk)
-    workload_avg = Evaluation.objects.filter(course_id=pk).aggregate(Avg('workload'))
-
-    return render(request, 'evaluation/evaluate.html',
-                  {'course': course,
-                   'evaluations':evaluations,
-                   'workload_avg':workload_avg,
-                   }
-                  )

@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mark',
             name='end',
-            field=models.DateTimeField(default=apps.events.models.mark_end_default),
+            field=models.DateTimeField(default=apps.events.models.end_of_semester),
         ),
     ]
