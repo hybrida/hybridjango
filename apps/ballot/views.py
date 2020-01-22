@@ -1,8 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from apps.rfid.models import GeneralAssembly
+from hybridjango.utils import group_test
 
 
 class Ballot:
@@ -23,27 +24,68 @@ class Ballot:
     votes = []
     active = True
 
+class Suggestion:
+    num = 0
+    author = "Ikke vevsjef"
+    suggestion_text = "Vevkom burde ta over styret"
+    suggestions_enabled = False
+
+
 
 empty_vote = 'Tomt'
+suggestion_list = []
 
-
-@login_required
+@user_passes_test(group_test("Tellekorps"))
 def overview(request):
     user = request.user
-    if not user.username == 'sindreeo':
-        return redirect('login')
     if request.method == 'POST':
-        Ballot.title = request.POST.get('title', 'Avstemning')
-        Ballot.only_members = True if request.POST.get('membersOnly') else False
-        Ballot.empty_votes = True if request.POST.get('empty_votes') else False
-        Ballot.is_attending = True if request.POST.get('is_attending') else False
-        Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
-        Ballot.votes = []
-        Ballot.has_voted = []
-        Ballot.nr += 1
+        if 'ballot_form' in request.POST:
+            Ballot.title = request.POST.get('title', 'Avstemning')
+            Ballot.only_members = True if request.POST.get('membersOnly') else False
+            Ballot.empty_votes = True if request.POST.get('empty_votes') else False
+            Ballot.is_attending = True if request.POST.get('is_attending') else False
+            Ballot.choices = [v for k, v in request.POST.items() if k.startswith('choice-')]
+            Ballot.votes = []
+            Ballot.has_voted = []
+            Ballot.nr += 1
+        return HttpResponseRedirect('#')
     elif 'active' in request.GET:
         Ballot.active = not (request.GET['active'] == 'Deaktiver')
-    return render(request, 'ballot/overview.html', context={'active': Ballot.active})
+    return render(
+        request, 'ballot/overview.html', context={
+            'active': Ballot.active,
+            },
+        )
+
+@user_passes_test(group_test("Nestleder"))
+def suggestion_overview(request):
+    user = request.user
+    if request.method == 'POST':
+        if 'toggle_suggestions' in request.POST:
+            Suggestion.suggestions_enabled = not Suggestion.suggestions_enabled
+        elif 'clear_suggestions' in request.POST:
+            del suggestion_list[:]
+        return HttpResponseRedirect("#")
+
+    return render(request, 'ballot/suggestions.html', context={
+            'suggestions_enabled' : Suggestion.suggestions_enabled
+    })
+
+@login_required
+def post_suggestion(request):
+    sugg = Suggestion()
+    sugg.num += 1
+    sugg.author = request.user
+    sugg.suggestion_text = request.POST.get('suggestion_text')
+    suggestion_list.append(sugg)
+
+@user_passes_test(group_test("Nestleder"))
+def get_suggestions(request):
+    json_list = [{
+        "author_name" : suggestion.author.full_name,
+        "suggestion_text" : suggestion.suggestion_text,
+    } for suggestion in suggestion_list]
+    return JsonResponse({"suggestion_list" : json_list})
 
 
 @login_required
@@ -66,6 +108,7 @@ def get_ballot_dict(user):
         'choices': choices,
         'has_voted': user.pk in Ballot.has_voted,
         'active': Ballot.active,
+        'suggestions_enabled' : Suggestion.suggestions_enabled,
     }
 
 
@@ -95,10 +138,10 @@ def vote(request):
 
     return HttpResponse("Du avga ingen stemme")
 
-
+@user_passes_test(group_test("Tellekorps"))
 def get_results(request):
     user = request.user
-    if not (user.is_authenticated and user.username == 'sindreeo'):
+    if not (user.is_authenticated and group_test("Tellekorps")):
         return JsonResponse(
             {"title": "Hvem er best?", "results": [{"name": "vevkom", "votes": 9001}, {"name": "andre", "votes": 0}],
              "total": 9001, "total_nonblank": 9001})

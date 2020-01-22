@@ -5,7 +5,7 @@ from os import path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
@@ -14,15 +14,14 @@ from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 from django.views.generic.edit import CreateView, DeleteView
 from django.core.mail import send_mail
 
+from hybridjango.settings import STATIC_FOLDER
 from apps.events.models import Event, TPEvent
 from apps.events.views import EventList
 from apps.jobannouncements.models import Job
-from apps.registration.models import Hybrid
-from apps.registration.models import get_graduation_year
-from apps.staticpages.models import BoardReport, Protocol, Ktv_report
-from hybridjango.settings import STATIC_FOLDER
-from .forms import CommiteApplicationForm, ApplicationForm
-from .models import Application, CommiteApplication
+from apps.registration.models import Hybrid, ContactPerson, get_graduation_year
+from .forms import CommiteApplicationForm, ApplicationForm, UpdatekForm, StatuteForm
+from .models import Application, BoardReport, BoardReportSemester, CommiteApplication, Ktv_report, Protocol, Statute, \
+    Updatek
 
 
 class FrontPage(EventList):
@@ -61,7 +60,6 @@ class FrontPage(EventList):
             context['Scorelist'] = scorelist
         except FileNotFoundError:
             context['Scorelist'] = []
-
 
         return context
 
@@ -102,16 +100,25 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
 
         context['before_pages'] = before_pages
         context['after_pages'] = after_pages
+        board_search_names = [
+            'leder',
+            'nestleder',
+            'skattmester',
+            'festivalus',
+            'bksjef',
+            'vevsjef',
+            'jentekomsjef',
+            'prokomsjef',
+        ]
+        # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
+        board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
         context.update({
-            'leder': Hybrid.objects.get(username='andrsly'),
-            'nestleder': Hybrid.objects.get(username='martahal'),
-            'skattmester': Hybrid.objects.get(username='torstsol'),
-            'bksjef': Hybrid.objects.get(username='helenesm'),
-            'festivalus': Hybrid.objects.get(username='jakobdr'),
-            'vevsjef': Hybrid.objects.get(username='sindreeo'),
-            'jentekomsjef': Hybrid.objects.get(username='renatebf'),
-            'redaktor': Hybrid.objects.get(username='kriraae'),
-        })  # Can be initialized only on startup (using middleware for example) if it becomes too costly
+            # map titles to ContactPerson objects, used instead of board_dict.values() to preserve order
+            'board': [*map(board_dict.get, board_search_names)],
+            # ** operator unpacks board dict, adding its mapped contents to the context dict
+            **board_dict,
+            'redaktor': ContactPerson.objects.get(search_name='redaktor')
+        })
         return self.render_to_response(context)
 
 
@@ -135,6 +142,21 @@ def members(request):
                   {'students': Hybrid.objects.filter(graduation_year=endyear).order_by('last_name')})
 
 
+class StatutesView(LoginRequiredMixin, AboutView):
+    def get_context_data(self, **kwargs):
+        context = super(StatutesView, self).get_context_data(**kwargs)
+        context['statute'] = Statute.objects.all().last()
+        context['active_page'] = 'statutter'
+        return context
+
+
+class StatuteCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'staticpages.add_statute'
+    model = Statute
+    form_class = StatuteForm
+    success_url = reverse_lazy('statutter')
+
+
 class ProtocolView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(ProtocolView, self).get_context_data(**kwargs)
@@ -142,11 +164,13 @@ class ProtocolView(LoginRequiredMixin, AboutView):
         context['active_page'] = 'statutter'
         return context
 
+
 class BoardReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):
         context = super(BoardReportView, self).get_context_data(**kwargs)
         context['reports'] = BoardReport.objects.all().order_by('date').reverse()
         context['active_page'] = 'board'
+        context['reportsemseters'] = BoardReportSemester.objects.all().order_by('pk').reverse()
         return context
 
 
@@ -171,18 +195,32 @@ class RingenView(TemplateResponseMixin, ContextMixin, View):
         return self.render_to_response(context)
 
 
-UPDATEK = os.path.join(STATIC_FOLDER, 'pdf/updatek')
+class UpdatekView(TemplateResponseMixin, ContextMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        updateks = Updatek.objects.all().order_by('-school_year', 'edition')
+        year = ''
+        editions = []
+        years_with_editions = []
+        for updatek in updateks:
+            if updatek.school_year == year:
+                editions.append(updatek)
+            else:
+                if year != '':
+                    years_with_editions.append([year, editions])
+                year = updatek.school_year
+                editions = []
+                editions.append(updatek)
+        years_with_editions.append([year, editions])
+        context['updatek'] = years_with_editions
+        return self.render_to_response(context)
 
 
-def updatek(request):
-    context = {}
-    dirs = os.listdir(UPDATEK)
-    context['updatek'] = sorted([(
-                                     dir,
-                                     sorted(set([os.path.splitext(file)[0] for file in
-                                                 os.listdir(os.path.join(UPDATEK, dir))]))
-                                 ) for dir in dirs], key=lambda dir: dir[0], reverse=True)
-    return render(request, 'staticpages/updatek.html', context)
+class UpdatekCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'staticpages.add_updatek'
+    model = Updatek
+    form_class = UpdatekForm
+    success_url = reverse_lazy('updatek')
 
 
 @login_required
@@ -194,7 +232,7 @@ def search(request):
     job_object_company = Job.objects.filter(company__name__icontains=query)
     user_object_username = Hybrid.objects.filter(username__icontains=query)
 
-    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username,))
+    complete_list = list(chain(event_object, job_object_title, job_object_company, user_object_username, ))
     print(complete_list)
 
     context = {
@@ -203,10 +241,12 @@ def search(request):
     }
     return render(request, 'staticpages/search.html', context)
 
+
 @permission_required(['staticpages.add_application'])
 def application_table(request):
-    applications = Application.objects.all()
+    applications = Application.objects.all().order_by('pk').reverse()
     return render(request, 'staticpages/application_table.html', {"applications": applications})
+
 
 @permission_required(['staticpages.add_commiteapplication'])
 def commiteapplications(request):
@@ -220,12 +260,12 @@ def application(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
-            pplication = form.save(commit=False)
-            pplication.save()
+            application_form = form.save(commit=False)
+            application_form.save()
             mail = ['skattmester@hybrida.no']
             sucsessful = send_mail('Søknad om støtte fra styret',
                                    'Navn: {navn}\n{beskrivelse}'
-                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   .format(navn=application_form.name, beskrivelse=application_form.description),
                                    'robot@hybrida.no',
                                    mail,
                                    )
@@ -235,6 +275,7 @@ def application(request):
     return render(request, 'staticpages/application_form.html', {
         'form': form,
     })
+
 
 def edit_application(request, pk):
     applications = Application.objects.all()
@@ -247,39 +288,43 @@ def edit_application(request, pk):
         granted = request.POST.get('grantForm', False)
 
         if user.is_authenticated:
-                application = applications.get(pk=application_id)
-                application.granted = granted
-                application.comment = comment
-                application.save()
+            application_form = applications.get(pk=application_id)
+            application_form.granted = granted
+            application_form.comment = comment
+            application_form.save()
     return redirect('application_table')
+
 
 class DeleteApplication(DeleteView):
     model = Application
-    success_url =  reverse_lazy('application_table')
+    success_url = reverse_lazy('application_table')
+
 
 @login_required
 def AddComApplication(request):
+    form = CommiteApplicationForm(request.POST)
+    if request.method == 'POST':
         form = CommiteApplicationForm(request.POST)
-        if request.method == 'POST':
-            form = CommiteApplicationForm(request.POST)
-            if form.is_valid():
-                ComApplication = form.save(commit=False)
-                ComApplication.navn = request.user
-                ComApplication.save()
-                return redirect('about')
+        if form.is_valid():
+            ComApplication = form.save(commit=False)
+            ComApplication.navn = request.user
+            ComApplication.save()
+            return redirect('about')
 
-        return render(request, 'staticpages/comapplication_form.html', {
-            'form': form,
-        })
+    return render(request, 'staticpages/comapplication_form.html', {
+        'form': form,
+    })
+
 
 def NewStudent(request):
-
     return render(request, 'staticpages/ny_student.html')
+
 
 def ChangeAcceptedStatus(request):
     request.user.accepted_conditions = True
     request.user.save()
     return redirect('/')
+
 
 class KTVReportView(LoginRequiredMixin, AboutView):
     def get_context_data(self, **kwargs):

@@ -1,0 +1,27 @@
+{% extends 'standard_sidebar.html' %}
+{% load static %}
+{% block text %}
+
+    <!-- Include author -->
+<div>
+    <h3>{{ subject.first.code }} - {{ subject.first }}</h3>
+    <br>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="/uploads/{{ file.file }} ">{{ file.name }} lagt ut av: {{ file.author }}</a>
+                {# : {{ file.author }}</a>#}
+            </li>
+        {% endfor %}
+
+    </ul>
+
+
+</div>
+
+{% endblock text%}
+{% block sidebar %}
+
+         <a class="btn btn-default" href="{% url 'hybridopedia:fileForm' %}">Legg til ny kok</a>
+
+{% endblock sidebar %}

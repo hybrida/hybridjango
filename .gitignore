@@ -3,6 +3,9 @@
 *.iws
 *.iml
 
+#VSCode
+.vscode/
+
 # Python stuff
 __pycache__/
 *.py[cod]
@@ -30,3 +33,7 @@ db.sqlite3
 
 static/pdf/updatek
 .gitignore.local
+
+uploads/
+
+hybridjango/utils/secrets
