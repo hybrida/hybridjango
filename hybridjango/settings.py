@@ -69,7 +69,6 @@ INSTALLED_APPS = [
     'apps.hybridopedia',
     'hybridjango',
     'crispy_forms',
-    'nested_admin',
 ]
 
 MIDDLEWARE = [
