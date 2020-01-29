@@ -325,6 +325,7 @@ def remove_user_from_events(hybrid):
     mark_punishment = MarkPunishment.objects.last()
     too_many_marks = mark_punishment.too_many_marks
     if num_marks >= too_many_marks != 0 and mark_punishment.remove_on_too_many_marks:
+        # Gets all attendance objects from today to one year from now.
         attendances = Attendance.objects.filter(event__event_start__range=[datetime.now(),
                                                                            datetime.now() + timedelta(days=365)])
         for attendance in attendances:
