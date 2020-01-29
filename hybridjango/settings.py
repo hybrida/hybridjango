@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'apps.vevkom',
     'apps.merchandise',
     'apps.hybridopedia',
+    'apps.lan',
     'hybridjango',
     'crispy_forms',
 ]

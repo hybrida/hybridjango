@@ -47,5 +47,7 @@ urlpatterns = [
                   url(r'^vevkom/', include('apps.vevkom.urls'), name='vevkom'),
                   url(r'^hybridopedia/', include('apps.hybridopedia.urls'), name='hybridopedia'),
                   # url(r'^butikk/', include('apps.merchandise.urls'), name='merchandise')
-                  url(r'^avvik$', RedirectView.as_view(url='https://forms.gle/yVuSU5v7vr96Cvth6'), name='avvik')
+                  url(r'^avvik$', RedirectView.as_view(url='https://forms.gle/yVuSU5v7vr96Cvth6'), name='avvik'),
+                  url(r'^lan/', include('apps.lan.urls'), name='lan')
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
