@@ -154,8 +154,9 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
     requires_admin = ['Arrkom', 'Bedkom', 'Jentekomsjef', 'Kjellersjef', 'Styret', 'Vevkom']
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Styret').exists() or \
-               self.request.user.groups.filter(name='Redaktør').exists() or self.request.user.is_superuser()
+        return self.request.user.groups.filter(name='Styret').exists() or self.request.user.groups.filter(
+            name='Kjellersjef').exists() or self.request.user.groups.filter(
+            name='Redaktør').exists() or self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
