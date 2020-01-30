@@ -112,8 +112,9 @@ attend the event, price and so forth'''
 class Attendance(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default='Påmelding')
-    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation, related_name='+')
-    participantsSecondary = models.ManyToManyField(Hybrid, blank=True, through=ParticipationSecondary, related_name='+')
+    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation, related_name='hybridattendances')
+    participantsSecondary = models.ManyToManyField(Hybrid, blank=True, through=ParticipationSecondary,
+                                                   related_name='hybridattendances_secondary')
     max_participants = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     signup_start = models.DateTimeField()

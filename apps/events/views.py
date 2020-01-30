@@ -325,11 +325,15 @@ def remove_user_from_events(hybrid):
     mark_punishment = MarkPunishment.objects.last()
     too_many_marks = mark_punishment.too_many_marks
     if num_marks >= too_many_marks != 0 and mark_punishment.remove_on_too_many_marks:
-        # Gets all attendance objects from today to one year from now.
-        attendances = Attendance.objects.filter(event__event_start__range=[datetime.now(),
-                                                                           datetime.now() + timedelta(days=365)])
+        # Gets all attendance objects from today to one year from now and
+        # where the user is either a participant or on the secondary waitinglist.
+        attendances = hybrid.hybridattendances.filter(
+            event__event_start__range=[datetime.now(), datetime.now() + timedelta(days=365)])
+        attendances_secondary = hybrid.hybridattendances_secondary.filter(
+            event__event_start__range=[datetime.now(), datetime.now() + timedelta(days=365)])
+
         for attendance in attendances:
-            if attendance.is_participant(hybrid) and attendance.event.type.use_remove_on_too_many_marks:
+            if attendance.event.type.use_remove_on_too_many_marks:
                 # Checks if the person that is being removed is on the waitinglist,
                 # if not it sends mail to the first person on the waiting list
                 if attendance.get_waiting().exists() and not attendance.is_waiting(hybrid):
@@ -338,7 +342,8 @@ def remove_user_from_events(hybrid):
                 Participation.objects.filter(hybrid=hybrid, attendance=attendance).delete()
                 SendRemovedMail(hybrid, attendance, 'du har for mange prikker.')
 
-            if attendance.is_participantSecondary(hybrid) and attendance.event.type.use_remove_on_too_many_marks:
+        for attendance in attendances_secondary:
+            if attendance.event.type.use_remove_on_too_many_marks:
                 ParticipationSecondary.objects.filter(hybrid=hybrid, attendance=attendance).delete()
                 SendRemovedMail(hybrid, attendance, 'du har for mange prikker.')
 
