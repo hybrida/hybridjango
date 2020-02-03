@@ -117,7 +117,8 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
             'board': [*map(board_dict.get, board_search_names)],
             # ** operator unpacks board dict, adding its mapped contents to the context dict
             **board_dict,
-            'redaktor': ContactPerson.objects.get(search_name='redaktor')
+            'redaktor': ContactPerson.objects.get(search_name='redaktor'),
+            'faddersjef': ContactPerson.objects.get(search_name='faddersjef'),
         })
         return self.render_to_response(context)
 
@@ -317,7 +318,9 @@ def AddComApplication(request):
 
 
 def NewStudent(request):
-    return render(request, 'staticpages/ny_student.html')
+    return render(request, 'staticpages/new_student.html', {
+        'faddersjef': ContactPerson.objects.get(search_name='faddersjef'),
+    })
 
 
 def ChangeAcceptedStatus(request):
