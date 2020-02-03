@@ -110,13 +110,30 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
             'jentekomsjef',
             'prokomsjef',
         ]
+        elected_representatives_search_names = [
+            'itv1',
+            'itv2',
+            'forste_ktv1',
+            'forste_ktv2',
+            'andre_ktv1',
+            'andre_ktv2',
+            'tredje_ktv1',
+            'tredje_ktv2',
+            'fjerde_ktv1',
+            'fjerde_ktv2',
+            'femte_ktv1',
+            'femte_ktv2',
+        ]
         # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
         board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
+        elected_dict = ContactPerson.objects.in_bulk(elected_representatives_search_names, field_name='search_name')
         context.update({
             # map titles to ContactPerson objects, used instead of board_dict.values() to preserve order
             'board': [*map(board_dict.get, board_search_names)],
             # ** operator unpacks board dict, adding its mapped contents to the context dict
             **board_dict,
+            'elected': [*map(elected_dict.get, elected_representatives_search_names)],
+            **elected_dict,
             'redaktor': ContactPerson.objects.get(search_name='redaktor'),
             'faddersjef': ContactPerson.objects.get(search_name='faddersjef'),
         })
