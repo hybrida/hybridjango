@@ -7,7 +7,7 @@ class Season(models.Model):
     SeasonEnd = models.DateField
 
 class Match(models.Model):
-    season = models.ForeignKey(Season)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
     title = models.TextField
     desc = models.TextField
     date = models.DateTimeField
@@ -53,6 +53,6 @@ class Player(models.Model):
 
 class Playerlist(models.Model):
     player = models.ManyToManyField(Player)
-    match = models.ForeignKey(Match)
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
 
 
