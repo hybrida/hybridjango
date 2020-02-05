@@ -151,11 +151,12 @@ def get_all_groups_members_and_form(users, groups, committees):
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
     committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Kjellerkom', 'Redaksjonen', 'Prokom', 'Ståpels', 'Vevkom']
-    requires_admin = ['Arrkom', 'Bedkom', 'Kjellersjef', 'Styret', 'Vevkom']
+    requires_admin = ['Arrkom', 'Bedkom', 'Jentekomsjef', 'Kjellersjef', 'Styret', 'Vevkom']
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Styret').exists() or \
-               self.request.user.groups.filter(name='Redaktør').exists() or self.request.user.is_superuser()
+        return self.request.user.groups.filter(name='Styret').exists() or self.request.user.groups.filter(
+            name='Kjellersjef').exists() or self.request.user.groups.filter(
+            name='Redaktør').exists() or self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
