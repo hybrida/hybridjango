@@ -1,13 +1,21 @@
 {% extends 'standard_wide.html' %}
 {% load static %}
 {% block text %}
+
+    {% if perms.staticpages.add_updatek %}
+        <a href="{% url 'add_updatek' %}">
+            <button class="btn btn-xs btn-primary">Ny</button>
+        </a>
+    {% endif %}
+
     <h1>Update<sup>k</sup></h1>
-    {% for dir, files in updatek %}
+
+    {% for year, editions in updatek %}
         <div class="space-above">
-            <h3>{{ dir }}</h3>
-            {% for file in files %}
-                <a href="/static/pdf/updatek/{{ dir }}/{{ file }}.pdf" target="_blank">
-                    <img width="142px" src="/static/pdf/updatek/{{ dir }}/{{ file }}.png" class="styled-image">
+            <h3>{{ year }}</h3>
+            {% for edition in editions %}
+                <a href="/uploads/{{ edition.pdf }}" target="_blank">
+                    <img width="142px" src="/uploads/{{ edition.frontpage }}" class="styled-image">
                 </a>
             {% endfor %}
         </div>

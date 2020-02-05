@@ -48,7 +48,5 @@ urlpatterns = [
                   url(r'^hybridopedia/', include('apps.hybridopedia.urls'), name='hybridopedia'),
                   url(r'interestgroups', include('apps.interestgroups.urls'), name='interestgroups'),
                   # url(r'^butikk/', include('apps.merchandise.urls'), name='merchandise')
-
-                  # TODO temprary, remove after 32. general assembly  2019-03-27
-                  url(r'^hjelp$', RedirectView.as_view(url='https://forms.gle/jcr8hjdvP8tJKzGL6'), name='missing-user')
+                  url(r'^avvik$', RedirectView.as_view(url='https://forms.gle/yVuSU5v7vr96Cvth6'), name='avvik')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

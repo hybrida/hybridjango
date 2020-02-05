@@ -1,0 +1,33 @@
+{% extends 'standard_sidebar.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block text %}
+    <div class="header" style="text-align: center;">
+        <h3 style="display: inline-block; font-size: xx-large; margin: auto">Last opp ny Update<sup>k</sup></h3>
+    </div>
+    <br>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label_tag }}</label>
+                <div>{{ field }}</div>
+            </div>
+
+        {% endfor %}
+        <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+    </form>
+{% endblock text %}
+{% block sidebar %}
+    <div class="header" style="text-align: center;">
+        <h3 style="display: inline-block; font-size: x-large; margin: auto">Info</h3>
+    </div>
+    <br>
+    <p>
+        Forsidebildet er det som blir vist på update<sup>k</sup> siden, for øyeblikket må det lastes opp manuelt (håper
+        vi får automatisert det snart)
+        <br> <br>
+        Utgavenummeret er skoleårets utgavenummer, dette blir brukt for å bestemme rekkefølgen utgavene står på
+        update<sup>k</sup> siden
+    </p>
+{% endblock sidebar %}

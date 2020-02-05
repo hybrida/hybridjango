@@ -1,4 +1,5 @@
 {% load static %}
+{% load has_group %}
 <nav class="navbar navbar-default navbar-fixed-top" xmlns="http://www.w3.org/1999/html">
     <div class="container" id="nav-container">
         <div class="navbar-header">
@@ -37,6 +38,9 @@
                                 <a href="{% url 'ballot:index' %}">Avstemning</a>
                             </li>
                             <li>
+                                <a href="{% url 'avvik' %}">Avviksmelding</a>
+                            </li>
+                            <li>
                                 <a href="{% url 'strikk' %}">Hybridastrikk</a>
                             </li>
                             <li>
@@ -58,11 +62,13 @@
                                     <a href="{% url 'internside:index' %}">Vevkom</a>
                                 </li>
                             {% endif %}
+                            {% comment %}
                             {% if perms.staticpages.add_commiteapplication %}
                                 <li>
                                     <a href="{% url 'comapps' %}">Komitésøknader</a>
                                 </li>
                             {% endif %}
+                            {% endcomment %}
                             {% if perms.staticpages.add_application %}
                                 <li>
                                     <a href="{% url 'application_table' %}">Oversikt over søknader</a>
@@ -108,6 +114,11 @@
                             {% if user.is_staff %}
                                 <li>
                                     <a href="{% url 'admin:index' %}">Administrering</a>
+                                </li>
+                            {% endif %}
+                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user|has_group:"Kjellersjef" or user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'group_management' %}">Gruppe administrering</a>
                                 </li>
                             {% endif %}
                             <li>

@@ -1,19 +1,20 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from apps.staticpages.views import AboutView, updatek, search, RingenView, members, BoardReportView, ProtocolView, \
-    application, application_table, DeleteApplication, AddComApplication, commiteapplications, NewStudent, edit_application, ChangeAcceptedStatus, KTVReportView, OnlinePictureView
+from apps.staticpages.views import *
 
 urlpatterns = [
     url(r'^s[oø]k$', search, name='search'),
     url(r'^nystudent$', NewStudent, name='newstudent'),
     url(r'^strikk$', TemplateView.as_view(template_name='staticpages/hybridastrikk.html'), name="strikk"),
-    url(r'^statutter$', AboutView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
+    url(r'^statutter$', StatutesView.as_view(template_name='staticpages/statutter.html'), name='statutter'),
+    url(r'^statutter/add$', StatuteCreate.as_view(template_name='staticpages/statutter_form.html'), name='add_statutter'),
     url(r'^statutter/protokoller/$', ProtocolView.as_view(template_name='staticpages/protocols.html'),
         name='protocols'),
     url(r'^om_hybrida$', AboutView.as_view(template_name='staticpages/about.html'), name='about'),
     url(r'^for_bedrifter$', AboutView.as_view(template_name='staticpages/for_companies.html'), name='for_companies'),
-    url(r'^updatek$', updatek, name='updatek'),
+    url(r'^updatek$', UpdatekView.as_view(template_name='staticpages/updatek.html'), name='updatek'),
+    url(r'^updatek/add$', UpdatekCreate.as_view(template_name='staticpages/updatek_form.html'), name='add_updatek'),
     url(r'^komite$', AboutView.as_view(template_name='staticpages/committees.html'), name='committees'),
     url(r'^styret$', AboutView.as_view(template_name='staticpages/board.html'), name='board'),
     url(r'^styret/referat$', BoardReportView.as_view(template_name='staticpages/board_report.html'),
@@ -42,8 +43,5 @@ urlpatterns = [
     url(r'^komiteersok', commiteapplications, name='comapps'),
     url(r'(?P<pk>[0-9]+)/applications/edit', edit_application, name='edit_application'),
     url(r'^change_accepted_status', ChangeAcceptedStatus, name='change_accepted_status'),
-    url(r'itvreferat', KTVReportView.as_view(template_name="staticpages/ITVprotocols.html"), name="KTVreport"),
-
-    # TODO very temporary
-    url(r'^online$', OnlinePictureView, name="online-picture")
+    url(r'itvreferat', KTVReportView.as_view(template_name="staticpages/ITVprotocols.html"), name="KTVreport")
 ]

@@ -8,11 +8,29 @@ from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
 
+
+'''Defines rules for different type of events'''
+
+
+class EventType(models.Model):
+    name = models.CharField(max_length=150)
+
+    # Can choose which parts of the Mark Systems are active for a specific type of event
+    use_delay = models.BooleanField(default=False)
+    use_goes_on_secondary = models.BooleanField(default=False)
+    use_too_many_marks = models.BooleanField(default=False)
+    use_mark_on_late_signoff = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
 '''The main event class'''
 
 
 class Event(models.Model):
     title = models.CharField(max_length=150)
+    type = models.ForeignKey(EventType, default=1, null=False, on_delete=models.CASCADE)
     ingress = models.CharField(max_length=350, blank=True, default='')
     text = HTMLField(blank=True)
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
@@ -26,6 +44,7 @@ class Event(models.Model):
     news = models.BooleanField(default=True)
     public = models.BooleanField(default=True)
     signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
+    signoff_close_on_signup_close = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
@@ -120,7 +139,6 @@ class Attendance(models.Model):
     def get_event_pk(self):
         return self.event.pk
 
-
     def signup_closed(self):
         return self.signup_start and self.signup_end and timezone.now() > self.signup_end
 
@@ -178,28 +196,23 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def get_number_of_marks(self, hybrid):  # Finds the number of marks a user has
-        marks = Mark.objects.all().filter(recipient=hybrid)
-        totalMarks = 0
-        for mark in marks:
-            totalMarks += mark.value
-        return totalMarks
-
-    def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
-        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid):
-            return True
+    def too_many_marks(self, hybrid, maxmarks):     # Checks if a user has too many marks to sign up to an event
+        if self.event.type.use_too_many_marks:
+            if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
+                return True
         return False
 
-    def goes_on_secondary(self, hybrid, maxmarks,
-                          too_many):  # Checks whether a user goes on the secondary waitinglist or not
-        if maxmarks != 0 and maxmarks <= self.get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
-            return True
+    def goes_on_secondary(self, hybrid, maxmarks, too_many):    # Checks whether a user goes on the secondary
+        if self.event.type.use_goes_on_secondary:               # waitinglist or not
+            if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
+                return True
         return False
 
     def signup_delay(self, hybrid, delays):  # Finds how many minutes a users signup time is delayed
-        for delay in delays:
-            if delay.marks <= self.get_number_of_marks(hybrid):
-                return delay.minutes
+        if self.event.type.use_delay:
+            for delay in delays:
+                if delay.marks <= get_number_of_marks(hybrid):
+                    return delay.minutes
         return 0
 
     def delay_over(self, hybrid, delays):  # Checks if signup delay is over
@@ -233,6 +246,8 @@ class Attendance(models.Model):
     def get_signoff_close(self):
         if MarkPunishment.objects.all().last().signoff_close == None and self.event.signoff_close == None:
             return self.signup_end
+        elif self.event.signoff_close_on_signup_close == True:
+            return self.signup_end
         elif self.event.signoff_close != None:
             return self.event.event_start - datetime.timedelta(hours=self.event.signoff_close)
         return self.event.event_start - datetime.timedelta(hours=MarkPunishment.objects.all().last().signoff_close)
@@ -241,8 +256,8 @@ class Attendance(models.Model):
         return self.get_signoff_close() > timezone.now()
 
     def late_signoff_mark(self, hybrid):
-        mark = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
-                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
+        mark, created = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
+                                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
         return mark
 
 
@@ -259,33 +274,35 @@ class EventComment(models.Model):
         return '{} - {} - {}'.format(self.event, self.author, self.timestamp)
 
 
-'''Checks which semester we're in and returns the amount of days to the end of that semester'''
+'''Checks which semester we're in and returns the date of the end of that semester'''
 
 
-def closest_end_of_semester():
-    now = datetime.date.today()
-    end_sem1 = datetime.date(now.year, 7, 1)
-    end_sem2 = datetime.date(now.year + 1, 1, 1)
-    delta = end_sem1 - now
-    if delta.days <= 0:
-        return (end_sem2 - now).days
+def end_of_semester():
+    today = datetime.date.today()
+    end_autumn = datetime.date(today.year + 1, 1, 1)
+    end_spring = datetime.date(today.year, 7, 1)
+    if end_spring > today:
+        return end_spring
     else:
-        return delta.days
+        return end_autumn
 
 
-'''Returns the date of the end of the semester we're in'''
+'''Returns the amount of days untill the end of the semester'''
 
 
-def closest_end_of_semester_date():
-    return (datetime.date.today() + datetime.timedelta(days=closest_end_of_semester()))
+def end_of_semester_days():
+    return (end_of_semester() - datetime.date.today()).days
 
 
-'''Time and date the mark will delete itself'''
+'''Returns the total amount of marks a user has'''
 
 
-def mark_end_default():
-    return datetime.datetime.combine(datetime.datetime.now() + datetime.timedelta(days=closest_end_of_semester()),
-                                          datetime.datetime.min.time())
+def get_number_of_marks(hybrid):  # Finds the number of marks a user has
+    marks = Mark.objects.all().filter(recipient=hybrid)
+    totalMarks = 0
+    for mark in marks:
+        totalMarks += mark.value
+    return totalMarks
 
 
 '''A model that contains a mark given to users for transgressions in accordance with the rules regarding events'''
@@ -302,16 +319,16 @@ class Mark(models.Model):
     recipient = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
     value = models.IntegerField()
     start = models.DateTimeField(default=timezone.now)
-    end = models.DateTimeField(default=mark_end_default)
+    end = models.DateField(default=end_of_semester)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):
         return '{}, {} - {} dager'.format(self.recipient, self.start, MarkPunishment.objects.all().last().duration)
 
-    # Checks if the mark has passed it's expiredate, if so it deletes it self
+    # Checks if the mark is at or passed it's expiredate, if so it deletes itself
     def check_mark(self):
-        if datetime.datetime.now() >= self.end:
+        if datetime.date.today() >= self.end:
             self.delete()
 
 
@@ -341,8 +358,10 @@ class Rule(models.Model):
 class MarkPunishment(models.Model):
     delay = models.ManyToManyField(Delay, blank=True)  # Delays to signup based on the amount of marks a user has
     rules = models.ManyToManyField(Rule, blank=True)  # The rules displayed in the mark.html
-    duration = closest_end_of_semester()  # How long a mark lasts
+    duration = end_of_semester_days()  # How long a mark lasts
     goes_on_secondary = models.PositiveIntegerField(
         default=0)  # How many marks to put a user on a secondary waitinglist
     too_many_marks = models.PositiveIntegerField(default=0)  # How many marks to block a user from signing up to events
-    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)  # How many hours before event start does signoff close
+    signoff_close = models.PositiveIntegerField(default=None, null=True,
+                                                blank=True)  # How many hours before event start does signoff close
+    mark_on_late_signoff = models.BooleanField(default=True)  # If a mark is given or not for signing off late

@@ -40,8 +40,8 @@ class Hybrid(AbstractUser):
     image = models.ImageField(upload_to=user_folder, default='placeholder-profile.jpg', verbose_name='Bilde')
     gender = models.CharField(max_length=1, blank=False, choices=(('M', 'Mann'), ('F', 'Dame'), ('U', 'Ukjent')),
                               verbose_name='Kjønn', default='U')
-    specialization = models.ForeignKey(Specialization,null=True, on_delete=models.SET_NULL,
-                                       verbose_name='Spesialisering')
+    specialization = models.ForeignKey(Specialization, null=True, on_delete=models.SET_NULL,
+                                       verbose_name='Spesialisering', limit_choices_to={'active': True})
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='Fødselsår')
     title = models.CharField(max_length=150, blank=True, default='Hybrid', verbose_name='Tittel')
     food_preferences = models.CharField(max_length=150, blank=True, verbose_name='Allergier og matpreferanser')
@@ -106,3 +106,46 @@ class ContactPerson(models.Model):
     search_name = models.CharField(max_length=128, null=False, blank=False, unique=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name="Fagnavn")
+    code = models.CharField(max_length=10, unique=True, null=False, blank=False, verbose_name="Fagkode")
+
+    Years = (
+        ('First', 'Første'),
+        ('Second', 'Andre'),
+        ('Third', 'Tredje'),
+        ('Fourth', 'Fjerde'),
+        ('Fifth', 'Femte'),
+        ('Third-Fifth', 'Tredje til Femte'),
+    )
+    Semesters = (
+        ('Autumn', 'Høst'),
+        ('Spring', 'Vår'),
+        ('Both', 'Begge'),
+    )
+    Specializations = (
+        ('Geomatikk', 'Geomatikk'),
+        ('Konstruksjonsteknikk', 'Konstruksjonsteknikk'),
+        ('Marin teknikk', 'Marin teknikk'),
+        ('Petroleumsfag', 'Petroleumsfag'),
+        ('Produksjonsledelse', 'Produksjonsledelse'),
+        ('Maskinteknikk', 'Maskinteknikk')
+    )
+
+    year = models.CharField(choices=Years, max_length=250, blank=False, default="", verbose_name="Trinn")
+    semester = models.CharField(choices=Semesters, max_length=250, blank=False, default="", verbose_name="Semester")
+    specialization = models.CharField(choices=Specializations, max_length=250, blank=True, verbose_name="Spesialisering")
+
+    # Used in course evaluation
+    grades_link = models.CharField(max_length=255, blank=True)
+    ntnu_link = models.CharField(max_length=255, blank=True)
+    average_score = models.DecimalField(decimal_places=2, max_digits=3, blank=True, null=True)
+    number_of_evaluations = models.IntegerField(default=0, blank=True)
+
+    author = models.ForeignKey(Hybrid, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.name
+
