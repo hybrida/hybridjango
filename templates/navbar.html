@@ -62,11 +62,13 @@
                                     <a href="{% url 'internside:index' %}">Vevkom</a>
                                 </li>
                             {% endif %}
+                            {% comment %}
                             {% if perms.staticpages.add_commiteapplication %}
                                 <li>
                                     <a href="{% url 'comapps' %}">Komitésøknader</a>
                                 </li>
                             {% endif %}
+                            {% endcomment %}
                             {% if perms.staticpages.add_application %}
                                 <li>
                                     <a href="{% url 'application_table' %}">Oversikt over søknader</a>
@@ -114,7 +116,7 @@
                                     <a href="{% url 'admin:index' %}">Administrering</a>
                                 </li>
                             {% endif %}
-                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user.is_superuser %}
+                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user|has_group:"Kjellersjef" or user.is_superuser %}
                                 <li>
                                     <a href="{% url 'group_management' %}">Gruppe administrering</a>
                                 </li>

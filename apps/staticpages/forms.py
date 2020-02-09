@@ -13,8 +13,8 @@ class CommiteApplicationForm(forms.ModelForm, BootstrapFormMixin):
 class ApplicationForm(forms.ModelForm, BootstrapFormMixin):
     class Meta:
         model = Application
-        exclude = ['granted', 'comment']
-        fields = ['navn', 'beskrivelse']
+        exclude = ['granted', 'comment', 'date']
+        fields = ['name', 'description']
 
 
 class StatuteForm(forms.ModelForm):

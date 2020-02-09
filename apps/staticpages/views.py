@@ -110,14 +110,32 @@ class AboutView(TemplateResponseMixin, ContextMixin, View):
             'jentekomsjef',
             'prokomsjef',
         ]
+        elected_representatives_search_names = [
+            'itv1',
+            'itv2',
+            'forste_ktv1',
+            'forste_ktv2',
+            'andre_ktv1',
+            'andre_ktv2',
+            'tredje_ktv1',
+            'tredje_ktv2',
+            'fjerde_ktv1',
+            'fjerde_ktv2',
+            'femte_ktv1',
+            'femte_ktv2',
+        ]
         # in_bulk returns a dict of the form {field_value: obj}, i.e. {search_name: contact_person}
         board_dict = ContactPerson.objects.in_bulk(board_search_names, field_name='search_name')
+        elected_dict = ContactPerson.objects.in_bulk(elected_representatives_search_names, field_name='search_name')
         context.update({
             # map titles to ContactPerson objects, used instead of board_dict.values() to preserve order
             'board': [*map(board_dict.get, board_search_names)],
             # ** operator unpacks board dict, adding its mapped contents to the context dict
             **board_dict,
-            'redaktor': ContactPerson.objects.get(search_name='redaktor')
+            'elected': [*map(elected_dict.get, elected_representatives_search_names)],
+            **elected_dict,
+            'redaktor': ContactPerson.objects.get(search_name='redaktor'),
+            'faddersjef': ContactPerson.objects.get(search_name='faddersjef'),
         })
         return self.render_to_response(context)
 
@@ -260,12 +278,12 @@ def application(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
-            pplication = form.save(commit=False)
-            pplication.save()
+            application_form = form.save(commit=False)
+            application_form.save()
             mail = ['skattmester@hybrida.no']
             sucsessful = send_mail('Søknad om støtte fra styret',
                                    'Navn: {navn}\n{beskrivelse}'
-                                   .format(navn=pplication.navn, beskrivelse=pplication.beskrivelse),
+                                   .format(navn=application_form.name, beskrivelse=application_form.description),
                                    'robot@hybrida.no',
                                    mail,
                                    )
@@ -288,10 +306,10 @@ def edit_application(request, pk):
         granted = request.POST.get('grantForm', False)
 
         if user.is_authenticated:
-            application = applications.get(pk=application_id)
-            application.granted = granted
-            application.comment = comment
-            application.save()
+            application_form = applications.get(pk=application_id)
+            application_form.granted = granted
+            application_form.comment = comment
+            application_form.save()
     return redirect('application_table')
 
 
@@ -317,7 +335,9 @@ def AddComApplication(request):
 
 
 def NewStudent(request):
-    return render(request, 'staticpages/ny_student.html')
+    return render(request, 'staticpages/new_student.html', {
+        'faddersjef': ContactPerson.objects.get(search_name='faddersjef'),
+    })
 
 
 def ChangeAcceptedStatus(request):
