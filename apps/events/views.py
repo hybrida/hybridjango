@@ -294,7 +294,7 @@ def unattended(request, pk):
             mark, created = Mark.objects.get_or_create(event=event, recipient=participant, defaults={'value': 1},
                                                        reason="Du møtte ikke opp på arrangementet")
             SendMarkMail(participant, mark)
-            remove_user_from_events(participant)
+            # remove_user_from_events(participant)
 
         if 'give_mark_all' in request.POST:
             pk = request.POST.get('give_mark_all')
@@ -306,7 +306,7 @@ def unattended(request, pk):
                                                                defaults={'value': 1},
                                                                reason="Du møtte ikke opp på arrangementet")
                     SendMarkMail(participant, mark)
-                    remove_user_from_events(participant)
+                    # remove_user_from_events(participant)
 
     return render(request, "rfid/unattended_list.html",
                   {'event': event, 'attendance': attendance, 'users': users, 'has_rfid': has_rfid, 'marks': marks})
@@ -316,7 +316,7 @@ def late_signoff_mark(event, hybrid):
     mark, created = Mark.objects.get_or_create(
         recipient=hybrid, value=1, event=event,
         reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
-    remove_user_from_events(hybrid)
+    # remove_user_from_events(hybrid)
     return mark
 
 
