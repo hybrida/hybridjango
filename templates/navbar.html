@@ -116,7 +116,7 @@
                                     <a href="{% url 'admin:index' %}">Administrering</a>
                                 </li>
                             {% endif %}
-                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user|has_group:"Kjellersjef" or user.is_superuser %}
+                            {% if user|has_group:"Styret" or user|has_group:"Redaktør" or user|has_group:"Kjellersjef"  or user|has_group:"Faddersjef" or user.is_superuser %}
                                 <li>
                                     <a href="{% url 'group_management' %}">Gruppe administrering</a>
                                 </li>
