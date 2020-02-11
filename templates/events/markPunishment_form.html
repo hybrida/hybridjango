@@ -54,6 +54,11 @@
     <script type="text/javascript">
         $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
     </script>
+    <script>
+        function goBack() {
+          window.history.back();
+        }
+    </script>
 {% endblock script %}
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{% static "lib/css/bootstrap-datetimepicker.min.css" %}">

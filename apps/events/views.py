@@ -378,7 +378,7 @@ class MarkPunishmentEdit(PermissionRequiredMixin, generic.UpdateView):
     model = MarkPunishment
     template_name = 'events/markPunishment_form.html'
     form_class = MarkPunishmentForm
-    success_url = None
+    success_url = reverse_lazy('bedkom')
 
     def get_context_data(self, **kwargs):
         data = super(MarkPunishmentEdit, self).get_context_data(**kwargs)
@@ -404,6 +404,3 @@ class MarkPunishmentEdit(PermissionRequiredMixin, generic.UpdateView):
                 delays.instance = self.object
                 delays.save()
         return super(MarkPunishmentEdit, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('edit_mark_punishment', kwargs={'pk': self.object.pk})

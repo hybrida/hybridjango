@@ -13,9 +13,6 @@
 
     <div class="header">
         <h3 style="display: inline-block; font-size: xx-large; margin: auto; margin-left: -12%">Legg til nytt prosjekt</h3>
-        <a href="{% url 'internside:index'  %}">
-            <button style="float: left" class="btn btn-primary">Tilbake</button>
-        </a>
     </div>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -27,5 +24,6 @@
 
         {% endfor %}
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+        <button class="btn btn-default pull-right" style="" onclick="history.back();">Tilbake</button>
     </form>
 {% endblock text %}

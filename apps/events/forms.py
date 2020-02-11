@@ -1,8 +1,7 @@
 from django import forms
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
-from tinymce import TinyMCE
+from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, Submit, Button
 from hybridjango.custom_layout_object import *
 from hybridjango.mixins import BootstrapFormMixin
 from .models import *
@@ -79,7 +78,8 @@ class MarkPunishmentForm(forms.ModelForm, BootstrapFormMixin):
                 Fieldset('Add rules',
                          Formset('rules')),
                 HTML("<br>"),
-                ButtonHolder(Submit('submit', 'save')),
+                Submit('submit', 'Lagre'),
+                Button('back', "Tilbake", css_class='btn btn-default pull-right', onclick="goBack()"),
             )
         )
 
