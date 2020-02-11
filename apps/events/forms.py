@@ -2,6 +2,7 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
+from tinymce import TinyMCE
 from hybridjango.custom_layout_object import *
 from hybridjango.mixins import BootstrapFormMixin
 from .models import *
@@ -15,15 +16,34 @@ class EventCommentForm(forms.ModelForm):
 
 class EventForm(forms.ModelForm):
     class Meta:
-        exclude = [
-            'author',
-            'participants',
-            'timestamp',
+        model = Event
+        fields = [
+            'title',
+            'type',
+            'ingress',
+            'text',  # TODO: Make this field a HTMLField in form
+            'image',
+            'event_start',
+            'event_end',
+            'weight',
+            'location',
+            'hidden',
+            'news',
+            'public',
+            'signoff_close_on_signup_close',
+            'signoff_close',
         ]
         widgets = {
             'ingress': forms.Textarea(attrs={'rows': 3}),
         }
-        model = Event
+
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if self.fields[field] == self.fields['event_start'] or self.fields[field] == self.fields['event_end']:
+                self.fields[field].widget.attrs.update({'class': 'form_datetime', 'autocomplete': 'off'})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
 class MarkPunishmentForm(forms.ModelForm, BootstrapFormMixin):

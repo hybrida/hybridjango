@@ -55,6 +55,7 @@ class MarkPunishmentAdmin(admin.ModelAdmin):
     ]
     exclude = ('delay', 'rules', )
 
+
 admin.site.register(EventType)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Attendance, AttendanceAdmin)

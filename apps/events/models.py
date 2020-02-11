@@ -30,22 +30,25 @@ class EventType(models.Model):
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=150, verbose_name="Tittel")
     type = models.ForeignKey(EventType, default=1, null=False, on_delete=models.CASCADE)
     ingress = models.CharField(max_length=350, blank=True, default='')
-    text = HTMLField(blank=True)
+    text = HTMLField(blank=True, verbose_name="Tekst")
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='events', blank=True)
-    event_start = models.DateTimeField(null=True, blank=True)
-    event_end = models.DateTimeField(null=True, blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    weight = models.IntegerField(default=0)
-    hidden = models.BooleanField(default=False)
-    news = models.BooleanField(default=True)
-    public = models.BooleanField(default=True)
-    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
-    signoff_close_on_signup_close = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='events', blank=True, verbose_name="Bilde")
+    event_start = models.DateTimeField(null=True, blank=True, verbose_name="Start")
+    event_end = models.DateTimeField(null=True, blank=True, verbose_name="Slutt")
+    location = models.CharField(max_length=50, blank=True, verbose_name="Sted")
+    weight = models.IntegerField(default=0, verbose_name="Vekting")
+    hidden = models.BooleanField(default=False, verbose_name="Utkast")
+    news = models.BooleanField(default=True, verbose_name="Nyhet")
+    public = models.BooleanField(default=True, verbose_name="Synlig for alle")
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True,
+                                                verbose_name="Antall timer før hendelsen starter avmeldingen skal "
+                                                             "stenge")
+    signoff_close_on_signup_close = models.BooleanField(default=False,
+                                                        verbose_name="Steng avmelding når påmeldingen stenger")
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
