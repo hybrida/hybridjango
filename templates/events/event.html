@@ -190,8 +190,8 @@
                 <tr>
                     <td>Profiler</td>
                     <td>
-                        {% for specialization in attendance.o.specializations.all %}
-                            {{ specialization }}
+                        {% for specialization in attendance.o.specializations.all|dictsort:"name" %}
+                            {{ specialization }}<br>
                         {% endfor %}
                     </td>
                 </tr>
@@ -200,8 +200,8 @@
                 <tr>
                     <td>Komiteer</td>
                     <td>
-                        {% for group in attendance.o.groups.all %}
-                            {{ group }}
+                        {% for group in attendance.o.groups.all|dictsort:"name" %}
+                            {{ group }} <br>
                         {% endfor %}
                     </td>
                 </tr>
