@@ -1,4 +1,4 @@
-Django==2.0.8
+Django==2.2.10
 django-tinymce4-lite==1.7.2
 django-widget-tweaks==1.4.3
 Pillow==5.2.0
