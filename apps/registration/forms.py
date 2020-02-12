@@ -49,4 +49,4 @@ class SubjectForm(forms.ModelForm, BootstrapFormMixin):
     class Meta:
         model = Subject
         exclude = ['author']
-        fields = ['code', 'name']
+        fields = ['code', 'name', 'year', 'semester', 'specialization']
