@@ -35,5 +35,6 @@ static/pdf/updatek
 .gitignore.local
 
 uploads/
+uploads.zip
 
 hybridjango/utils/secrets

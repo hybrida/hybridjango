@@ -28,3 +28,13 @@ class Match(models.Model):
     teams = models.ManyToManyField(Team)
     next_match = models.ForeignKey('Match', related_name='prev_match', on_delete=models.SET_NULL)
     bracket = models.ForeignKey(Bracket, related_name='matches')
+
+
+class Scoreboard(models.Model):
+    pass
+
+
+class Entry(models.Model):
+    user = models.ForeignKey(Hybrid, null=False, blank=False)
+    value = models.DoubleField(null=False, blank=False)
+    scoreboard = models.ForeignKey(Scoreboard, related_name='entries', blank=False)
