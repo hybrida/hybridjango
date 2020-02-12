@@ -6,8 +6,8 @@ from .models import File
 from .forms import HybridopediaFileForm
 
 
-# TODO: Login required for forms?
 # TODO: PEP 8?
+@login_required
 def fileForm(request):
     if request.method == 'POST':
         form = HybridopediaFileForm(request.POST, request.FILES)
@@ -22,6 +22,7 @@ def fileForm(request):
     })
 
 
+@login_required
 def subjectForm(request):
     if request.method == 'POST':
         form = SubjectForm(request.POST)
