@@ -1,13 +1,13 @@
 import datetime
 
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from tinymce import HTMLField
 
 from apps.registration.models import Hybrid, Specialization
-
 
 '''Defines rules for different type of events'''
 
@@ -20,6 +20,7 @@ class EventType(models.Model):
     use_goes_on_secondary = models.BooleanField(default=False)
     use_too_many_marks = models.BooleanField(default=False)
     use_mark_on_late_signoff = models.BooleanField(default=False)
+    use_remove_on_too_many_marks = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -29,22 +30,25 @@ class EventType(models.Model):
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=150, verbose_name="Tittel")
     type = models.ForeignKey(EventType, default=1, null=False, on_delete=models.CASCADE)
     ingress = models.CharField(max_length=350, blank=True, default='')
-    text = HTMLField(blank=True)
+    text = HTMLField(blank=True, verbose_name="Tekst")
     author = models.ForeignKey(Hybrid, related_name='authored', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='events', blank=True)
-    event_start = models.DateTimeField(null=True, blank=True)
-    event_end = models.DateTimeField(null=True, blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    weight = models.IntegerField(default=0)
-    hidden = models.BooleanField(default=False)
-    news = models.BooleanField(default=True)
-    public = models.BooleanField(default=True)
-    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True)
-    signoff_close_on_signup_close = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='events', blank=True, verbose_name="Bilde")
+    event_start = models.DateTimeField(null=True, blank=True, verbose_name="Start")
+    event_end = models.DateTimeField(null=True, blank=True, verbose_name="Slutt")
+    location = models.CharField(max_length=50, blank=True, verbose_name="Sted")
+    weight = models.IntegerField(default=0, verbose_name="Vekting")
+    hidden = models.BooleanField(default=False, verbose_name="Utkast")
+    news = models.BooleanField(default=True, verbose_name="Nyhet")
+    public = models.BooleanField(default=True, verbose_name="Synlig for alle")
+    signoff_close = models.PositiveIntegerField(default=None, null=True, blank=True,
+                                                verbose_name="Antall timer før hendelsen starter avmeldingen skal "
+                                                             "stenge")
+    signoff_close_on_signup_close = models.BooleanField(default=False,
+                                                        verbose_name="Steng avmelding når påmeldingen stenger")
 
     def get_absolute_url(self):
         return reverse('event', kwargs={'pk': self.pk})
@@ -111,8 +115,9 @@ attend the event, price and so forth'''
 class Attendance(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default='Påmelding')
-    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation, related_name='+')
-    participantsSecondary = models.ManyToManyField(Hybrid, blank=True, through=ParticipationSecondary, related_name='+')
+    participants = models.ManyToManyField(Hybrid, blank=True, through=Participation, related_name='hybridattendances')
+    participantsSecondary = models.ManyToManyField(Hybrid, blank=True, through=ParticipationSecondary,
+                                                   related_name='hybridattendances_secondary')
     max_participants = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     signup_start = models.DateTimeField()
@@ -120,9 +125,18 @@ class Attendance(models.Model):
     genders = models.CharField(max_length=3, default='MFU')
     grades = models.CharField(max_length=50, default='12345')
     specializations = models.ManyToManyField(Specialization, blank=True, limit_choices_to={'active': True})
+    groups = models.ManyToManyField(Group, blank=True)
 
     def invited_specialization(self, specialization):
         return not self.specializations.count() or specialization in self.specializations.all()
+
+    def invited_groups(self, groups):
+        if not self.groups.count():
+            return True
+        for group in groups:
+            if group in self.groups.all():
+                return True
+        return False
 
     def signup_open(self):
         return self.signup_start and self.signup_end and self.signup_start < timezone.now() < self.signup_end
@@ -144,7 +158,7 @@ class Attendance(models.Model):
 
     def invited(self, user):
         return user.gender in self.genders and str(user.get_grade()) in self.grades and self.invited_specialization(
-            user.specialization)
+            user.specialization) and self.invited_groups(user.groups.all())
 
     def get_sorted_hybrids(self):
         return self.participants.order_by('participation__timestamp')
@@ -196,14 +210,14 @@ class Attendance(models.Model):
     def __str__(self):
         return '{}, {}'.format(self.name, self.event)
 
-    def too_many_marks(self, hybrid, maxmarks):     # Checks if a user has too many marks to sign up to an event
+    def too_many_marks(self, hybrid, maxmarks):  # Checks if a user has too many marks to sign up to an event
         if self.event.type.use_too_many_marks:
             if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid):
                 return True
         return False
 
-    def goes_on_secondary(self, hybrid, maxmarks, too_many):    # Checks whether a user goes on the secondary
-        if self.event.type.use_goes_on_secondary:               # waitinglist or not
+    def goes_on_secondary(self, hybrid, maxmarks, too_many):  # Checks whether a user goes on the secondary
+        if self.event.type.use_goes_on_secondary:  # waitinglist or not
             if maxmarks != 0 and maxmarks <= get_number_of_marks(hybrid) and not self.too_many_marks(hybrid, too_many):
                 return True
         return False
@@ -244,21 +258,16 @@ class Attendance(models.Model):
                 in self.get_placementsSecondary()]
 
     def get_signoff_close(self):
-        if MarkPunishment.objects.all().last().signoff_close == None and self.event.signoff_close == None:
+        if MarkPunishment.objects.all().last().signoff_close is None and self.event.signoff_close is None:
             return self.signup_end
-        elif self.event.signoff_close_on_signup_close == True:
+        elif self.event.signoff_close_on_signup_close is True:
             return self.signup_end
-        elif self.event.signoff_close != None:
+        elif self.event.signoff_close is not None:
             return self.event.event_start - datetime.timedelta(hours=self.event.signoff_close)
         return self.event.event_start - datetime.timedelta(hours=MarkPunishment.objects.all().last().signoff_close)
 
     def signoff_open(self):
         return self.get_signoff_close() > timezone.now()
-
-    def late_signoff_mark(self, hybrid):
-        mark, created = Mark.objects.get_or_create(recipient=hybrid, value=1, event=self.event,
-                                                   reason="Du meldte deg sent av et arrangement hvor det ikke var noen på venteliste.")
-        return mark
 
 
 '''A model that will contain any feedback or comment that may be instered into the event'''
@@ -365,3 +374,5 @@ class MarkPunishment(models.Model):
     signoff_close = models.PositiveIntegerField(default=None, null=True,
                                                 blank=True)  # How many hours before event start does signoff close
     mark_on_late_signoff = models.BooleanField(default=True)  # If a mark is given or not for signing off late
+    remove_on_too_many_marks = models.BooleanField(
+        default=True)  # If a user has too many marks, they will be removed from future events

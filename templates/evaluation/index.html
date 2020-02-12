@@ -1,0 +1,35 @@
+{% extends "evaluation/evaluation_sidebar.html" %}
+{% load static %}
+{% block text %}
+    <style>
+        .clickable-row{
+        /* Giving rows in table click prompt. Add both to support more browsers. */
+            cursor: pointer;
+            cursor: hand;}
+    </style>
+<h1 class="text-center"> Fagliste Høstemner </h1>
+<div class="center-block">
+    <div id="users">
+        <div class="text-center">
+            <input style="width: 80%" class="search" placeholder="Search" />
+        </div>
+        <table class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Subject code</th>
+                    <th>Subject name</th>
+                </tr>
+            </thead>
+            <!-- IMPORTANT, class="list" have to be at tbody -->
+            <tbody class="list">
+                {% for subject in courses %}
+                <tr class='clickable-row' data-href="{% url "evaluation" subject.pk %}">
+                    <td class="id">{{ subject.code }}</td>
+                    <td class="name">{{ subject.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

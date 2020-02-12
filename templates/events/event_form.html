@@ -5,96 +5,9 @@
     <h3>Endre/Lag hendelse</h3>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="id_title">Tittel:</label>
-            {{ form.title|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_ingress">Ingress:</label>
-            {{ form.ingress.errors }}
-            {{ form.ingress|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_text">Tekst:</label>
-            {{ form.text.errors }}
-            {{ form.text|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_image">Bilde:</label>
-            {{ form.image.errors }}
-            {{ form.image }}
-        </div>
-        <div class="form-group">
-            <label for="id_event_start">Start:</label>
-            {{ form.event_start.errors }}
-            {{ form.event_start|add_class:"form-control form_datetime" }}
-        </div>
-        <div class="form-group">
-            <label for="id_event_end">Slutt:</label>
-            {{ form.event_end.errors }}
-            {{ form.event_end|add_class:"form-control form_datetime" }}
-        </div>
-        <div class="form-group">
-            <label for="id_max_participants">Deltagere:</label>
-            {{ form.max_participants.errors }}
-            {{ form.max_participants|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_signup_start">Påmeldingsstart:</label>
-            {{ form.signup_start.errors }}
-            {{ form.signup_start|add_class:"form-control form_datetime" }}
-        </div>
-        <div class="form-group">
-            <label for="id_signup_end">Påmeldingsslutt:</label>
-            {{ form.signup_end.errors }}
-            {{ form.signup_end|add_class:"form-control form_datetime" }}
-        </div>
-        <div class="form-group">
-            <label for="id_price">Pris:</label>
-            {{ form.price.errors }}
-            {{ form.price|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_genders">Kjønn:</label>
-            {{ form.genders.errors }}
-            {{ form.genders|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_grades">Klassetrinn:</label>
-            {{ form.grades.errors }}
-            {{ form.grades|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_weight">Vekting:</label>
-            {{ form.weight.errors }}
-            {{ form.weight|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_weight">Sted:</label>
-            {{ form.location.errors }}
-            {{ form.location|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_hidden">Utkast:</label>
-            {{ form.hidden.errors }}
-            {{ form.hidden|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_news">Nyhet:</label>
-            {{ form.news.errors }}
-            {{ form.news|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_public">Synlig for alle:</label>
-            {{ form.public.errors }}
-            {{ form.public|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_public">Antall timer før hendelsen starter avmeldingen skal stenge:</label>
-            {{ form.signoff_close.errors }}
-            {{ form.signoff_close|add_class:"form-control" }}
-        </div>
+        {{ form.as_p }}
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+        <button class="btn btn-default pull-right" style="" onclick="history.back();">Tilbake</button>
     </form>
 {% endblock text %}
 {% block sidebar %}
@@ -117,21 +30,12 @@
         hvis det er for smalt. Prøv også å finne en grei oppløsning, gjerne en plass mellom 800px og 1600px i bredde.
     </p>
     <p>
-        Hvis det skal være et arrangement (bedriftspresentasjoner er arrangement) så må dere velge start og
-        slutttidspunkt. Det vil da dukke opp i arrangement eller bedpresslisten på forsiden (avhengig av om det er en
-        bedriftspresentasjon eller ikke).
+        Hvis det skal være et arrangement med påmelding så må dere velge start og slutttidspunkt. Det vil da dukke opp
+        i arrangementet og evt. i bedpresslisten på forsiden (avhengig av om det er en bedriftspresentasjon eller ikke).
     </p>
     <p>
         Tidspunkt kan fylles ut ved hjelp av boksen som popper opp når dere velger et av feltene. Hvis den ikke kan
         brukes så er det mulig å fylle inn datoen manuelt. Formatet er da YYYY-MM-DD HH:MM, som f.eks. 2017-02-13 00:35.
-    </p>
-    <p>
-        Hvis det skal være mulig å melde seg på et arrangement så legg inn antall deltakere og påmeldingsstart/-slutt.
-    </p>
-    <p>
-        Hvis det kun skal åpnes for enkelte kjønn eller trinn så fjern de "uvedkommende" kjønnene eller trinnene fra
-        feltene. F.eks. så vil kun F på kjønn og 12 på klassetrinn gjøre at det kun åpnes for jenter i første og
-        andre klasse.
     </p>
     <p>
         Vektingen skal <strong><u>KUN</u></strong> endres fra 0 når en eller flere hendelser skal tvinges øverst eller
@@ -149,8 +53,12 @@
         Hvis man fjerner krysset på synlig for alle vil kun påloggede kunne se hendelsen.
     </p>
     <p>
-        Hvis man lar feltet for antall timer før hendelsen starter avmeldingen skal stenge stå tomt så blir
-        standardverdien brukt.
+        Hvis man krysser av for å stenge avmeldingen når påmeldingen stenger så har man ikke mulighet for å melde seg av
+        etter at påmeldingen er stengt.
+    </p>
+    <p>
+        Hvis du ikke krysser av for å stenge avmeldingen så kan du velge antall timer før hendelsen starter at
+        avmeldingen skal stenge eller så kan man la feltet stå tomt så blir standardverdien brukt.
     </p>
 {% endblock sidebar %}
 {% block script %}

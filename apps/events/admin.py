@@ -23,7 +23,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 class AttendanceInline(admin.StackedInline):
     model = Attendance
-    filter_horizontal = ('participants', 'specializations')  # TODO: participants won't show up
+    filter_horizontal = ('participants', 'specializations', 'groups')  # TODO: participants won't show up
     extra = 0
 
 
@@ -54,6 +54,7 @@ class MarkPunishmentAdmin(admin.ModelAdmin):
         RuleInline,
     ]
     exclude = ('delay', 'rules', )
+
 
 admin.site.register(EventType)
 admin.site.register(Event, EventAdmin)

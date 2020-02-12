@@ -4,14 +4,13 @@
 
 
     <h3>Nytt fag</h3>
-<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-     {{ form.as_p }}
-
-
-
-    <button type="submit">Lagre</button>
-</form>
+        <button type="submit" class="btn btn-primary">Lagre</button>
+        <button class="btn btn-default pull-right" style="" onclick="history.back();">Tilbake</button>
+    </form>
 
 
 

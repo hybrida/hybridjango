@@ -34,7 +34,7 @@
         <h3 style="font-size: 30px ">Konsekvenser</h3>
 
         {% if Delays.exists %}
-            <h4 style="font-size: 20px ">Utsatt påmeling</h4>
+            <h4 style="font-size: 20px ">Utsatt påmelding</h4>
             <P style="margin-left: 2.5%; font-size: 16px ">Utsatt påmelding vil si at du må vente før du får lov til å
                 melde deg på et arrangement.<br>
                 F.eks med {{ Delay.marks }} prikk{% if Delay.marks > 1 %}er{% endif %} må du vente
@@ -69,8 +69,8 @@
                     </li>
                 {% endfor %}
             </ul>
-            {% endcomment %}
             <br>
+            {% endcomment %}
         {% endif %}
 
         {% if Goes_on_secondary != 0 %}
@@ -93,6 +93,17 @@
                 <li style="font-size: 16px {% if user|num_marks >= Too_many_marks %}; font-weight: bold{% endif %}">
                     Med {{ Too_many_marks }} prikk{% if Too_many_marks > 1 %}er{% endif %} får du ikke meldt deg på
                     Hybrida sine arrangementer.
+                </li>
+            </ul>
+            <br>
+        {% endif %}
+
+        {% if Remove_on_too_many_marks %}
+            <h4 style="font-size: 20px ">Fjernet fra arrangementer</h4>
+            <ul>
+                <li style="font-size: 16px {% if user|num_marks >= Too_many_marks %}; font-weight: bold{% endif %}">
+                    Med {{ Too_many_marks }} prikk{% if Too_many_marks > 1 %}er{% endif %} blir du meldt av fremtidge
+                    arrangementer.
                 </li>
             </ul>
             <br>

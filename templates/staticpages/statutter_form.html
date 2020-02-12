@@ -2,8 +2,8 @@
 {% load widget_tweaks %}
 {% load static %}
 {% block text %}
-    <div class="header">
-        <h3 style="display: inline-block; font-size: xx-large; margin: auto">Last opp nye statutter</h3>
+    <div class="header" style="text-align: center;">
+        <h3 style="display: inline-block; font-size: xx-large; margin: auto;">Last opp nye statutter</h3>
     </div>
     <br>
     <form action="" method="post" enctype="multipart/form-data">
@@ -19,5 +19,17 @@
                 {{ form.date|add_class:"form-control form_datetime" }}
             </div>
         <button type="submit" value="Save" class="btn btn-primary">Lagre</button>
+        <button class="btn btn-default pull-right" style="" onclick="history.back();">Tilbake</button>
     </form>
 {% endblock text %}
+{% block sidebar %}
+    <div class="header" style="text-align: center;">
+        <h3 style="display: inline-block; font-size: x-large; margin: auto">Info</h3>
+    </div>
+    <br>
+    <p>
+        Det er den siste versjonen av statuttene som blir lastet opp som blir vist frem på statutt-siden.
+        <br> <br>
+        Datoen skal være datoen på forrige generalforsamling hvor statuttene ble endret.
+    </p>
+{% endblock sidebar %}
