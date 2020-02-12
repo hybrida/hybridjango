@@ -12,9 +12,12 @@
         {% csrf_token %}
         <label for="username">NTNU- Brukernavn: </label>
         <input id="username" name="username" type="text" class="form-control">
-        <button class="btn btn-primary">Send</button>
+        <button class="btn btn-primary" style="margin-top: 10px">Send</button>
     </form>
 {% endblock %}
 {% block sidebar %}
-    <p style="text-align: center">Skriv inn ditt NTNU-brukernavn for å opprette bruker</p>
+    <p style="text-align: center">Skriv inn ditt NTNU-brukernavn for å gjenopprette brukeren din</p>
+    <p style="text-align: center">Hvis du mangler bruker eller ikke får gjenopprettet brukeren din, kontakt Vevsjef på
+        vevsjef@hybrida.no</p>
+
 {%  endblock %}
