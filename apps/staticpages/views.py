@@ -275,10 +275,12 @@ def commiteapplications(request):
 
 def application(request):
     form = ApplicationForm(request.POST)
+    user = request.user
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
             application_form = form.save(commit=False)
+            application_form.sent_by = user
             application_form.save()
             mail = ['skattmester@hybrida.no']
             sucsessful = send_mail('Søknad om støtte fra styret',
@@ -310,7 +312,27 @@ def edit_application(request, pk):
             application_form.granted = granted
             application_form.comment = comment
             application_form.save()
+            send_application_response_mail(application_form.sent_by, granted, comment)
     return redirect('application_table')
+
+
+def send_application_response_mail(hybrid, granted, comment):
+    mail = [hybrid.email if hybrid.email else '{}@stud.ntnu.no'.format(hybrid.username)]
+    if comment == "" or comment is None:
+        comment = "Ingen kommentar"
+    successful = send_mail(
+        'Søknaden din til styret ble {granted}'.format(granted=granted),
+        'Hei {name},\n\n'
+        'Vi vil informere deg om at din søknad til styret ble {granted}.\n'
+        'Styrets kommentar angående søknaden er;\n'
+        '{comment}.\n\n'
+        'Hvis du har noen spørsmål eller vil ha mer informasjon angående søknaden kan du kontakte oss på '
+        'styret@hybrida.no\n\n'
+        'Med vennelig hilsen\n'
+        'Styret ved Linjeforeningen Hybrida'.format(name=hybrid.get_full_name(), granted=granted, comment=comment),
+        'robot@hybrida.no',
+        mail,
+    )
 
 
 class DeleteApplication(DeleteView):

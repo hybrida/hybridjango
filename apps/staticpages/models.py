@@ -41,6 +41,7 @@ class Protocol(models.Model):
 
 class Application(models.Model):
     name = models.CharField(max_length=500, verbose_name="navn")
+    sent_by = models.ForeignKey(Hybrid, null=True, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now, null=True)
     description = models.TextField(max_length=5000, verbose_name="beskrivelse")
 
