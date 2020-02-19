@@ -28,7 +28,7 @@ class Bracket(models.Model):
 class Match(models.Model):
     teams = models.ManyToManyField(Team)
     next_match = models.ForeignKey('Match', related_name='prev_match', on_delete=models.SET_NULL)
-    bracket = models.ForeignKey(Bracket, related_name='matches')
+    bracket = models.ForeignKey(Bracket, related_name='matches', on_delete=models.CASCADE)
 
 
 class Scoreboard(models.Model):
@@ -37,9 +37,9 @@ class Scoreboard(models.Model):
 
 
 class Entry(models.Model):
-    user = models.ForeignKey(Hybrid, null=False, blank=False)
+    user = models.ForeignKey(Hybrid, null=False, blank=False, on_delete=models.CASCADE)
     value = models.FloatField(null=False, blank=False)
-    scoreboard = models.ForeignKey(Scoreboard, related_name='entries', blank=False)
+    scoreboard = models.ForeignKey(Scoreboard, related_name='entries', blank=False, on_delete=models.CASCADE)
 
     @property
     def time(self):
