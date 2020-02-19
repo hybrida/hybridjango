@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load has_group %}
 {% block content %}
     <div class="container">
         <div class="row space-below">
-            {% for group, members, is_committee, form_add, form_remove in all_groups_and_members %}
-                {% if is_committee or user.is_superuser %}
+            {% for group, members, is_board_committee, is_other_committee,form_add, form_remove in all_groups_and_members %}
+                {% if is_other_committee or user.is_superuser or is_board_committee and user|has_group:"Styret" %}
                     <div class="col-xs-12 space-above">
                         <div class="white-box" id="text-box">
                             <h2>{{ group.name }}</h2>

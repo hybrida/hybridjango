@@ -125,12 +125,13 @@ def complete_registration(request, uidb64, token):
     return render(request, 'registration/reset_password.html', {'valid': valid, 'form': form})
 
 
-def get_all_groups_members_and_form(users, groups, committees):
+def get_all_groups_members_and_form(users, groups, board_committees, other_committees, other_groups_for_board):
     all_groups_members_and_form = []
     hybrids = Hybrid.objects.filter(graduation_year__range=(timezone.now().year, timezone.now().year + 5)).order_by(
         'first_name')
     for group in groups:
-        is_committee = False
+        is_board_committee = False
+        is_other_committee = False
         group_members = users.filter(groups__name=group.name)
         filtered_hybrids = hybrids
         for member in group_members:
@@ -141,23 +142,31 @@ def get_all_groups_members_and_form(users, groups, committees):
         form_remove = GroupForm()
         form_remove.fields['hybrids'].queryset = group_members
 
-        if group.name in committees:
-            is_committee = True
+        if group.name in board_committees:
+            is_board_committee = True
+        if group.name in other_groups_for_board:
+            is_board_committee = True
+        if group.name in other_committees:
+            is_other_committee = True
 
-        all_groups_members_and_form.append([group, group_members, is_committee, form_add, form_remove])
+        all_groups_members_and_form.append(
+            [group, group_members, is_board_committee, is_other_committee, form_add, form_remove])
     return all_groups_members_and_form
 
 
 class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, View):
     template_name = 'registration/group_management.html'
-    committees = ['Arrkom', 'Bedkom', 'Fadderkom', 'Jentekom', 'Kjellerkom', 'Redaksjonen', 'Prokom', 'Ståpels',
-                  'Vevkom']
-    requires_admin = ['Arrkom', 'Bedkom', 'Fadderkom', 'Jentekomsjef', 'Kjellersjef', 'Styret', 'Vevkom']
+    board_committees = ['Arrkom', 'Bedkom', 'Jentekom', 'Prokom', 'Vevkom']
+    other_committees = ['Fadderkom', 'Kjellerkom', 'Redaksjonen', 'Ståpels']
+    other_groups_for_board = ['Arrangementsansvarlige']
+    requires_admin = ['Arrangementsansvarlige', 'Bedkom', 'Fadderkom', 'Jentekomsjef',
+                      'Kjellersjef', 'Styret', 'Turingen', 'Vevkom']
 
     def test_func(self):
         return self.request.user.groups.filter(name='Styret').exists() or self.request.user.groups.filter(
             name='Kjellersjef').exists() or self.request.user.groups.filter(name='Redaktør').exists() or \
-               self.request.user.groups.filter(name='Faddersjef').exists() or self.request.user.is_superuser
+               self.request.user.groups.filter(name='Faddersjef').exists() or \
+               self.request.user.groups.filter(name='Bandsjef').exists() or self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -165,7 +174,9 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
         groups = Group.objects.all().order_by('name')
 
         context.update({
-            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.committees),
+            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.board_committees,
+                                                                      self.other_committees,
+                                                                      self.other_groups_for_board),
         })
         return self.render_to_response(context)
 
@@ -206,6 +217,8 @@ class ManageGroups(UserPassesTestMixin, TemplateResponseMixin, ContextMixin, Vie
         groups = Group.objects.all().order_by('name')
 
         context.update({
-            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.committees),
+            'all_groups_and_members': get_all_groups_members_and_form(users, groups, self.board_committees,
+                                                                      self.other_committees,
+                                                                      self.other_groups_for_board),
         })
         return self.render_to_response(context)
