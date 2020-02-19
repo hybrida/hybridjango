@@ -1,5 +1,6 @@
 from django.db import models
 from apps.registration.models import Hybrid
+from datetime import timedelta
 
 
 class Team(models.Model):
@@ -31,10 +32,20 @@ class Match(models.Model):
 
 
 class Scoreboard(models.Model):
+    # Add foreignkey to comp
     pass
 
 
 class Entry(models.Model):
     user = models.ForeignKey(Hybrid, null=False, blank=False)
-    value = models.DoubleField(null=False, blank=False)
+    value = models.FloatField(null=False, blank=False)
     scoreboard = models.ForeignKey(Scoreboard, related_name='entries', blank=False)
+
+    @property
+    def time(self):
+        return timedelta(seconds=self.value)
+
+    @time.setter
+    def time(self, duration):
+        self.value = round(duration.total_seconds(), 3)
+        self.save()
