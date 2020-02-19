@@ -1,31 +1,60 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 from apps.registration.models import Hybrid
-from apps.registration.models import Specialization
-import datetime
+from tinymce import HTMLField
+from ..registration.models import Subject
 
-
-class Course(models.Model):
-    code = models.CharField(max_length=10)
-    name = models.CharField(max_length=500, null=True)
-    semester = models.CharField(max_length=4, null=True)
-
-    def __str__(self):
-        return self.code + " - " + self.name
 
 
 class Evaluation(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    workload = models.IntegerField(default=1)
-    difficulty = models.IntegerField(default=1)
-    learn = models.CharField(max_length=2500, null=True)
-    structure = models.CharField(max_length=2500, null=True)
-    useful = models.CharField(max_length=2500, null=True)
-    comment = models.CharField(max_length=2500, null=True)
-    grade = models.IntegerField(default=3)
-    year = models.IntegerField(default=2017)
-    anonymous = models.BooleanField(default=False)
-    specializaion = models.ForeignKey(Specialization, on_delete=models.CASCADE)
-    user = models.ForeignKey(Hybrid, on_delete=models.CASCADE)
+
+    author = models.ForeignKey(Hybrid, on_delete=models.CASCADE, blank=True, null=True)
+    course = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        related_name="evaluation",
+    verbose_name="Navn")
+    lecturer = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False)
+
+    year = models.IntegerField(default=2010, validators=[MaxValueValidator(3000)], blank=False, null=False, verbose_name="Året du tok faget")
+    semester = models.IntegerField(blank=False, null=False, verbose_name="Semester faget ble gjennomført") #1.-5.år
+    Seasons= (
+        ('Høst', 'Høst'),
+        ('Vår','Vår' )
+    )
+    season = models.CharField(choices=Seasons, max_length=255, blank=False, null=False, verbose_name="Årstid") #Høst/vår
+    title = models.CharField(max_length=255, verbose_name="Tittel")
+    evaluation_lecturer = HTMLField(verbose_name="Evaluering av foreleser")
+    evaluation_course = HTMLField(verbose_name="Evaluering av faget")
+
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    Scores = (
+        (ONE, '1'),
+        (TWO, '2'),
+        (THREE, '3'),
+        (FOUR, '4'),
+        (FIVE, '5')
+    )
+    score = models.IntegerField(choices=Scores, default=0, validators=[MaxValueValidator(5)])
+    Profiles = (
+        ('Geomatikk', 'Geomatikk'),
+        ('Konstruksjonsteknikk', 'Konstruksjonsteknikk'),
+        ('Marin teknikk', 'Marin teknikk'),
+        ('Petroleumsfag', 'Petroleumsfag'),
+        ('Produksjonsledelse', 'Produksjonsledelse'),
+        ('Maskinteknikk', 'Maskinteknikk')
+
+    )
+    profile = models.CharField(choices=Profiles, max_length=250, blank=False, default="", null=True, verbose_name="Spesialisering")
 
     def __str__(self):
-        return self.course.name + ": " + str(self.pk)
+        return self.title

@@ -1,10 +1,11 @@
 from django.conf.urls import url
+from django.urls import  path
+from .views import *
 
-from . import views
-
+app_name = 'evaluation'
 urlpatterns = [
-    url(r'^fall$', views.index, name='evaluation_fall'),
-    url(r'^spring$', views.spring, name='evaluation_spring'),
-    url(r'^(?P<pk>[0-9]+)$', views.evaluation, name='evaluation'),
-
+    path('', course_views , name='course_views'),
+    path('fag/<int:pk>', get_course, name='get_course'),
+    path('evaluation_form/', get_evaluation_form, name='get_evaluation_form'),
+    path('search/', search, name='search')
 ]
